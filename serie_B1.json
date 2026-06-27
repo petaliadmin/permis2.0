@@ -1,0 +1,347 @@
+{
+  "serie": "B1",
+  "titre": "Série de Test B1 – Permis de conduire Sénégal",
+  "total_questions": 25,
+  "questions": [
+    {
+      "id": "B1_Q1",
+      "numero": 1,
+      "enonce": "Pour aller tout droit, je m'arrête au niveau du signal ou au niveau de la bande blanche",
+      "signalisation_visible": "STOP",
+      "propositions": [
+        { "lettre": "A", "texte": "Je m'arrête au niveau du signal" },
+        { "lettre": "B", "texte": "Je m'arrête au niveau de la bande blanche" },
+        { "lettre": "C", "texte": "Je passerai avant les voitures venant de gauche – OUI" },
+        { "lettre": "D", "texte": "Je passerai avant les voitures venant de gauche – NON" }
+      ],
+      "reponses_correctes": ["B", "D"],
+      "categorie": "priorite_arret",
+      "explication": "Au STOP, on s'arrête au niveau de la bande blanche au sol. Les véhicules sur la route principale ont priorité absolue, donc on ne passe PAS avant les voitures venant de gauche."
+    },
+    {
+      "id": "B1_Q2",
+      "numero": 2,
+      "enonce": "Je peux rouler à 50 km/h ou à 70 km/h (panneau de limitation à 60 km/h visible)",
+      "signalisation_visible": "Panneau vitesse limitée 60 km/h",
+      "propositions": [
+        { "lettre": "A", "texte": "Je peux rouler à 50 km/h – OUI" },
+        { "lettre": "B", "texte": "Je peux rouler à 50 km/h – NON" },
+        { "lettre": "C", "texte": "Je peux rouler à 70 km/h – OUI" },
+        { "lettre": "D", "texte": "Je peux rouler à 70 km/h – NON" }
+      ],
+      "reponses_correctes": ["A", "D"],
+      "categorie": "vitesse",
+      "explication": "La limitation est à 60 km/h. On peut donc rouler à 50 km/h (inférieur à la limite), mais pas à 70 km/h (supérieur à la limite)."
+    },
+    {
+      "id": "B1_Q3",
+      "numero": 3,
+      "enonce": "Je ralentis (panneau PASSAGE PROTÉGÉ visible)",
+      "signalisation_visible": "Panneau PASSAGE PROTÉGÉ (croix noire sur fond blanc triangulaire)",
+      "propositions": [
+        { "lettre": "A", "texte": "OUI" },
+        { "lettre": "B", "texte": "NON" }
+      ],
+      "reponses_correctes": ["A"],
+      "categorie": "priorite_intersection",
+      "explication": "Le panneau PASSAGE PROTÉGÉ indique qu'on est sur une route prioritaire, mais la prudence reste de mise. On peut ralentir pour anticiper l'intersection."
+    },
+    {
+      "id": "B1_Q4",
+      "numero": 4,
+      "enonce": "Derrière la voiture bleue : je peux stationner / je peux m'arrêter (panneau interdiction de stationner visible)",
+      "signalisation_visible": "Panneau interdiction de stationner (cercle rouge barré)",
+      "propositions": [
+        { "lettre": "A", "texte": "Je peux stationner – OUI" },
+        { "lettre": "B", "texte": "Je peux stationner – NON" },
+        { "lettre": "C", "texte": "Je peux m'arrêter – OUI" },
+        { "lettre": "D", "texte": "Je peux m'arrêter – NON" }
+      ],
+      "reponses_correctes": ["B", "C"],
+      "categorie": "stationnement_arret",
+      "explication": "Le panneau interdit le stationnement (stationner = laisser le véhicule sans conducteur). En revanche, l'arrêt momentané reste autorisé (arrêter = s'immobiliser brièvement avec conducteur présent)."
+    },
+    {
+      "id": "B1_Q5",
+      "numero": 5,
+      "enonce": "À 150 mètres, si le feu clignote : je passerai au ralenti ou je m'arrêterai (passage à niveau avec signal automatique)",
+      "signalisation_visible": "Passage à niveau – signal automatique",
+      "propositions": [
+        { "lettre": "A", "texte": "Je passerai au ralenti" },
+        { "lettre": "B", "texte": "Je m'arrêterai" }
+      ],
+      "reponses_correctes": ["B"],
+      "categorie": "passage_a_niveau",
+      "explication": "Lorsque le feu d'un passage à niveau clignote, cela signifie qu'un train approche. Il est OBLIGATOIRE de s'arrêter. Passer au ralenti est dangereux et interdit."
+    },
+    {
+      "id": "B1_Q6",
+      "numero": 6,
+      "enonce": "Je dépasse (voiture en train de tourner, portière ouverte)",
+      "signalisation_visible": "Aucune – situation de circulation",
+      "propositions": [
+        { "lettre": "A", "texte": "OUI" },
+        { "lettre": "B", "texte": "NON" }
+      ],
+      "reponses_correctes": ["A"],
+      "categorie": "depassement",
+      "explication": "La voiture tourne ou a une portière ouverte. Si la visibilité est bonne et la route libre, on peut dépasser en toute sécurité."
+    },
+    {
+      "id": "B1_Q7",
+      "numero": 7,
+      "enonce": "Je peux rouler derrière le cyclomotoriste (voie cyclable signalée)",
+      "signalisation_visible": "Panneau voie cyclable (vélo blanc sur fond bleu)",
+      "propositions": [
+        { "lettre": "A", "texte": "OUI" },
+        { "lettre": "B", "texte": "NON" }
+      ],
+      "reponses_correctes": ["B"],
+      "categorie": "signalisation_voie",
+      "explication": "Le panneau bleu avec un vélo indique une voie réservée aux cycles. Les voitures ne peuvent pas y circuler, même derrière un cyclomotoriste."
+    },
+    {
+      "id": "B1_Q8",
+      "numero": 8,
+      "enonce": "Le premier virage sera à droite ou à gauche (panneau virages sur 1 km)",
+      "signalisation_visible": "Panneau virages sur 1 km – flèche en S commençant à gauche",
+      "propositions": [
+        { "lettre": "A", "texte": "À droite" },
+        { "lettre": "B", "texte": "À gauche" }
+      ],
+      "reponses_correctes": ["B"],
+      "categorie": "signalisation_danger",
+      "explication": "Le panneau de virages montre une courbe en S. La flèche indique que le premier virage part vers la gauche."
+    },
+    {
+      "id": "B1_Q9",
+      "numero": 9,
+      "enonce": "Les signaux indiquent une déviation de la circulation / un virage dangereux à gauche (chantier avec flèches rouges et blanches)",
+      "signalisation_visible": "Balises de chantier – flèches rouges et blanches orientées à gauche",
+      "propositions": [
+        { "lettre": "A", "texte": "Une déviation de la circulation – OUI" },
+        { "lettre": "B", "texte": "Une déviation de la circulation – NON" },
+        { "lettre": "C", "texte": "Un virage dangereux à gauche – OUI" },
+        { "lettre": "D", "texte": "Un virage dangereux à gauche – NON" }
+      ],
+      "reponses_correctes": ["A", "D"],
+      "categorie": "signalisation_temporaire",
+      "explication": "Les balises chevrons rouges et blancs indiquent une déviation de la circulation (travaux). Elles ne signalent pas un virage dangereux permanent."
+    },
+    {
+      "id": "B1_Q10",
+      "numero": 10,
+      "enonce": "Je dépasse (camion devant, voiture dans le rétroviseur)",
+      "signalisation_visible": "Aucune – situation de circulation",
+      "propositions": [
+        { "lettre": "A", "texte": "OUI" },
+        { "lettre": "B", "texte": "NON" }
+      ],
+      "reponses_correctes": ["B"],
+      "categorie": "depassement",
+      "explication": "Une voiture est visible dans le rétroviseur, donc quelqu'un est en train de nous dépasser. Il est interdit de dépasser lorsqu'on est soi-même dépassé."
+    },
+    {
+      "id": "B1_Q11",
+      "numero": 11,
+      "enonce": "Pour dépasser ce cycliste, je m'écarte au minimum de : 0,50 m / 1,00 m / 1,50 m",
+      "signalisation_visible": "Aucune – route de campagne",
+      "propositions": [
+        { "lettre": "A", "texte": "0,50 mètre" },
+        { "lettre": "B", "texte": "1,00 mètre" },
+        { "lettre": "C", "texte": "1,50 mètre" }
+      ],
+      "reponses_correctes": ["C"],
+      "categorie": "depassement",
+      "explication": "La règle impose un écart latéral minimum de 1,50 mètre pour dépasser un cycliste hors agglomération, afin de garantir sa sécurité."
+    },
+    {
+      "id": "B1_Q12",
+      "numero": 12,
+      "enonce": "Ce signal annonce une entrée d'autoroute ou un carrefour routier",
+      "signalisation_visible": "Panneau carrefour routier (croix directionnelle jaune)",
+      "propositions": [
+        { "lettre": "A", "texte": "Une entrée d'autoroute – OUI" },
+        { "lettre": "B", "texte": "Une entrée d'autoroute – NON" },
+        { "lettre": "C", "texte": "Un carrefour routier – OUI" },
+        { "lettre": "D", "texte": "Un carrefour routier – NON" }
+      ],
+      "reponses_correctes": ["B", "C"],
+      "categorie": "signalisation_direction",
+      "explication": "Le panneau à flèches croisées sur fond jaune annonce un carrefour routier, pas une entrée d'autoroute."
+    },
+    {
+      "id": "B1_Q13",
+      "numero": 13,
+      "enonce": "Je peux rouler en feux de croisement / en feux de route (nuit en ville éclairée)",
+      "signalisation_visible": "Nuit – rue urbaine bien éclairée",
+      "propositions": [
+        { "lettre": "A", "texte": "En feux de croisement – OUI" },
+        { "lettre": "B", "texte": "En feux de croisement – NON" },
+        { "lettre": "C", "texte": "En feux de route – OUI" },
+        { "lettre": "D", "texte": "En feux de route – NON" }
+      ],
+      "reponses_correctes": ["A", "D"],
+      "categorie": "eclairage",
+      "explication": "En ville la nuit, avec un éclairage public suffisant, on utilise les feux de croisement. Les feux de route sont interdits car ils éblouissent les autres usagers."
+    },
+    {
+      "id": "B1_Q14",
+      "numero": 14,
+      "enonce": "À la prochaine intersection, je passerai avant les voitures venant de droite / de gauche (panneau PASSAGE PROTÉGÉ)",
+      "signalisation_visible": "Panneau PASSAGE PROTÉGÉ",
+      "propositions": [
+        { "lettre": "A", "texte": "Je passerai avant les voitures venant de droite – OUI" },
+        { "lettre": "B", "texte": "Je passerai avant les voitures venant de droite – NON" },
+        { "lettre": "C", "texte": "Je passerai avant les voitures venant de gauche – OUI" },
+        { "lettre": "D", "texte": "Je passerai avant les voitures venant de gauche – NON" }
+      ],
+      "reponses_correctes": ["A", "C"],
+      "categorie": "priorite_intersection",
+      "explication": "Le panneau PASSAGE PROTÉGÉ signifie que vous êtes sur une route prioritaire. Vous passez avant tous les véhicules venant des voies secondaires, que ce soit à droite ou à gauche."
+    },
+    {
+      "id": "B1_Q15",
+      "numero": 15,
+      "enonce": "Je ralentis (panneau route glissante par temps de pluie)",
+      "signalisation_visible": "Panneau PLUIE – route glissante",
+      "propositions": [
+        { "lettre": "A", "texte": "OUI" },
+        { "lettre": "B", "texte": "NON" }
+      ],
+      "reponses_correctes": ["B"],
+      "categorie": "signalisation_danger",
+      "explication": "Ce panneau signale un risque de glissance par temps de pluie. Mais si la chaussée est actuellement sèche et sans danger, ralentir n'est pas obligatoire. La prudence s'adapte aux conditions réelles."
+    },
+    {
+      "id": "B1_Q16",
+      "numero": 16,
+      "enonce": "Je dépasse (camion devant sur route droite, rétroviseur libre)",
+      "signalisation_visible": "Aucune – route droite en rase campagne",
+      "propositions": [
+        { "lettre": "A", "texte": "OUI" },
+        { "lettre": "B", "texte": "NON" }
+      ],
+      "reponses_correctes": ["B"],
+      "categorie": "depassement",
+      "explication": "Même si la route est droite, dépasser un camion impose une grande visibilité. Si la situation n'est pas clairement sûre (ligne continue, visibilité insuffisante), il ne faut pas dépasser."
+    },
+    {
+      "id": "B1_Q17",
+      "numero": 17,
+      "enonce": "Je peux m'arrêter ici (marquage au sol – bande d'arrêt d'urgence)",
+      "signalisation_visible": "Marquage au sol – bandes obliques blanches",
+      "propositions": [
+        { "lettre": "A", "texte": "OUI" },
+        { "lettre": "B", "texte": "NON" }
+      ],
+      "reponses_correctes": ["B"],
+      "categorie": "stationnement_arret",
+      "explication": "Les bandes obliques blanches au sol marquent une zone de convergence ou de sortie d'autoroute. Il est interdit de s'y arrêter."
+    },
+    {
+      "id": "B1_Q18",
+      "numero": 18,
+      "enonce": "Ce signal indique l'entrée d'une autoroute ou la sortie d'une autoroute",
+      "signalisation_visible": "Panneau autoroute (blanc sur fond bleu-noir)",
+      "propositions": [
+        { "lettre": "A", "texte": "L'entrée d'une autoroute" },
+        { "lettre": "B", "texte": "La sortie d'une autoroute" }
+      ],
+      "reponses_correctes": ["A"],
+      "categorie": "signalisation_autoroutiere",
+      "explication": "Le panneau d'autoroute (pictogramme de route à 2 voies séparées) indique l'entrée d'une autoroute. Le panneau de sortie est différent (barré)."
+    },
+    {
+      "id": "B1_Q19",
+      "numero": 19,
+      "enonce": "Je vais rencontrer des feux de signalisation à 150 mètres ou à 50 mètres",
+      "signalisation_visible": "Panneau feux tricolores + panneau piétons",
+      "propositions": [
+        { "lettre": "A", "texte": "À 150 mètres" },
+        { "lettre": "B", "texte": "À 50 mètres" }
+      ],
+      "reponses_correctes": ["B"],
+      "categorie": "signalisation_feux",
+      "explication": "Le panneau annonce les feux à courte distance. Selon la position du panneau, les feux sont à 50 mètres environ."
+    },
+    {
+      "id": "B1_Q20",
+      "numero": 20,
+      "enonce": "En marche normale, je suis bien placé (route de campagne, courbe douce)",
+      "signalisation_visible": "Aucune – route de campagne la nuit",
+      "propositions": [
+        { "lettre": "A", "texte": "OUI" },
+        { "lettre": "B", "texte": "NON" }
+      ],
+      "reponses_correctes": ["B"],
+      "categorie": "positionnement",
+      "explication": "Sur une route de campagne en courbe, le positionnement correct est à droite de la chaussée. Si on est trop au centre ou à gauche, c'est un mauvais placement."
+    },
+    {
+      "id": "B1_Q21",
+      "numero": 21,
+      "enonce": "Lorsque je roule hors agglomération, ma ceinture de sécurité doit être bouclée de jour comme de nuit",
+      "signalisation_visible": "Aucune – question théorique",
+      "propositions": [
+        { "lettre": "A", "texte": "OUI" },
+        { "lettre": "B", "texte": "NON" }
+      ],
+      "reponses_correctes": ["A"],
+      "categorie": "securite",
+      "explication": "Le port de la ceinture de sécurité est obligatoire en toutes circonstances : hors agglomération, en agglomération, de jour comme de nuit."
+    },
+    {
+      "id": "B1_Q22",
+      "numero": 22,
+      "enonce": "Lorsqu'il y a un blessé sur la route, je dois prévenir en premier : une pharmacie ou la police/gendarmerie",
+      "signalisation_visible": "Aucune – question théorique",
+      "propositions": [
+        { "lettre": "A", "texte": "Une pharmacie" },
+        { "lettre": "B", "texte": "La police ou la gendarmerie" }
+      ],
+      "reponses_correctes": ["B"],
+      "categorie": "premiers_secours",
+      "explication": "En cas d'accident avec blessé, la première chose à faire est de prévenir les secours d'urgence (police, gendarmerie, SAMU). Ils coordonnent l'intervention médicale."
+    },
+    {
+      "id": "B1_Q23",
+      "numero": 23,
+      "enonce": "Entre ces lignes bleues, le disque de stationnement est obligatoire",
+      "signalisation_visible": "Zone bleue de stationnement (lignes bleues au sol)",
+      "propositions": [
+        { "lettre": "A", "texte": "OUI" },
+        { "lettre": "B", "texte": "NON" }
+      ],
+      "reponses_correctes": ["A"],
+      "categorie": "stationnement_arret",
+      "explication": "Les lignes bleues au sol délimitent une zone de stationnement réglementé. Dans ces zones, le disque de stationnement est obligatoire pour contrôler la durée de stationnement."
+    },
+    {
+      "id": "B1_Q24",
+      "numero": 24,
+      "enonce": "Dans cette rue à double sens, je suis bien placé pour tourner à gauche",
+      "signalisation_visible": "Rue à double sens, files de voitures",
+      "propositions": [
+        { "lettre": "A", "texte": "OUI" },
+        { "lettre": "B", "texte": "NON" }
+      ],
+      "reponses_correctes": ["B"],
+      "categorie": "positionnement",
+      "explication": "Pour tourner à gauche dans une rue à double sens, il faut se placer à gauche de sa voie (près de l'axe central). Si on est trop à droite, le positionnement est incorrect."
+    },
+    {
+      "id": "B1_Q25",
+      "numero": 25,
+      "enonce": "Je passe avant la voiture blanche (camion avec matières dangereuses, voiture blanche stationnée à droite)",
+      "signalisation_visible": "Panneau interdiction de stationner",
+      "propositions": [
+        { "lettre": "A", "texte": "OUI" },
+        { "lettre": "B", "texte": "NON" }
+      ],
+      "reponses_correctes": ["B"],
+      "categorie": "priorite_intersection",
+      "explication": "La voiture blanche est prioritaire car elle est à droite. En l'absence de signalisation accordant la priorité, la règle de la priorité à droite s'applique."
+    }
+  ]
+}

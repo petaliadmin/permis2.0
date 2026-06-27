@@ -1,0 +1,206 @@
+{
+  "version": "1.0",
+  "pays": "Sénégal",
+  "langue": "fr",
+  "categories": [
+    {
+      "id": "priorite_arret",
+      "label": "Priorité & Arrêt (STOP / Cédez)",
+      "description": "Questions relatives au panneau STOP, au cédez-le-passage et aux règles d'arrêt aux intersections.",
+      "couleur": "#E74C3C",
+      "icone": "stop_sign"
+    },
+    {
+      "id": "priorite_intersection",
+      "label": "Priorité aux intersections",
+      "description": "Règles de priorité à droite, passage protégé, routes prioritaires.",
+      "couleur": "#E67E22",
+      "icone": "intersection"
+    },
+    {
+      "id": "priorite_giratoire",
+      "label": "Rond-point & Giratoire",
+      "description": "Règles de priorité dans les carrefours giratoires.",
+      "couleur": "#F39C12",
+      "icone": "roundabout"
+    },
+    {
+      "id": "priorite_feux",
+      "label": "Priorité aux feux tricolores",
+      "description": "Comportement à adopter selon les couleurs des feux de signalisation.",
+      "couleur": "#27AE60",
+      "icone": "traffic_light"
+    },
+    {
+      "id": "vehicules_prioritaires",
+      "label": "Véhicules prioritaires",
+      "description": "Police, pompiers, ambulances – comportement à adopter.",
+      "couleur": "#2980B9",
+      "icone": "emergency_vehicle"
+    },
+    {
+      "id": "vitesse",
+      "label": "Limitation de vitesse",
+      "description": "Panneaux de limitation de vitesse, vitesse maximale autorisée.",
+      "couleur": "#8E44AD",
+      "icone": "speedometer"
+    },
+    {
+      "id": "depassement",
+      "label": "Dépassement",
+      "description": "Règles relatives au dépassement : quand peut-on ou ne peut-on pas dépasser.",
+      "couleur": "#16A085",
+      "icone": "overtaking"
+    },
+    {
+      "id": "positionnement",
+      "label": "Positionnement sur la voie",
+      "description": "Placement correct sur la chaussée selon le type de route et la manœuvre à effectuer.",
+      "couleur": "#2C3E50",
+      "icone": "road_position"
+    },
+    {
+      "id": "stationnement_arret",
+      "label": "Stationnement & Arrêt",
+      "description": "Différence entre arrêt et stationnement, zones autorisées et interdites.",
+      "couleur": "#7F8C8D",
+      "icone": "parking"
+    },
+    {
+      "id": "eclairage",
+      "label": "Éclairage du véhicule",
+      "description": "Feux de position, croisement, route – quand et comment les utiliser.",
+      "couleur": "#F1C40F",
+      "icone": "headlights"
+    },
+    {
+      "id": "signalisation_priorite",
+      "label": "Panneaux de priorité",
+      "description": "Panneaux losange (route prioritaire), fin de priorité.",
+      "couleur": "#E67E22",
+      "icone": "priority_sign"
+    },
+    {
+      "id": "signalisation_interdiction",
+      "label": "Panneaux d'interdiction",
+      "description": "Panneaux ronds à fond blanc et bord rouge.",
+      "couleur": "#C0392B",
+      "icone": "prohibition_sign"
+    },
+    {
+      "id": "signalisation_danger",
+      "label": "Panneaux de danger",
+      "description": "Panneaux triangulaires – virages, pentes, enfants, passage à niveau.",
+      "couleur": "#E74C3C",
+      "icone": "warning_sign"
+    },
+    {
+      "id": "signalisation_autoroutiere",
+      "label": "Signalisation autoroutière",
+      "description": "Entrée/sortie d'autoroute, aires de repos, limitations spécifiques.",
+      "couleur": "#1A5276",
+      "icone": "highway_sign"
+    },
+    {
+      "id": "signalisation_voie",
+      "label": "Signalisation de voie",
+      "description": "Voies cyclables, voies réservées, sens unique.",
+      "couleur": "#117A65",
+      "icone": "lane_sign"
+    },
+    {
+      "id": "signalisation_feux",
+      "label": "Annonce de feux",
+      "description": "Panneaux annonçant la présence de feux tricolores.",
+      "couleur": "#1E8449",
+      "icone": "traffic_light_ahead"
+    },
+    {
+      "id": "signalisation_direction",
+      "label": "Panneaux de direction",
+      "description": "Carrefours, bifurcations, carrefour routier.",
+      "couleur": "#1F618D",
+      "icone": "direction_sign"
+    },
+    {
+      "id": "signalisation_temporaire",
+      "label": "Signalisation temporaire",
+      "description": "Balises de chantier, déviations, signaux provisoires.",
+      "couleur": "#D35400",
+      "icone": "temporary_sign"
+    },
+    {
+      "id": "signalisation_restriction",
+      "label": "Restrictions (hauteur/largeur/poids)",
+      "description": "Panneaux de limitation de hauteur, largeur ou poids des véhicules.",
+      "couleur": "#6C3483",
+      "icone": "restriction_sign"
+    },
+    {
+      "id": "passage_a_niveau",
+      "label": "Passage à niveau",
+      "description": "Comportement à adopter aux passages à niveau (avec et sans barrières).",
+      "couleur": "#922B21",
+      "icone": "railroad_crossing"
+    },
+    {
+      "id": "feux_tricolores",
+      "label": "Feux tricolores",
+      "description": "Comportement selon la couleur du feu (rouge, orange, vert).",
+      "couleur": "#1E8449",
+      "icone": "traffic_light"
+    },
+    {
+      "id": "signaux_agents",
+      "label": "Signaux des agents",
+      "description": "Gestes des policiers et agents de circulation.",
+      "couleur": "#1A5276",
+      "icone": "police_officer"
+    },
+    {
+      "id": "securite",
+      "label": "Sécurité passive",
+      "description": "Ceinture de sécurité, casque, équipements de sécurité.",
+      "couleur": "#1D8348",
+      "icone": "seatbelt"
+    },
+    {
+      "id": "premiers_secours",
+      "label": "Premiers secours & Accidents",
+      "description": "Comportement à adopter en cas d'accident, alerte des secours.",
+      "couleur": "#C0392B",
+      "icone": "first_aid"
+    }
+  ],
+  "niveaux_difficulte": [
+    { "id": "facile", "label": "Facile", "couleur": "#27AE60" },
+    { "id": "moyen", "label": "Moyen", "couleur": "#F39C12" },
+    { "id": "difficile", "label": "Difficile", "couleur": "#E74C3C" }
+  ],
+  "types_permis": [
+    {
+      "id": "B",
+      "label": "Permis B",
+      "description": "Véhicules légers – voitures particulières jusqu'à 3,5 tonnes",
+      "age_minimum": 18
+    },
+    {
+      "id": "A",
+      "label": "Permis A",
+      "description": "Motocycles",
+      "age_minimum": 20
+    },
+    {
+      "id": "C",
+      "label": "Permis C",
+      "description": "Poids lourds",
+      "age_minimum": 21
+    },
+    {
+      "id": "D",
+      "label": "Permis D",
+      "description": "Transport en commun",
+      "age_minimum": 24
+    }
+  ]
+}

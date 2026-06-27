@@ -1,0 +1,21 @@
+FROM node:20-slim
+
+WORKDIR /app
+
+RUN npm install -g pnpm
+
+COPY package*.json ./
+COPY turbo.json ./
+COPY tsconfig.json ./
+COPY .eslintrc.json ./
+COPY .prettierrc.json ./
+COPY pnpm-workspace.yaml ./
+
+COPY apps/web ./apps/web
+COPY packages ./packages
+
+RUN pnpm install
+
+EXPOSE 3000
+
+CMD ["pnpm", "--filter", "@permis2.0/web", "run", "start"]

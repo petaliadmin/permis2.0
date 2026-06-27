@@ -1,0 +1,12 @@
+{
+  "Index": {
+    "title": "Bienvenue sur Permis2.0",
+    "description": "Préparez votre examen du permis de conduire sénégalais"
+  },
+  "Admin": {
+    "dashboard": "Tableau de Bord",
+    "users": "Utilisateurs",
+    "categories": "Catégories",
+    "lessons": "Leçons"
+  }
+}

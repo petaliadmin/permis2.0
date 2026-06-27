@@ -1,0 +1,338 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model User {
+  id            String     @id @default(cuid())
+  email         String     @unique
+  name          String
+  avatar        String?
+  passwordHash  String?
+  googleId      String?    @unique
+  xp            Int        @default(0)
+  level         String     @default("Débutant")
+  role          Role       @default(USER)
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  // Relations
+  exams         Exam[]
+  progress      Progress[]
+  statistics    Statistic[]
+  favorites     Favorite[]
+  badges        Badge[]
+  streak        DailyStreak?
+  subscriptions Subscription[]
+  notifications Notification[]
+
+  @@map("users")
+}
+
+model Category {
+  id          String     @id @default(cuid())
+  label       String
+  description String
+  couleur     String
+  icone       String
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  // Relations
+  lessons     Lesson[]
+  questions   Question[]
+  statistics  Statistic[]
+
+  @@map("categories")
+}
+
+model Lesson {
+  id                  String     @id @default(cuid())
+  categoryId          String
+  titre               String
+  contenu             String
+  points_cles         String[]
+  exceptions          String[]
+  erreurs_frequentes  String[]
+  regles              String[]
+  illustrations       String[]
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @updatedAt
+
+  // Relations
+  category            Category   @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  favorites           Favorite[]
+
+  @@index([categoryId])
+  @@map("lessons")
+}
+
+model Series {
+  id          String     @id @default(cuid())
+  name        String
+  description String
+  code        String     @unique // B1, B2, B3
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  // Relations
+  questions   Question[]
+  progress    Progress[]
+
+  @@map("series")
+}
+
+model Question {
+  id                    String     @id @default(cuid())
+  serieId               String
+  categoryId            String
+  numero                Int
+  enonce                String
+  image                 String?    // scene image path, e.g. /images/quiz/diappo1_q1.png
+  signalisation_visible String?
+  reponses_correctes    String[]
+  explication           String
+  createdAt             DateTime   @default(now())
+  updatedAt             DateTime   @updatedAt
+
+  // Relations
+  series                Series     @relation(fields: [serieId], references: [id], onDelete: Cascade)
+  category              Category   @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  choices               Choice[]
+  examQuestions         ExamQuestion[]
+  favorites             Favorite[]
+
+  @@index([serieId])
+  @@index([categoryId])
+  @@map("questions")
+}
+
+model Choice {
+  id          String     @id @default(cuid())
+  questionId  String
+  text        String
+  order       Int
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  // Relations
+  question    Question   @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@index([questionId])
+  @@map("choices")
+}
+
+model Exam {
+  id          String     @id @default(cuid())
+  userId      String
+  status      String     @default("pending") // pending, in_progress, completed
+  duration    Int        @default(1800000) // 30 minutes in milliseconds
+  startedAt   DateTime?
+  completedAt DateTime?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  // Relations
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  questions   ExamQuestion[]
+  result      ExamResult?
+
+  @@index([userId])
+  @@map("exams")
+}
+
+model ExamQuestion {
+  id          String     @id @default(cuid())
+  examId      String
+  questionId  String
+  userAnswer  String?
+  isCorrect   Boolean?
+  timeSpent   Int        @default(0) // in seconds
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  // Relations
+  exam        Exam       @relation(fields: [examId], references: [id], onDelete: Cascade)
+  question    Question   @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@index([examId])
+  @@index([questionId])
+  @@map("exam_questions")
+}
+
+model ExamResult {
+  id          String     @id @default(cuid())
+  examId      String     @unique
+  userId      String
+  score       Int
+  percentage  Int
+  passed      Boolean
+  timeUsed    Int        // in seconds
+  totalTime   Int        // in seconds
+  startedAt   DateTime
+  completedAt DateTime
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  // Relations
+  exam        Exam       @relation(fields: [examId], references: [id], onDelete: Cascade)
+
+  @@index([examId])
+  @@map("exam_results")
+}
+
+model Progress {
+  id              String     @id @default(cuid())
+  userId          String
+  serieId         String
+  correctAnswers  Int        @default(0)
+  totalQuestions  Int        @default(0)
+  accuracy        Float      @default(0)
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+
+  // Relations
+  user            User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  series          Series     @relation(fields: [serieId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, serieId])
+  @@index([userId])
+  @@index([serieId])
+  @@map("progress")
+}
+
+model Statistic {
+  id              String     @id @default(cuid())
+  userId          String
+  categoryId      String?
+  correctAnswers  Int        @default(0)
+  totalAnswers    Int        @default(0)
+  successRate     Float      @default(0)
+  averageTime     Float      @default(0)
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+
+  // Relations
+  user            User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category        Category?  @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([categoryId])
+  @@map("statistics")
+}
+
+model Favorite {
+  id          String     @id @default(cuid())
+  userId      String
+  lessonId    String?
+  questionId  String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  // Relations
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lesson      Lesson?    @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  question    Question?  @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, lessonId, questionId])
+  @@index([userId])
+  @@index([lessonId])
+  @@index([questionId])
+  @@map("favorites")
+}
+
+model Badge {
+  id          String     @id @default(cuid())
+  userId      String
+  name        String
+  description String
+  icon        String
+  unlockedAt  DateTime   @default(now())
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  // Relations
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, name])
+  @@index([userId])
+  @@map("badges")
+}
+
+model DailyStreak {
+  id              String     @id @default(cuid())
+  userId          String     @unique
+  currentStreak   Int        @default(0)
+  longestStreak   Int        @default(0)
+  lastActivityDate DateTime?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+
+  // Relations
+  user            User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("daily_streaks")
+}
+
+model Notification {
+  id        String     @id @default(cuid())
+  userId    String
+  title     String
+  message   String
+  type      String     @default("info") // success, info, warning, error
+  read      Boolean    @default(false)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  // Relations
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("notifications")
+}
+
+model Subscription {
+  id        String     @id @default(cuid())
+  userId    String
+  plan      String     @default("free") // free, premium, pro
+  status    String     @default("active") // active, cancelled, expired
+  startDate DateTime   @default(now())
+  endDate   DateTime?
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  // Relations
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("subscriptions")
+}
+
+model TrafficSign {
+  id              String     @id @default(cuid())
+  name            String
+  code            String?
+  meaning         String
+  category        String // Danger, Interdiction, Obligation, Priorité, Indication, Direction, Temporaire, Restriction, Stationnement
+  description     String
+  contexte_usage  String?
+  regle_associee  String?
+  icone           String?
+  image           String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@map("traffic_signs")
+}

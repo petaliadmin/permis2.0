@@ -1,0 +1,354 @@
+{
+  "serie": "B2",
+  "titre": "Série de Test B2 – Permis de conduire Sénégal",
+  "total_questions": 25,
+  "questions": [
+    {
+      "id": "B2_Q1",
+      "numero": 1,
+      "enonce": "Ce signal indique une route prioritaire / une interdiction de stationner",
+      "signalisation_visible": "Panneau route prioritaire (losange jaune/orange)",
+      "propositions": [
+        { "lettre": "A", "texte": "Une route prioritaire – OUI" },
+        { "lettre": "B", "texte": "Une route prioritaire – NON" },
+        { "lettre": "C", "texte": "Une interdiction de stationner – OUI" },
+        { "lettre": "D", "texte": "Une interdiction de stationner – NON" }
+      ],
+      "reponses_correctes": ["A", "D"],
+      "categorie": "signalisation_priorite",
+      "explication": "Le losange jaune-orange indique une route prioritaire. Il ne signifie pas une interdiction de stationner."
+    },
+    {
+      "id": "B2_Q2",
+      "numero": 2,
+      "enonce": "Pour aller tout droit, je m'arrête au niveau du signal ou au niveau de la bande blanche / je passerai avant les voitures venant de gauche",
+      "signalisation_visible": "STOP",
+      "propositions": [
+        { "lettre": "A", "texte": "Je m'arrête au niveau du signal" },
+        { "lettre": "B", "texte": "Je m'arrête au niveau de la bande blanche" },
+        { "lettre": "C", "texte": "Je passerai avant les voitures venant de gauche – OUI" },
+        { "lettre": "D", "texte": "Je passerai avant les voitures venant de gauche – NON" }
+      ],
+      "reponses_correctes": ["B", "D"],
+      "categorie": "priorite_arret",
+      "explication": "Au STOP, on s'immobilise à la bande blanche au sol (et non au niveau du panneau). Le STOP impose de céder le passage à tous les véhicules."
+    },
+    {
+      "id": "B2_Q3",
+      "numero": 3,
+      "enonce": "Je m'arrête au niveau du signal / Je passerai avant les voitures venant de gauche (cédez-le-passage avec STOP à 50 m)",
+      "signalisation_visible": "Panneau cédez-le-passage (triangle inversé rouge) + STOP 50m",
+      "propositions": [
+        { "lettre": "A", "texte": "Je m'arrête au niveau du signal – OUI" },
+        { "lettre": "B", "texte": "Je m'arrête au niveau du signal – NON" },
+        { "lettre": "C", "texte": "Je passerai avant les voitures venant de gauche – OUI" },
+        { "lettre": "D", "texte": "Je passerai avant les voitures venant de gauche – NON" }
+      ],
+      "reponses_correctes": ["B", "D"],
+      "categorie": "priorite_arret",
+      "explication": "Le panneau cédez-le-passage n'oblige pas à s'arrêter (contrairement au STOP), mais à laisser passer. On ne passe pas avant les voitures venant de gauche."
+    },
+    {
+      "id": "B2_Q4",
+      "numero": 4,
+      "enonce": "Cette balise annonce un virage ou un passage à niveau",
+      "signalisation_visible": "Balise blanche et rouge (poteau kilométrique bordure)",
+      "propositions": [
+        { "lettre": "A", "texte": "Un virage" },
+        { "lettre": "B", "texte": "Un passage à niveau" }
+      ],
+      "reponses_correctes": ["B"],
+      "categorie": "signalisation_danger",
+      "explication": "La balise rouge et blanche placée en bordure de route annonce un passage à niveau proche. Elle se distingue des balises de virage par sa coloration spécifique."
+    },
+    {
+      "id": "B2_Q5",
+      "numero": 5,
+      "enonce": "Ce signal indique une hauteur limitée / une largeur limitée",
+      "signalisation_visible": "Panneau limitation 3,75 m (cercle rouge avec chiffre)",
+      "propositions": [
+        { "lettre": "A", "texte": "Une hauteur limitée – OUI" },
+        { "lettre": "B", "texte": "Une hauteur limitée – NON" },
+        { "lettre": "C", "texte": "Une largeur limitée – OUI" },
+        { "lettre": "D", "texte": "Une largeur limitée – NON" }
+      ],
+      "reponses_correctes": ["A", "D"],
+      "categorie": "signalisation_restriction",
+      "explication": "Le panneau rond rouge avec une valeur en mètres sous un pont indique une limitation de hauteur. Une limitation de largeur aurait un pictogramme différent (largeur de voie)."
+    },
+    {
+      "id": "B2_Q6",
+      "numero": 6,
+      "enonce": "Je reste sur cette voie ou je me rabats à droite (autoroute, camion devant change de voie)",
+      "signalisation_visible": "Autoroute – voie de gauche, camion se déplaçant vers la droite",
+      "propositions": [
+        { "lettre": "A", "texte": "Je reste sur cette voie" },
+        { "lettre": "B", "texte": "Je me rabats à droite" }
+      ],
+      "reponses_correctes": ["A"],
+      "categorie": "positionnement",
+      "explication": "Si le camion se rabat à droite et que la voie de gauche est libre devant, on peut rester sur cette voie pour le dépasser. Se rabattre à droite derrière lui serait moins sûr."
+    },
+    {
+      "id": "B2_Q7",
+      "numero": 7,
+      "enonce": "Je peux rouler en feux de croisement / en feux de route (brouillard, véhicule devant)",
+      "signalisation_visible": "Brouillard dense – véhicule visible devant",
+      "propositions": [
+        { "lettre": "A", "texte": "En feux de croisement – OUI" },
+        { "lettre": "B", "texte": "En feux de croisement – NON" },
+        { "lettre": "C", "texte": "En feux de route – OUI" },
+        { "lettre": "D", "texte": "En feux de route – NON" }
+      ],
+      "reponses_correctes": ["A", "D"],
+      "categorie": "eclairage",
+      "explication": "Par brouillard avec un véhicule devant, on utilise les feux de croisement (ou antibrouillard). Les feux de route sont interdits car ils créent un mur lumineux qui aggrave le problème de visibilité."
+    },
+    {
+      "id": "B2_Q8",
+      "numero": 8,
+      "enonce": "Pour tourner à droite, je m'arrête ou je passe (feux verts, piétons traversent)",
+      "signalisation_visible": "Feux tricolores – feu vert, piétons sur passage clouté",
+      "propositions": [
+        { "lettre": "A", "texte": "Je m'arrête" },
+        { "lettre": "B", "texte": "Je passe" }
+      ],
+      "reponses_correctes": ["B"],
+      "categorie": "feux_tricolores",
+      "explication": "Le feu est vert. On peut passer, mais avec prudence pour les piétons qui traversent (ils sont prioritaires sur le passage clouté)."
+    },
+    {
+      "id": "B2_Q9",
+      "numero": 9,
+      "enonce": "Pour tourner à gauche, je passe avant la voiture blanche / je passe avant la voiture rouge",
+      "signalisation_visible": "Intersection – voiture blanche en face, voiture rouge à droite",
+      "propositions": [
+        { "lettre": "A", "texte": "Je passe avant la voiture blanche – OUI" },
+        { "lettre": "B", "texte": "Je passe avant la voiture blanche – NON" },
+        { "lettre": "C", "texte": "Je passe avant la voiture rouge – OUI" },
+        { "lettre": "D", "texte": "Je passe avant la voiture rouge – NON" }
+      ],
+      "reponses_correctes": ["B", "D"],
+      "categorie": "priorite_intersection",
+      "explication": "Pour tourner à gauche, on croise la voie des véhicules en face (voiture blanche) ET ceux venant de droite (voiture rouge). On doit céder le passage dans les deux cas."
+    },
+    {
+      "id": "B2_Q10",
+      "numero": 10,
+      "enonce": "Je suis bien placé pour aller tout droit (flèche au sol indiquant gauche)",
+      "signalisation_visible": "Marquage au sol – flèche directionnelle gauche",
+      "propositions": [
+        { "lettre": "A", "texte": "OUI" },
+        { "lettre": "B", "texte": "NON" }
+      ],
+      "reponses_correctes": ["B"],
+      "categorie": "positionnement",
+      "explication": "La flèche au sol indique que cette voie est réservée aux véhicules tournant à gauche. Pour aller tout droit, il faut se positionner sur une autre voie."
+    },
+    {
+      "id": "B2_Q11",
+      "numero": 11,
+      "enonce": "Je dépasse (véhicule lent devant, ligne discontinue, rétroviseur libre)",
+      "signalisation_visible": "Ligne centrale discontinue – voiture lente devant",
+      "propositions": [
+        { "lettre": "A", "texte": "OUI" },
+        { "lettre": "B", "texte": "NON" }
+      ],
+      "reponses_correctes": ["B"],
+      "categorie": "depassement",
+      "explication": "Même avec une ligne discontinue, dépasser nécessite de vérifier la visibilité suffisante, l'absence de véhicule en sens inverse et la sécurité globale. Si ce n'est pas le cas, on ne dépasse pas."
+    },
+    {
+      "id": "B2_Q12",
+      "numero": 12,
+      "enonce": "Je peux dépasser / Je peux klaxonner (panneau interdiction de dépasser + interdiction de klaxon)",
+      "signalisation_visible": "Panneau interdiction de dépasser + panneau interdiction de klaxonner",
+      "propositions": [
+        { "lettre": "A", "texte": "Je peux dépasser – OUI" },
+        { "lettre": "B", "texte": "Je peux dépasser – NON" },
+        { "lettre": "C", "texte": "Je peux klaxonner – OUI" },
+        { "lettre": "D", "texte": "Je peux klaxonner – NON" }
+      ],
+      "reponses_correctes": ["B", "D"],
+      "categorie": "signalisation_interdiction",
+      "explication": "Les deux panneaux (interdiction de dépasser + interdiction de klaxonner) sont clairement visibles. Les deux actions sont donc interdites."
+    },
+    {
+      "id": "B2_Q13",
+      "numero": 13,
+      "enonce": "Pour aller tout droit, je passe avant la voiture blanche (intersection avec feux, camion-citerne à droite)",
+      "signalisation_visible": "Feux tricolores – intersection urbaine",
+      "propositions": [
+        { "lettre": "A", "texte": "OUI" },
+        { "lettre": "B", "texte": "NON" }
+      ],
+      "reponses_correctes": ["A"],
+      "categorie": "priorite_feux",
+      "explication": "Si le feu est vert pour aller tout droit et que la voiture blanche doit céder, on passe avant elle. La signalisation lumineuse prime sur la règle de priorité à droite."
+    },
+    {
+      "id": "B2_Q14",
+      "numero": 14,
+      "enonce": "Ce véhicule a annoncé son approche. Je passe avant lui (véhicule de police)",
+      "signalisation_visible": "Véhicule de police avec signaux lumineux/sonores",
+      "propositions": [
+        { "lettre": "A", "texte": "OUI" },
+        { "lettre": "B", "texte": "NON" }
+      ],
+      "reponses_correctes": ["B"],
+      "categorie": "vehicules_prioritaires",
+      "explication": "Les véhicules d'urgence (police, pompiers, ambulance) avec signaux actifs ont la priorité absolue. On doit leur céder le passage immédiatement."
+    },
+    {
+      "id": "B2_Q15",
+      "numero": 15,
+      "enonce": "La vitesse est limitée pour tous les véhicules ou seulement pour les véhicules de plus de 16 tonnes (panneaux 16t + 10 km/h)",
+      "signalisation_visible": "Panneau 16 tonnes + panneau 10 km/h",
+      "propositions": [
+        { "lettre": "A", "texte": "Pour tous les véhicules" },
+        { "lettre": "B", "texte": "Seulement pour les véhicules de plus de 16 tonnes" }
+      ],
+      "reponses_correctes": ["A"],
+      "categorie": "vitesse",
+      "explication": "Le panneau 16t indique le poids maximal autorisé sur le pont. Le panneau 10 km/h est une limitation de vitesse pour TOUS les véhicules (la combinaison protège le pont)."
+    },
+    {
+      "id": "B2_Q16",
+      "numero": 16,
+      "enonce": "Je roule à la même vitesse que cette voiture, je suis bien placé (autoroute, voiture devant dans voie centrale)",
+      "signalisation_visible": "Autoroute – 3 voies",
+      "propositions": [
+        { "lettre": "A", "texte": "OUI" },
+        { "lettre": "B", "texte": "NON" }
+      ],
+      "reponses_correctes": ["B"],
+      "categorie": "positionnement",
+      "explication": "Sur autoroute, on doit circuler dans la voie de droite sauf pour dépasser. Rouler dans la voie centrale à la même vitesse qu'une voiture devant sans dépasser est un mauvais placement."
+    },
+    {
+      "id": "B2_Q17",
+      "numero": 17,
+      "enonce": "En tournant à droite à la prochaine intersection, je serai sur une route prioritaire (panneau losange jaune + panneau bifurcation)",
+      "signalisation_visible": "Route prioritaire + panneau bifurcation à droite",
+      "propositions": [
+        { "lettre": "A", "texte": "OUI" },
+        { "lettre": "B", "texte": "NON" }
+      ],
+      "reponses_correctes": ["B"],
+      "categorie": "signalisation_priorite",
+      "explication": "Le panneau losange jaune indique la route actuelle comme prioritaire. En tournant à droite sur une voie secondaire, on quitte la route prioritaire."
+    },
+    {
+      "id": "B2_Q18",
+      "numero": 18,
+      "enonce": "Je peux rouler sans feux / en feux de croisement (nuit en ville, voiture garée à droite)",
+      "signalisation_visible": "Nuit – ville avec éclairage public",
+      "propositions": [
+        { "lettre": "A", "texte": "Sans feux – OUI" },
+        { "lettre": "B", "texte": "Sans feux – NON" },
+        { "lettre": "C", "texte": "En feux de croisement – OUI" },
+        { "lettre": "D", "texte": "En feux de croisement – NON" }
+      ],
+      "reponses_correctes": ["B", "C"],
+      "categorie": "eclairage",
+      "explication": "La nuit, même en ville éclairée, circuler sans feux est interdit. Les feux de croisement sont obligatoires. Les feux de route seraient trop éblouissants en ville."
+    },
+    {
+      "id": "B2_Q19",
+      "numero": 19,
+      "enonce": "Je dépasse (route de campagne, voiture bleue devant, ligne discontinue, brouillard léger)",
+      "signalisation_visible": "Ligne discontinue – brouillard",
+      "propositions": [
+        { "lettre": "A", "texte": "OUI" },
+        { "lettre": "B", "texte": "NON" }
+      ],
+      "reponses_correctes": ["A"],
+      "categorie": "depassement",
+      "explication": "La ligne est discontinue et la visibilité est suffisante malgré le brouillard léger. Le dépassement peut être effectué si la voie en sens inverse est libre et la manœuvre sécurisée."
+    },
+    {
+      "id": "B2_Q20",
+      "numero": 20,
+      "enonce": "Après ce signal, ma vitesse sera limitée à 60 km/h",
+      "signalisation_visible": "Panneau limitation vitesse 60 km/h",
+      "propositions": [
+        { "lettre": "A", "texte": "OUI" },
+        { "lettre": "B", "texte": "NON" }
+      ],
+      "reponses_correctes": ["B"],
+      "categorie": "vitesse",
+      "explication": "Un panneau de limitation de vitesse fixe le maximum autorisé. On peut rouler à 60 km/h maximum, mais pas nécessairement à cette vitesse (conditions de route peuvent imposer moins)."
+    },
+    {
+      "id": "B2_Q21",
+      "numero": 21,
+      "enonce": "Pour dépasser, la nuit, en campagne, je fais des appels : feux de croisement/feux de route ou feux de croisement/feux de position",
+      "signalisation_visible": "Nuit – route de campagne",
+      "propositions": [
+        { "lettre": "A", "texte": "Feux de croisement / feux de route" },
+        { "lettre": "B", "texte": "Feux de croisement / feux de position" }
+      ],
+      "reponses_correctes": ["A"],
+      "categorie": "eclairage",
+      "explication": "Pour signaler un dépassement la nuit en campagne, on alterne feux de croisement et feux de route (appels de phares). Les feux de position sont insuffisants pour un appel de phares."
+    },
+    {
+      "id": "B2_Q22",
+      "numero": 22,
+      "enonce": "En ville, la nuit, je dois mettre ma ceinture de sécurité",
+      "signalisation_visible": "Aucune – question théorique",
+      "propositions": [
+        { "lettre": "A", "texte": "OUI" },
+        { "lettre": "B", "texte": "NON" }
+      ],
+      "reponses_correctes": ["A"],
+      "categorie": "securite",
+      "explication": "La ceinture de sécurité est obligatoire en toutes circonstances : en ville, hors agglomération, de jour comme de nuit."
+    },
+    {
+      "id": "B2_Q23",
+      "numero": 23,
+      "enonce": "Je vais rencontrer un endroit fréquenté par des enfants / Je ralentis (panneau attention enfants)",
+      "signalisation_visible": "Panneau danger – enfants (adulte et enfant)",
+      "propositions": [
+        { "lettre": "A", "texte": "Je vais rencontrer un endroit fréquenté par des enfants – OUI" },
+        { "lettre": "B", "texte": "Je vais rencontrer un endroit fréquenté par des enfants – NON" },
+        { "lettre": "C", "texte": "Je ralentis – OUI" },
+        { "lettre": "D", "texte": "Je ralentis – NON" }
+      ],
+      "reponses_correctes": ["A", "C"],
+      "categorie": "signalisation_danger",
+      "explication": "Le panneau triangulaire avec adulte et enfant signale une zone fréquentée par des enfants (école, parc). Il faut ralentir et redoubler de vigilance."
+    },
+    {
+      "id": "B2_Q24",
+      "numero": 24,
+      "enonce": "Le long du trottoir, je peux m'arrêter / je peux stationner (flèches au sol bidirectionnelles)",
+      "signalisation_visible": "Marquage au sol – double flèche (sens interdit aux deux bouts)",
+      "propositions": [
+        { "lettre": "A", "texte": "Je peux m'arrêter – OUI" },
+        { "lettre": "B", "texte": "Je peux m'arrêter – NON" },
+        { "lettre": "C", "texte": "Je peux stationner – OUI" },
+        { "lettre": "D", "texte": "Je peux stationner – NON" }
+      ],
+      "reponses_correctes": ["B", "D"],
+      "categorie": "stationnement_arret",
+      "explication": "Les flèches bidirectionnelles au sol indiquent un carrefour avec sens giratoire ou zone de manœuvre. L'arrêt et le stationnement y sont interdits car ils gêneraient la circulation."
+    },
+    {
+      "id": "B2_Q25",
+      "numero": 25,
+      "enonce": "Derrière la voiture bleue, je peux stationner / je peux m'arrêter (panneau interdiction de stationner)",
+      "signalisation_visible": "Panneau interdiction de stationner",
+      "propositions": [
+        { "lettre": "A", "texte": "Je peux stationner – OUI" },
+        { "lettre": "B", "texte": "Je peux stationner – NON" },
+        { "lettre": "C", "texte": "Je peux m'arrêter – OUI" },
+        { "lettre": "D", "texte": "Je peux m'arrêter – NON" }
+      ],
+      "reponses_correctes": ["B", "C"],
+      "categorie": "stationnement_arret",
+      "explication": "Le panneau interdit le stationnement. Mais l'arrêt momentané reste autorisé (le conducteur reste dans le véhicule ou à proximité immédiate)."
+    }
+  ]
+}

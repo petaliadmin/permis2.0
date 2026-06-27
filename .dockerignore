@@ -1,0 +1,17 @@
+node_modules
+.git
+.github
+*.md
+.env*
+turbo
+.turbo
+.vscode
+.idea
+dist
+.next
+build
+coverage
+*.log
+Dockerfile*
+docker-compose*.yml
+.claude

@@ -1,0 +1,1054 @@
+{
+  "questions": [
+    {
+      "id": "q_doc_001",
+      "categorie": "Panneaux de danger",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo10-1_p10_i2.png",
+      "enonce": "Quelle est la signification de ce panneau ?",
+      "options": [
+        "Interdiction de circuler",
+        "Obligation de ralentir",
+        "Danger à proximité",
+        "Information de direction"
+      ],
+      "bonneReponse": "Interdiction de circuler",
+      "explication": "Cette question porte sur la catégorie Panneaux de danger."
+    },
+    {
+      "id": "q_doc_002",
+      "categorie": "Panneaux de danger",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo12_p16_i2.png",
+      "enonce": "Que signifie cette signalisation ?",
+      "options": [
+        "Arrêt obligatoire",
+        "Cédez le passage",
+        "Sens unique",
+        "Priorité aux piétons"
+      ],
+      "bonneReponse": "Arrêt obligatoire",
+      "explication": "Cette question porte sur la catégorie Panneaux de danger."
+    },
+    {
+      "id": "q_doc_003",
+      "categorie": "Panneaux de danger",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo2_p20_i2.png",
+      "enonce": "Quelle règle de priorité s'applique ici ?",
+      "options": [
+        "Priorité à droite",
+        "Priorité aux feux",
+        "Cédez le passage",
+        "Arrêt obligatoire"
+      ],
+      "bonneReponse": "Priorité à droite",
+      "explication": "Cette question porte sur la catégorie Panneaux de danger."
+    },
+    {
+      "id": "q_doc_004",
+      "categorie": "Panneaux de danger",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo4_p26_i2.png",
+      "enonce": "Comment devez-vous réagir face à ce panneau ?",
+      "options": [
+        "Ralentir et redoubler de vigilance",
+        "Accélérer",
+        "Klaxonner",
+        "Dépasser"
+      ],
+      "bonneReponse": "Ralentir et redoubler de vigilance",
+      "explication": "Cette question porte sur la catégorie Panneaux de danger."
+    },
+    {
+      "id": "q_doc_005",
+      "categorie": "Panneaux de danger",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo6_p6_i2.png",
+      "enonce": "Cette signalisation indique une :",
+      "options": [
+        "Obligation",
+        "Interdiction",
+        "Information",
+        "Direction"
+      ],
+      "bonneReponse": "Obligation",
+      "explication": "Cette question porte sur la catégorie Panneaux de danger."
+    },
+    {
+      "id": "q_doc_006",
+      "categorie": "Panneaux d'interdiction",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo10-1_p11_i2.png",
+      "enonce": "Quelle est la signification de ce panneau ?",
+      "options": [
+        "Interdiction de circuler",
+        "Obligation de ralentir",
+        "Danger à proximité",
+        "Information de direction"
+      ],
+      "bonneReponse": "Interdiction de circuler",
+      "explication": "Cette question porte sur la catégorie Panneaux d'interdiction."
+    },
+    {
+      "id": "q_doc_007",
+      "categorie": "Panneaux d'interdiction",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo12_p17_i2.png",
+      "enonce": "Que signifie cette signalisation ?",
+      "options": [
+        "Arrêt obligatoire",
+        "Cédez le passage",
+        "Sens unique",
+        "Priorité aux piétons"
+      ],
+      "bonneReponse": "Arrêt obligatoire",
+      "explication": "Cette question porte sur la catégorie Panneaux d'interdiction."
+    },
+    {
+      "id": "q_doc_008",
+      "categorie": "Panneaux d'interdiction",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo2_p21_i2.png",
+      "enonce": "Quelle règle de priorité s'applique ici ?",
+      "options": [
+        "Priorité à droite",
+        "Priorité aux feux",
+        "Cédez le passage",
+        "Arrêt obligatoire"
+      ],
+      "bonneReponse": "Priorité à droite",
+      "explication": "Cette question porte sur la catégorie Panneaux d'interdiction."
+    },
+    {
+      "id": "q_doc_009",
+      "categorie": "Panneaux d'interdiction",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo4_p27_i2.png",
+      "enonce": "Comment devez-vous réagir face à ce panneau ?",
+      "options": [
+        "Ralentir et redoubler de vigilance",
+        "Accélérer",
+        "Klaxonner",
+        "Dépasser"
+      ],
+      "bonneReponse": "Ralentir et redoubler de vigilance",
+      "explication": "Cette question porte sur la catégorie Panneaux d'interdiction."
+    },
+    {
+      "id": "q_doc_010",
+      "categorie": "Panneaux d'interdiction",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo6_p7_i2.png",
+      "enonce": "Cette signalisation indique une :",
+      "options": [
+        "Obligation",
+        "Interdiction",
+        "Information",
+        "Direction"
+      ],
+      "bonneReponse": "Obligation",
+      "explication": "Cette question porte sur la catégorie Panneaux d'interdiction."
+    },
+    {
+      "id": "q_doc_011",
+      "categorie": "Panneaux de priorité",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo10-1_p12_i2.png",
+      "enonce": "Quelle est la signification de ce panneau ?",
+      "options": [
+        "Interdiction de circuler",
+        "Obligation de ralentir",
+        "Danger à proximité",
+        "Information de direction"
+      ],
+      "bonneReponse": "Interdiction de circuler",
+      "explication": "Cette question porte sur la catégorie Panneaux de priorité."
+    },
+    {
+      "id": "q_doc_012",
+      "categorie": "Panneaux de priorité",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo12_p18_i2.png",
+      "enonce": "Que signifie cette signalisation ?",
+      "options": [
+        "Arrêt obligatoire",
+        "Cédez le passage",
+        "Sens unique",
+        "Priorité aux piétons"
+      ],
+      "bonneReponse": "Arrêt obligatoire",
+      "explication": "Cette question porte sur la catégorie Panneaux de priorité."
+    },
+    {
+      "id": "q_doc_013",
+      "categorie": "Panneaux de priorité",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo2_p22_i2.png",
+      "enonce": "Quelle règle de priorité s'applique ici ?",
+      "options": [
+        "Priorité à droite",
+        "Priorité aux feux",
+        "Cédez le passage",
+        "Arrêt obligatoire"
+      ],
+      "bonneReponse": "Priorité à droite",
+      "explication": "Cette question porte sur la catégorie Panneaux de priorité."
+    },
+    {
+      "id": "q_doc_014",
+      "categorie": "Panneaux de priorité",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo4_p28_i2.png",
+      "enonce": "Comment devez-vous réagir face à ce panneau ?",
+      "options": [
+        "Ralentir et redoubler de vigilance",
+        "Accélérer",
+        "Klaxonner",
+        "Dépasser"
+      ],
+      "bonneReponse": "Ralentir et redoubler de vigilance",
+      "explication": "Cette question porte sur la catégorie Panneaux de priorité."
+    },
+    {
+      "id": "q_doc_015",
+      "categorie": "Panneaux de priorité",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo6_p8_i2.png",
+      "enonce": "Cette signalisation indique une :",
+      "options": [
+        "Obligation",
+        "Interdiction",
+        "Information",
+        "Direction"
+      ],
+      "bonneReponse": "Obligation",
+      "explication": "Cette question porte sur la catégorie Panneaux de priorité."
+    },
+    {
+      "id": "q_doc_016",
+      "categorie": "Panneaux de direction",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo10-1_p13_i2.png",
+      "enonce": "Quelle est la signification de ce panneau ?",
+      "options": [
+        "Interdiction de circuler",
+        "Obligation de ralentir",
+        "Danger à proximité",
+        "Information de direction"
+      ],
+      "bonneReponse": "Interdiction de circuler",
+      "explication": "Cette question porte sur la catégorie Panneaux de direction."
+    },
+    {
+      "id": "q_doc_017",
+      "categorie": "Panneaux de direction",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo12_p19_i2.png",
+      "enonce": "Que signifie cette signalisation ?",
+      "options": [
+        "Arrêt obligatoire",
+        "Cédez le passage",
+        "Sens unique",
+        "Priorité aux piétons"
+      ],
+      "bonneReponse": "Arrêt obligatoire",
+      "explication": "Cette question porte sur la catégorie Panneaux de direction."
+    },
+    {
+      "id": "q_doc_018",
+      "categorie": "Panneaux de direction",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo2_p23_i2.png",
+      "enonce": "Quelle règle de priorité s'applique ici ?",
+      "options": [
+        "Priorité à droite",
+        "Priorité aux feux",
+        "Cédez le passage",
+        "Arrêt obligatoire"
+      ],
+      "bonneReponse": "Priorité à droite",
+      "explication": "Cette question porte sur la catégorie Panneaux de direction."
+    },
+    {
+      "id": "q_doc_019",
+      "categorie": "Panneaux de direction",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo4_p2_i2.png",
+      "enonce": "Comment devez-vous réagir face à ce panneau ?",
+      "options": [
+        "Ralentir et redoubler de vigilance",
+        "Accélérer",
+        "Klaxonner",
+        "Dépasser"
+      ],
+      "bonneReponse": "Ralentir et redoubler de vigilance",
+      "explication": "Cette question porte sur la catégorie Panneaux de direction."
+    },
+    {
+      "id": "q_doc_020",
+      "categorie": "Panneaux de direction",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo6_p9_i2.png",
+      "enonce": "Cette signalisation indique une :",
+      "options": [
+        "Obligation",
+        "Interdiction",
+        "Information",
+        "Direction"
+      ],
+      "bonneReponse": "Obligation",
+      "explication": "Cette question porte sur la catégorie Panneaux de direction."
+    },
+    {
+      "id": "q_doc_021",
+      "categorie": "Feux tricolores",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo10-1_p14_i2.png",
+      "enonce": "Quelle est la signification de ce panneau ?",
+      "options": [
+        "Interdiction de circuler",
+        "Obligation de ralentir",
+        "Danger à proximité",
+        "Information de direction"
+      ],
+      "bonneReponse": "Interdiction de circuler",
+      "explication": "Cette question porte sur la catégorie Feux tricolores."
+    },
+    {
+      "id": "q_doc_022",
+      "categorie": "Feux tricolores",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo12_p20_i2.png",
+      "enonce": "Que signifie cette signalisation ?",
+      "options": [
+        "Arrêt obligatoire",
+        "Cédez le passage",
+        "Sens unique",
+        "Priorité aux piétons"
+      ],
+      "bonneReponse": "Arrêt obligatoire",
+      "explication": "Cette question porte sur la catégorie Feux tricolores."
+    },
+    {
+      "id": "q_doc_023",
+      "categorie": "Feux tricolores",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo2_p24_i2.png",
+      "enonce": "Quelle règle de priorité s'applique ici ?",
+      "options": [
+        "Priorité à droite",
+        "Priorité aux feux",
+        "Cédez le passage",
+        "Arrêt obligatoire"
+      ],
+      "bonneReponse": "Priorité à droite",
+      "explication": "Cette question porte sur la catégorie Feux tricolores."
+    },
+    {
+      "id": "q_doc_024",
+      "categorie": "Feux tricolores",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo4_p3_i2.png",
+      "enonce": "Comment devez-vous réagir face à ce panneau ?",
+      "options": [
+        "Ralentir et redoubler de vigilance",
+        "Accélérer",
+        "Klaxonner",
+        "Dépasser"
+      ],
+      "bonneReponse": "Ralentir et redoubler de vigilance",
+      "explication": "Cette question porte sur la catégorie Feux tricolores."
+    },
+    {
+      "id": "q_doc_025",
+      "categorie": "Feux tricolores",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo7_p10_i2.png",
+      "enonce": "Cette signalisation indique une :",
+      "options": [
+        "Obligation",
+        "Interdiction",
+        "Information",
+        "Direction"
+      ],
+      "bonneReponse": "Obligation",
+      "explication": "Cette question porte sur la catégorie Feux tricolores."
+    },
+    {
+      "id": "q_doc_026",
+      "categorie": "Priorité aux intersections",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo10-1_p15_i2.png",
+      "enonce": "Quelle est la signification de ce panneau ?",
+      "options": [
+        "Interdiction de circuler",
+        "Obligation de ralentir",
+        "Danger à proximité",
+        "Information de direction"
+      ],
+      "bonneReponse": "Interdiction de circuler",
+      "explication": "Cette question porte sur la catégorie Priorité aux intersections."
+    },
+    {
+      "id": "q_doc_027",
+      "categorie": "Priorité aux intersections",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo12_p21_i2.png",
+      "enonce": "Que signifie cette signalisation ?",
+      "options": [
+        "Arrêt obligatoire",
+        "Cédez le passage",
+        "Sens unique",
+        "Priorité aux piétons"
+      ],
+      "bonneReponse": "Arrêt obligatoire",
+      "explication": "Cette question porte sur la catégorie Priorité aux intersections."
+    },
+    {
+      "id": "q_doc_028",
+      "categorie": "Priorité aux intersections",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo2_p25_i2.png",
+      "enonce": "Quelle règle de priorité s'applique ici ?",
+      "options": [
+        "Priorité à droite",
+        "Priorité aux feux",
+        "Cédez le passage",
+        "Arrêt obligatoire"
+      ],
+      "bonneReponse": "Priorité à droite",
+      "explication": "Cette question porte sur la catégorie Priorité aux intersections."
+    },
+    {
+      "id": "q_doc_029",
+      "categorie": "Priorité aux intersections",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo4_p4_i2.png",
+      "enonce": "Comment devez-vous réagir face à ce panneau ?",
+      "options": [
+        "Ralentir et redoubler de vigilance",
+        "Accélérer",
+        "Klaxonner",
+        "Dépasser"
+      ],
+      "bonneReponse": "Ralentir et redoubler de vigilance",
+      "explication": "Cette question porte sur la catégorie Priorité aux intersections."
+    },
+    {
+      "id": "q_doc_030",
+      "categorie": "Priorité aux intersections",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo7_p11_i2.png",
+      "enonce": "Cette signalisation indique une :",
+      "options": [
+        "Obligation",
+        "Interdiction",
+        "Information",
+        "Direction"
+      ],
+      "bonneReponse": "Obligation",
+      "explication": "Cette question porte sur la catégorie Priorité aux intersections."
+    },
+    {
+      "id": "q_doc_031",
+      "categorie": "Priorité & Arrêt (STOP / Cédez)",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo10-1_p16_i2.png",
+      "enonce": "Quelle est la signification de ce panneau ?",
+      "options": [
+        "Interdiction de circuler",
+        "Obligation de ralentir",
+        "Danger à proximité",
+        "Information de direction"
+      ],
+      "bonneReponse": "Interdiction de circuler",
+      "explication": "Cette question porte sur la catégorie Priorité & Arrêt (STOP / Cédez)."
+    },
+    {
+      "id": "q_doc_032",
+      "categorie": "Priorité & Arrêt (STOP / Cédez)",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo12_p22_i2.png",
+      "enonce": "Que signifie cette signalisation ?",
+      "options": [
+        "Arrêt obligatoire",
+        "Cédez le passage",
+        "Sens unique",
+        "Priorité aux piétons"
+      ],
+      "bonneReponse": "Arrêt obligatoire",
+      "explication": "Cette question porte sur la catégorie Priorité & Arrêt (STOP / Cédez)."
+    },
+    {
+      "id": "q_doc_033",
+      "categorie": "Priorité & Arrêt (STOP / Cédez)",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo2_p26_i2.png",
+      "enonce": "Quelle règle de priorité s'applique ici ?",
+      "options": [
+        "Priorité à droite",
+        "Priorité aux feux",
+        "Cédez le passage",
+        "Arrêt obligatoire"
+      ],
+      "bonneReponse": "Priorité à droite",
+      "explication": "Cette question porte sur la catégorie Priorité & Arrêt (STOP / Cédez)."
+    },
+    {
+      "id": "q_doc_034",
+      "categorie": "Priorité & Arrêt (STOP / Cédez)",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo4_p5_i2.png",
+      "enonce": "Comment devez-vous réagir face à ce panneau ?",
+      "options": [
+        "Ralentir et redoubler de vigilance",
+        "Accélérer",
+        "Klaxonner",
+        "Dépasser"
+      ],
+      "bonneReponse": "Ralentir et redoubler de vigilance",
+      "explication": "Cette question porte sur la catégorie Priorité & Arrêt (STOP / Cédez)."
+    },
+    {
+      "id": "q_doc_035",
+      "categorie": "Priorité & Arrêt (STOP / Cédez)",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo7_p12_i2.png",
+      "enonce": "Cette signalisation indique une :",
+      "options": [
+        "Obligation",
+        "Interdiction",
+        "Information",
+        "Direction"
+      ],
+      "bonneReponse": "Obligation",
+      "explication": "Cette question porte sur la catégorie Priorité & Arrêt (STOP / Cédez)."
+    },
+    {
+      "id": "q_doc_036",
+      "categorie": "Rond-point & Giratoire",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo10-1_p17_i2.png",
+      "enonce": "Quelle est la signification de ce panneau ?",
+      "options": [
+        "Interdiction de circuler",
+        "Obligation de ralentir",
+        "Danger à proximité",
+        "Information de direction"
+      ],
+      "bonneReponse": "Interdiction de circuler",
+      "explication": "Cette question porte sur la catégorie Rond-point & Giratoire."
+    },
+    {
+      "id": "q_doc_037",
+      "categorie": "Rond-point & Giratoire",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo12_p23_i2.png",
+      "enonce": "Que signifie cette signalisation ?",
+      "options": [
+        "Arrêt obligatoire",
+        "Cédez le passage",
+        "Sens unique",
+        "Priorité aux piétons"
+      ],
+      "bonneReponse": "Arrêt obligatoire",
+      "explication": "Cette question porte sur la catégorie Rond-point & Giratoire."
+    },
+    {
+      "id": "q_doc_038",
+      "categorie": "Rond-point & Giratoire",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo2_p2_i2.png",
+      "enonce": "Quelle règle de priorité s'applique ici ?",
+      "options": [
+        "Priorité à droite",
+        "Priorité aux feux",
+        "Cédez le passage",
+        "Arrêt obligatoire"
+      ],
+      "bonneReponse": "Priorité à droite",
+      "explication": "Cette question porte sur la catégorie Rond-point & Giratoire."
+    },
+    {
+      "id": "q_doc_039",
+      "categorie": "Rond-point & Giratoire",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo4_p6_i2.png",
+      "enonce": "Comment devez-vous réagir face à ce panneau ?",
+      "options": [
+        "Ralentir et redoubler de vigilance",
+        "Accélérer",
+        "Klaxonner",
+        "Dépasser"
+      ],
+      "bonneReponse": "Ralentir et redoubler de vigilance",
+      "explication": "Cette question porte sur la catégorie Rond-point & Giratoire."
+    },
+    {
+      "id": "q_doc_040",
+      "categorie": "Rond-point & Giratoire",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo7_p13_i2.png",
+      "enonce": "Cette signalisation indique une :",
+      "options": [
+        "Obligation",
+        "Interdiction",
+        "Information",
+        "Direction"
+      ],
+      "bonneReponse": "Obligation",
+      "explication": "Cette question porte sur la catégorie Rond-point & Giratoire."
+    },
+    {
+      "id": "q_doc_041",
+      "categorie": "Passage à niveau",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo10-1_p18_i2.png",
+      "enonce": "Quelle est la signification de ce panneau ?",
+      "options": [
+        "Interdiction de circuler",
+        "Obligation de ralentir",
+        "Danger à proximité",
+        "Information de direction"
+      ],
+      "bonneReponse": "Interdiction de circuler",
+      "explication": "Cette question porte sur la catégorie Passage à niveau."
+    },
+    {
+      "id": "q_doc_042",
+      "categorie": "Passage à niveau",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo12_p24_i2.png",
+      "enonce": "Que signifie cette signalisation ?",
+      "options": [
+        "Arrêt obligatoire",
+        "Cédez le passage",
+        "Sens unique",
+        "Priorité aux piétons"
+      ],
+      "bonneReponse": "Arrêt obligatoire",
+      "explication": "Cette question porte sur la catégorie Passage à niveau."
+    },
+    {
+      "id": "q_doc_043",
+      "categorie": "Passage à niveau",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo2_p3_i2.png",
+      "enonce": "Quelle règle de priorité s'applique ici ?",
+      "options": [
+        "Priorité à droite",
+        "Priorité aux feux",
+        "Cédez le passage",
+        "Arrêt obligatoire"
+      ],
+      "bonneReponse": "Priorité à droite",
+      "explication": "Cette question porte sur la catégorie Passage à niveau."
+    },
+    {
+      "id": "q_doc_044",
+      "categorie": "Passage à niveau",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo4_p8_i2.png",
+      "enonce": "Comment devez-vous réagir face à ce panneau ?",
+      "options": [
+        "Ralentir et redoubler de vigilance",
+        "Accélérer",
+        "Klaxonner",
+        "Dépasser"
+      ],
+      "bonneReponse": "Ralentir et redoubler de vigilance",
+      "explication": "Cette question porte sur la catégorie Passage à niveau."
+    },
+    {
+      "id": "q_doc_045",
+      "categorie": "Passage à niveau",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo7_p14_i2.png",
+      "enonce": "Cette signalisation indique une :",
+      "options": [
+        "Obligation",
+        "Interdiction",
+        "Information",
+        "Direction"
+      ],
+      "bonneReponse": "Obligation",
+      "explication": "Cette question porte sur la catégorie Passage à niveau."
+    },
+    {
+      "id": "q_doc_046",
+      "categorie": "Limitation de vitesse",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo10-1_p19_i2.png",
+      "enonce": "Quelle est la signification de ce panneau ?",
+      "options": [
+        "Interdiction de circuler",
+        "Obligation de ralentir",
+        "Danger à proximité",
+        "Information de direction"
+      ],
+      "bonneReponse": "Interdiction de circuler",
+      "explication": "Cette question porte sur la catégorie Limitation de vitesse."
+    },
+    {
+      "id": "q_doc_047",
+      "categorie": "Limitation de vitesse",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo12_p25_i2.png",
+      "enonce": "Que signifie cette signalisation ?",
+      "options": [
+        "Arrêt obligatoire",
+        "Cédez le passage",
+        "Sens unique",
+        "Priorité aux piétons"
+      ],
+      "bonneReponse": "Arrêt obligatoire",
+      "explication": "Cette question porte sur la catégorie Limitation de vitesse."
+    },
+    {
+      "id": "q_doc_048",
+      "categorie": "Limitation de vitesse",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo2_p4_i2.png",
+      "enonce": "Quelle règle de priorité s'applique ici ?",
+      "options": [
+        "Priorité à droite",
+        "Priorité aux feux",
+        "Cédez le passage",
+        "Arrêt obligatoire"
+      ],
+      "bonneReponse": "Priorité à droite",
+      "explication": "Cette question porte sur la catégorie Limitation de vitesse."
+    },
+    {
+      "id": "q_doc_049",
+      "categorie": "Limitation de vitesse",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo4_p9_i2.png",
+      "enonce": "Comment devez-vous réagir face à ce panneau ?",
+      "options": [
+        "Ralentir et redoubler de vigilance",
+        "Accélérer",
+        "Klaxonner",
+        "Dépasser"
+      ],
+      "bonneReponse": "Ralentir et redoubler de vigilance",
+      "explication": "Cette question porte sur la catégorie Limitation de vitesse."
+    },
+    {
+      "id": "q_doc_050",
+      "categorie": "Limitation de vitesse",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo7_p15_i2.png",
+      "enonce": "Cette signalisation indique une :",
+      "options": [
+        "Obligation",
+        "Interdiction",
+        "Information",
+        "Direction"
+      ],
+      "bonneReponse": "Obligation",
+      "explication": "Cette question porte sur la catégorie Limitation de vitesse."
+    },
+    {
+      "id": "q_doc_051",
+      "categorie": "Stationnement & Arrêt",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo10-1_p20_i2.png",
+      "enonce": "Quelle est la signification de ce panneau ?",
+      "options": [
+        "Interdiction de circuler",
+        "Obligation de ralentir",
+        "Danger à proximité",
+        "Information de direction"
+      ],
+      "bonneReponse": "Interdiction de circuler",
+      "explication": "Cette question porte sur la catégorie Stationnement & Arrêt."
+    },
+    {
+      "id": "q_doc_052",
+      "categorie": "Stationnement & Arrêt",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo12_p26_i2.png",
+      "enonce": "Que signifie cette signalisation ?",
+      "options": [
+        "Arrêt obligatoire",
+        "Cédez le passage",
+        "Sens unique",
+        "Priorité aux piétons"
+      ],
+      "bonneReponse": "Arrêt obligatoire",
+      "explication": "Cette question porte sur la catégorie Stationnement & Arrêt."
+    },
+    {
+      "id": "q_doc_053",
+      "categorie": "Stationnement & Arrêt",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo2_p5_i2.png",
+      "enonce": "Quelle règle de priorité s'applique ici ?",
+      "options": [
+        "Priorité à droite",
+        "Priorité aux feux",
+        "Cédez le passage",
+        "Arrêt obligatoire"
+      ],
+      "bonneReponse": "Priorité à droite",
+      "explication": "Cette question porte sur la catégorie Stationnement & Arrêt."
+    },
+    {
+      "id": "q_doc_054",
+      "categorie": "Stationnement & Arrêt",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo5_p10_i2.png",
+      "enonce": "Comment devez-vous réagir face à ce panneau ?",
+      "options": [
+        "Ralentir et redoubler de vigilance",
+        "Accélérer",
+        "Klaxonner",
+        "Dépasser"
+      ],
+      "bonneReponse": "Ralentir et redoubler de vigilance",
+      "explication": "Cette question porte sur la catégorie Stationnement & Arrêt."
+    },
+    {
+      "id": "q_doc_055",
+      "categorie": "Stationnement & Arrêt",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo7_p16_i2.png",
+      "enonce": "Cette signalisation indique une :",
+      "options": [
+        "Obligation",
+        "Interdiction",
+        "Information",
+        "Direction"
+      ],
+      "bonneReponse": "Obligation",
+      "explication": "Cette question porte sur la catégorie Stationnement & Arrêt."
+    },
+    {
+      "id": "q_doc_056",
+      "categorie": "Signalisation temporaire",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo10-1_p21_i2.png",
+      "enonce": "Quelle est la signification de ce panneau ?",
+      "options": [
+        "Interdiction de circuler",
+        "Obligation de ralentir",
+        "Danger à proximité",
+        "Information de direction"
+      ],
+      "bonneReponse": "Interdiction de circuler",
+      "explication": "Cette question porte sur la catégorie Signalisation temporaire."
+    },
+    {
+      "id": "q_doc_057",
+      "categorie": "Signalisation temporaire",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo12_p2_i2.png",
+      "enonce": "Que signifie cette signalisation ?",
+      "options": [
+        "Arrêt obligatoire",
+        "Cédez le passage",
+        "Sens unique",
+        "Priorité aux piétons"
+      ],
+      "bonneReponse": "Arrêt obligatoire",
+      "explication": "Cette question porte sur la catégorie Signalisation temporaire."
+    },
+    {
+      "id": "q_doc_058",
+      "categorie": "Signalisation temporaire",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo2_p6_i2.png",
+      "enonce": "Quelle règle de priorité s'applique ici ?",
+      "options": [
+        "Priorité à droite",
+        "Priorité aux feux",
+        "Cédez le passage",
+        "Arrêt obligatoire"
+      ],
+      "bonneReponse": "Priorité à droite",
+      "explication": "Cette question porte sur la catégorie Signalisation temporaire."
+    },
+    {
+      "id": "q_doc_059",
+      "categorie": "Signalisation temporaire",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo5_p11_i2.png",
+      "enonce": "Comment devez-vous réagir face à ce panneau ?",
+      "options": [
+        "Ralentir et redoubler de vigilance",
+        "Accélérer",
+        "Klaxonner",
+        "Dépasser"
+      ],
+      "bonneReponse": "Ralentir et redoubler de vigilance",
+      "explication": "Cette question porte sur la catégorie Signalisation temporaire."
+    },
+    {
+      "id": "q_doc_060",
+      "categorie": "Signalisation temporaire",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo7_p17_i2.png",
+      "enonce": "Cette signalisation indique une :",
+      "options": [
+        "Obligation",
+        "Interdiction",
+        "Information",
+        "Direction"
+      ],
+      "bonneReponse": "Obligation",
+      "explication": "Cette question porte sur la catégorie Signalisation temporaire."
+    },
+    {
+      "id": "q_doc_061",
+      "categorie": "Restrictions (hauteur/largeur/poids)",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo10-1_p22_i2.png",
+      "enonce": "Quelle est la signification de ce panneau ?",
+      "options": [
+        "Interdiction de circuler",
+        "Obligation de ralentir",
+        "Danger à proximité",
+        "Information de direction"
+      ],
+      "bonneReponse": "Interdiction de circuler",
+      "explication": "Cette question porte sur la catégorie Restrictions (hauteur/largeur/poids)."
+    },
+    {
+      "id": "q_doc_062",
+      "categorie": "Restrictions (hauteur/largeur/poids)",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo12_p3_i2.png",
+      "enonce": "Que signifie cette signalisation ?",
+      "options": [
+        "Arrêt obligatoire",
+        "Cédez le passage",
+        "Sens unique",
+        "Priorité aux piétons"
+      ],
+      "bonneReponse": "Arrêt obligatoire",
+      "explication": "Cette question porte sur la catégorie Restrictions (hauteur/largeur/poids)."
+    },
+    {
+      "id": "q_doc_063",
+      "categorie": "Restrictions (hauteur/largeur/poids)",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo2_p7_i2.png",
+      "enonce": "Quelle règle de priorité s'applique ici ?",
+      "options": [
+        "Priorité à droite",
+        "Priorité aux feux",
+        "Cédez le passage",
+        "Arrêt obligatoire"
+      ],
+      "bonneReponse": "Priorité à droite",
+      "explication": "Cette question porte sur la catégorie Restrictions (hauteur/largeur/poids)."
+    },
+    {
+      "id": "q_doc_064",
+      "categorie": "Restrictions (hauteur/largeur/poids)",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo5_p12_i2.png",
+      "enonce": "Comment devez-vous réagir face à ce panneau ?",
+      "options": [
+        "Ralentir et redoubler de vigilance",
+        "Accélérer",
+        "Klaxonner",
+        "Dépasser"
+      ],
+      "bonneReponse": "Ralentir et redoubler de vigilance",
+      "explication": "Cette question porte sur la catégorie Restrictions (hauteur/largeur/poids)."
+    },
+    {
+      "id": "q_doc_065",
+      "categorie": "Restrictions (hauteur/largeur/poids)",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo7_p18_i2.png",
+      "enonce": "Cette signalisation indique une :",
+      "options": [
+        "Obligation",
+        "Interdiction",
+        "Information",
+        "Direction"
+      ],
+      "bonneReponse": "Obligation",
+      "explication": "Cette question porte sur la catégorie Restrictions (hauteur/largeur/poids)."
+    },
+    {
+      "id": "q_doc_066",
+      "categorie": "Dépassement",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo10-1_p23_i2.png",
+      "enonce": "Quelle est la signification de ce panneau ?",
+      "options": [
+        "Interdiction de circuler",
+        "Obligation de ralentir",
+        "Danger à proximité",
+        "Information de direction"
+      ],
+      "bonneReponse": "Interdiction de circuler",
+      "explication": "Cette question porte sur la catégorie Dépassement."
+    },
+    {
+      "id": "q_doc_067",
+      "categorie": "Dépassement",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo12_p4_i2.png",
+      "enonce": "Que signifie cette signalisation ?",
+      "options": [
+        "Arrêt obligatoire",
+        "Cédez le passage",
+        "Sens unique",
+        "Priorité aux piétons"
+      ],
+      "bonneReponse": "Arrêt obligatoire",
+      "explication": "Cette question porte sur la catégorie Dépassement."
+    },
+    {
+      "id": "q_doc_068",
+      "categorie": "Dépassement",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo2_p8_i2.png",
+      "enonce": "Quelle règle de priorité s'applique ici ?",
+      "options": [
+        "Priorité à droite",
+        "Priorité aux feux",
+        "Cédez le passage",
+        "Arrêt obligatoire"
+      ],
+      "bonneReponse": "Priorité à droite",
+      "explication": "Cette question porte sur la catégorie Dépassement."
+    },
+    {
+      "id": "q_doc_069",
+      "categorie": "Dépassement",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo5_p13_i2.png",
+      "enonce": "Comment devez-vous réagir face à ce panneau ?",
+      "options": [
+        "Ralentir et redoubler de vigilance",
+        "Accélérer",
+        "Klaxonner",
+        "Dépasser"
+      ],
+      "bonneReponse": "Ralentir et redoubler de vigilance",
+      "explication": "Cette question porte sur la catégorie Dépassement."
+    },
+    {
+      "id": "q_doc_070",
+      "categorie": "Dépassement",
+      "difficulte": "débutant",
+      "image": "/images/quiz/Diappo7_p19_i2.png",
+      "enonce": "Cette signalisation indique une :",
+      "options": [
+        "Obligation",
+        "Interdiction",
+        "Information",
+        "Direction"
+      ],
+      "bonneReponse": "Obligation",
+      "explication": "Cette question porte sur la catégorie Dépassement."
+    }
+  ]
+}

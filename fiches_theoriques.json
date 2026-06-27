@@ -1,0 +1,341 @@
+{
+  "titre": "Fiches de révision – Code de la route Sénégal",
+  "version": "1.0",
+  "fiches": [
+    {
+      "id": "fiche_001",
+      "titre": "La priorité à droite",
+      "categorie": "priorite_intersection",
+      "contenu": "En l'absence de signalisation, la priorité va toujours au véhicule venant de droite. Cette règle s'applique dans toutes les intersections non signalisées.",
+      "points_cles": [
+        "Tout véhicule venant de votre droite est prioritaire",
+        "Vous cédez le passage aux véhicules venant de votre droite",
+        "Cette règle cède devant toute signalisation spécifique (STOP, cédez, route prioritaire)"
+      ],
+      "exceptions": [
+        "Sur une route prioritaire (losange jaune), vous ne cédez pas le passage aux routes secondaires",
+        "Au STOP, tous les véhicules sont prioritaires",
+        "Dans un giratoire, les véhicules déjà engagés sont prioritaires"
+      ]
+    },
+    {
+      "id": "fiche_002",
+      "titre": "Le panneau STOP",
+      "categorie": "priorite_arret",
+      "contenu": "Le panneau STOP (octogone rouge) oblige à un arrêt complet, même si la route semble dégagée.",
+      "points_cles": [
+        "Arrêt COMPLET obligatoire – ralentir n'est pas suffisant",
+        "S'arrêter au niveau de la ligne blanche au sol (pas du panneau)",
+        "Vérifier dans les deux sens avant de repartir",
+        "Céder le passage à TOUS les véhicules"
+      ],
+      "erreurs_frequentes": [
+        "S'arrêter trop tôt (avant la ligne blanche)",
+        "Ne pas s'arrêter complètement (roulement lent)",
+        "Penser qu'on peut passer avant les voitures venant de gauche"
+      ]
+    },
+    {
+      "id": "fiche_003",
+      "titre": "Le cédez-le-passage",
+      "categorie": "priorite_arret",
+      "contenu": "Le triangle inversé rouge (cédez-le-passage) oblige à laisser passer les véhicules sur la voie principale, sans arrêt obligatoire.",
+      "points_cles": [
+        "Pas d'arrêt obligatoire si la voie est dégagée",
+        "Ralentir et vérifier avant de s'engager",
+        "Les véhicules sur la voie principale sont prioritaires"
+      ]
+    },
+    {
+      "id": "fiche_004",
+      "titre": "Route prioritaire – Losange jaune",
+      "categorie": "signalisation_priorite",
+      "contenu": "Le panneau losange jaune-orange indique que vous êtes sur une route prioritaire. Les véhicules des voies secondaires doivent vous céder le passage.",
+      "points_cles": [
+        "Losange plein jaune = début de route prioritaire",
+        "Losange barré = fin de route prioritaire",
+        "Vous êtes prioritaire sur tous les véhicules venant des voies secondaires"
+      ]
+    },
+    {
+      "id": "fiche_005",
+      "titre": "Le dépassement – Règles essentielles",
+      "categorie": "depassement",
+      "contenu": "Le dépassement est une manœuvre dangereuse qui nécessite une grande prudence et le respect de conditions strictes.",
+      "points_cles": [
+        "Vérifier les rétroviseurs et l'angle mort",
+        "Mettre le clignotant gauche",
+        "Ligne discontinue = dépassement autorisé",
+        "Ligne continue = dépassement interdit",
+        "Visibilité suffisante obligatoire",
+        "Reprendre la voie de droite après le dépassement"
+      ],
+      "interdictions": [
+        "En haut d'une côte",
+        "Dans un virage",
+        "À l'approche d'une intersection",
+        "Sur ligne continue",
+        "Lorsqu'on est soi-même dépassé",
+        "En cas de visibilité insuffisante",
+        "Quand un panneau l'interdit explicitement"
+      ],
+      "distances_securite": {
+        "cycliste_hors_agglomeration": "1,50 mètre minimum",
+        "cycliste_en_agglomeration": "1,00 mètre minimum"
+      }
+    },
+    {
+      "id": "fiche_006",
+      "titre": "L'éclairage du véhicule",
+      "categorie": "eclairage",
+      "contenu": "L'usage des feux dépend des conditions de visibilité et de la présence d'autres usagers.",
+      "regles": [
+        {
+          "situation": "Nuit en ville éclairée",
+          "feux": "Feux de croisement obligatoires",
+          "interdits": "Feux de route (éblouissement)"
+        },
+        {
+          "situation": "Nuit hors agglomération",
+          "feux": "Feux de route si voie libre, feux de croisement si véhicule en face",
+          "interdits": "Circuler sans feux"
+        },
+        {
+          "situation": "Brouillard",
+          "feux": "Feux de croisement + antibrouillard",
+          "interdits": "Feux de route (créent un mur lumineux)"
+        },
+        {
+          "situation": "Appel de phares (dépassement nuit)",
+          "feux": "Alternance feux de croisement / feux de route",
+          "interdits": "Appel avec feux de position uniquement"
+        }
+      ]
+    },
+    {
+      "id": "fiche_007",
+      "titre": "Arrêt vs Stationnement",
+      "categorie": "stationnement_arret",
+      "contenu": "La différence entre arrêt et stationnement est fondamentale pour comprendre les règles de circulation.",
+      "definitions": {
+        "arret": "Immobilisation momentanée du véhicule, conducteur présent et prêt à repartir immédiatement (ex: laisser descendre un passager)",
+        "stationnement": "Immobilisation prolongée du véhicule, conducteur absent ou non prêt à repartir"
+      },
+      "zones_interdites_arret_stationnement": [
+        "Sur les passages pour piétons",
+        "Sur les intersections et carrefours",
+        "Sur les voies de tramway",
+        "Devant les bouches d'incendie",
+        "En double file",
+        "Sur les pistes cyclables"
+      ],
+      "zones_interdites_stationnement_seul": [
+        "Là où un panneau l'interdit (cercle rouge barré)",
+        "Zone bleue sans disque de stationnement",
+        "Devant les entrées de garage",
+        "Sur les emplacements réservés (handicapés, livraisons)"
+      ]
+    },
+    {
+      "id": "fiche_008",
+      "titre": "La ceinture de sécurité",
+      "categorie": "securite",
+      "contenu": "Le port de la ceinture de sécurité est OBLIGATOIRE pour tous les occupants du véhicule.",
+      "regles": [
+        "Obligatoire en agglomération ET hors agglomération",
+        "Obligatoire de jour ET de nuit",
+        "Pour le conducteur ET tous les passagers",
+        "Sur toutes les routes (nationale, départementale, autoroute)"
+      ],
+      "statistiques": "La ceinture réduit le risque de décès de 50% en cas d'accident."
+    },
+    {
+      "id": "fiche_009",
+      "titre": "Passage à niveau",
+      "categorie": "passage_a_niveau",
+      "contenu": "Les passages à niveau sont des zones de danger extrême. Le train a toujours la priorité absolue.",
+      "balises": [
+        "3 bandes rouges = à 150 mètres du passage à niveau",
+        "2 bandes rouges = à 100 mètres",
+        "1 bande rouge = à 50 mètres"
+      ],
+      "comportement": [
+        "Ralentir dès les premières balises",
+        "Si le feu clignote (orange) : ARRÊT OBLIGATOIRE",
+        "Ne jamais s'engager si le feu clignote",
+        "Attendre que les barrières soient complètement relevées",
+        "Ne pas s'engager si le passage est encombré"
+      ]
+    },
+    {
+      "id": "fiche_010",
+      "titre": "Premiers secours en cas d'accident",
+      "categorie": "premiers_secours",
+      "contenu": "En cas d'accident, il faut agir vite et dans le bon ordre pour limiter les conséquences.",
+      "protocole_pca": {
+        "P": "PROTÉGER – Baliser les lieux, couper le contact, allumer les feux de détresse",
+        "C": "ALERTER – Appeler les secours (police/gendarmerie, SAMU)",
+        "A": "SECOURIR – Apporter les premiers soins sans déplacer les blessés"
+      },
+      "numeros_urgence_senegal": {
+        "police_secours": "17",
+        "pompiers": "18",
+        "samu": "15",
+        "urgences_generales": "1515"
+      },
+      "a_ne_pas_faire": [
+        "Déplacer un blessé sauf danger immédiat",
+        "Donner à manger ou à boire à un blessé",
+        "Retirer le casque d'un motocycliste"
+      ]
+    },
+    {
+      "id": "fiche_011",
+      "titre": "Vitesses maximales autorisées au Sénégal",
+      "categorie": "vitesse",
+      "contenu": "Les limitations de vitesse varient selon le type de route et les conditions.",
+      "limites": [
+        {
+          "type_route": "En agglomération",
+          "vitesse_max": "50 km/h",
+          "note": "Sauf indication contraire"
+        },
+        {
+          "type_route": "Route nationale hors agglomération",
+          "vitesse_max": "90 km/h",
+          "note": "Sauf indication contraire"
+        },
+        {
+          "type_route": "Route express / voie rapide",
+          "vitesse_max": "110 km/h",
+          "note": ""
+        },
+        {
+          "type_route": "Autoroute",
+          "vitesse_max": "130 km/h",
+          "note": ""
+        },
+        {
+          "type_route": "Par temps de pluie (autoroute)",
+          "vitesse_max": "110 km/h",
+          "note": "Réduction obligatoire"
+        },
+        {
+          "type_route": "Brouillard (visibilité < 50m)",
+          "vitesse_max": "50 km/h",
+          "note": "Sur toutes les routes"
+        }
+      ]
+    },
+    {
+      "id": "fiche_012",
+      "titre": "Signaux des agents de circulation",
+      "categorie": "signaux_agents",
+      "contenu": "Les gestes des policiers et agents de la circulation ont une valeur absolue, même contre les feux.",
+      "gestes": [
+        {
+          "geste": "Agent de face (ou de dos) – bras levés",
+          "signification": "STOP – Arrêt obligatoire pour tous les conducteurs"
+        },
+        {
+          "geste": "Agent de profil – bras tendus horizontalement",
+          "signification": "PASSAGE – Les véhicules dans l'axe du corps peuvent passer"
+        },
+        {
+          "geste": "Agent faisant des cercles avec le bras",
+          "signification": "Accélérez / Circulez"
+        }
+      ],
+      "priorite": "Les signaux des agents priment sur les feux tricolores et tous les autres panneaux."
+    },
+    {
+      "id": "fiche_013",
+      "titre": "Panneaux de danger",
+      "categorie": "signalisation_danger",
+      "contenu": "Les panneaux de danger annoncent un risque imminent. Ils sont triangulaires, fond blanc, bordure rouge.",
+      "points_cles": [
+        "Forme triangulaire, fond blanc, bordure rouge",
+        "Implantés à 50 m en agglomération, 150 m hors agglomération",
+        "Ils n'interdisent rien mais imposent la prudence",
+        "Le danger cesse généralement au niveau du panneau"
+      ],
+      "exemples": [
+        "Virage à droite/ gauche",
+        "Chaussée glissante",
+        "Passage à niveau",
+        "Débouché de cyclistes"
+      ]
+    },
+    {
+      "id": "fiche_014",
+      "titre": "Panneaux d'interdiction",
+      "categorie": "signalisation_interdiction",
+      "contenu": "Les panneaux d'interdiction imposent une obligation de ne pas faire quelque chose. Ils sont circulaires, fond blanc, bordure rouge.",
+      "points_cles": [
+        "Forme circulaire, fond blanc, bordure rouge",
+        "L'interdiction prend effet au niveau du panneau",
+        "Elle se poursuit jusqu'à la prochaine intersection ou un panneau de fin d'interdiction",
+        "Les panneaux de fin d'interdiction sont blancs avec une barre noire"
+      ],
+      "exemples": [
+        "Sens interdit (B1)",
+        "Interdiction de dépasser (B4)",
+        "Limitation de vitesse (B5)",
+        "Accès interdit aux piétons (B9)"
+      ]
+    },
+    {
+      "id": "fiche_015",
+      "titre": "Panneaux d'obligation",
+      "categorie": "signalisation_voie",
+      "contenu": "Les panneaux d'obligation imposent un comportement obligatoire. Ils sont circulaires, fond bleu, symbole blanc.",
+      "points_cles": [
+        "Forme circulaire, fond bleu, symbole blanc",
+        "L'obligation prend effet immédiatement",
+        "Les panneaux de fin d'obligation ont une barre rouge diagonale",
+        "Ils sont moins nombreux que les interdictions"
+      ],
+      "exemples": [
+        "Tourner à droite obligatoire (C1a)",
+        "Piste cyclable obligatoire (C3)",
+        "Vitesse minimale obligatoire (C5)",
+        "Chaînes à neige obligatoires (C6)"
+      ]
+    },
+    {
+      "id": "fiche_016",
+      "titre": "Signalisation temporaire (chantiers)",
+      "categorie": "signalisation_temporaire",
+      "contenu": "La signalisation temporaire signale des dangers ou des restrictions liés à des travaux ou des chantiers.",
+      "points_cles": [
+        "Fond jaune, bordures rouges",
+        "Elle prime sur la signalisation permanente",
+        "Elle balise les déviations et les obstacles temporaires",
+        "Respecter scrupuleusement les indications temporaires"
+      ],
+      "exemples": [
+        "Fanion de chantier (AK1)",
+        "Déviation temporaire (AK7a)",
+        "Rétrécissement temporaire de chaussée",
+        "Panneaux de fermeture de voie"
+      ]
+    },
+    {
+      "id": "fiche_017",
+      "titre": "Panneaux de restriction (hauteur / largeur / poids)",
+      "categorie": "signalisation_restriction",
+      "contenu": "Ces panneaux limitent les dimensions ou le poids des véhicules pouvant emprunter un passage.",
+      "points_cles": [
+        "Limitation de hauteur (ex: 3.50m)",
+        "Limitation de largeur",
+        "Limitation de poids total",
+        "Respect strict, même pour les véhicules légers"
+      ],
+      "regles": [
+        "Vérifier les dimensions de son véhicule avant de s'engager",
+        "Un panonceau peut préciser la catégorie de véhicules concernée",
+        "En cas de doute, ne pas s'engager"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "name": "@permis2.0/utils",
+  "version": "1.0.0",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "lint": "eslint . --ext .ts"
+  },
+  "dependencies": {
+    "@permis2.0/types": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.2",
+    "eslint": "^8.57.0",
+    "@typescript-eslint/eslint-plugin": "^7.3.1",
+    "@typescript-eslint/parser": "^7.3.1",
+    "@types/node": "^20.12.12"
+  }
+}

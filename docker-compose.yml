@@ -1,0 +1,81 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: permis2.0-db
+    environment:
+      POSTGRES_USER: ${DB_USER:-permis2.0}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-password123}
+      POSTGRES_DB: ${DB_NAME:-permis2.0}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-permis2.0}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    container_name: permis2.0-api
+    environment:
+      NODE_ENV: development
+      PORT: 3001
+      DATABASE_URL: postgresql://${DB_USER:-permis2.0}:${DB_PASSWORD:-password123}@postgres:5432/${DB_NAME:-permis2.0}
+      JWT_SECRET: ${JWT_SECRET:-dev-secret-key-change-in-production}
+      FRONTEND_URL: http://localhost:3000
+    ports:
+      - "3001:3001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./apps/api/src:/app/apps/api/src
+      - ./apps/api/prisma:/app/apps/api/prisma
+      - ./apps/api/dist:/app/apps/api/dist
+      - ./packages:/app/packages
+      - ./categories_et_meta.json:/app/apps/categories_et_meta.json
+      - ./fiches_theoriques.json:/app/apps/fiches_theoriques.json
+      - ./serie_B1.json:/app/apps/serie_B1.json
+      - ./serie_B2.json:/app/apps/serie_B2.json
+      - ./serie_B3.json:/app/apps/serie_B3.json
+      - ./panneaux_senegal.json:/app/apps/panneaux_senegal.json
+    working_dir: /app/apps/api
+    command: sh -c "npx prisma db push --accept-data-loss && node dist/prisma/seed.js && node dist/src/main.js"
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+    container_name: permis2.0-web
+    environment:
+      NODE_ENV: development
+      NEXT_PUBLIC_API_URL: http://localhost:3001
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+    volumes:
+      - ./apps/web/src:/app/apps/web/src
+      - ./apps/web/public:/app/apps/web/public
+      - ./apps/web/tailwind.config.ts:/app/apps/web/tailwind.config.ts
+      - ./apps/web/next.config.ts:/app/apps/web/next.config.ts
+      - ./apps/web/postcss.config.js:/app/apps/web/postcss.config.js
+      - ./packages:/app/packages
+    working_dir: /app/apps/web
+    command: sh -c "pnpm run dev"
+
+  adminer:
+    image: adminer:latest
+    container_name: permis2.0-adminer
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:
+    driver: local

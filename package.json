@@ -1,0 +1,36 @@
+{
+  "name": "permis2.0",
+  "version": "1.0.0",
+  "description": "Progressive Web App for Senegalese driving license exam preparation",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@9.0.0",
+  "scripts": {
+    "dev": "turbo run dev --no-cache",
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "test:e2e": "turbo run test:e2e",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,json,md}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,json,md}\"",
+    "clean": "turbo run clean && rm -rf node_modules",
+    "prisma:seed": "pnpm --filter @permis2.0/api run prisma:seed",
+    "prisma:migrate": "pnpm --filter @permis2.0/api run prisma:migrate",
+    "prisma:push": "pnpm --filter @permis2.0/api run prisma:push"
+  },
+  "devDependencies": {
+    "turbo": "^2.0.0",
+    "prettier": "^3.2.5",
+    "typescript": "^5.4.2",
+    "eslint-config-prettier": "^10.1.8"
+  },
+  "keywords": [
+    "permis",
+    "driving",
+    "education",
+    "senegal",
+    "pwa"
+  ],
+  "author": "Permis2.0 Team",
+  "license": "MIT"
+}
