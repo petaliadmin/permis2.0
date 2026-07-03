@@ -9,6 +9,10 @@ import { GoogleStrategy } from './strategies/google.strategy';
 import { UserService } from '../user/user.service';
 import { PrismaService } from '../prisma/prisma.service';
 
+if (!process.env.JWT_SECRET) {
+  throw new Error('JWT_SECRET environment variable is required but not set. Refusing to start.');
+}
+
 const googleStrategyProvider = process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET
   ? { provide: GoogleStrategy, useClass: GoogleStrategy }
   : [];
@@ -17,7 +21,7 @@ const googleStrategyProvider = process.env.GOOGLE_CLIENT_ID && process.env.GOOGL
   imports: [
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
-      secret: process.env.JWT_SECRET || 'your-secret-key',
+      secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: process.env.JWT_EXPIRATION || '24h' },
     }),
   ],

@@ -14,7 +14,7 @@ interface AuthState {
   setError: (error: string | null) => void;
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string, name: string) => Promise<void>;
-  logout: () => void;
+  logout: () => Promise<void>;
   clearError: () => void;
 }
 
@@ -40,6 +40,7 @@ export const useAuthStore = create<AuthState>()(
           const response = await fetch(`${API_URL}/auth/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
             body: JSON.stringify({ email, password }),
           });
 
@@ -67,6 +68,7 @@ export const useAuthStore = create<AuthState>()(
           const response = await fetch(`${API_URL}/auth/register`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
             body: JSON.stringify({ email, password, name }),
           });
 
@@ -89,7 +91,15 @@ export const useAuthStore = create<AuthState>()(
         }
       },
 
-      logout: () => {
+      logout: async () => {
+        try {
+          await fetch(`${API_URL}/auth/logout`, {
+            method: 'POST',
+            credentials: 'include',
+          });
+        } catch {
+          // Ignore logout API errors — clear state regardless
+        }
         set({
           user: null,
           token: null,
@@ -105,8 +115,8 @@ export const useAuthStore = create<AuthState>()(
       name: 'auth-store',
       partialize: (state) => ({
         user: state.user,
-        token: state.token,
         isAuthenticated: state.isAuthenticated,
+        // token volontairement exclus — restera en mémoire seulement
       }),
     }
   )

@@ -103,51 +103,54 @@ export class SeriesService {
     // Check if answer is correct
     const isCorrect = question.reponses_correctes.includes(userAnswer);
 
-    // Award XP if correct
-    if (isCorrect) {
-      const user = await this.prisma.user.findUnique({ where: { id: userId } });
-      if (user) {
-        const newXP = user.xp + XP_RULES.correctAnswer;
-        const newLevel = this.calculateLevel(newXP);
+    // Award XP and update progress atomically
+    await this.prisma.$transaction(async (tx) => {
+      // Award XP if correct
+      if (isCorrect) {
+        const user = await tx.user.findUnique({ where: { id: userId } });
+        if (user) {
+          const newXP = user.xp + XP_RULES.correctAnswer;
+          const newLevel = this.calculateLevel(newXP);
 
-        await this.prisma.user.update({
-          where: { id: userId },
-          data: { xp: newXP, level: newLevel },
+          await tx.user.update({
+            where: { id: userId },
+            data: { xp: newXP, level: newLevel },
+          });
+        }
+      }
+
+      // Update or create progress
+      const progress = await tx.progress.findUnique({
+        where: {
+          userId_serieId: { userId, serieId: question.serieId },
+        },
+      });
+
+      if (progress) {
+        const newCorrect = isCorrect ? progress.correctAnswers + 1 : progress.correctAnswers;
+        const newTotal = progress.totalQuestions + 1;
+        const newAccuracy = (newCorrect / newTotal) * 100;
+
+        await tx.progress.update({
+          where: { id: progress.id },
+          data: {
+            correctAnswers: newCorrect,
+            totalQuestions: newTotal,
+            accuracy: newAccuracy,
+          },
+        });
+      } else {
+        await tx.progress.create({
+          data: {
+            userId,
+            serieId: question.serieId,
+            correctAnswers: isCorrect ? 1 : 0,
+            totalQuestions: 1,
+            accuracy: isCorrect ? 100 : 0,
+          },
         });
       }
-    }
-
-    // Update or create progress
-    const progress = await this.prisma.progress.findUnique({
-      where: {
-        userId_serieId: { userId, serieId: question.serieId },
-      },
     });
-
-    if (progress) {
-      const newCorrect = isCorrect ? progress.correctAnswers + 1 : progress.correctAnswers;
-      const newTotal = progress.totalQuestions + 1;
-      const newAccuracy = (newCorrect / newTotal) * 100;
-
-      await this.prisma.progress.update({
-        where: { id: progress.id },
-        data: {
-          correctAnswers: newCorrect,
-          totalQuestions: newTotal,
-          accuracy: newAccuracy,
-        },
-      });
-    } else {
-      await this.prisma.progress.create({
-        data: {
-          userId,
-          serieId: question.serieId,
-          correctAnswers: isCorrect ? 1 : 0,
-          totalQuestions: 1,
-          accuracy: isCorrect ? 100 : 0,
-        },
-      });
-    }
 
     return {
       isCorrect,

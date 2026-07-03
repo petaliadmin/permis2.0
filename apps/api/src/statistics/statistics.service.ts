@@ -76,22 +76,24 @@ export class StatisticsService {
       : 0;
     const bestScore = exams.length > 0 ? Math.max(...exams.map((e) => e.percentage)) : 0;
 
-    // Get all answers (from exams)
-    const allAnswers = await this.prisma.examQuestion.findMany({
-      where: {
-        exam: { userId },
-      },
+    // Get all answers (from exams) using aggregations to avoid unbounded scans
+    const answerAgg = await this.prisma.examQuestion.aggregate({
+      where: { exam: { userId } },
+      _count: { _all: true },
+      _sum: { timeSpent: true },
+    });
+    const totalCorrectAnswers = await this.prisma.examQuestion.count({
+      where: { exam: { userId }, isCorrect: true },
     });
 
-    const totalQuestionsAnswered = allAnswers.length;
-    const totalCorrectAnswers = allAnswers.filter((a) => a.isCorrect).length;
+    const totalQuestionsAnswered = answerAgg._count._all;
     const totalIncorrectAnswers = totalQuestionsAnswered - totalCorrectAnswers;
     const overallAccuracy = totalQuestionsAnswered > 0
       ? (totalCorrectAnswers / totalQuestionsAnswered) * 100
       : 0;
 
     // Calculate time spent
-    const timeSpentTraining = allAnswers.reduce((sum, a) => sum + a.timeSpent, 0);
+    const timeSpentTraining = answerAgg._sum.timeSpent ?? 0;
 
     return {
       userId,
@@ -275,20 +277,25 @@ export class StatisticsService {
   }> {
     const userStats = await this.getUserStatistics(userId);
 
-    // Get global statistics
-    const allExams = await this.prisma.examResult.findMany();
-    const globalAverageScore = allExams.length > 0
-      ? allExams.reduce((sum, e) => sum + e.percentage, 0) / allExams.length
-      : 0;
+    // Get global statistics using aggregations to avoid unbounded full-table scans
+    const examAgg = await this.prisma.examResult.aggregate({
+      _avg: { percentage: true },
+      _count: { _all: true },
+    });
+    const globalAverageScore = examAgg._avg.percentage ?? 0;
 
-    const allAnswers = await this.prisma.examQuestion.findMany();
-    const globalAccuracy = allAnswers.length > 0
-      ? (allAnswers.filter((a) => a.isCorrect).length / allAnswers.length) * 100
+    const answerAgg = await this.prisma.examQuestion.aggregate({
+      _avg: { timeSpent: true },
+      _count: { _all: true },
+    });
+    const correctAnswerCount = await this.prisma.examQuestion.count({
+      where: { isCorrect: true },
+    });
+    const totalAnswerCount = answerAgg._count._all;
+    const globalAccuracy = totalAnswerCount > 0
+      ? (correctAnswerCount / totalAnswerCount) * 100
       : 0;
-
-    const globalAverageTime = allAnswers.length > 0
-      ? allAnswers.reduce((sum, a) => sum + a.timeSpent, 0) / allAnswers.length
-      : 0;
+    const globalAverageTime = answerAgg._avg.timeSpent ?? 0;
 
     // Calculate user percentile
     const usersWithBetterScore = await this.prisma.user.count({

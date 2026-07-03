@@ -53,7 +53,8 @@ self.addEventListener('fetch', (event) => {
 
   // Only handle same-origin requests; let the browser handle cross-origin (API).
   if (url.origin !== self.location.origin) return;
-  if (url.port === '3001') return;
+  // Skip API routes (proxied under /api/ in production, or same-origin /api/ path).
+  if (url.pathname.startsWith('/api/')) return;
 
   // Navigations: network-first with offline fallback to cached shell.
   if (request.mode === 'navigate') {

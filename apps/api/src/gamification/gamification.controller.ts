@@ -2,6 +2,7 @@ import {
   Controller,
   Get,
   Post,
+  Body,
   UseGuards,
   Request,
   Query,
@@ -9,6 +10,7 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { ApiTags, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { GamificationService } from './gamification.service';
+import { RecordQuizDto } from './dto/record-quiz.dto';
 
 @ApiTags('Gamification')
 @Controller('gamification')
@@ -26,9 +28,10 @@ export class GamificationController {
 
   @Get('leaderboard')
   @ApiResponse({ status: 200, description: 'Global leaderboard' })
-  async getLeaderboard(@Query('limit') limit = 100) {
-    const parsed = parseInt(limit as any, 10) || 100;
-    return this.gamificationService.getLeaderboard(parsed);
+  async getLeaderboard(@Query('limit') limit?: string) {
+    const parsed = parseInt(limit as any, 10) || 20;
+    const safeLimit = Math.min(Math.max(parsed, 1), 100);
+    return this.gamificationService.getLeaderboard(safeLimit);
   }
 
   @Get('rank')
@@ -47,5 +50,21 @@ export class GamificationController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async checkAchievements(@Request() req) {
     return this.gamificationService.checkAndUnlockAchievements(req.user.userId);
+  }
+
+  @Post('record-quiz')
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
+  @ApiResponse({ status: 200, description: 'XP awarded, streak updated, achievements checked' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  async recordQuiz(
+    @Request() req,
+    @Body() dto: RecordQuizDto,
+  ) {
+    return this.gamificationService.recordQuiz(
+      req.user.userId,
+      dto.correct,
+      dto.total,
+    );
   }
 }

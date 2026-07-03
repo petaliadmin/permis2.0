@@ -12,6 +12,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { ApiTags, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { ExamService } from './exam.service';
 import { SubmitAnswerDto } from '../series/dto/submit-answer.dto';
+import { StartExamDto } from './dto/start-exam.dto';
 
 @ApiTags('Exams')
 @Controller('exams')
@@ -23,8 +24,11 @@ export class ExamController {
   @ApiBearerAuth()
   @ApiResponse({ status: 201, description: 'Exam started' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async startExam(@Request() req, @Body() config?: { numberOfQuestions?: number }) {
-    return this.examService.startExam(req.user.userId, config);
+  async startExam(
+    @Request() req,
+    @Body() dto: StartExamDto,
+  ) {
+    return this.examService.startExam(req.user.userId, dto);
   }
 
   @Get(':id')
@@ -73,8 +77,8 @@ export class ExamController {
   @ApiResponse({ status: 200, description: 'Exam results' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 404, description: 'Results not found' })
-  async getResults(@Param('id') examId: string) {
-    return this.examService.getExamResult(examId);
+  async getResults(@Param('id') examId: string, @Request() req) {
+    return this.examService.getExamResult(examId, req.user.userId);
   }
 
   @Get('history/list')
@@ -84,9 +88,13 @@ export class ExamController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async getHistory(
     @Request() req,
-    @Query('skip') skip = 0,
-    @Query('take') take = 10,
+    @Query('skip') skip?: string,
+    @Query('take') take?: string,
   ) {
-    return this.examService.getExamHistory(req.user.userId, skip, take);
+    return this.examService.getExamHistory(
+      req.user.userId,
+      parseInt(skip ?? '0', 10),
+      parseInt(take ?? '10', 10),
+    );
   }
 }

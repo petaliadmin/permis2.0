@@ -2,6 +2,7 @@
 
 import { create } from 'zustand';
 import type { BadgeType, UserProfile } from '@permis2.0/types';
+import { useAuthStore } from './authStore';
 
 export interface GamificationState {
   // User profile
@@ -39,6 +40,15 @@ export interface GamificationState {
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
+function getAuthHeaders(): Record<string, string> {
+  const token = useAuthStore.getState().token;
+  const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+  if (token && !token.startsWith('local:')) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+  return headers;
+}
+
 export const useGamificationStore = create<GamificationState>((set, get) => ({
   userProfile: null,
   xp: 0,
@@ -54,9 +64,7 @@ export const useGamificationStore = create<GamificationState>((set, get) => ({
   fetchUserProfile: async () => {
     set({ isLoading: true, error: null });
     try {
-      const token = localStorage.getItem('auth-store')
-        ? JSON.parse(localStorage.getItem('auth-store') || '{}').state?.token
-        : null;
+      const token = useAuthStore.getState().token;
 
       if (!token) {
         throw new Error('Not authenticated');
@@ -64,10 +72,7 @@ export const useGamificationStore = create<GamificationState>((set, get) => ({
 
       const response = await fetch(`${API_URL}/profile`, {
         method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
+        headers: getAuthHeaders(),
       });
 
       if (!response.ok) {
@@ -92,9 +97,7 @@ export const useGamificationStore = create<GamificationState>((set, get) => ({
   fetchBadges: async () => {
     set({ isLoading: true, error: null });
     try {
-      const token = localStorage.getItem('auth-store')
-        ? JSON.parse(localStorage.getItem('auth-store') || '{}').state?.token
-        : null;
+      const token = useAuthStore.getState().token;
 
       if (!token) {
         throw new Error('Not authenticated');
@@ -102,10 +105,7 @@ export const useGamificationStore = create<GamificationState>((set, get) => ({
 
       const response = await fetch(`${API_URL}/gamification/badges`, {
         method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
+        headers: getAuthHeaders(),
       });
 
       if (!response.ok) {
@@ -155,9 +155,7 @@ export const useGamificationStore = create<GamificationState>((set, get) => ({
   fetchUserRank: async () => {
     set({ isLoading: true, error: null });
     try {
-      const token = localStorage.getItem('auth-store')
-        ? JSON.parse(localStorage.getItem('auth-store') || '{}').state?.token
-        : null;
+      const token = useAuthStore.getState().token;
 
       if (!token) {
         throw new Error('Not authenticated');
@@ -165,10 +163,7 @@ export const useGamificationStore = create<GamificationState>((set, get) => ({
 
       const response = await fetch(`${API_URL}/gamification/rank`, {
         method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
+        headers: getAuthHeaders(),
       });
 
       if (!response.ok) {
@@ -192,9 +187,7 @@ export const useGamificationStore = create<GamificationState>((set, get) => ({
 
   checkAchievements: async () => {
     try {
-      const token = localStorage.getItem('auth-store')
-        ? JSON.parse(localStorage.getItem('auth-store') || '{}').state?.token
-        : null;
+      const token = useAuthStore.getState().token;
 
       if (!token) {
         throw new Error('Not authenticated');
@@ -202,10 +195,7 @@ export const useGamificationStore = create<GamificationState>((set, get) => ({
 
       const response = await fetch(`${API_URL}/gamification/check-achievements`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
+        headers: getAuthHeaders(),
       });
 
       if (!response.ok) {

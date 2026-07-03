@@ -6,21 +6,28 @@ import {
   Body,
   UseGuards,
   Request,
+  ForbiddenException,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiTags, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { SeriesService } from './series.service';
+import { EntitlementService } from '../entitlement/entitlement.service';
+import { OptionalJwtAuthGuard } from '../auth/guards/optional-jwt-auth.guard';
 import { SubmitAnswerDto } from './dto/submit-answer.dto';
 
 @ApiTags('Series')
 @Controller('series')
 export class SeriesController {
-  constructor(private seriesService: SeriesService) {}
+  constructor(
+    private seriesService: SeriesService,
+    private entitlements: EntitlementService,
+  ) {}
 
   @Get()
-  @ApiResponse({ status: 200, description: 'List of series' })
-  async findAll() {
-    return this.seriesService.findAll();
+  @UseGuards(OptionalJwtAuthGuard)
+  @ApiResponse({ status: 200, description: 'List of series (with locked flag)' })
+  async findAll(@Request() req) {
+    return this.seriesService.findAll(req.user?.userId);
   }
 
   @Get(':id')
@@ -31,11 +38,20 @@ export class SeriesController {
   }
 
   @Get(':id/questions')
+  @UseGuards(OptionalJwtAuthGuard)
   @ApiResponse({ status: 200, description: 'Questions in series' })
+  @ApiResponse({ status: 403, description: 'Premium series — entitlement required' })
   @ApiResponse({ status: 404, description: 'Series not found' })
-  async getQuestions(@Param('id') id: string) {
-    // Validate series exists
-    await this.seriesService.findById(id);
+  async getQuestions(@Param('id') id: string, @Request() req) {
+    // Validate series exists, then gate premium content server-side.
+    const series = await this.seriesService.findById(id);
+    const allowed = await this.entitlements.hasAccessToSeries(
+      req.user?.userId,
+      series,
+    );
+    if (!allowed) {
+      throw new ForbiddenException('premium_series');
+    }
     return this.seriesService.getQuestionsBySeriesId(id);
   }
 
@@ -65,7 +81,7 @@ export class SeriesController {
     return this.seriesService.submitAnswer(
       req.user.userId,
       questionId,
-      submitAnswerDto.answer,
+      submitAnswerDto.answers ?? submitAnswerDto.answer,
     );
   }
 }

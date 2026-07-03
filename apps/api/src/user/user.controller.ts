@@ -8,6 +8,7 @@ import {
   UseGuards,
   Request,
   Query,
+  ForbiddenException,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiTags, ApiResponse } from '@nestjs/swagger';
@@ -20,7 +21,10 @@ export class UserController {
   constructor(private userService: UserService) {}
 
   @Get()
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
   @ApiResponse({ status: 200, description: 'List of users' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async findAll(
     @Query('skip') skip = 0,
     @Query('take') take = 10,
@@ -50,7 +54,10 @@ export class UserController {
   }
 
   @Get(':id')
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
   @ApiResponse({ status: 200, description: 'User found' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 404, description: 'User not found' })
   async findById(@Param('id') id: string) {
     return this.userService.findById(id);
@@ -61,8 +68,12 @@ export class UserController {
   @ApiBearerAuth()
   @ApiResponse({ status: 200, description: 'User deleted' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 404, description: 'User not found' })
-  async delete(@Param('id') id: string) {
+  async delete(@Param('id') id: string, @Request() req) {
+    if (req.user.userId !== id && req.user.role !== 'ADMIN') {
+      throw new ForbiddenException('Cannot delete another user');
+    }
     return this.userService.delete(id);
   }
 }

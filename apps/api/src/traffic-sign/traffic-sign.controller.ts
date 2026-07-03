@@ -4,7 +4,9 @@ import {
   Post,
   Param,
   Query,
+  Request,
   UseGuards,
+  ForbiddenException,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiTags, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
@@ -18,10 +20,13 @@ export class TrafficSignController {
   @Get()
   @ApiResponse({ status: 200, description: 'List of traffic signs' })
   async findAll(
-    @Query('skip') skip = 0,
-    @Query('take') take = 20,
+    @Query('skip') skip?: string,
+    @Query('take') take?: string,
   ) {
-    return this.trafficSignService.findAll(skip, take);
+    return this.trafficSignService.findAll(
+      parseInt(skip ?? '0', 10),
+      parseInt(take ?? '20', 10),
+    );
   }
 
   @Get('categories')
@@ -34,35 +39,35 @@ export class TrafficSignController {
   @ApiResponse({ status: 200, description: 'Search traffic signs' })
   async search(
     @Query('q') query: string,
-    @Query('skip') skip = 0,
-    @Query('take') take = 20,
+    @Query('skip') skip?: string,
+    @Query('take') take?: string,
   ) {
     if (!query || query.length < 2) {
       return { data: [], query, total: 0, message: 'Query too short' };
     }
-    return this.trafficSignService.search(query, skip, take);
+    return this.trafficSignService.search(query, parseInt(skip ?? '0', 10), parseInt(take ?? '20', 10));
   }
 
   @Get('category/:category')
   @ApiResponse({ status: 200, description: 'Signs by category' })
   async findByCategory(
     @Param('category') category: string,
-    @Query('skip') skip = 0,
-    @Query('take') take = 20,
+    @Query('skip') skip?: string,
+    @Query('take') take?: string,
   ) {
-    return this.trafficSignService.findByCategory(category, skip, take);
+    return this.trafficSignService.findByCategory(category, parseInt(skip ?? '0', 10), parseInt(take ?? '20', 10));
   }
 
   @Get(':id/related')
   @ApiResponse({ status: 200, description: 'Related traffic signs' })
-  async getRelated(@Param('id') id: string, @Query('limit') limit = 5) {
-    return this.trafficSignService.getRelatedSigns(id, limit);
+  async getRelated(@Param('id') id: string, @Query('limit') limit?: string) {
+    return this.trafficSignService.getRelatedSigns(id, parseInt(limit ?? '5', 10));
   }
 
   @Get(':id/questions')
   @ApiResponse({ status: 200, description: 'Questions using this sign' })
-  async getQuestions(@Param('id') id: string, @Query('limit') limit = 5) {
-    return this.trafficSignService.getQuestionsForSign(id, limit);
+  async getQuestions(@Param('id') id: string, @Query('limit') limit?: string) {
+    return this.trafficSignService.getQuestionsForSign(id, parseInt(limit ?? '5', 10));
   }
 
   @Get(':id')
@@ -84,13 +89,25 @@ export class TrafficSignController {
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth()
   @ApiResponse({ status: 201, description: 'Traffic signs seeded' })
-  async seedFromQuestions() {
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Admin only' })
+  async seedFromQuestions(@Request() req) {
+    if (req.user.role !== 'ADMIN') {
+      throw new ForbiddenException('Admin access required');
+    }
     return this.trafficSignService.seedTrafficSignsFromQuestions();
   }
 
   @Get('extract/list')
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
   @ApiResponse({ status: 200, description: 'Extracted signs from questions' })
-  async extractSigns() {
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Admin only' })
+  async extractSigns(@Request() req) {
+    if (req.user.role !== 'ADMIN') {
+      throw new ForbiddenException('Admin access required');
+    }
     const signs = await this.trafficSignService.extractSignsFromQuestions();
     return {
       signs,

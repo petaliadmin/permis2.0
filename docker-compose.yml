@@ -43,8 +43,12 @@ services:
       - ./serie_B2.json:/app/apps/serie_B2.json
       - ./serie_B3.json:/app/apps/serie_B3.json
       - ./panneaux_senegal.json:/app/apps/panneaux_senegal.json
+      - ./conduite.json:/app/apps/conduite.json
     working_dir: /app/apps/api
-    command: sh -c "npx prisma db push --accept-data-loss && node dist/prisma/seed.js && node dist/src/main.js"
+    # Migrations must be run manually via: docker compose exec api npx prisma migrate deploy
+    # Seeding must also be run manually. Never use db push --accept-data-loss in automated startup
+    # as it can silently drop columns/tables.
+    command: node dist/src/main.js
 
   web:
     build:

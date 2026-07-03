@@ -222,7 +222,8 @@ export class GamificationService {
     });
   }
 
-  async getLeaderboard(limit = 100) {
+  async getLeaderboard(limit = 20) {
+    const safeLimit = Math.min(limit || 20, 100);
     return this.prisma.user.findMany({
       select: {
         id: true,
@@ -232,7 +233,7 @@ export class GamificationService {
         level: true,
       },
       orderBy: { xp: 'desc' },
-      take: limit,
+      take: safeLimit,
     });
   }
 

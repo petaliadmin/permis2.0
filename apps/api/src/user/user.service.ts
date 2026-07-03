@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { getLevelFromXP } from '@permis2.0/utils';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
@@ -28,6 +29,14 @@ export class UserService {
   async findByGoogleId(googleId: string) {
     return this.prisma.user.findUnique({
       where: { googleId },
+    });
+  }
+
+  /** Link a Google identity onto an existing (email/password) account. */
+  async linkGoogle(userId: string, googleId: string, avatar?: string) {
+    return this.prisma.user.update({
+      where: { id: userId },
+      data: { googleId, ...(avatar ? { avatar } : {}) },
     });
   }
 
@@ -76,7 +85,7 @@ export class UserService {
     }
 
     const newXP = user.xp + xp;
-    const newLevel = this.calculateLevel(newXP);
+    const newLevel = getLevelFromXP(newXP);
 
     return this.prisma.user.update({
       where: { id: userId },
@@ -96,12 +105,5 @@ export class UserService {
     return this.prisma.user.delete({
       where: { id },
     });
-  }
-
-  private calculateLevel(xp: number): string {
-    if (xp >= 600) return 'Expert';
-    if (xp >= 300) return 'Confirmé';
-    if (xp >= 100) return 'Intermédiaire';
-    return 'Débutant';
   }
 }

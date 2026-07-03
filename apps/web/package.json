@@ -20,7 +20,7 @@
     "@tanstack/react-query": "^5.40.0",
     "zustand": "^4.4.6",
     "framer-motion": "^10.16.19",
-    "recharts": "^2.12.0",
+    "@tabler/icons-webfont": "^3.0.0",
     "@permis2.0/types": "workspace:*",
     "@permis2.0/utils": "workspace:*",
     "@permis2.0/hooks": "workspace:*",

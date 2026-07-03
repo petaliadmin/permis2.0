@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException, ForbiddenException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { XP_RULES } from '@permis2.0/utils';
 
@@ -199,44 +199,47 @@ export class ExamService {
       : 0;
     const passed = percentage >= 70; // 70% threshold
 
-    // Award XP
-    const user = await this.prisma.user.findUnique({
-      where: { id: userId },
-    });
-
-    if (user) {
-      const xpEarned = correctAnswers * XP_RULES.correctAnswer;
-      const newXP = user.xp + xpEarned;
-      const newLevel = this.calculateLevel(newXP);
-
-      await this.prisma.user.update({
+    // Execute XP update, result creation, and exam completion atomically
+    await this.prisma.$transaction(async (tx) => {
+      // Award XP
+      const user = await tx.user.findUnique({
         where: { id: userId },
-        data: { xp: newXP, level: newLevel },
       });
-    }
 
-    // Create exam result
-    const result = await this.prisma.examResult.create({
-      data: {
-        examId,
-        userId,
-        score,
-        percentage,
-        passed,
-        timeUsed: Math.round(totalTime / 1000), // seconds
-        totalTime: Math.round(this.EXAM_DURATION / 1000), // seconds
-        startedAt: exam.startedAt ?? new Date(),
-        completedAt: new Date(),
-      },
-    });
+      if (user) {
+        const xpEarned = correctAnswers * XP_RULES.correctAnswer;
+        const newXP = user.xp + xpEarned;
+        const newLevel = this.calculateLevel(newXP);
 
-    // Mark exam as completed
-    await this.prisma.exam.update({
-      where: { id: examId },
-      data: {
-        status: 'completed',
-        completedAt: new Date(),
-      },
+        await tx.user.update({
+          where: { id: userId },
+          data: { xp: newXP, level: newLevel },
+        });
+      }
+
+      // Create exam result
+      await tx.examResult.create({
+        data: {
+          examId,
+          userId,
+          score,
+          percentage,
+          passed,
+          timeUsed: Math.round(totalTime / 1000), // seconds
+          totalTime: Math.round(this.EXAM_DURATION / 1000), // seconds
+          startedAt: exam.startedAt ?? new Date(),
+          completedAt: new Date(),
+        },
+      });
+
+      // Mark exam as completed
+      await tx.exam.update({
+        where: { id: examId },
+        data: {
+          status: 'completed',
+          completedAt: new Date(),
+        },
+      });
     });
 
     return {
@@ -254,7 +257,7 @@ export class ExamService {
     };
   }
 
-  async getExamResult(examId: string) {
+  async getExamResult(examId: string, userId?: string) {
     const result = await this.prisma.examResult.findUnique({
       where: { examId },
       include: {
@@ -276,6 +279,10 @@ export class ExamService {
 
     if (!result) {
       throw new NotFoundException('Exam result not found');
+    }
+
+    if (userId && result.userId !== userId) {
+      throw new ForbiddenException('Access denied');
     }
 
     // Calculate category breakdown

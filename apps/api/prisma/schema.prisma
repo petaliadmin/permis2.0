@@ -190,6 +190,7 @@ model ExamResult {
   exam        Exam       @relation(fields: [examId], references: [id], onDelete: Cascade)
 
   @@index([examId])
+  @@index([userId])
   @@map("exam_results")
 }
 
@@ -300,6 +301,7 @@ model Notification {
   user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
+  @@index([read])
   @@map("notifications")
 }
 
@@ -317,6 +319,7 @@ model Subscription {
   user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
+  @@index([status])
   @@map("subscriptions")
 }
 
@@ -334,5 +337,6 @@ model TrafficSign {
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
 
+  @@index([category])
   @@map("traffic_signs")
 }

@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import type { Category, Lesson } from '@permis2.0/types';
+import { useAuthStore } from './authStore';
 
 interface ContentState {
   // Categories
@@ -92,19 +93,22 @@ export const useContentStore = create<ContentState>((set, get) => ({
 
   toggleFavorite: async (lessonId: string) => {
     const { favorites } = get();
-    const token = localStorage.getItem('auth-store')
-      ? JSON.parse(localStorage.getItem('auth-store') || '{}').state?.token
-      : null;
+    const token = useAuthStore.getState().token;
 
     if (!token) {
       console.error('Not authenticated');
       return;
     }
 
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+    if (!token.startsWith('local:')) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
     try {
       const response = await fetch(`${API_URL}/lessons/${lessonId}/favorite`, {
         method: 'POST',
-        headers: { Authorization: `Bearer ${token}` },
+        headers,
       });
 
       if (!response.ok) throw new Error('Failed to toggle favorite');

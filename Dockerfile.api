@@ -1,21 +1,20 @@
-FROM node:20-slim
-
-WORKDIR /app
+# ─── Stage 1: builder ───────────────────────────────────────────────────────
+FROM node:20-slim AS builder
 
 # Only dumb-init and openssl needed - no build tools (using bcryptjs pure JS instead of bcrypt native)
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    dumb-init \
     openssl \
-    procps \
     && rm -rf /var/lib/apt/lists/* \
     && npm install -g pnpm
 
+WORKDIR /app
+
 COPY package*.json ./
+COPY pnpm-workspace.yaml ./
 COPY turbo.json ./
 COPY tsconfig.json ./
 COPY .eslintrc.json ./
 COPY .prettierrc.json ./
-COPY pnpm-workspace.yaml ./
 
 COPY apps/api ./apps/api
 COPY packages ./packages
@@ -23,12 +22,56 @@ COPY packages ./packages
 # Data source JSON files — the Prisma seed resolves them relative to
 # dist/prisma (../../../*.json => /app/apps/*.json). Keep them in the image
 # so seeding is reproducible without manual copies.
-COPY categories_et_meta.json fiches_theoriques.json serie_B1.json serie_B2.json serie_B3.json panneaux_senegal.json ./apps/
+COPY categories_et_meta.json fiches_theoriques.json serie_B1.json serie_B2.json serie_B3.json panneaux_senegal.json conduite.json ./apps/
 
-RUN pnpm install && cd apps/api && pnpm run prisma:generate
+RUN pnpm install --frozen-lockfile
+RUN cd apps/api && pnpm run prisma:generate
+RUN cd packages/types && pnpm run build
+RUN cd packages/utils && pnpm run build
 RUN cd apps/api && pnpm run build
+
+# ─── Stage 2: runner ─────────────────────────────────────────────────────────
+FROM node:20-slim AS runner
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    dumb-init \
+    openssl \
+    procps \
+    && rm -rf /var/lib/apt/lists/* \
+    && npm install -g pnpm
+
+WORKDIR /app
+
+# Copy compiled output and manifests needed for pnpm install --prod
+COPY --from=builder /app/apps/api/dist ./apps/api/dist
+COPY --from=builder /app/apps/api/prisma ./apps/api/prisma
+COPY --from=builder /app/apps/api/package.json ./apps/api/package.json
+COPY --from=builder /app/packages ./packages
+COPY --from=builder /app/package.json ./
+COPY --from=builder /app/pnpm-workspace.yaml ./
+COPY --from=builder /app/pnpm-lock.yaml ./
+
+# Copy data files needed for seed (run manually via docker exec)
+COPY --from=builder /app/apps/categories_et_meta.json /app/apps/
+COPY --from=builder /app/apps/fiches_theoriques.json /app/apps/
+COPY --from=builder /app/apps/serie_B1.json /app/apps/
+COPY --from=builder /app/apps/serie_B2.json /app/apps/
+COPY --from=builder /app/apps/serie_B3.json /app/apps/
+COPY --from=builder /app/apps/panneaux_senegal.json /app/apps/
+COPY --from=builder /app/apps/conduite.json /app/apps/
+
+# Install production dependencies only
+RUN pnpm install --prod --frozen-lockfile
+
+# Non-root user for security
+RUN chown -R node:node /app
+USER node
+
+WORKDIR /app/apps/api
 
 EXPOSE 3001
 
 ENTRYPOINT ["dumb-init", "--"]
+# Migrations must be run manually before startup:
+#   docker compose exec api npx prisma migrate deploy
 CMD ["node", "dist/src/main.js"]
