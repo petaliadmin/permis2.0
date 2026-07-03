@@ -1,17 +1,10 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
+// Only routes that are entirely meaningless without an account.
+// Everything else is accessible as a guest; individual pages prompt for
+// login only when a specific action requires it (saving progress, purchasing…).
 const PROTECTED_ROUTES = [
-  '/boutique',
-  '/profil',
-  '/exam',
-  '/quizz',
-  '/tests',
-  '/traffic-signs',
-  '/conduite',
-  '/gamification',
-  '/statistics',
-  '/assistance',
   '/notifications',
 ];
 
