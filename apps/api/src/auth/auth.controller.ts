@@ -18,14 +18,77 @@ import { LoginDto } from './dto/login.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { MigrateGuestDto } from './dto/migrate-guest.dto';
+import { RequestOtpDto } from './dto/request-otp.dto';
+import { VerifyOtpDto } from './dto/verify-otp.dto';
+import { LoginPinDto } from './dto/login-pin.dto';
+import { RegisterPinDto } from './dto/register-pin.dto';
 
 @ApiTags('Authentication')
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  // Stricter per-IP throttling on credential endpoints to blunt brute-force and
-  // account-enumeration (the global guard allows 100/min, too permissive here).
+  // ─── Phone / OTP / PIN ───────────────────────────────────────────────────────
+
+  @Throttle({ default: { limit: 5, ttl: 60_000 } })
+  @Post('otp/request')
+  @HttpCode(200)
+  @ApiResponse({ status: 200, description: 'OTP sent (devCode present in non-production)' })
+  async requestOtp(@Body() dto: RequestOtpDto) {
+    return this.authService.requestOtp(dto.phone, dto.channel);
+  }
+
+  @Throttle({ default: { limit: 10, ttl: 60_000 } })
+  @Post('otp/verify')
+  @HttpCode(200)
+  @ApiResponse({ status: 200, description: '{ verified: true|false }' })
+  async verifyOtp(@Body() dto: VerifyOtpDto) {
+    const verified = await this.authService.verifyOtp(dto.phone, dto.otp);
+    return { verified };
+  }
+
+  @Throttle({ default: { limit: 5, ttl: 60_000 } })
+  @Post('login-pin')
+  @HttpCode(200)
+  @ApiResponse({ status: 200, description: 'Login with phone + PIN' })
+  @ApiResponse({ status: 401, description: 'Invalid credentials' })
+  async loginWithPin(
+    @Body() dto: LoginPinDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const result = await this.authService.loginWithPin(dto.phone, dto.pin);
+    res.cookie('access_token', result.accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 24 * 60 * 60 * 1000,
+      path: '/',
+    });
+    return result;
+  }
+
+  @Throttle({ default: { limit: 5, ttl: 60_000 } })
+  @Post('register-pin')
+  @HttpCode(201)
+  @ApiResponse({ status: 201, description: 'Account created with phone + PIN' })
+  @ApiResponse({ status: 409, description: 'Phone number already in use' })
+  async registerWithPin(
+    @Body() dto: RegisterPinDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const result = await this.authService.registerWithPin(dto.name, dto.phone, dto.pin);
+    res.cookie('access_token', result.accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 24 * 60 * 60 * 1000,
+      path: '/',
+    });
+    return result;
+  }
+
+  // ─── Email / Password (kept for admin / web fallback) ────────────────────────
+
   @Throttle({ default: { limit: 5, ttl: 60_000 } })
   @Post('register')
   @HttpCode(201)
@@ -88,31 +151,8 @@ export class AuthController {
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth()
   @ApiResponse({ status: 200, description: 'Guest progress merged into the account' })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async migrateGuest(@Request() req, @Body() dto: MigrateGuestDto) {
     return this.authService.migrateGuestProgress(req.user.userId, dto);
-  }
-
-  @Get('google')
-  @UseGuards(AuthGuard('google'))
-  async googleAuth() {
-    // Passport redirects to Google's consent screen.
-  }
-
-  @Get('google/callback')
-  @UseGuards(AuthGuard('google'))
-  async googleAuthRedirect(@Request() req, @Res() res: Response) {
-    // Set the token in a httpOnly cookie — never expose it in the URL.
-    const { accessToken } = await this.authService.googleLogin(req.user);
-    const webUrl = process.env.WEB_URL || 'http://localhost:3000';
-    res.cookie('access_token', accessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 24 * 60 * 60 * 1000,
-      path: '/',
-    });
-    return res.redirect(`${webUrl}/auth/callback`);
   }
 
   @Post('logout')
@@ -127,7 +167,6 @@ export class AuthController {
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth()
   @ApiResponse({ status: 200, description: 'Token refreshed' })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async refreshToken(@Request() req) {
     return this.authService.refreshToken(req.user.userId);
   }
@@ -136,7 +175,6 @@ export class AuthController {
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth()
   @ApiResponse({ status: 200, description: 'Current user info' })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async getCurrentUser(@Request() req) {
     return this.authService.validateUser(req.user.userId);
   }

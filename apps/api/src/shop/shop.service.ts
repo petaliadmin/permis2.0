@@ -111,7 +111,7 @@ export class ShopService {
       amountXof: product.priceXof,
       phone: dto.phone,
       method: dto.method,
-      email: user?.email,
+      email: user?.email ?? undefined,
       name: user?.name,
     });
 

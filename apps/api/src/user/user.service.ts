@@ -9,35 +9,21 @@ export class UserService {
   constructor(private prisma: PrismaService) {}
 
   async create(createUserDto: CreateUserDto) {
-    return this.prisma.user.create({
-      data: createUserDto,
-    });
+    return this.prisma.user.create({ data: createUserDto });
   }
 
   async findById(id: string) {
-    return this.prisma.user.findUnique({
-      where: { id },
-    });
+    return this.prisma.user.findUnique({ where: { id } });
   }
 
   async findByEmail(email: string) {
-    return this.prisma.user.findUnique({
-      where: { email },
-    });
+    if (!email) return null;
+    return this.prisma.user.findUnique({ where: { email } });
   }
 
-  async findByGoogleId(googleId: string) {
-    return this.prisma.user.findUnique({
-      where: { googleId },
-    });
-  }
-
-  /** Link a Google identity onto an existing (email/password) account. */
-  async linkGoogle(userId: string, googleId: string, avatar?: string) {
-    return this.prisma.user.update({
-      where: { id: userId },
-      data: { googleId, ...(avatar ? { avatar } : {}) },
-    });
+  async findByPhone(phone: string) {
+    if (!phone) return null;
+    return this.prisma.user.findUnique({ where: { phone } });
   }
 
   async findAll(skip = 0, take = 10) {
@@ -48,6 +34,7 @@ export class UserService {
         select: {
           id: true,
           email: true,
+          phone: true,
           name: true,
           avatar: true,
           xp: true,
@@ -68,42 +55,26 @@ export class UserService {
 
   async update(id: string, updateUserDto: UpdateUserDto) {
     const user = await this.findById(id);
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
-
-    return this.prisma.user.update({
-      where: { id },
-      data: updateUserDto,
-    });
+    if (!user) throw new NotFoundException('User not found');
+    return this.prisma.user.update({ where: { id }, data: updateUserDto });
   }
 
   async addXP(userId: string, xp: number) {
     const user = await this.findById(userId);
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
+    if (!user) throw new NotFoundException('User not found');
 
     const newXP = user.xp + xp;
     const newLevel = getLevelFromXP(newXP);
 
     return this.prisma.user.update({
       where: { id: userId },
-      data: {
-        xp: newXP,
-        level: newLevel,
-      },
+      data: { xp: newXP, level: newLevel },
     });
   }
 
   async delete(id: string) {
     const user = await this.findById(id);
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
-
-    return this.prisma.user.delete({
-      where: { id },
-    });
+    if (!user) throw new NotFoundException('User not found');
+    return this.prisma.user.delete({ where: { id } });
   }
 }

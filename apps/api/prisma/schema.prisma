@@ -17,11 +17,12 @@ enum Role {
 
 model User {
   id            String     @id @default(cuid())
-  email         String     @unique
+  email         String?    @unique
+  phone         String?    @unique
   name          String
   avatar        String?
   passwordHash  String?
-  googleId      String?    @unique
+  pinHash       String?
   xp            Int        @default(0)
   level         String     @default("Débutant")
   role          Role       @default(USER)
@@ -459,4 +460,17 @@ model DrivingChoice {
 
   @@index([questionId])
   @@map("driving_choices")
+}
+
+model OtpToken {
+  id        String    @id @default(cuid())
+  phone     String
+  codeHash  String
+  channel   String    @default("sms")
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([phone])
+  @@map("otp_tokens")
 }
