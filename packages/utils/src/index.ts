@@ -30,6 +30,25 @@ export function getScoreLabel(score: number): 'Excellent' | 'Bon' | 'Moyen' | 'F
   return 'Faible';
 }
 
+// Answer-checking utilities — a question can have one or several correct answers
+// (Question.reponses_correctes is a string[]). Normalise both sides and compare
+// as sets so single- and multi-answer questions are graded correctly.
+export function normalizeAnswers(input: string | string[] | undefined | null): string[] {
+  if (input == null) return [];
+  return (Array.isArray(input) ? input : [input]).map((s) => s.trim()).filter(Boolean);
+}
+
+export function isAnswerCorrect(
+  correct: string | string[],
+  user: string | string[],
+): boolean {
+  const c = normalizeAnswers(correct);
+  const u = normalizeAnswers(user);
+  if (c.length === 0 || c.length !== u.length) return false;
+  const set = new Set(c);
+  return u.every((a) => set.has(a));
+}
+
 // XP utilities
 export const XP_RULES = {
   correctAnswer: 10,

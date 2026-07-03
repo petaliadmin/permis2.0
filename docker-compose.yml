@@ -54,6 +54,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.web
+      target: builder
     container_name: permis2.0-web
     environment:
       NODE_ENV: development

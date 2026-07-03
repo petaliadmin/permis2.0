@@ -14,9 +14,9 @@ const buttonVariants = cva(
         danger:
           'bg-danger text-white shadow-soft hover:bg-danger-700',
         outline:
-          'border border-slate-300 bg-white text-slate-800 hover:border-primary hover:text-primary dark:border-slate-700 dark:bg-dark-800 dark:text-slate-100 dark:hover:border-primary',
+          'border border-token bg-surface-2 text-foreground hover:border-primary hover:text-primary',
         ghost:
-          'text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-dark-800',
+          'text-secondary hover:bg-surface-2',
       },
       size: {
         default: 'h-10 px-5 py-2',

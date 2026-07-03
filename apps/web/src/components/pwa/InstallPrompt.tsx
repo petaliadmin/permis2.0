@@ -136,7 +136,7 @@ export function InstallPrompt() {
                 P
               </motion.span>
               <div className="min-w-0 flex-1">
-                <h2 id="install-title" className="text-lg font-extrabold text-dark dark:text-white">
+                <h2 id="install-title" className="text-lg font-extrabold text-foreground">
                   Installer PERMIS2.0
                 </h2>
                 <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
@@ -158,10 +158,10 @@ export function InstallPrompt() {
               {FEATURES.map((f) => (
                 <div
                   key={f.label}
-                  className="flex flex-col items-center gap-1 rounded-2xl bg-slate-50 py-3 text-center dark:bg-dark-900"
+                  className="flex flex-col items-center gap-1 rounded-2xl bg-surface-1 py-3 text-center"
                 >
                   <span className="text-xl">{f.icon}</span>
-                  <span className="text-[11px] font-semibold text-slate-600 dark:text-slate-300">
+                  <span className="text-[11px] font-semibold text-secondary">
                     {f.label}
                   </span>
                 </div>
@@ -169,8 +169,8 @@ export function InstallPrompt() {
             </div>
 
             {iosHelp ? (
-              <div className="mt-4 rounded-2xl bg-slate-50 p-4 text-sm text-slate-600 dark:bg-dark-900 dark:text-slate-300">
-                <p className="font-semibold text-dark dark:text-white">Sur iPhone / iPad :</p>
+              <div className="mt-4 rounded-2xl bg-surface-1 p-4 text-sm text-secondary">
+                <p className="font-semibold text-foreground">Sur iPhone / iPad :</p>
                 <ol className="mt-2 space-y-1.5">
                   <li>1. Appuie sur <span className="font-semibold">Partager</span> <span className="align-middle">􀈂</span> dans la barre Safari.</li>
                   <li>2. Choisis <span className="font-semibold">« Sur l&apos;écran d&apos;accueil »</span>.</li>
@@ -178,7 +178,7 @@ export function InstallPrompt() {
                 </ol>
                 <button
                   onClick={dismiss}
-                  className="mt-4 w-full rounded-xl bg-slate-200 py-2.5 text-sm font-semibold text-slate-700 dark:bg-dark-800 dark:text-slate-200"
+                  className="mt-4 w-full rounded-xl bg-surface-2 py-2.5 text-sm font-semibold text-secondary hover:bg-surface-3 transition-colors"
                 >
                   J&apos;ai compris
                 </button>
@@ -187,7 +187,7 @@ export function InstallPrompt() {
               <div className="mt-4 flex gap-3">
                 <button
                   onClick={dismiss}
-                  className="flex-1 rounded-xl border border-slate-300 py-3 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-dark-900"
+                  className="flex-1 rounded-xl border border-token py-3 text-sm font-semibold text-secondary transition-colors hover:bg-surface-2"
                 >
                   Plus tard
                 </button>

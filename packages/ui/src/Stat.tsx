@@ -15,8 +15,7 @@ const Stat = React.forwardRef<HTMLDivElement, StatProps>(
     <div
       ref={ref}
       className={cn(
-        'flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-card',
-        'dark:border-slate-800 dark:bg-dark-800',
+        'flex items-center gap-4 rounded-2xl border border-token bg-surface-2 p-4 shadow-card',
         className
       )}
       {...props}
@@ -32,10 +31,10 @@ const Stat = React.forwardRef<HTMLDivElement, StatProps>(
         </div>
       )}
       <div className="min-w-0">
-        <p className="truncate text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">
+        <p className="truncate text-xs font-medium uppercase tracking-wide text-muted">
           {label}
         </p>
-        <p className="mt-0.5 text-2xl font-extrabold leading-none text-dark dark:text-white">
+        <p className="mt-0.5 text-2xl font-extrabold leading-none text-foreground">
           {value}
         </p>
       </div>

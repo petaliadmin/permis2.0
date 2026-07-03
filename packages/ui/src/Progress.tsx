@@ -35,7 +35,7 @@ const Progress = React.forwardRef<HTMLDivElement, ProgressProps>(
         aria-valuemin={0}
         aria-valuemax={100}
         className={cn(
-          'relative w-full overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700',
+          'relative w-full overflow-hidden rounded-full bg-surface-3',
           trackSizes[size],
           className
         )}

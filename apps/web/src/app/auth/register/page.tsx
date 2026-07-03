@@ -2,206 +2,175 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuthStore } from '@/store/authStore';
-import { Button } from '@permis2.0/ui';
-import { Input } from '@permis2.0/ui';
 import Link from 'next/link';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useAuthStore, isValidSnPhone, formatPhone, type OtpChannel } from '@/store/authStore';
+import { CodeInput } from '@/components/CodeInput';
 
 export default function RegisterPage() {
   const router = useRouter();
-  const register = useAuthStore((state) => state.register);
-  const error = useAuthStore((state) => state.error);
-  const isLoading = useAuthStore((state) => state.isLoading);
+  const requestOtp = useAuthStore((s) => s.requestOtp);
+  const verifyOtp = useAuthStore((s) => s.verifyOtp);
+  const registerWithPin = useAuthStore((s) => s.registerWithPin);
+  const isLoading = useAuthStore((s) => s.isLoading);
+  const devCode = useAuthStore((s) => s.devCode);
+  const storeError = useAuthStore((s) => s.error);
 
-  const [formData, setFormData] = useState({
-    email: '',
-    name: '',
-    password: '',
-    passwordConfirm: '',
-  });
+  const [step, setStep] = useState(0);
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [channel, setChannel] = useState<OtpChannel>('whatsapp');
+  const [otp, setOtp] = useState('');
+  const [pin, setPin] = useState('');
+  const [pinConfirm, setPinConfirm] = useState('');
+  const [err, setErr] = useState('');
 
-  const [validationError, setValidationError] = useState('');
+  const phoneOk = isValidSnPhone(phone);
+  const nameOk = name.trim().length >= 2;
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    setValidationError('');
+  const sendCode = async () => {
+    setErr('');
+    if (!nameOk) return setErr('Entrez votre nom (2 caractères min).');
+    if (!phoneOk) return setErr('Numéro sénégalais invalide (77, 78, 76, 70 ou 75…).');
+    await requestOtp(phone, channel);
+    setStep(1);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const checkCode = async () => {
+    setErr('');
+    if (otp.length !== 6) return setErr('Entrez les 6 chiffres du code.');
+    const ok = await verifyOtp(phone, otp);
+    if (!ok) return setErr('Code incorrect. Réessayez.');
+    setStep(2);
+  };
 
-    // Validation
-    if (formData.password !== formData.passwordConfirm) {
-      setValidationError('Les mots de passe ne correspondent pas');
-      return;
-    }
-
-    if (formData.password.length < 8) {
-      setValidationError('Le mot de passe doit contenir au moins 8 caractères');
-      return;
-    }
-
-    try {
-      await register(formData.email, formData.password, formData.name);
-      router.push('/');
-    } catch (err) {
-      console.error(err);
-    }
+  const finish = async () => {
+    setErr('');
+    if (pin.length !== 4) return setErr('Choisissez un code à 4 chiffres.');
+    if (pin !== pinConfirm) return setErr('Les deux codes ne correspondent pas.');
+    await registerWithPin(name.trim(), phone, pin);
+    router.push('/');
   };
 
   return (
-    <div className="relative flex min-h-[100dvh] flex-col bg-gradient-hero px-4 pb-[calc(2rem+env(safe-area-inset-bottom))] pt-[calc(2.5rem+env(safe-area-inset-top))]">
-      {/* Brand header on the gradient */}
-      <div className="mx-auto mb-5 w-full max-w-md text-center text-white">
-        <span className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl bg-white/15 text-2xl font-black shadow-soft backdrop-blur">
-          P
-        </span>
-        <h1 className="text-2xl font-extrabold">
-          PERMIS<span className="text-secondary">2.0</span>
-        </h1>
-        <p className="mt-1 text-sm text-primary-50/90">
-          Crée ton compte et commence à apprendre
-        </p>
+    <div className="flex min-h-[100dvh] flex-col bg-gradient-to-b from-primary-600 to-primary-800 px-5 pb-[calc(2rem+env(safe-area-inset-bottom))] pt-[calc(2.5rem+env(safe-area-inset-top))]">
+      {/* Brand */}
+      <div className="mx-auto mb-6 w-full max-w-md text-center text-white">
+        <span className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl bg-white/15 text-2xl font-black backdrop-blur">P</span>
+        <h1 className="font-display text-2xl font-extrabold">PERMIS<span className="text-primary-200">2.0</span></h1>
+        <p className="mt-1 text-sm text-white/75">Crée ton compte en une minute</p>
+      </div>
+
+      {/* Progress */}
+      <div className="mx-auto mb-5 flex gap-2">
+        {[0, 1, 2].map((i) => (
+          <div key={i} className={`h-1.5 rounded-full transition-all duration-500 ${i === step ? 'w-8 bg-white' : i < step ? 'w-4 bg-white/60' : 'w-4 bg-white/25'}`} />
+        ))}
       </div>
 
       {/* Card */}
-      <div className="mx-auto w-full max-w-md rounded-3xl bg-white p-6 shadow-2xl animate-fade-in dark:bg-dark-800 sm:p-8">
-        <h2 className="mb-5 text-xl font-extrabold text-dark dark:text-white">Inscription</h2>
+      <div className="mx-auto w-full max-w-md rounded-3xl border border-token bg-surface-1 p-6 shadow-card">
+        <AnimatePresence mode="wait">
+          {/* Step 0 — name + phone + channel */}
+          {step === 0 && (
+            <motion.div key="s0" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+              <h2 className="font-display text-xl font-extrabold text-foreground">Créer un compte</h2>
+              <p className="mt-1 text-sm text-secondary">On vérifie ton numéro, une seule fois.</p>
 
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label htmlFor="name" className="block text-sm font-medium mb-2">
-              Nom complet
-            </label>
-            <Input
-              id="name"
-              name="name"
-              type="text"
-              required
-              placeholder="John Doe"
-              value={formData.name}
-              onChange={handleChange}
-              disabled={isLoading}
-            />
-          </div>
+              <label className="mt-5 block text-sm font-medium text-foreground">Nom</label>
+              <div className="mt-1.5 flex items-center gap-2 rounded-2xl border border-token bg-surface-2 px-4">
+                <i className="ti ti-user text-secondary" aria-hidden="true" />
+                <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Ex : Moussa Diop"
+                  className="h-12 w-full bg-transparent text-sm text-foreground placeholder:text-muted focus:outline-none" />
+              </div>
 
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium mb-2">
-              Email
-            </label>
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              required
-              placeholder="votre@email.com"
-              value={formData.email}
-              onChange={handleChange}
-              disabled={isLoading}
-            />
-          </div>
+              <label className="mt-4 block text-sm font-medium text-foreground">Téléphone</label>
+              <div className="mt-1.5 flex items-center gap-2 rounded-2xl border border-token bg-surface-2 px-4">
+                <span className="text-sm font-semibold text-secondary">🇸🇳 +221</span>
+                <input value={phone} onChange={(e) => setPhone(e.target.value)} inputMode="tel" placeholder="77 000 00 00"
+                  className="h-12 w-full bg-transparent text-sm text-foreground placeholder:text-muted focus:outline-none" />
+              </div>
 
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium mb-2">
-              Mot de passe
-            </label>
-            <Input
-              id="password"
-              name="password"
-              type="password"
-              required
-              placeholder="••••••••"
-              value={formData.password}
-              onChange={handleChange}
-              disabled={isLoading}
-            />
-          </div>
+              <p className="mt-4 text-sm font-medium text-foreground">Recevoir le code par</p>
+              <div className="mt-1.5 grid grid-cols-2 gap-3">
+                <button type="button" onClick={() => setChannel('whatsapp')}
+                  className={`flex items-center justify-center gap-2 rounded-2xl border-2 py-3 text-sm font-bold transition-colors ${channel === 'whatsapp' ? 'border-success-500 bg-success-50 text-success-700' : 'border-token text-secondary'}`}>
+                  <i className="ti ti-brand-whatsapp text-lg" aria-hidden="true" /> WhatsApp
+                </button>
+                <button type="button" onClick={() => setChannel('sms')}
+                  className={`flex items-center justify-center gap-2 rounded-2xl border-2 py-3 text-sm font-bold transition-colors ${channel === 'sms' ? 'border-primary-500 bg-primary-50 text-primary-700' : 'border-token text-secondary'}`}>
+                  <i className="ti ti-message text-lg" aria-hidden="true" /> SMS
+                </button>
+              </div>
 
-          <div>
-            <label htmlFor="passwordConfirm" className="block text-sm font-medium mb-2">
-              Confirmer le mot de passe
-            </label>
-            <Input
-              id="passwordConfirm"
-              name="passwordConfirm"
-              type="password"
-              required
-              placeholder="••••••••"
-              value={formData.passwordConfirm}
-              onChange={handleChange}
-              disabled={isLoading}
-            />
-          </div>
+              {err && <p className="mt-4 rounded-xl bg-red-50 px-3 py-2 text-sm font-medium text-danger">{err}</p>}
 
-          {(error || validationError) && (
-            <div className="bg-danger/10 border border-danger text-danger px-4 py-3 rounded-lg">
-              {error || validationError}
-            </div>
+              <button onClick={sendCode} disabled={isLoading} className="btn-primary mt-5 w-full disabled:opacity-40">
+                {isLoading ? 'Envoi du code…' : 'Envoyer le code'}
+              </button>
+            </motion.div>
           )}
 
-          <Button
-            type="submit"
-            className="w-full"
-            disabled={isLoading}
-            size="lg"
-          >
-            {isLoading ? 'Création du compte...' : 'S\'inscrire'}
-          </Button>
-        </form>
+          {/* Step 1 — OTP */}
+          {step === 1 && (
+            <motion.div key="s1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+              <button onClick={() => setStep(0)} className="mb-3 flex items-center gap-1 text-sm font-semibold text-primary-600">
+                <i className="ti ti-chevron-left" aria-hidden="true" /> Modifier le numéro
+              </button>
+              <h2 className="font-display text-xl font-extrabold text-foreground">Vérifie ton numéro</h2>
+              <p className="mt-1 text-sm text-secondary">
+                Code envoyé par {channel === 'whatsapp' ? 'WhatsApp' : 'SMS'} au <span className="font-semibold text-foreground">+221 {formatPhone(phone)}</span>
+              </p>
 
-        {/* Divider */}
-        <div className="relative">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-300 dark:border-gray-600" />
-          </div>
-          <div className="relative flex justify-center text-sm">
-            <span className="px-2 bg-gray-50 dark:bg-dark text-gray-500">
-              Ou
-            </span>
-          </div>
-        </div>
+              <div className="mt-6">
+                <CodeInput length={6} value={otp} onChange={setOtp} autoFocus onComplete={() => {}} />
+              </div>
 
-        {/* Google Signup */}
-        <Button
-          variant="outline"
-          className="w-full"
-          size="lg"
-          disabled={isLoading}
-        >
-          <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
-            <path
-              fill="currentColor"
-              d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-            />
-            <path
-              fill="currentColor"
-              d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-            />
-            <path
-              fill="currentColor"
-              d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-            />
-            <path
-              fill="currentColor"
-              d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-            />
-          </svg>
-          S'inscrire avec Google
-        </Button>
+              {devCode && (
+                <p className="mt-4 rounded-xl bg-amber-50 px-3 py-2 text-center text-xs font-medium text-amber-700">
+                  Mode démo (hors ligne) — ton code est <span className="font-black tracking-widest">{devCode}</span>
+                </p>
+              )}
+              {err && <p className="mt-4 rounded-xl bg-red-50 px-3 py-2 text-sm font-medium text-danger">{err}</p>}
 
-        {/* Footer */}
-        <p className="text-center text-sm text-gray-600 dark:text-gray-400">
-          Déjà un compte?{' '}
-          <Link
-            href="/auth/login"
-            className="font-medium text-primary hover:underline"
-          >
-            Se connecter
-          </Link>
-        </p>
+              <button onClick={checkCode} disabled={isLoading} className="btn-primary mt-6 w-full disabled:opacity-40">
+                {isLoading ? 'Vérification…' : 'Valider'}
+              </button>
+              <button onClick={() => requestOtp(phone, channel)} className="mt-3 w-full py-2 text-center text-sm font-medium text-secondary">
+                Renvoyer le code
+              </button>
+            </motion.div>
+          )}
+
+          {/* Step 2 — choose PIN */}
+          {step === 2 && (
+            <motion.div key="s2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+              <h2 className="font-display text-xl font-extrabold text-foreground">Choisis ton code de sécurité</h2>
+              <p className="mt-1 text-sm text-secondary">4 chiffres pour te reconnecter facilement.</p>
+
+              <p className="mt-6 mb-2 text-center text-sm font-medium text-foreground">Nouveau code</p>
+              <CodeInput length={4} value={pin} onChange={setPin} secret autoFocus />
+
+              <p className="mt-5 mb-2 text-center text-sm font-medium text-foreground">Confirme le code</p>
+              <CodeInput length={4} value={pinConfirm} onChange={setPinConfirm} secret />
+
+              {(err || storeError) && <p className="mt-4 rounded-xl bg-red-50 px-3 py-2 text-sm font-medium text-danger">{err || storeError}</p>}
+
+              <button onClick={finish} disabled={isLoading} className="btn-primary mt-6 w-full disabled:opacity-40">
+                {isLoading ? 'Création…' : 'Créer mon compte'}
+              </button>
+              <p className="mt-3 flex items-center justify-center gap-1.5 text-xs text-muted">
+                <i className="ti ti-lock" aria-hidden="true" /> Ta session reste ouverte, pas besoin de te reconnecter.
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
+
+      <p className="mx-auto mt-5 text-center text-sm text-white/80">
+        Déjà un compte ?{' '}
+        <Link href="/auth/login" className="font-bold text-white underline">Se connecter</Link>
+      </p>
     </div>
   );
 }

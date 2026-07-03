@@ -1,169 +1,171 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { useAuthStore } from '@/store/authStore';
-import { Button } from '@permis2.0/ui';
 import { cn } from '@/lib/cn';
 import { PageTransition } from '@/components/PageTransition';
+import { ThemeInit } from '@/components/ThemeInit';
 
-// Full nav used by the desktop top bar.
-const NAV_LINKS = [
-  { href: '/traffic-signs', label: 'Panneaux', icon: '🚦' },
-  { href: '/exam', label: 'Examen blanc', icon: '🎯' },
-  { href: '/lessons', label: 'Leçons', icon: '📚' },
-  { href: '/training', label: 'Entraînement', icon: '✍️' },
+/* ─── Section accent map ─────────────────────────────────────────────────────── */
+type Accent = 'blue' | 'violet' | 'orange';
+
+const ACCENT: Record<Accent, { grad: string; text: string; solid: string; soft: string }> = {
+  blue:   { grad: 'from-primary-600 to-primary-800', text: 'text-primary-600', solid: 'bg-primary-600', soft: 'bg-primary-50' },
+  violet: { grad: 'from-violet-600 to-violet-700',   text: 'text-violet-600',  solid: 'bg-violet-600',  soft: 'bg-violet-50' },
+  orange: { grad: 'from-orange-500 to-orange-600',   text: 'text-orange-500',  solid: 'bg-orange-500',  soft: 'bg-orange-50' },
+};
+
+/* ─── Navigation ─────────────────────────────────────────────────────────────── */
+const TAB_LINKS: { href: string; label: string; icon: string; accent: Accent }[] = [
+  { href: '/',              label: 'Accueil',  icon: 'ti-home-2',         accent: 'blue'   },
+  { href: '/traffic-signs', label: 'Panneaux', icon: 'ti-road-sign',      accent: 'blue'   },
+  { href: '/quizz',         label: 'Quiz',     icon: 'ti-cards',          accent: 'violet' },
+  { href: '/exam',          label: 'Examens',  icon: 'ti-clipboard-check',accent: 'orange' },
+  { href: '/profil',        label: 'Profil',   icon: 'ti-user',           accent: 'violet' },
 ];
-
-// Primary tabs for the mobile bottom bar.
-const TAB_LINKS = NAV_LINKS;
 
 interface AppShellProps {
   children: React.ReactNode;
-  /** Optional streak value (days) shown in the gamification chips */
-  streak?: number;
+  hideNav?: boolean;
+  /** Removes the default horizontal padding so a page can render a full-bleed header. */
+  padded?: boolean;
 }
 
-export function AppShell({ children, streak = 0 }: AppShellProps) {
+export function AppShell({ children, hideNav = false, padded = false }: AppShellProps) {
   const pathname = usePathname();
-  const router = useRouter();
-  const user = useAuthStore((s) => s.user);
-  const logout = useAuthStore((s) => s.logout);
 
   const isActive = (href: string) =>
     href === '/' ? pathname === '/' : pathname.startsWith(href);
 
-  const handleLogout = () => {
-    logout();
-    router.push('/auth/login');
-  };
-
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-dark-950">
-      {/* Top bar — compact on mobile, rich on desktop */}
-      <header
-        className="sticky top-0 z-30 border-b border-slate-200/70 bg-white/80 backdrop-blur-xl dark:border-slate-800/70 dark:bg-dark-900/80
-                   pt-[env(safe-area-inset-top)]"
+    <div className="min-h-screen bg-surface">
+      <ThemeInit />
+
+      <main
+        id="main-content"
+        className={cn(
+          'mx-auto min-h-screen w-full max-w-md bg-surface',
+          padded && 'px-4 py-5',
+          !hideNav && 'pb-28',
+        )}
       >
-        <div className="mx-auto flex h-12 max-w-7xl items-center justify-between px-4 sm:h-16 sm:px-6 lg:px-8">
-          {/* Brand + desktop nav */}
-          <div className="flex items-center gap-8">
-            <Link href="/" className="flex items-center gap-2">
-              <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-gradient-primary text-sm font-black text-white shadow-soft sm:h-9 sm:w-9 sm:text-lg">
-                P
-              </span>
-              <span className="text-base font-extrabold tracking-tight text-dark dark:text-white sm:text-xl">
-                PERMIS<span className="text-primary">2.0</span>
-              </span>
-            </Link>
-            <nav className="hidden items-center gap-1 lg:flex">
-              {NAV_LINKS.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={cn(
-                    'rounded-lg px-3 py-2 text-sm font-medium transition-colors',
-                    isActive(link.href)
-                      ? 'bg-primary-50 text-primary-700 dark:bg-primary-900/30 dark:text-primary-300'
-                      : 'text-slate-600 hover:bg-slate-100 hover:text-primary dark:text-slate-300 dark:hover:bg-dark-800'
-                  )}
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </nav>
-          </div>
-
-          {/* Gamification chips + user */}
-          <div className="flex items-center gap-1.5 sm:gap-3">
-            <GameChip emoji="🔥" value={streak} title="Jours d'affilée" />
-            <GameChip emoji="⭐" value={`${user?.xp ?? 0}`} title="Points d'expérience" />
-            <span className="hidden rounded-full bg-primary-100 px-3 py-1 text-xs font-bold text-primary-700 dark:bg-primary-900/40 dark:text-primary-300 sm:inline">
-              {user?.level ?? 'Débutant'}
-            </span>
-            <span className="ml-0.5 flex h-7 w-7 items-center justify-center rounded-full bg-secondary text-xs font-bold text-dark sm:h-9 sm:w-9 sm:text-sm">
-              {(user?.name ?? '?').charAt(0).toUpperCase()}
-            </span>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleLogout}
-              className="hidden lg:inline-flex"
-            >
-              Déconnexion
-            </Button>
-          </div>
-        </div>
-      </header>
-
-      {/* Content — extra bottom padding on mobile to clear the tab bar */}
-      <main className="mx-auto max-w-7xl px-4 py-5 pb-28 sm:px-6 sm:py-8 lg:px-8 lg:pb-8">
         <PageTransition>{children}</PageTransition>
       </main>
 
-      {/* Mobile bottom tab bar — app-style with an animated active pill */}
-      <nav
-        className="fixed inset-x-0 bottom-0 z-30 border-t border-slate-200/70 bg-white/90 backdrop-blur-xl lg:hidden dark:border-slate-800/70 dark:bg-dark-900/90
-                   pb-[env(safe-area-inset-bottom)]"
-        aria-label="Navigation principale"
-      >
-        <div className="mx-auto grid max-w-md grid-cols-4">
-          {TAB_LINKS.map((tab) => {
-            const active = isActive(tab.href);
-            return (
-              <Link
-                key={tab.href}
-                href={tab.href}
-                aria-current={active ? 'page' : undefined}
-                className="group relative flex h-16 items-center justify-center"
-              >
-                <motion.span
-                  whileTap={{ scale: 0.86 }}
-                  transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-                  className={cn(
-                    'flex flex-col items-center justify-center gap-0.5 text-[11px] font-medium transition-colors',
-                    active
-                      ? 'text-primary'
-                      : 'text-slate-500 dark:text-slate-400'
-                  )}
+      {/* ── Bottom navigation — 5 tabs (mockup) */}
+      {!hideNav && (
+        <nav
+          className="fixed inset-x-0 bottom-0 z-40 mx-auto max-w-md border-t border-token bg-surface-1/95 shadow-nav backdrop-blur-xl pb-[env(safe-area-inset-bottom)]"
+          aria-label="Navigation principale"
+        >
+          <div className="grid grid-cols-5">
+            {TAB_LINKS.map((tab) => {
+              const active = isActive(tab.href);
+              const a = ACCENT[tab.accent];
+              return (
+                <Link
+                  key={tab.href}
+                  href={tab.href}
+                  aria-current={active ? 'page' : undefined}
+                  className="group relative flex h-16 flex-col items-center justify-center gap-1"
                 >
-                  <span className="relative flex h-8 w-12 items-center justify-center">
-                    {active && (
-                      <motion.span
-                        layoutId="tab-pill"
-                        transition={{ type: 'spring', stiffness: 450, damping: 35 }}
-                        className="absolute inset-0 rounded-full bg-primary-50 dark:bg-primary-900/40"
-                      />
+                  {active && (
+                    <motion.span
+                      layoutId="tab-indicator"
+                      className={cn('absolute top-0 h-1 w-9 rounded-full', a.solid)}
+                      transition={{ type: 'spring', stiffness: 500, damping: 35 }}
+                    />
+                  )}
+                  <motion.i
+                    whileTap={{ scale: 0.82 }}
+                    className={cn(
+                      `ti ${tab.icon} text-[22px] transition-colors`,
+                      active ? a.text : 'text-slate-400 group-hover:text-slate-500',
                     )}
-                    <span
-                      className={cn(
-                        'relative text-lg transition-transform',
-                        active && 'scale-110'
-                      )}
-                    >
-                      {tab.icon}
-                    </span>
+                    aria-hidden="true"
+                  />
+                  <span
+                    className={cn(
+                      'text-[10px] font-bold tracking-wide transition-colors',
+                      active ? a.text : 'text-slate-400',
+                    )}
+                  >
+                    {tab.label}
                   </span>
-                  <span className={cn(active && 'font-bold')}>{tab.label}</span>
-                </motion.span>
-              </Link>
-            );
-          })}
-        </div>
-      </nav>
+                </Link>
+              );
+            })}
+          </div>
+        </nav>
+      )}
     </div>
   );
 }
 
-function GameChip({ emoji, value, title }: { emoji: string; value: React.ReactNode; title: string }) {
+/* ─── PageHeader — full-bleed colored header used by each section ─────────────── */
+interface PageHeaderProps {
+  title: string;
+  subtitle?: string;
+  accent?: Accent;
+  /** Optional back link href; when set, shows a back chevron. */
+  back?: string;
+  /** Renders a menu icon on the left instead of nothing. */
+  menu?: boolean;
+  /** Right-side action nodes. */
+  actions?: React.ReactNode;
+  /** Extra content rendered below the title row (e.g. a search bar or tabs). */
+  children?: React.ReactNode;
+  /** Compact removes the large vertical padding. */
+  compact?: boolean;
+}
+
+export function PageHeader({
+  title, subtitle, accent = 'blue', back, menu, actions, children, compact,
+}: PageHeaderProps) {
+  const a = ACCENT[accent];
   return (
-    <span
-      title={title}
-      className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-1 text-xs font-bold text-slate-700 dark:bg-dark-800 dark:text-slate-200"
+    <header
+      className={cn(
+        'relative overflow-hidden rounded-b-[28px] bg-gradient-to-br text-white shadow-lg',
+        a.grad,
+      )}
     >
-      <span>{emoji}</span>
-      {value}
-    </span>
+      {/* soft decorative blobs */}
+      <div className="pointer-events-none absolute -right-10 -top-12 h-40 w-40 rounded-full bg-white/10" />
+      <div className="pointer-events-none absolute -left-8 top-10 h-24 w-24 rounded-full bg-white/5" />
+
+      <div className={cn('relative px-5 pt-[calc(env(safe-area-inset-top)+16px)]', compact ? 'pb-4' : 'pb-6')}>
+        <div className="flex items-center gap-3">
+          {back ? (
+            <Link
+              href={back}
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/15 transition-colors hover:bg-white/25"
+              aria-label="Retour"
+            >
+              <i className="ti ti-chevron-left text-lg" aria-hidden="true" />
+            </Link>
+          ) : menu ? (
+            <button
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/15"
+              aria-label="Menu"
+            >
+              <i className="ti ti-menu-2 text-lg" aria-hidden="true" />
+            </button>
+          ) : null}
+
+          <div className="min-w-0 flex-1">
+            <h1 className="truncate font-display text-xl font-extrabold leading-tight">{title}</h1>
+            {subtitle && <p className="mt-0.5 truncate text-xs text-white/80">{subtitle}</p>}
+          </div>
+
+          {actions && <div className="flex shrink-0 items-center gap-2">{actions}</div>}
+        </div>
+
+        {children && <div className="mt-4">{children}</div>}
+      </div>
+    </header>
   );
 }
+
+export { ACCENT };

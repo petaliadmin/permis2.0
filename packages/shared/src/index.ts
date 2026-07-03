@@ -1,6 +1,7 @@
 // Constants
 export const APP_NAME = 'PERMIS2.0';
 export const APP_SLOGAN = 'Réussissez votre permis du premier coup.';
+export const APP_VERSION = '1.0.0';
 
 // Colors
 export const COLORS = {
@@ -17,7 +18,7 @@ export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost
 // Exam Configuration
 export const EXAM_CONFIG = {
   duration: 30 * 60 * 1000, // 30 minutes
-  questionCount: 40,
+  questionCount: 25,
   passingScore: 70,
 };
 

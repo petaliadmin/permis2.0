@@ -255,6 +255,21 @@ export class GamificationService {
     };
   }
 
+  async recordQuiz(userId: string, correct: number, total: number) {
+    const xpEarned =
+      correct * XP_RULES.correctAnswer +
+      (total > 0 && correct === total ? XP_RULES.seriesPerfect : 0);
+
+    const [xpResult, streakResult] = await Promise.all([
+      this.addXP(userId, xpEarned),
+      this.checkDailyStreak(userId),
+    ]);
+
+    const newAchievements = await this.checkAndUnlockAchievements(userId);
+
+    return { xpEarned, xpResult, streakResult, newAchievements };
+  }
+
   private calculateLevel(xp: number): string {
     if (xp >= LEVEL_THRESHOLDS['Expert']) return 'Expert';
     if (xp >= LEVEL_THRESHOLDS['Confirmé']) return 'Confirmé';

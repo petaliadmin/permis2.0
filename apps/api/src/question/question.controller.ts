@@ -20,19 +20,23 @@ export class QuestionController {
   @ApiResponse({ status: 200, description: 'Random questions' })
   async getRandom(
     @Query('categoryId') categoryId?: string,
-    @Query('limit') limit = 10,
+    @Query('limit') limit?: string,
   ) {
-    return this.questionService.getRandomQuestions(categoryId, limit);
+    return this.questionService.getRandomQuestions(categoryId, parseInt(limit ?? '10', 10));
   }
 
   @Get('category/:categoryId')
   @ApiResponse({ status: 200, description: 'Questions by category' })
   async findByCategory(
     @Param('categoryId') categoryId: string,
-    @Query('skip') skip = 0,
-    @Query('take') take = 10,
+    @Query('skip') skip?: string,
+    @Query('take') take?: string,
   ) {
-    return this.questionService.findByCategory(categoryId, skip, take);
+    return this.questionService.findByCategory(
+      categoryId,
+      parseInt(skip ?? '0', 10),
+      parseInt(take ?? '10', 10),
+    );
   }
 
   @Get('favorites')
@@ -42,10 +46,14 @@ export class QuestionController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async getFavorites(
     @Request() req,
-    @Query('skip') skip = 0,
-    @Query('take') take = 10,
+    @Query('skip') skip?: string,
+    @Query('take') take?: string,
   ) {
-    return this.questionService.getFavoriteQuestions(req.user.userId, skip, take);
+    return this.questionService.getFavoriteQuestions(
+      req.user.userId,
+      parseInt(skip ?? '0', 10),
+      parseInt(take ?? '10', 10),
+    );
   }
 
   @Post(':id/favorite')

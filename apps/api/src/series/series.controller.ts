@@ -78,10 +78,11 @@ export class SeriesController {
     @Body() submitAnswerDto: SubmitAnswerDto,
     @Request() req,
   ) {
+    const answer = submitAnswerDto.answers?.[0] ?? submitAnswerDto.answer;
     return this.seriesService.submitAnswer(
       req.user.userId,
       questionId,
-      submitAnswerDto.answers ?? submitAnswerDto.answer,
+      answer,
     );
   }
 }

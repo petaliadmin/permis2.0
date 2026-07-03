@@ -6,7 +6,7 @@ import { calculateScore, getLevelFromXP, XP_RULES } from '@permis2.0/utils';
 export class SeriesService {
   constructor(private prisma: PrismaService) {}
 
-  async findAll() {
+  async findAll(_userId?: string) {
     return this.prisma.series.findMany({
       include: {
         _count: {

@@ -1,0 +1,1329 @@
+{
+  "meta": {
+    "title": "Cours complet du Code de la route",
+    "language": "fr",
+    "version": "1.0.0",
+    "description": "Contenu structuré pour application mobile d'apprentissage du Code de la route, couvrant la signalisation, les règles de circulation, les priorités, la sécurité et la réglementation.",
+    "totalChapters": 15
+  },
+  "chapters": [
+    {
+      "id": 1,
+      "title": "Introduction",
+      "type": "lesson",
+      "sections": [
+        {
+          "id": 1,
+          "title": "Définition du Code de la route",
+          "content": "Le Code de la route est l'ensemble des règles juridiques et techniques qui organisent la circulation des personnes, des véhicules et des animaux sur les voies publiques. Il définit les droits et les devoirs de chaque usager, qu'il soit piéton, cycliste, motocycliste ou conducteur de véhicule motorisé, afin d'assurer une circulation ordonnée et sécurisée pour tous.",
+          "keyPoints": [
+            "Le Code de la route s'applique à tous les usagers, sans exception.",
+            "Il fixe des règles communes pour éviter les conflits d'usage de la route.",
+            "Sa connaissance est obligatoire pour obtenir le permis de conduire."
+          ]
+        },
+        {
+          "id": 2,
+          "title": "Objectifs du Code de la route",
+          "content": "Le Code de la route poursuit plusieurs objectifs essentiels : réduire le nombre d'accidents et leur gravité, protéger la vie et l'intégrité physique des usagers, fluidifier la circulation, garantir un partage équitable de la route entre tous les usagers (piétons, cyclistes, automobilistes, transporteurs), et responsabiliser chaque conducteur face à ses actes.",
+          "keyPoints": [
+            "Sécurité : prévenir les accidents corporels et matériels.",
+            "Fluidité : organiser une circulation efficace et prévisible.",
+            "Équité : protéger en priorité les usagers les plus vulnérables.",
+            "Responsabilité : chaque usager répond de ses infractions."
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Signalisation routière",
+      "type": "signage",
+      "categories": [
+        {
+          "category": "Les panneaux de danger",
+          "description": "Annoncent un danger sur la route et incitent à la prudence.",
+          "signs": [
+            {
+              "name": "Virage à droite",
+              "code": "A1a",
+              "description": "Annonce un virage dangereux orienté vers la droite.",
+              "icon": "icons/panneaux/A1a.png",
+              "advice": [
+                "Ralentissez avant d'aborder le virage.",
+                "Ne dépassez pas dans le virage.",
+                "Restez sur votre voie de circulation."
+              ],
+              "category": "Panneaux de danger"
+            },
+            {
+              "name": "Virage à gauche",
+              "code": "A1b",
+              "description": "Annonce un virage dangereux orienté vers la gauche.",
+              "icon": "icons/panneaux/A1b.png",
+              "advice": [
+                "Réduisez votre vitesse à l'approche.",
+                "Anticipez la trajectoire du virage."
+              ],
+              "category": "Panneaux de danger"
+            },
+            {
+              "name": "Succession de virages",
+              "code": "A3a",
+              "description": "Annonce une succession d'au moins deux virages dangereux.",
+              "icon": "icons/panneaux/A3a.png",
+              "advice": [
+                "Adaptez votre vitesse pour toute la portion.",
+                "Restez vigilant sur plusieurs virages consécutifs."
+              ],
+              "category": "Panneaux de danger"
+            },
+            {
+              "name": "Cassis ou dos d'âne",
+              "code": "A2a",
+              "description": "Signale une déformation de la chaussée (cassis ou dos d'âne).",
+              "icon": "icons/panneaux/A2a.png",
+              "advice": [
+                "Ralentissez fortement avant l'obstacle.",
+                "Maintenez les deux mains sur le volant."
+              ],
+              "category": "Panneaux de danger"
+            },
+            {
+              "name": "Chaussée glissante",
+              "code": "A4",
+              "description": "Signale un risque de chaussée glissante, notamment par temps de pluie.",
+              "icon": "icons/panneaux/A4.png",
+              "advice": [
+                "Réduisez votre vitesse.",
+                "Évitez les freinages et accélérations brusques.",
+                "Augmentez la distance de sécurité."
+              ],
+              "category": "Panneaux de danger"
+            },
+            {
+              "name": "Passage d'animaux sauvages",
+              "code": "A19",
+              "description": "Signale un risque de traversée d'animaux sauvages sur la chaussée.",
+              "icon": "icons/panneaux/A19.png",
+              "advice": [
+                "Soyez attentif sur les zones boisées.",
+                "Ralentissez à la tombée de la nuit."
+              ],
+              "category": "Panneaux de danger"
+            },
+            {
+              "name": "Travaux",
+              "code": "A14",
+              "description": "Signale la présence de travaux sur ou aux abords de la chaussée.",
+              "icon": "icons/panneaux/A14.png",
+              "advice": [
+                "Ralentissez et respectez la signalisation temporaire.",
+                "Soyez attentif aux ouvriers et engins de chantier."
+              ],
+              "category": "Panneaux de danger"
+            },
+            {
+              "name": "Passage pour piétons",
+              "code": "A13b",
+              "description": "Signale la proximité d'un passage pour piétons.",
+              "icon": "icons/panneaux/A13b.png",
+              "advice": [
+                "Réduisez votre vitesse.",
+                "Soyez prêt à céder le passage aux piétons."
+              ],
+              "category": "Panneaux de danger"
+            }
+          ]
+        },
+        {
+          "category": "Les panneaux d'interdiction",
+          "description": "Interdisent ou restreignent certains comportements ou manœuvres.",
+          "signs": [
+            {
+              "name": "Sens interdit",
+              "code": "B1",
+              "description": "Interdit l'accès à la voie dans le sens indiqué.",
+              "icon": "icons/panneaux/B1.png",
+              "advice": [
+                "Ne jamais s'engager dans cette voie.",
+                "Cherchez un itinéraire alternatif."
+              ],
+              "category": "Panneaux d'interdiction"
+            },
+            {
+              "name": "Interdiction de dépasser",
+              "code": "B3a",
+              "description": "Interdit le dépassement de tout véhicule à moteur.",
+              "icon": "icons/panneaux/B3a.png",
+              "advice": [
+                "Ne tentez aucun dépassement sur ce tronçon.",
+                "Respectez la signalisation jusqu'au panneau de fin d'interdiction."
+              ],
+              "category": "Panneaux d'interdiction"
+            },
+            {
+              "name": "Vitesse maximale autorisée",
+              "code": "B14",
+              "description": "Indique la vitesse maximale autorisée, exprimée en km/h.",
+              "icon": "icons/panneaux/B14.png",
+              "advice": [
+                "Ne dépassez jamais cette vitesse.",
+                "Adaptez votre vitesse aux conditions même en dessous de la limite."
+              ],
+              "category": "Panneaux d'interdiction"
+            },
+            {
+              "name": "Arrêt et stationnement interdits",
+              "code": "B6a1",
+              "description": "Interdit l'arrêt et le stationnement sur la portion concernée.",
+              "icon": "icons/panneaux/B6a1.png",
+              "advice": [
+                "Ne vous arrêtez pas, même brièvement.",
+                "Cherchez une zone autorisée à proximité."
+              ],
+              "category": "Panneaux d'interdiction"
+            },
+            {
+              "name": "Accès interdit aux piétons",
+              "code": "B9a",
+              "description": "Interdit l'accès de la voie aux piétons.",
+              "icon": "icons/panneaux/B9a.png",
+              "advice": [
+                "Les piétons doivent emprunter un autre itinéraire."
+              ],
+              "category": "Panneaux d'interdiction"
+            },
+            {
+              "name": "Demi-tour interdit",
+              "code": "B3a-bis",
+              "description": "Interdit d'effectuer un demi-tour à cet endroit.",
+              "icon": "icons/panneaux/B3a-bis.png",
+              "advice": [
+                "Poursuivez votre route et faites demi-tour ailleurs."
+              ],
+              "category": "Panneaux d'interdiction"
+            }
+          ]
+        },
+        {
+          "category": "Les panneaux d'obligation",
+          "description": "Imposent une obligation aux usagers de la route.",
+          "signs": [
+            {
+              "name": "Direction obligatoire à suivre",
+              "code": "B21a",
+              "description": "Oblige à suivre la direction indiquée par la flèche.",
+              "icon": "icons/panneaux/B21a.png",
+              "advice": [
+                "Préparez votre changement de direction à l'avance.",
+                "Utilisez vos clignotants."
+              ],
+              "category": "Panneaux d'obligation"
+            },
+            {
+              "name": "Piste cyclable obligatoire",
+              "code": "B22a",
+              "description": "Oblige les cyclistes à emprunter la piste cyclable signalée.",
+              "icon": "icons/panneaux/B22a.png",
+              "advice": [
+                "Les cyclistes doivent quitter la chaussée pour la piste.",
+                "Les automobilistes doivent respecter cet espace réservé."
+              ],
+              "category": "Panneaux d'obligation"
+            },
+            {
+              "name": "Vitesse minimale obligatoire",
+              "code": "B27",
+              "description": "Impose une vitesse minimale à respecter sur la voie.",
+              "icon": "icons/panneaux/B27.png",
+              "advice": [
+                "Maintenez au moins la vitesse minimale indiquée."
+              ],
+              "category": "Panneaux d'obligation"
+            },
+            {
+              "name": "Chaînes à neige obligatoires",
+              "code": "B26",
+              "description": "Impose l'utilisation de chaînes ou pneus neige sur cette portion.",
+              "icon": "icons/panneaux/B26.png",
+              "advice": [
+                "Équipez votre véhicule avant de vous engager.",
+                "Adaptez votre vitesse même équipé."
+              ],
+              "category": "Panneaux d'obligation"
+            }
+          ]
+        },
+        {
+          "category": "Les panneaux d'indication",
+          "description": "Donnent une information utile à l'usager (services, directions, zones).",
+          "signs": [
+            {
+              "name": "Parking",
+              "code": "Cb1",
+              "description": "Indique un emplacement de stationnement autorisé.",
+              "icon": "icons/panneaux/Cb1.png",
+              "advice": [
+                "Respectez les places délimitées.",
+                "Vérifiez les éventuelles restrictions horaires."
+              ],
+              "category": "Panneaux d'indication"
+            },
+            {
+              "name": "Hôpital",
+              "code": "Cb14",
+              "description": "Indique la proximité d'un établissement hospitalier.",
+              "icon": "icons/panneaux/Cb14.png",
+              "advice": [
+                "Soyez silencieux et prudent aux abords.",
+                "Respectez les zones d'urgence."
+              ],
+              "category": "Panneaux d'indication"
+            },
+            {
+              "name": "Zone 30",
+              "code": "B30",
+              "description": "Indique une zone de circulation apaisée limitée à 30 km/h.",
+              "icon": "icons/panneaux/B30.png",
+              "advice": [
+                "Réduisez votre vitesse dès l'entrée de la zone.",
+                "Soyez vigilant face aux piétons et cyclistes."
+              ],
+              "category": "Panneaux d'indication"
+            },
+            {
+              "name": "Autoroute",
+              "code": "E41",
+              "description": "Indique le début d'une section d'autoroute.",
+              "icon": "icons/panneaux/E41.png",
+              "advice": [
+                "Respectez les règles spécifiques aux autoroutes.",
+                "Vitesse minimale obligatoire sur certaines voies."
+              ],
+              "category": "Panneaux d'indication"
+            }
+          ]
+        },
+        {
+          "category": "Les panneaux de priorité",
+          "description": "Définissent l'ordre de passage entre usagers aux intersections.",
+          "signs": [
+            {
+              "name": "Cédez le passage",
+              "code": "AB3a",
+              "description": "Impose de céder le passage aux véhicules circulant sur la voie abordée.",
+              "icon": "icons/panneaux/AB3a.png",
+              "advice": [
+                "Ralentissez et soyez prêt à vous arrêter.",
+                "Cédez le passage si nécessaire avant de vous engager."
+              ],
+              "category": "Panneaux de priorité"
+            },
+            {
+              "name": "Stop",
+              "code": "AB4",
+              "description": "Impose un arrêt complet du véhicule avant de céder le passage.",
+              "icon": "icons/panneaux/AB4.png",
+              "advice": [
+                "Arrêtez-vous totalement, même si la voie semble libre.",
+                "Repartez uniquement après vous être assuré qu'aucun véhicule n'arrive."
+              ],
+              "category": "Panneaux de priorité"
+            },
+            {
+              "name": "Route à priorité",
+              "code": "AB6",
+              "description": "Indique que le conducteur circule sur une voie à priorité.",
+              "icon": "icons/panneaux/AB6.png",
+              "advice": [
+                "Vous êtes prioritaire aux intersections suivantes.",
+                "Restez tout de même vigilant."
+              ],
+              "category": "Panneaux de priorité"
+            },
+            {
+              "name": "Intersection où vous êtes prioritaire",
+              "code": "AB6",
+              "description": "Annonce une intersection où le conducteur conserve la priorité.",
+              "icon": "icons/panneaux/AB6.png",
+              "advice": [
+                "Maintenez votre allure tout en restant attentif."
+              ],
+              "category": "Panneaux de priorité"
+            },
+            {
+              "name": "Annonce d'un cédez-le-passage",
+              "code": "AB1",
+              "description": "Annonce un panneau cédez-le-passage à venir.",
+              "icon": "icons/panneaux/AB1.png",
+              "advice": [
+                "Anticipez votre ralentissement."
+              ],
+              "category": "Panneaux de priorité"
+            }
+          ]
+        },
+        {
+          "category": "Les panneaux temporaires",
+          "description": "Signalent une situation ponctuelle (travaux, danger temporaire).",
+          "signs": [
+            {
+              "name": "Limitation de vitesse temporaire",
+              "code": "KC1",
+              "description": "Signale une limitation de vitesse temporaire liée à des travaux ou un danger ponctuel.",
+              "icon": "icons/panneaux/KC1.png",
+              "advice": [
+                "Respectez la nouvelle limite jusqu'au panneau de fin.",
+                "Restez vigilant face aux modifications de la chaussée."
+              ],
+              "category": "Panneaux temporaires"
+            },
+            {
+              "name": "Déviation",
+              "code": "KD",
+              "description": "Indique un itinéraire de déviation temporaire.",
+              "icon": "icons/panneaux/KD.png",
+              "advice": [
+                "Suivez le fléchage de déviation.",
+                "Réduisez votre vitesse sur l'itinéraire alternatif."
+              ],
+              "category": "Panneaux temporaires"
+            },
+            {
+              "name": "Travaux temporaires",
+              "code": "AK14",
+              "description": "Signale la présence ponctuelle de travaux sur la chaussée.",
+              "icon": "icons/panneaux/AK14.png",
+              "advice": [
+                "Ralentissez et respectez le balisage.",
+                "Attention aux ouvriers et engins."
+              ],
+              "category": "Panneaux temporaires"
+            }
+          ]
+        },
+        {
+          "category": "Les balises",
+          "description": "Dispositifs visuels guidant le conducteur, notamment de nuit.",
+          "signs": [
+            {
+              "name": "Balise de virage",
+              "code": "J1",
+              "description": "Matérialise le tracé d'un virage dangereux la nuit ou par mauvaise visibilité.",
+              "icon": "icons/panneaux/J1.png",
+              "advice": [
+                "Suivez l'alignement des balises pour anticiper le virage."
+              ],
+              "category": "Balises"
+            },
+            {
+              "name": "Balise de chantier",
+              "code": "J5",
+              "description": "Signale visuellement les limites d'une zone de travaux.",
+              "icon": "icons/panneaux/J5.png",
+              "advice": [
+                "Restez à distance des balises de chantier.",
+                "Réduisez votre vitesse à proximité."
+              ],
+              "category": "Balises"
+            },
+            {
+              "name": "Borne de guidage",
+              "code": "J11",
+              "description": "Délimite le bord de la chaussée pour guider le conducteur de nuit.",
+              "icon": "icons/panneaux/J11.png",
+              "advice": [
+                "Utilisez les bornes comme repère de trajectoire en conditions de faible visibilité."
+              ],
+              "category": "Balises"
+            }
+          ]
+        },
+        {
+          "category": "Le marquage au sol",
+          "description": "Lignes et symboles peints sur la chaussée organisant la circulation.",
+          "signs": [
+            {
+              "name": "Ligne continue",
+              "code": "M-LC",
+              "description": "Ligne blanche continue interdisant le franchissement, notamment le dépassement.",
+              "icon": "icons/panneaux/M-LC.png",
+              "advice": [
+                "Ne franchissez jamais une ligne continue.",
+                "Ne dépassez pas tant que la ligne est continue."
+              ],
+              "category": "Marquage au sol"
+            },
+            {
+              "name": "Ligne discontinue",
+              "code": "M-LD",
+              "description": "Ligne blanche discontinue autorisant le franchissement si la visibilité le permet.",
+              "icon": "icons/panneaux/M-LD.png",
+              "advice": [
+                "Vous pouvez dépasser si la voie est dégagée.",
+                "Vérifiez l'absence de danger avant de franchir."
+              ],
+              "category": "Marquage au sol"
+            },
+            {
+              "name": "Passage piéton",
+              "code": "M-PP",
+              "description": "Bandes blanches parallèles indiquant une zone de traversée réservée aux piétons.",
+              "icon": "icons/panneaux/M-PP.png",
+              "advice": [
+                "Cédez toujours le passage aux piétons engagés.",
+                "Ralentissez à l'approche du passage."
+              ],
+              "category": "Marquage au sol"
+            },
+            {
+              "name": "Ligne d'arrêt",
+              "code": "M-LA",
+              "description": "Ligne matérialisant l'endroit où le véhicule doit s'arrêter (stop, feu rouge).",
+              "icon": "icons/panneaux/M-LA.png",
+              "advice": [
+                "Arrêtez-vous avant la ligne, jamais sur ou après."
+              ],
+              "category": "Marquage au sol"
+            }
+          ]
+        },
+        {
+          "category": "Les feux tricolores",
+          "description": "Signaux lumineux régulant la circulation aux intersections.",
+          "signs": [
+            {
+              "name": "Feu rouge",
+              "code": "F-R",
+              "description": "Impose l'arrêt obligatoire du véhicule avant le feu.",
+              "icon": "icons/panneaux/F-R.png",
+              "advice": [
+                "Arrêtez-vous complètement avant la ligne d'arrêt.",
+                "Ne redémarrez qu'au feu vert."
+              ],
+              "category": "Feux tricolores"
+            },
+            {
+              "name": "Feu orange",
+              "code": "F-O",
+              "description": "Annonce le passage imminent au rouge ; impose l'arrêt sauf si l'arrêt est dangereux.",
+              "icon": "icons/panneaux/F-O.png",
+              "advice": [
+                "Ralentissez et préparez-vous à vous arrêter.",
+                "Ne forcez pas le passage."
+              ],
+              "category": "Feux tricolores"
+            },
+            {
+              "name": "Feu vert",
+              "code": "F-V",
+              "description": "Autorise le passage si la voie est dégagée.",
+              "icon": "icons/panneaux/F-V.png",
+              "advice": [
+                "Vérifiez que l'intersection est dégagée avant de vous engager.",
+                "Cédez le passage aux véhicules encore engagés."
+              ],
+              "category": "Feux tricolores"
+            },
+            {
+              "name": "Feu clignotant orange",
+              "code": "F-CO",
+              "description": "Indique une signalisation en fonctionnement de nuit ou réduit ; impose la prudence.",
+              "icon": "icons/panneaux/F-CO.png",
+              "advice": [
+                "Ralentissez et redoublez de vigilance à l'intersection."
+              ],
+              "category": "Feux tricolores"
+            }
+          ]
+        },
+        {
+          "category": "Les signaux des agents de circulation",
+          "description": "Gestes effectués par les agents pour réguler la circulation, prioritaires sur tout autre signal.",
+          "signs": [
+            {
+              "name": "Bras levé verticalement",
+              "code": "AG-1",
+              "description": "Geste de l'agent imposant l'arrêt à tous les usagers, y compris ceux déjà engagés.",
+              "icon": "icons/panneaux/AG-1.png",
+              "advice": [
+                "Arrêtez-vous immédiatement, sauf si vous êtes déjà trop engagé pour le faire en sécurité."
+              ],
+              "category": "Signaux des agents"
+            },
+            {
+              "name": "Bras tendus horizontalement",
+              "code": "AG-2",
+              "description": "Geste imposant l'arrêt aux usagers venant de face et de dos de l'agent.",
+              "icon": "icons/panneaux/AG-2.png",
+              "advice": [
+                "Arrêtez-vous si vous arrivez face ou dos à l'agent."
+              ],
+              "category": "Signaux des agents"
+            },
+            {
+              "name": "Bras balançant verticalement",
+              "code": "AG-3",
+              "description": "Geste invitant les usagers à accélérer leur passage.",
+              "icon": "icons/panneaux/AG-3.png",
+              "advice": [
+                "Dégagez rapidement l'intersection sans précipitation dangereuse."
+              ],
+              "category": "Signaux des agents"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Les règles de circulation",
+      "type": "lesson",
+      "sections": [
+        {
+          "id": 1,
+          "title": "Circulation à droite",
+          "content": "En règle générale, tout conducteur doit circuler à droite de la chaussée et serrer le bord droit, sauf en cas de dépassement, de présence d'obstacles, ou de signalisation contraire.",
+          "keyPoints": [
+            "Restez sur la moitié droite de la chaussée.",
+            "Ne quittez votre voie que pour dépasser ou contourner un obstacle."
+          ]
+        },
+        {
+          "id": 2,
+          "title": "Utilisation des voies",
+          "content": "Sur une chaussée à plusieurs voies, le conducteur doit emprunter la voie correspondant à sa direction et ne changer de voie qu'après s'être assuré qu'il peut le faire sans danger.",
+          "keyPoints": [
+            "La voie de gauche est réservée au dépassement.",
+            "Signalez tout changement de voie avec votre clignotant."
+          ]
+        },
+        {
+          "id": 3,
+          "title": "Changement de direction",
+          "content": "Avant de changer de direction (tourner à droite, à gauche), le conducteur doit se placer à temps sur la partie de la chaussée correspondant à la direction qu'il va prendre et signaler son intention suffisamment à l'avance.",
+          "keyPoints": [
+            "Anticipez en vous positionnant tôt.",
+            "Utilisez systématiquement vos clignotants."
+          ]
+        },
+        {
+          "id": 4,
+          "title": "Changement de voie",
+          "content": "Tout changement de voie doit être anticipé, signalé par le clignotant, et effectué uniquement après vérification des angles morts et rétroviseurs.",
+          "keyPoints": [
+            "Vérifiez toujours vos angles morts.",
+            "Ne changez jamais de voie brusquement."
+          ]
+        },
+        {
+          "id": 5,
+          "title": "Demi-tour",
+          "content": "Le demi-tour ne doit être effectué que lorsque la visibilité est suffisante et qu'aucun panneau ne l'interdit, sans gêner ni mettre en danger les autres usagers.",
+          "keyPoints": [
+            "Choisissez un endroit dégagé et autorisé.",
+            "Vérifiez l'absence de circulation dans les deux sens."
+          ]
+        },
+        {
+          "id": 6,
+          "title": "Marche arrière",
+          "content": "La marche arrière est une manœuvre à risque qui doit être effectuée lentement, en se retournant ou à l'aide des rétroviseurs/caméra, et si possible avec l'aide d'un tiers.",
+          "keyPoints": [
+            "Effectuez la manœuvre lentement.",
+            "Faites-vous guider si la visibilité est réduite."
+          ]
+        },
+        {
+          "id": 7,
+          "title": "Croisement",
+          "content": "Lors du croisement d'un autre véhicule, chaque conducteur doit serrer sa droite et, si nécessaire, réduire sa vitesse pour laisser un espace suffisant.",
+          "keyPoints": [
+            "Serrez votre droite en cas de voie étroite.",
+            "Réduisez votre vitesse si l'espace est limité."
+          ]
+        },
+        {
+          "id": 8,
+          "title": "Dépassement",
+          "content": "Le dépassement doit se faire par la gauche (sauf exception), après s'être assuré que la voie est libre, que la visibilité est suffisante, et sans dépasser la vitesse autorisée.",
+          "keyPoints": [
+            "Ne dépassez jamais dans un virage ou avant une intersection.",
+            "Revenez sur votre voie sans couper la trajectoire du véhicule dépassé."
+          ]
+        },
+        {
+          "id": 9,
+          "title": "Distances de sécurité",
+          "content": "Le conducteur doit toujours maintenir une distance suffisante avec le véhicule qui le précède pour pouvoir s'arrêter en cas de freinage brusque.",
+          "keyPoints": [
+            "Appliquez la règle des 2 secondes minimum.",
+            "Augmentez la distance par temps de pluie ou de brouillard."
+          ]
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Les priorités",
+      "type": "lesson",
+      "sections": [
+        {
+          "id": 1,
+          "title": "Priorité à droite",
+          "content": "En l'absence de signalisation, tout conducteur doit céder le passage au véhicule venant de sa droite.",
+          "keyPoints": [
+            "Ralentissez à chaque intersection non signalée.",
+            "Cédez systématiquement le passage à droite."
+          ]
+        },
+        {
+          "id": 2,
+          "title": "Priorité aux intersections",
+          "content": "Le franchissement d'une intersection est réglé par la signalisation en place (stop, cédez le passage, feux) qui prime sur la règle générale de priorité à droite.",
+          "keyPoints": [
+            "Respectez en priorité la signalisation présente.",
+            "À défaut de signalisation, appliquez la priorité à droite."
+          ]
+        },
+        {
+          "id": 3,
+          "title": "Cédez-le-passage",
+          "content": "Le panneau cédez-le-passage impose au conducteur de ralentir et, si nécessaire, de s'arrêter pour laisser passer les véhicules circulant sur la voie abordée.",
+          "keyPoints": [
+            "Ne vous engagez que si la voie est totalement libre."
+          ]
+        },
+        {
+          "id": 4,
+          "title": "Stop",
+          "content": "Le panneau stop impose un arrêt total et complet du véhicule, même en l'absence de circulation visible, avant de céder le passage.",
+          "keyPoints": [
+            "Marquez un arrêt net, roues immobiles.",
+            "Repartez uniquement après vérification complète."
+          ]
+        },
+        {
+          "id": 5,
+          "title": "Giratoires",
+          "content": "Dans un giratoire, la priorité est généralement accordée aux véhicules déjà engagés dans l'anneau, sauf signalisation contraire.",
+          "keyPoints": [
+            "Cédez le passage aux véhicules déjà dans le giratoire.",
+            "Signalez votre sortie avec le clignotant droit."
+          ]
+        },
+        {
+          "id": 6,
+          "title": "Priorité des véhicules d'urgence",
+          "content": "Les véhicules d'urgence en intervention (gyrophare et avertisseur sonore activés) sont prioritaires sur tous les autres usagers.",
+          "keyPoints": [
+            "Facilitez leur passage en vous écartant en sécurité.",
+            "Ne les suivez jamais pour profiter de leur priorité."
+          ]
+        },
+        {
+          "id": 7,
+          "title": "Priorité des piétons",
+          "content": "Les piétons engagés ou sur le point de s'engager sur un passage protégé sont prioritaires sur les véhicules.",
+          "keyPoints": [
+            "Ralentissez systématiquement à l'approche d'un passage piéton.",
+            "Cédez le passage dès qu'un piéton manifeste son intention de traverser."
+          ]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "La vitesse",
+      "type": "lesson",
+      "sections": [
+        {
+          "id": 1,
+          "title": "Limitations de vitesse",
+          "content": "Chaque type de voie impose une vitesse maximale (agglomération, route, autoroute) que le conducteur doit impérativement respecter.",
+          "keyPoints": [
+            "Connaissez les limites par défaut selon le type de route.",
+            "Respectez les limitations spécifiques signalées."
+          ]
+        },
+        {
+          "id": 2,
+          "title": "Adaptation de la vitesse",
+          "content": "La vitesse doit toujours être adaptée aux conditions de circulation, de météo, de visibilité et à l'état de la chaussée, même en dessous de la limite autorisée.",
+          "keyPoints": [
+            "Réduisez votre vitesse par mauvais temps.",
+            "Adaptez-vous à la densité du trafic."
+          ]
+        },
+        {
+          "id": 3,
+          "title": "Distance d'arrêt",
+          "content": "La distance d'arrêt correspond à la distance parcourue entre le moment où le danger est perçu et l'arrêt complet du véhicule ; elle inclut la distance de réaction et la distance de freinage.",
+          "keyPoints": [
+            "Plus la vitesse est élevée, plus la distance d'arrêt augmente de façon exponentielle."
+          ]
+        },
+        {
+          "id": 4,
+          "title": "Distance de freinage",
+          "content": "La distance de freinage est la distance parcourue par le véhicule entre le moment où le frein est actionné et l'arrêt total.",
+          "keyPoints": [
+            "Elle dépend de la vitesse, de l'état des pneus et de la chaussée."
+          ]
+        },
+        {
+          "id": 5,
+          "title": "Distance de sécurité",
+          "content": "La distance de sécurité est l'espace minimal à maintenir avec le véhicule précédent pour pouvoir réagir sans collision en cas de freinage soudain.",
+          "keyPoints": [
+            "Augmentez cette distance en cas de pluie, de brouillard ou de chaussée glissante."
+          ]
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "title": "Arrêt et stationnement",
+      "type": "lesson",
+      "sections": [
+        {
+          "id": 1,
+          "title": "Arrêt",
+          "content": "L'arrêt est l'immobilisation momentanée d'un véhicule, le conducteur restant présent et prêt à repartir.",
+          "keyPoints": [
+            "Un arrêt ne doit jamais gêner la circulation."
+          ]
+        },
+        {
+          "id": 2,
+          "title": "Stationnement",
+          "content": "Le stationnement est l'immobilisation d'un véhicule au-delà du temps nécessaire à la montée ou descente de personnes ou au chargement/déchargement.",
+          "keyPoints": [
+            "Respectez les zones et durées autorisées.",
+            "Serrez-vous correctement le long du trottoir."
+          ]
+        },
+        {
+          "id": 3,
+          "title": "Stationnement interdit",
+          "content": "Certaines zones signalées ou par nature (passages piétons, intersections, trottoirs) interdisent tout stationnement.",
+          "keyPoints": [
+            "Vérifiez systématiquement la signalisation et le marquage."
+          ]
+        },
+        {
+          "id": 4,
+          "title": "Stationnement dangereux",
+          "content": "Un stationnement est considéré dangereux lorsqu'il réduit la visibilité ou la largeur de circulation pour les autres usagers (virages, sommets de côte, passages étroits).",
+          "keyPoints": [
+            "Ne stationnez jamais à un endroit réduisant la visibilité des autres conducteurs."
+          ]
+        },
+        {
+          "id": 5,
+          "title": "Stationnement gênant",
+          "content": "Un stationnement est gênant lorsqu'il entrave la circulation normale des véhicules ou piétons sans pour autant créer un danger immédiat (double file, sortie de garage).",
+          "keyPoints": [
+            "Évitez tout stationnement bloquant l'accès ou la circulation d'autrui."
+          ]
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "title": "Éclairage et signalisation des véhicules",
+      "type": "lesson",
+      "sections": [
+        {
+          "id": 1,
+          "title": "Feux de position",
+          "content": "Les feux de position permettent au véhicule d'être visible la nuit ou par faible visibilité sans éblouir les autres usagers.",
+          "keyPoints": [
+            "Utilisez-les dès la tombée de la nuit ou en cas de faible visibilité."
+          ]
+        },
+        {
+          "id": 2,
+          "title": "Feux de croisement",
+          "content": "Les feux de croisement (feux de route courte portée) sont utilisés la nuit en agglomération ou en présence d'autres véhicules pour ne pas les éblouir.",
+          "keyPoints": [
+            "Utilisez-les par défaut la nuit hors agglomération non éclairée."
+          ]
+        },
+        {
+          "id": 3,
+          "title": "Feux de route",
+          "content": "Les feux de route offrent un éclairage longue portée à utiliser sur les routes non éclairées en l'absence de véhicules venant en sens inverse ou précédant.",
+          "keyPoints": [
+            "Basculez en feux de croisement dès qu'un véhicule approche."
+          ]
+        },
+        {
+          "id": 4,
+          "title": "Feux antibrouillard",
+          "content": "Les feux antibrouillard améliorent la visibilité en cas de brouillard, neige ou forte pluie ; ils doivent être éteints dès que les conditions s'améliorent.",
+          "keyPoints": [
+            "N'utilisez pas les feux antibrouillard arrière par temps clair (risque d'éblouissement)."
+          ]
+        },
+        {
+          "id": 5,
+          "title": "Clignotants",
+          "content": "Les clignotants signalent l'intention du conducteur de changer de direction ou de voie ; ils doivent être actionnés suffisamment à l'avance.",
+          "keyPoints": [
+            "Activez-les avant chaque manœuvre, jamais pendant."
+          ]
+        },
+        {
+          "id": 6,
+          "title": "Feux de détresse",
+          "content": "Les feux de détresse signalent un danger ou un arrêt d'urgence du véhicule aux autres usagers.",
+          "keyPoints": [
+            "Utilisez-les uniquement en cas d'arrêt d'urgence ou de danger réel."
+          ]
+        },
+        {
+          "id": 7,
+          "title": "Avertisseur sonore",
+          "content": "L'avertisseur sonore (klaxon) est utilisé pour signaler sa présence en cas de danger imminent ; son usage abusif est interdit, notamment en agglomération la nuit.",
+          "keyPoints": [
+            "Réservez son usage aux situations de danger réel."
+          ]
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "title": "Les véhicules",
+      "type": "lesson",
+      "sections": [
+        {
+          "id": 1,
+          "title": "Documents obligatoires",
+          "content": "Tout conducteur doit être en mesure de présenter le permis de conduire, la carte grise (certificat d'immatriculation), l'attestation d'assurance et le certificat de contrôle technique en cours de validité.",
+          "keyPoints": [
+            "Conservez ces documents à bord du véhicule en permanence."
+          ]
+        },
+        {
+          "id": 2,
+          "title": "Immatriculation",
+          "content": "Tout véhicule en circulation doit porter une plaque d'immatriculation valide, lisible et conforme à la réglementation.",
+          "keyPoints": [
+            "Toute modification du véhicule nécessitant une nouvelle immatriculation doit être déclarée."
+          ]
+        },
+        {
+          "id": 3,
+          "title": "Assurance",
+          "content": "La souscription d'une assurance responsabilité civile est obligatoire pour tout véhicule motorisé circulant sur la voie publique.",
+          "keyPoints": [
+            "Rouler sans assurance valide constitue une infraction grave."
+          ]
+        },
+        {
+          "id": 4,
+          "title": "Contrôle technique",
+          "content": "Le contrôle technique périodique vérifie la conformité et la sécurité du véhicule ; son absence ou son invalidité est sanctionnée.",
+          "keyPoints": [
+            "Respectez la périodicité imposée selon l'âge et le type de véhicule."
+          ]
+        },
+        {
+          "id": 5,
+          "title": "Entretien du véhicule",
+          "content": "Un entretien régulier (freins, éclairage, niveaux, direction) garantit la sécurité du véhicule et la prévention des pannes.",
+          "keyPoints": [
+            "Planifiez des révisions régulières chez un professionnel."
+          ]
+        },
+        {
+          "id": 6,
+          "title": "Pneumatiques",
+          "content": "Les pneus doivent présenter une profondeur de sculpture suffisante, une pression correcte et être adaptés aux conditions climatiques.",
+          "keyPoints": [
+            "Vérifiez régulièrement la pression et l'usure.",
+            "Remplacez les pneus lisses ou endommagés sans délai."
+          ]
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "title": "Le conducteur",
+      "type": "lesson",
+      "sections": [
+        {
+          "id": 1,
+          "title": "Permis de conduire",
+          "content": "Le permis de conduire est le document légal obligatoire attestant de l'aptitude d'une personne à conduire un véhicule d'une catégorie donnée.",
+          "keyPoints": [
+            "Conduire sans permis valide est une infraction grave."
+          ]
+        },
+        {
+          "id": 2,
+          "title": "Catégories de permis",
+          "content": "Chaque catégorie de permis (A, B, C, D, etc.) correspond à un type de véhicule spécifique (motos, voitures, poids lourds, transport en commun).",
+          "keyPoints": [
+            "Vérifiez que votre permis couvre bien le véhicule conduit."
+          ]
+        },
+        {
+          "id": 3,
+          "title": "Aptitude physique",
+          "content": "Le conducteur doit être en bonne condition physique et visuelle pour conduire en sécurité ; certaines pathologies imposent un suivi médical régulier.",
+          "keyPoints": [
+            "Consultez un médecin en cas de doute sur votre aptitude à conduire."
+          ]
+        },
+        {
+          "id": 4,
+          "title": "Alcool et drogues",
+          "content": "La conduite sous l'emprise de l'alcool ou de stupéfiants altère gravement les réflexes et le jugement ; elle est strictement interdite et sévèrement sanctionnée.",
+          "keyPoints": [
+            "Ne prenez jamais le volant après consommation d'alcool ou de drogue.",
+            "Prévoyez un conducteur désigné ou un autre moyen de transport."
+          ]
+        },
+        {
+          "id": 5,
+          "title": "Fatigue",
+          "content": "La fatigue diminue la vigilance et les réflexes, augmentant fortement le risque d'accident, en particulier sur de longs trajets.",
+          "keyPoints": [
+            "Faites une pause toutes les deux heures.",
+            "Ne conduisez jamais en cas de somnolence."
+          ]
+        },
+        {
+          "id": 6,
+          "title": "Téléphone au volant",
+          "content": "L'utilisation d'un téléphone tenu en main au volant est interdite car elle détourne l'attention du conducteur et augmente fortement le risque d'accident.",
+          "keyPoints": [
+            "Utilisez un kit mains libres ou arrêtez-vous pour téléphoner."
+          ]
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "title": "Les usagers vulnérables",
+      "type": "lesson",
+      "sections": [
+        {
+          "id": 1,
+          "title": "Piétons",
+          "content": "Les piétons sont les usagers les plus exposés ; les conducteurs doivent leur accorder une attention particulière, notamment aux passages protégés.",
+          "keyPoints": [
+            "Ralentissez à l'approche des zones piétonnes.",
+            "Cédez toujours le passage sur les passages cloutés."
+          ]
+        },
+        {
+          "id": 2,
+          "title": "Cyclistes",
+          "content": "Les cyclistes partagent la chaussée et doivent être dépassés avec une distance latérale suffisante.",
+          "keyPoints": [
+            "Laissez au moins 1 mètre (1,5 m hors agglomération) lors du dépassement d'un cycliste."
+          ]
+        },
+        {
+          "id": 3,
+          "title": "Motocyclistes",
+          "content": "Les motocyclistes sont moins visibles et plus vulnérables en cas de choc ; une vigilance accrue est nécessaire, notamment aux intersections.",
+          "keyPoints": [
+            "Vérifiez deux fois avant de tourner ou de changer de voie."
+          ]
+        },
+        {
+          "id": 4,
+          "title": "Personnes handicapées",
+          "content": "Les personnes à mobilité réduite nécessitent une attention et une patience particulières lors de leurs déplacements ou traversées.",
+          "keyPoints": [
+            "Laissez-leur le temps nécessaire pour traverser ou se déplacer."
+          ]
+        },
+        {
+          "id": 5,
+          "title": "Enfants",
+          "content": "Les enfants sont imprévisibles et peu visibles ; une vigilance maximale est requise à proximité des écoles et zones résidentielles.",
+          "keyPoints": [
+            "Ralentissez fortement aux abords des écoles.",
+            "Anticipez les traversées soudaines."
+          ]
+        },
+        {
+          "id": 6,
+          "title": "Personnes âgées",
+          "content": "Les personnes âgées peuvent se déplacer plus lentement et nécessitent davantage de temps pour traverser en sécurité.",
+          "keyPoints": [
+            "Faites preuve de patience et laissez un temps de traversée suffisant."
+          ]
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "title": "Conditions particulières",
+      "type": "lesson",
+      "sections": [
+        {
+          "id": 1,
+          "title": "Conduite de nuit",
+          "content": "La visibilité réduite la nuit impose une vitesse adaptée et une utilisation correcte de l'éclairage.",
+          "keyPoints": [
+            "Réduisez votre vitesse.",
+            "Utilisez les feux de croisement ou de route selon le trafic."
+          ]
+        },
+        {
+          "id": 2,
+          "title": "Conduite sous la pluie",
+          "content": "La pluie réduit l'adhérence et la visibilité, augmentant les distances de freinage.",
+          "keyPoints": [
+            "Réduisez votre vitesse.",
+            "Augmentez les distances de sécurité.",
+            "Évitez les flaques pouvant provoquer l'aquaplaning."
+          ]
+        },
+        {
+          "id": 3,
+          "title": "Brouillard",
+          "content": "Le brouillard réduit fortement la visibilité ; les feux antibrouillard et une vitesse très réduite sont nécessaires.",
+          "keyPoints": [
+            "Allumez les feux antibrouillard.",
+            "Réduisez fortement votre vitesse.",
+            "Augmentez les distances de sécurité."
+          ]
+        },
+        {
+          "id": 4,
+          "title": "Vent",
+          "content": "Un vent fort peut déstabiliser le véhicule, en particulier sur ponts et zones dégagées.",
+          "keyPoints": [
+            "Tenez fermement le volant.",
+            "Réduisez votre vitesse dans les zones exposées."
+          ]
+        },
+        {
+          "id": 5,
+          "title": "Routes en mauvais état",
+          "content": "Les routes dégradées (nids-de-poule, gravillons) nécessitent une vigilance et une vitesse adaptées pour éviter les pertes de contrôle.",
+          "keyPoints": [
+            "Réduisez votre vitesse.",
+            "Évitez les freinages et virages brusques."
+          ]
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "title": "Les accidents",
+      "type": "lesson",
+      "sections": [
+        {
+          "id": 1,
+          "title": "Conduite à tenir",
+          "content": "En cas d'accident, il convient de sécuriser les lieux, protéger les victimes, alerter les secours et porter assistance si possible.",
+          "keyPoints": [
+            "Protégez avant de secourir.",
+            "Ne déplacez pas un blessé sauf danger immédiat."
+          ]
+        },
+        {
+          "id": 2,
+          "title": "Protection des victimes",
+          "content": "Il est essentiel de signaler l'accident (triangle, feux de détresse) et de protéger les victimes des risques supplémentaires (sur-accident, incendie).",
+          "keyPoints": [
+            "Placez le triangle de signalisation à distance suffisante.",
+            "Activez les feux de détresse."
+          ]
+        },
+        {
+          "id": 3,
+          "title": "Alerte des secours",
+          "content": "L'alerte doit être précise : lieu exact, nombre de victimes, gravité apparente, et numéro d'urgence approprié.",
+          "keyPoints": [
+            "Donnez des informations claires et précises aux secours.",
+            "Restez en ligne jusqu'à indication contraire."
+          ]
+        },
+        {
+          "id": 4,
+          "title": "Premiers gestes",
+          "content": "Les premiers gestes de secours (mise en sécurité, position latérale de sécurité si formé) peuvent sauver des vies en attendant les secours.",
+          "keyPoints": [
+            "N'intervenez que si vous êtes formé aux gestes de premiers secours.",
+            "Sécurisez la zone avant tout geste."
+          ]
+        },
+        {
+          "id": 5,
+          "title": "Constat d'accident",
+          "content": "Le constat amiable permet de décrire les circonstances de l'accident pour faciliter le traitement par les assurances.",
+          "keyPoints": [
+            "Remplissez le constat de façon factuelle et précise.",
+            "Faites un croquis clair de la situation."
+          ]
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "title": "Infractions et sanctions",
+      "type": "lesson",
+      "sections": [
+        {
+          "id": 1,
+          "title": "Contraventions",
+          "content": "Les contraventions sont des infractions mineures au Code de la route (stationnement, vitesse légère, défaut de ceinture) sanctionnées par une amende.",
+          "keyPoints": [
+            "Classées en 5 classes selon la gravité."
+          ]
+        },
+        {
+          "id": 2,
+          "title": "Délits routiers",
+          "content": "Les délits routiers (conduite sans permis, alcoolémie excessive, délit de fuite) sont des infractions graves pouvant entraîner des poursuites pénales.",
+          "keyPoints": [
+            "Peuvent entraîner une peine d'emprisonnement et/ou de lourdes amendes."
+          ]
+        },
+        {
+          "id": 3,
+          "title": "Suspension du permis",
+          "content": "La suspension est une mesure temporaire interdisant au conducteur de conduire pendant une durée déterminée.",
+          "keyPoints": [
+            "Peut être administrative (immédiate) ou judiciaire."
+          ]
+        },
+        {
+          "id": 4,
+          "title": "Retrait du permis",
+          "content": "Le retrait (annulation) est une sanction définitive ou de longue durée nécessitant de repasser l'examen pour reconduire.",
+          "keyPoints": [
+            "Intervient généralement pour des infractions très graves ou répétées."
+          ]
+        },
+        {
+          "id": 5,
+          "title": "Immobilisation du véhicule",
+          "content": "L'immobilisation empêche temporairement l'usage du véhicule, notamment en cas de danger ou d'infraction grave constatée.",
+          "keyPoints": [
+            "Le véhicule ne peut repartir qu'après levée de la mesure."
+          ]
+        },
+        {
+          "id": 6,
+          "title": "Mise en fourrière",
+          "content": "La mise en fourrière consiste à déplacer et retenir le véhicule dans un lieu dédié, notamment en cas de stationnement gênant ou dangereux répété.",
+          "keyPoints": [
+            "Des frais de fourrière s'appliquent au propriétaire du véhicule."
+          ]
+        },
+        {
+          "id": 7,
+          "title": "Amendes",
+          "content": "Les amendes sont des sanctions financières dont le montant varie selon la gravité de l'infraction commise.",
+          "keyPoints": [
+            "Le paiement rapide peut parfois donner droit à une amende minorée."
+          ]
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "title": "Transport",
+      "type": "lesson",
+      "sections": [
+        {
+          "id": 1,
+          "title": "Transport de personnes",
+          "content": "Le transport de passagers doit respecter le nombre de places autorisées et les règles de sécurité (ceintures, équipements).",
+          "keyPoints": [
+            "Ne dépassez jamais le nombre de places homologuées."
+          ]
+        },
+        {
+          "id": 2,
+          "title": "Transport des enfants",
+          "content": "Les enfants doivent être installés dans des dispositifs de retenue adaptés à leur âge, poids et taille (siège auto, rehausseur).",
+          "keyPoints": [
+            "Utilisez un siège homologué adapté à la morphologie de l'enfant.",
+            "Installez les enfants à l'arrière lorsque la réglementation l'impose."
+          ]
+        },
+        {
+          "id": 3,
+          "title": "Transport de marchandises",
+          "content": "Le transport de marchandises doit respecter le poids total autorisé en charge (PTAC) et les règles d'arrimage.",
+          "keyPoints": [
+            "Ne surchargez jamais le véhicule au-delà du PTAC."
+          ]
+        },
+        {
+          "id": 4,
+          "title": "Chargement",
+          "content": "Le chargement doit être correctement arrimé et ne pas dépasser les gabarits autorisés ni gêner la visibilité ou la conduite.",
+          "keyPoints": [
+            "Vérifiez l'arrimage avant chaque départ.",
+            "Signalez tout dépassement de gabarit."
+          ]
+        },
+        {
+          "id": 5,
+          "title": "Remorquage",
+          "content": "Le remorquage doit respecter les limites de poids autorisées et l'attelage doit être conforme et sécurisé.",
+          "keyPoints": [
+            "Vérifiez la conformité de l'attelage.",
+            "Adaptez votre conduite au poids supplémentaire."
+          ]
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "title": "Éco-conduite et sécurité routière",
+      "type": "lesson",
+      "sections": [
+        {
+          "id": 1,
+          "title": "Économie de carburant",
+          "content": "L'éco-conduite (anticipation, vitesse stabilisée, rapports adaptés) permet de réduire significativement la consommation de carburant.",
+          "keyPoints": [
+            "Anticipez les ralentissements pour éviter les freinages brusques.",
+            "Maintenez un régime moteur modéré."
+          ]
+        },
+        {
+          "id": 2,
+          "title": "Réduction de la pollution",
+          "content": "Une conduite souple et l'entretien régulier du véhicule réduisent les émissions polluantes.",
+          "keyPoints": [
+            "Évitez les accélérations et freinages inutiles.",
+            "Entretenez régulièrement votre véhicule."
+          ]
+        },
+        {
+          "id": 3,
+          "title": "Conduite préventive",
+          "content": "La conduite préventive consiste à anticiper les dangers potentiels et le comportement des autres usagers pour éviter les situations à risque.",
+          "keyPoints": [
+            "Anticipez plutôt que de réagir.",
+            "Gardez toujours une marge de sécurité."
+          ]
+        },
+        {
+          "id": 4,
+          "title": "Comportement responsable",
+          "content": "Un comportement responsable au volant repose sur le respect des règles, la courtoisie envers les autres usagers et la maîtrise de ses émotions.",
+          "keyPoints": [
+            "Restez calme face aux comportements agressifs d'autrui.",
+            "Respectez les règles même en l'absence de contrôle."
+          ]
+        }
+      ]
+    }
+  ]
+}

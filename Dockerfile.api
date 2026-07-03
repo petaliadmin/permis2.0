@@ -24,7 +24,7 @@ COPY packages ./packages
 # so seeding is reproducible without manual copies.
 COPY categories_et_meta.json fiches_theoriques.json serie_B1.json serie_B2.json serie_B3.json panneaux_senegal.json conduite.json ./apps/
 
-RUN pnpm install --frozen-lockfile
+RUN pnpm install
 RUN cd apps/api && pnpm run prisma:generate
 RUN cd packages/types && pnpm run build
 RUN cd packages/utils && pnpm run build
@@ -62,6 +62,9 @@ COPY --from=builder /app/apps/conduite.json /app/apps/
 
 # Install production dependencies only
 RUN pnpm install --prod --frozen-lockfile
+
+# Generate Prisma client for the production schema
+RUN cd apps/api && pnpm exec prisma generate
 
 # Non-root user for security
 RUN chown -R node:node /app

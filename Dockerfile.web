@@ -15,44 +15,30 @@ COPY .prettierrc.json ./
 COPY apps/web ./apps/web
 COPY packages ./packages
 
-RUN pnpm install --frozen-lockfile
+RUN pnpm install
 
-# Build the Next.js application (required before running `next start`)
+# Build the Next.js application — produces .next/standalone with output:'standalone'
 RUN pnpm --filter @permis2.0/web run build
 
-# ─── Stage 2: runner ─────────────────────────────────────────────────────────
+# ─── Stage 2: runner (standalone server, no TypeScript needed) ───────────────
 FROM node:20-slim AS runner
-
-RUN npm install -g pnpm
 
 WORKDIR /app
 
 ENV NODE_ENV=production
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
 
-# Copy manifests and workspaces config so pnpm install --prod works
-COPY --from=builder /app/package.json ./
-COPY --from=builder /app/pnpm-workspace.yaml ./
-COPY --from=builder /app/pnpm-lock.yaml ./
-COPY --from=builder /app/apps/web/package.json ./apps/web/package.json
-COPY --from=builder /app/packages ./packages
-
-# Copy compiled Next.js output and public assets
-COPY --from=builder /app/apps/web/.next ./apps/web/.next
+# Standalone output is a self-contained Node server; it needs only the static
+# assets layered on top of it.
+COPY --from=builder /app/apps/web/.next/standalone ./
+COPY --from=builder /app/apps/web/.next/static ./apps/web/.next/static
 COPY --from=builder /app/apps/web/public ./apps/web/public
-COPY --from=builder /app/apps/web/next.config.ts ./apps/web/next.config.ts
-
-# Install production dependencies only
-RUN pnpm install --prod --frozen-lockfile
 
 # Non-root user for security
 RUN chown -R node:node /app
 USER node
 
-WORKDIR /app/apps/web
-
 EXPOSE 3000
 
-ENV PORT=3000
-ENV HOSTNAME="0.0.0.0"
-
-CMD ["pnpm", "run", "start"]
+CMD ["node", "apps/web/server.js"]

@@ -1,0 +1,989 @@
+{
+  "exams": [
+    {
+      "id": 1,
+      "title": "Série 1 — Série de Test B1 – Permis de conduire Sénégal",
+      "questions": [
+        {
+          "q": 1,
+          "image": "serie1_q1.svg",
+          "answer": [
+            "B",
+            "D"
+          ]
+        },
+        {
+          "q": 2,
+          "image": "serie1_q2.svg",
+          "answer": [
+            "A",
+            "D"
+          ]
+        },
+        {
+          "q": 3,
+          "image": "serie1_q3.svg",
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 4,
+          "image": "serie1_q4.svg",
+          "answer": [
+            "B",
+            "C"
+          ]
+        },
+        {
+          "q": 5,
+          "image": "serie1_q5.svg",
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 6,
+          "image": "serie1_q6.svg",
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 7,
+          "image": "serie1_q7.svg",
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 8,
+          "image": "serie1_q8.svg",
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 9,
+          "image": "serie1_q9.svg",
+          "answer": [
+            "A",
+            "D"
+          ]
+        },
+        {
+          "q": 10,
+          "image": "serie1_q10.svg",
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 11,
+          "image": "serie1_q11.svg",
+          "answer": [
+            "C"
+          ]
+        },
+        {
+          "q": 12,
+          "image": "serie1_q12.svg",
+          "answer": [
+            "B",
+            "C"
+          ]
+        },
+        {
+          "q": 13,
+          "image": "serie1_q13.svg",
+          "answer": [
+            "A",
+            "D"
+          ]
+        },
+        {
+          "q": 14,
+          "image": "serie1_q14.svg",
+          "answer": [
+            "A",
+            "C"
+          ]
+        },
+        {
+          "q": 15,
+          "image": "serie1_q15.svg",
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 16,
+          "image": "serie1_q16.svg",
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 17,
+          "image": "serie1_q17.svg",
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 18,
+          "image": "serie1_q18.svg",
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 19,
+          "image": "serie1_q19.svg",
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 20,
+          "image": "serie1_q20.svg",
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 21,
+          "image": "serie1_q21.svg",
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 22,
+          "image": "serie1_q22.svg",
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 23,
+          "image": "serie1_q23.svg",
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 24,
+          "image": "serie1_q24.svg",
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 25,
+          "image": "serie1_q25.svg",
+          "answer": [
+            "B"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Série 2 — Série de Test B2 – Permis de conduire Sénégal",
+      "questions": [
+        {
+          "q": 1,
+          "image": "serie2_q1.svg",
+          "answer": [
+            "A",
+            "D"
+          ]
+        },
+        {
+          "q": 2,
+          "image": "serie2_q2.svg",
+          "answer": [
+            "B",
+            "D"
+          ]
+        },
+        {
+          "q": 3,
+          "image": "serie2_q3.svg",
+          "answer": [
+            "B",
+            "D"
+          ]
+        },
+        {
+          "q": 4,
+          "image": "serie2_q4.svg",
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 5,
+          "image": "serie2_q5.svg",
+          "answer": [
+            "A",
+            "D"
+          ]
+        },
+        {
+          "q": 6,
+          "image": "serie2_q6.svg",
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 7,
+          "image": "serie2_q7.svg",
+          "answer": [
+            "A",
+            "D"
+          ]
+        },
+        {
+          "q": 8,
+          "image": "serie2_q8.svg",
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 9,
+          "image": "serie2_q9.svg",
+          "answer": [
+            "B",
+            "D"
+          ]
+        },
+        {
+          "q": 10,
+          "image": "serie2_q10.svg",
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 11,
+          "image": "serie2_q11.svg",
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 12,
+          "image": "serie2_q12.svg",
+          "answer": [
+            "B",
+            "D"
+          ]
+        },
+        {
+          "q": 13,
+          "image": "serie2_q13.svg",
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 14,
+          "image": "serie2_q14.svg",
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 15,
+          "image": "serie2_q15.svg",
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 16,
+          "image": "serie2_q16.svg",
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 17,
+          "image": "serie2_q17.svg",
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 18,
+          "image": "serie2_q18.svg",
+          "answer": [
+            "B",
+            "C"
+          ]
+        },
+        {
+          "q": 19,
+          "image": "serie2_q19.svg",
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 20,
+          "image": "serie2_q20.svg",
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 21,
+          "image": "serie2_q21.svg",
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 22,
+          "image": "serie2_q22.svg",
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 23,
+          "image": "serie2_q23.svg",
+          "answer": [
+            "A",
+            "C"
+          ]
+        },
+        {
+          "q": 24,
+          "image": "serie2_q24.svg",
+          "answer": [
+            "B",
+            "D"
+          ]
+        },
+        {
+          "q": 25,
+          "image": "serie2_q25.svg",
+          "answer": [
+            "B",
+            "C"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Série 3 — Série de Test B3 – Permis de conduire Sénégal",
+      "questions": [
+        {
+          "q": 1,
+          "image": "serie3_q1.svg",
+          "answer": [
+            "B",
+            "D"
+          ]
+        },
+        {
+          "q": 2,
+          "image": "serie3_q2.svg",
+          "answer": [
+            "A",
+            "C"
+          ]
+        },
+        {
+          "q": 3,
+          "image": "serie3_q3.svg",
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 4,
+          "image": "serie3_q4.svg",
+          "answer": [
+            "B",
+            "D"
+          ]
+        },
+        {
+          "q": 5,
+          "image": "serie3_q5.svg",
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 6,
+          "image": "serie3_q6.svg",
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 7,
+          "image": "serie3_q7.svg",
+          "answer": [
+            "B",
+            "C"
+          ]
+        },
+        {
+          "q": 8,
+          "image": "serie3_q8.svg",
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 9,
+          "image": "serie3_q9.svg",
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 10,
+          "image": "serie3_q10.svg",
+          "answer": [
+            "B",
+            "C"
+          ]
+        },
+        {
+          "q": 11,
+          "image": "serie3_q11.svg",
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 12,
+          "image": "serie3_q12.svg",
+          "answer": [
+            "A",
+            "D"
+          ]
+        },
+        {
+          "q": 13,
+          "image": "serie3_q13.svg",
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 14,
+          "image": "serie3_q14.svg",
+          "answer": [
+            "A",
+            "C"
+          ]
+        },
+        {
+          "q": 15,
+          "image": "serie3_q15.svg",
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 16,
+          "image": "serie3_q16.svg",
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 17,
+          "image": "serie3_q17.svg",
+          "answer": [
+            "B",
+            "C"
+          ]
+        },
+        {
+          "q": 18,
+          "image": "serie3_q18.svg",
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 19,
+          "image": "serie3_q19.svg",
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 20,
+          "image": "serie3_q20.svg",
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 21,
+          "image": "serie3_q21.svg",
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 22,
+          "image": "serie3_q22.svg",
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 23,
+          "image": "serie3_q23.svg",
+          "answer": [
+            "A",
+            "C"
+          ]
+        },
+        {
+          "q": 24,
+          "image": "serie3_q24.svg",
+          "answer": [
+            "B",
+            "C"
+          ]
+        },
+        {
+          "q": 25,
+          "image": "serie3_q25.svg",
+          "answer": [
+            "B"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Série 4 — Priorités & Signalisation",
+      "questions": [
+        {
+          "q": 1,
+          "image": "serie4_q1.svg",
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 2,
+          "image": "serie4_q2.svg",
+          "answer": [
+            "A",
+            "C"
+          ]
+        },
+        {
+          "q": 3,
+          "image": "serie4_q3.svg",
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 4,
+          "image": "serie4_q4.svg",
+          "answer": [
+            "A",
+            "B"
+          ]
+        },
+        {
+          "q": 5,
+          "image": "serie4_q5.svg",
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 6,
+          "image": "serie4_q6.svg",
+          "answer": [
+            "A",
+            "B"
+          ]
+        },
+        {
+          "q": 7,
+          "image": "serie4_q7.svg",
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 8,
+          "image": "serie4_q8.svg",
+          "answer": [
+            "A",
+            "B"
+          ]
+        },
+        {
+          "q": 9,
+          "image": "serie4_q9.svg",
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 10,
+          "image": "serie4_q10.svg",
+          "answer": [
+            "A",
+            "B"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "Série 5 — Sécurité Routière & Documents",
+      "questions": [
+        {
+          "q": 1,
+          "image": "serie5_q1.svg",
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 2,
+          "image": "serie5_q2.svg",
+          "answer": [
+            "A",
+            "B"
+          ]
+        },
+        {
+          "q": 3,
+          "image": "serie5_q3.svg",
+          "answer": [
+            "A",
+            "B",
+            "C"
+          ]
+        },
+        {
+          "q": 4,
+          "image": "serie5_q4.svg",
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 5,
+          "image": "serie5_q5.svg",
+          "answer": [
+            "A",
+            "B"
+          ]
+        },
+        {
+          "q": 6,
+          "image": "serie5_q6.svg",
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 7,
+          "image": "serie5_q7.svg",
+          "answer": [
+            "A",
+            "B"
+          ]
+        },
+        {
+          "q": 8,
+          "image": "serie5_q8.svg",
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 9,
+          "image": "serie5_q9.svg",
+          "answer": [
+            "A",
+            "B"
+          ]
+        },
+        {
+          "q": 10,
+          "image": "serie5_q10.svg",
+          "answer": [
+            "A"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "title": "Série 6 — Manœuvres & Stationnement",
+      "questions": [
+        {
+          "q": 1,
+          "image": "serie6_q1.svg",
+          "answer": [
+            "B",
+            "D"
+          ]
+        },
+        {
+          "q": 2,
+          "image": "serie6_q2.svg",
+          "answer": [
+            "A",
+            "C"
+          ]
+        },
+        {
+          "q": 3,
+          "image": "serie6_q3.svg",
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 4,
+          "image": "serie6_q4.svg",
+          "answer": [
+            "A",
+            "B"
+          ]
+        },
+        {
+          "q": 5,
+          "image": "serie6_q5.svg",
+          "answer": [
+            "B",
+            "D"
+          ]
+        },
+        {
+          "q": 6,
+          "image": "serie6_q6.svg",
+          "answer": [
+            "A",
+            "C"
+          ]
+        },
+        {
+          "q": 7,
+          "image": "serie6_q7.svg",
+          "answer": [
+            "A",
+            "B"
+          ]
+        },
+        {
+          "q": 8,
+          "image": "serie6_q8.svg",
+          "answer": [
+            "B",
+            "D"
+          ]
+        },
+        {
+          "q": 9,
+          "image": "serie6_q9.svg",
+          "answer": [
+            "C",
+            "D"
+          ]
+        },
+        {
+          "q": 10,
+          "image": "serie6_q10.svg",
+          "answer": [
+            "A"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "title": "Série 7 — Code de la Route Avancé",
+      "questions": [
+        {
+          "q": 1,
+          "image": "serie7_q1.svg",
+          "answer": [
+            "A",
+            "B"
+          ]
+        },
+        {
+          "q": 2,
+          "image": "serie7_q2.svg",
+          "answer": [
+            "A",
+            "B"
+          ]
+        },
+        {
+          "q": 3,
+          "image": "serie7_q3.svg",
+          "answer": [
+            "A",
+            "C"
+          ]
+        },
+        {
+          "q": 4,
+          "image": "serie7_q4.svg",
+          "answer": [
+            "A",
+            "B"
+          ]
+        },
+        {
+          "q": 5,
+          "image": "serie7_q5.svg",
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 6,
+          "image": "serie7_q6.svg",
+          "answer": [
+            "A",
+            "B"
+          ]
+        },
+        {
+          "q": 7,
+          "image": "serie7_q7.svg",
+          "answer": [
+            "A",
+            "B"
+          ]
+        },
+        {
+          "q": 8,
+          "image": "serie7_q8.svg",
+          "answer": [
+            "A",
+            "B"
+          ]
+        },
+        {
+          "q": 9,
+          "image": "serie7_q9.svg",
+          "answer": [
+            "C"
+          ]
+        },
+        {
+          "q": 10,
+          "image": "serie7_q10.svg",
+          "answer": [
+            "A",
+            "B"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "title": "Série 8 — Examen Blanc Complet",
+      "questions": [
+        {
+          "q": 1,
+          "image": "serie8_q1.svg",
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 2,
+          "image": "serie8_q2.svg",
+          "answer": [
+            "A",
+            "B"
+          ]
+        },
+        {
+          "q": 3,
+          "image": "serie8_q3.svg",
+          "answer": [
+            "A",
+            "C"
+          ]
+        },
+        {
+          "q": 4,
+          "image": "serie8_q4.svg",
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 5,
+          "image": "serie8_q5.svg",
+          "answer": [
+            "A",
+            "B"
+          ]
+        },
+        {
+          "q": 6,
+          "image": "serie8_q6.svg",
+          "answer": [
+            "A",
+            "B"
+          ]
+        },
+        {
+          "q": 7,
+          "image": "serie8_q7.svg",
+          "answer": [
+            "A",
+            "B"
+          ]
+        },
+        {
+          "q": 8,
+          "image": "serie8_q8.svg",
+          "answer": [
+            "A",
+            "B"
+          ]
+        },
+        {
+          "q": 9,
+          "image": "serie8_q9.svg",
+          "answer": [
+            "A",
+            "C"
+          ]
+        },
+        {
+          "q": 10,
+          "image": "serie8_q10.svg",
+          "answer": [
+            "B"
+          ]
+        }
+      ]
+    }
+  ]
+}

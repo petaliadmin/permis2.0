@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60">
+<rect x="1" y="1" width="118" height="58" rx="5" fill="#003087" stroke="#ffffff" stroke-width="2"/>
+<polygon points="90,10 110,30 90,50" fill="white"/>
+<text x="55" y="36" font-family="Arial" font-weight="bold" font-size="18" fill="white" text-anchor="middle">THIÈS</text>
+<text x="55" y="52" font-family="Arial" font-size="11" fill="#ccddff" text-anchor="middle">78 km</text>
+</svg>
