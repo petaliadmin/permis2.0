@@ -17,6 +17,18 @@ COPY packages ./packages
 
 RUN pnpm install
 
+# apps/web depends on 5 workspace packages that compile TS -> dist/ (their
+# package.json "main" points at dist/index.js) — `pnpm --filter web run build`
+# bypasses turbo's ^build dependency graph, so these must be built explicitly
+# first or Next.js fails with "Module not found: Can't resolve '@permis2.0/x'".
+# Order matters: types has no internal deps; utils/shared/hooks depend on types
+# (and hooks also on utils); ui has no internal deps.
+RUN cd packages/types && pnpm run build
+RUN cd packages/utils && pnpm run build
+RUN cd packages/shared && pnpm run build
+RUN cd packages/hooks && pnpm run build
+RUN cd packages/ui && pnpm run build
+
 # NEXT_PUBLIC_* vars are inlined into the client bundle at build time — they
 # must be present as build args, not just runtime container env vars, or the
 # browser bundle falls back to the http://localhost:3001 default forever.
