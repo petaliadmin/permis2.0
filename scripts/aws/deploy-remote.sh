@@ -54,7 +54,7 @@ docker compose -f docker-compose.aws.yml up -d --remove-orphans
 
 echo "→ Waiting for the API to become healthy"
 for i in $(seq 1 30); do
-  status=$(docker inspect --format '{{.State.Health.Status}}' permis2.0-api-prod 2>/dev/null || echo "starting")
+  status=$(docker inspect --format '{{.State.Health.Status}}' permis2-0-api-prod 2>/dev/null || echo "starting")
   [ "$status" = "healthy" ] && break
   sleep 2
 done

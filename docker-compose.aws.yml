@@ -7,7 +7,7 @@ version: '3.8'
 services:
   postgres:
     image: postgres:16-alpine
-    container_name: permis2.0-db-prod
+    container_name: permis2-0-db-prod
     environment:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
@@ -27,8 +27,8 @@ services:
         max-file: "5"
 
   api:
-    image: ${IMAGE_NAMESPACE}/permis2.0-api:${IMAGE_TAG:-latest}
-    container_name: permis2.0-api-prod
+    image: ${IMAGE_NAMESPACE}/permis2-0-api:${IMAGE_TAG:-latest}
+    container_name: permis2-0-api-prod
     environment:
       NODE_ENV: production
       PORT: 3001
@@ -66,8 +66,8 @@ services:
         max-file: "5"
 
   web:
-    image: ${IMAGE_NAMESPACE}/permis2.0-web:${IMAGE_TAG:-latest}
-    container_name: permis2.0-web-prod
+    image: ${IMAGE_NAMESPACE}/permis2-0-web:${IMAGE_TAG:-latest}
+    container_name: permis2-0-web-prod
     environment:
       NODE_ENV: production
       # NEXT_PUBLIC_* are already baked into this image at build time (see
