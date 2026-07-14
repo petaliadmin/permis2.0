@@ -17,6 +17,16 @@ COPY packages ./packages
 
 RUN pnpm install
 
+# NEXT_PUBLIC_* vars are inlined into the client bundle at build time — they
+# must be present as build args, not just runtime container env vars, or the
+# browser bundle falls back to the http://localhost:3001 default forever.
+ARG NEXT_PUBLIC_API_URL=http://localhost:3001
+ARG NEXT_PUBLIC_PAYMENT_MODE=manual
+ARG NEXT_PUBLIC_PAYMENT_LIVE=false
+ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+ENV NEXT_PUBLIC_PAYMENT_MODE=${NEXT_PUBLIC_PAYMENT_MODE}
+ENV NEXT_PUBLIC_PAYMENT_LIVE=${NEXT_PUBLIC_PAYMENT_LIVE}
+
 # Build the Next.js application — produces .next/standalone with output:'standalone'
 RUN pnpm --filter @permis2.0/web run build
 
