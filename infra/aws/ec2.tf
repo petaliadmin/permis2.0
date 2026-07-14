@@ -42,7 +42,13 @@ data "aws_iam_policy_document" "ec2_app" {
       "ssm:GetParameters",
       "ssm:GetParametersByPath",
     ]
-    resources = ["arn:aws:ssm:${var.aws_region}:${data.aws_caller_identity.current.account_id}:parameter${local.ssm_prefix}/*"]
+    resources = [
+      # GetParametersByPath checks authorization against the exact path
+      # requested; the /* form below only covers the leaf parameters
+      # themselves, so both are needed.
+      "arn:aws:ssm:${var.aws_region}:${data.aws_caller_identity.current.account_id}:parameter${local.ssm_prefix}",
+      "arn:aws:ssm:${var.aws_region}:${data.aws_caller_identity.current.account_id}:parameter${local.ssm_prefix}/*",
+    ]
   }
   statement {
     sid       = "DecryptSecureStrings"
