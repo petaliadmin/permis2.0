@@ -18,8 +18,9 @@ APP_DIR="/opt/${PROJECT_NAME}"
 mkdir -p "$APP_DIR"
 cd "$APP_DIR"
 
-echo "→ Fetching docker-compose.aws.yml"
+echo "→ Fetching docker-compose.aws.yml and Caddyfile"
 aws s3 cp "s3://${BACKUPS_BUCKET}/deploy/docker-compose.aws.yml" ./docker-compose.aws.yml --region "$AWS_REGION"
+aws s3 cp "s3://${BACKUPS_BUCKET}/deploy/Caddyfile" ./Caddyfile --region "$AWS_REGION"
 
 echo "→ Building .env from SSM Parameter Store ($SSM_PREFIX)"
 : > .env

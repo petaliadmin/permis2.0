@@ -4,8 +4,10 @@ Architecture : une seule instance **EC2** (Ubuntu 22.04) fait tourner exactement
 `docker-compose.aws.yml` (postgres + api + web, comme en local), gérée
 **sans SSH** via **SSM Session Manager / Send Command**. Les images sont
 construites par **GitHub Actions** et poussées sur **Docker Hub**, puis le
-déploiement est déclenché à distance via SSM. Pas de domaine pour l'instant :
-l'app est servie sur `http://<IP Elastique>:3000` (web) et `:3001` (API).
+déploiement est déclenché à distance via SSM. HTTPS via **Caddy**
+(reverse-proxy + certificats Let's Encrypt automatiques) sur
+`www.permis2.com` (web) et `api.permis2.com` (API) — voir `../../DEPLOY.md`
+section 9 pour la configuration DNS.
 
 Coût approximatif : EC2 t3.small (~15 $/mois) + EBS 30 Go (~3 $/mois) + IP
 élastique (gratuite si attachée) + S3 (quelques centimes) + Docker Hub (gratuit
@@ -87,7 +89,8 @@ ajoute (valeurs = sorties Terraform de l'étape 2) :
 | `AWS_INSTANCE_ID`      | sortie `instance_id`                               |
 | `AWS_BACKUPS_BUCKET`   | sortie `backups_bucket`                            |
 | `AWS_SSM_PREFIX`       | sortie `ssm_parameter_prefix` (`/permis2-0/prod`)  |
-| `PUBLIC_APP_URL`       | `http://<public_ip>` (sans le port — le workflow ajoute `:3001` pour l'API) |
+| `PUBLIC_APP_URL`       | `https://www.permis2.com`                          |
+| `API_PUBLIC_URL`       | `https://api.permis2.com`                          |
 
 Ce sont des *variables*, pas des *secrets* (aucune n'est sensible — le rôle
 IAM n'est assumable que depuis ce repo via OIDC, et les vrais secrets vivent
@@ -162,10 +165,6 @@ docker compose -f docker-compose.aws.yml exec -T postgres psql -U <db_user> <db_
 
 ## Faire évoluer plus tard
 
-- **Nom de domaine + HTTPS** : pointer un enregistrement A sur l'IP élastique,
-  ajouter un reverse-proxy (Caddy/Nginx) avec Let's Encrypt sur le port 80/443
-  devant web:3000 et api:3001, puis mettre à jour `NEXT_PUBLIC_API_URL` /
-  `PUBLIC_APP_URL`.
 - **RDS managée** : si la base grossit, migrer `postgres` du compose vers une
   instance RDS séparée retire un point de défaillance unique et automatise les
   sauvegardes — mais ajoute un coût et de la complexité réseau (VPC/subnets).

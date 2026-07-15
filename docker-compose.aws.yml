@@ -90,6 +90,35 @@ services:
         max-size: "50m"
         max-file: "5"
 
+  # HTTPS reverse proxy (www.permis2.com / permis2.com / api.permis2.com) —
+  # obtains and renews Let's Encrypt certs automatically. The web/api ports
+  # above stay published during the DNS cutover so nothing goes dark if a
+  # domain doesn't resolve yet; infra/aws/security_group.tf has a note on
+  # closing them once HTTPS is confirmed working.
+  caddy:
+    image: caddy:2-alpine
+    container_name: permis2-0-caddy-prod
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - api
+      - web
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "5"
+
 volumes:
   postgres_data_prod:
+    driver: local
+  caddy_data:
+    driver: local
+  caddy_config:
     driver: local

@@ -16,6 +16,7 @@ GitHub Actions (push sur main)
   │                                                 │
   └─► déclenche un déploiement via AWS SSM ─────►  EC2 (Ubuntu, sans SSH)
                                                      │  docker compose :
+                                                     │   - caddy (:80/:443, HTTPS auto)
                                                      │   - postgres (data sur EBS)
                                                      │   - api   (:3001)
                                                      │   - web   (:3000)
@@ -23,8 +24,8 @@ GitHub Actions (push sur main)
                                                      └─► backup quotidien → S3
 ```
 
-- **Pas de domaine pour l'instant** : l'app est accessible via l'IP publique
-  (Elastique) de l'instance, ex. `http://51.x.x.x:3000`.
+- **HTTPS** : `www.permis2.com` / `api.permis2.com`, via Caddy (reverse-proxy +
+  certificats Let's Encrypt automatiques) — voir section 9.
 - **Pas de SSH** : toute administration de l'instance passe par AWS Systems
   Manager (Session Manager / Send Command) — rien à ouvrir sur le port 22.
 - **Secrets** : jamais dans le repo ni dans GitHub Actions — stockés chiffrés
@@ -47,7 +48,7 @@ pas-à-pas ; l'autre est la référence.
 - [ ] 6. Premier déploiement
 - [ ] 7. Charger les données initiales
 - [ ] 8. Vérifier que tout fonctionne
-- [ ] 9. (Optionnel) Nom de domaine / HTTPS
+- [ ] 9. Nom de domaine / HTTPS
 
 ---
 
@@ -171,7 +172,8 @@ Onglet **Variables** → **New repository variable**, un par un :
 | `AWS_INSTANCE_ID`      | sortie `instance_id` (étape 2)                                  |
 | `AWS_BACKUPS_BUCKET`   | sortie `backups_bucket` (étape 2)                               |
 | `AWS_SSM_PREFIX`       | sortie `ssm_parameter_prefix`, ex. `/permis2-0/prod`            |
-| `PUBLIC_APP_URL`       | `http://<public_ip>` — **sans** le port                        |
+| `PUBLIC_APP_URL`       | `https://www.tondomaine.com` (ou `http://<public_ip>` sans domaine) |
+| `API_PUBLIC_URL`       | `https://api.tondomaine.com` (ou `http://<public_ip>:3001` sans domaine) |
 
 Onglet **Secrets** → **New repository secret** :
 
@@ -252,18 +254,43 @@ docker compose -f docker-compose.aws.yml logs --tail=100 web
 
 ---
 
-## 9. (Optionnel) Nom de domaine / HTTPS
+## 9. Nom de domaine / HTTPS
 
-Non fait par défaut (choix initial : IP suffisante). Quand tu es prêt :
-1. Achète/possède un nom de domaine, crée un enregistrement A vers l'IP
-   élastique (`terraform output public_ip`).
-2. Ajoute un reverse-proxy (Caddy est le plus simple : HTTPS automatique via
-   Let's Encrypt) devant `web:3000` et `api:3001`, exposé sur 80/443.
-3. Mets à jour `NEXT_PUBLIC_API_URL` (secret SSM + variable GitHub
-   `PUBLIC_APP_URL`) pour pointer vers `https://tondomaine.com/api` (ou un
-   sous-domaine `api.tondomaine.com`), puis redéploie.
-4. Ouvre les ports 80/443 dans `infra/aws/security_group.tf` (et ferme 3000/3001
-   au public si le reverse-proxy est le seul point d'entrée désiré).
+En place pour `permis2.com` (Caddy en reverse-proxy, HTTPS automatique via
+Let's Encrypt) :
+
+- `www.permis2.com` → `web:3000`
+- `api.permis2.com` → `api:3001`
+- `permis2.com` (apex) → redirige vers `https://www.permis2.com`
+
+**DNS requis chez le registrar** (3 enregistrements A, tous vers l'IP
+élastique — `terraform output public_ip`) :
+
+| Sous-domaine | Cible |
+|---|---|
+| *(vide / `@`)* | IP élastique |
+| `www` | IP élastique |
+| `api` | IP élastique |
+
+Config Terraform/déploiement : `Caddyfile` (racine du repo) définit les
+routes ; `docker-compose.aws.yml` lance le service `caddy` (ports 80/443,
+volumes `caddy_data`/`caddy_config` pour persister les certificats entre
+redéploiements) ; `.github/workflows/deploy.yml` pousse `Caddyfile` vers S3
+comme `docker-compose.aws.yml`.
+
+Pendant la transition DNS, les ports 3000/3001 restent ouverts en direct sur
+l'IP (voir le commentaire `TODO` dans `infra/aws/security_group.tf`) pour ne
+rien casser si le DNS n'a pas encore propagé. Une fois `https://www.permis2.com`
+confirmé fonctionnel :
+1. Supprime les deux blocs `ingress` 3000/3001 dans `infra/aws/security_group.tf`
+   (et applique).
+2. Supprime les lignes `ports: ["3000:3000"]` / `["3001:3001"]` des services
+   `web`/`api` dans `docker-compose.aws.yml` (Caddy les joint via le réseau
+   Docker interne, pas besoin de les publier).
+3. Redéploie.
+
+Pour ajouter un autre domaine plus tard : ajoute un bloc dans `Caddyfile`,
+commit, redéploie — Caddy obtient le certificat automatiquement au démarrage.
 
 ---
 

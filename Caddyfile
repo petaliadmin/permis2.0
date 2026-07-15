@@ -1,0 +1,21 @@
+# Reverse proxy + automatic HTTPS (Let's Encrypt) for permis2.0.
+# Deployed alongside docker-compose.aws.yml — see scripts/aws/deploy-remote.sh.
+#
+# DNS required (A records, all -> the Elastic IP from `terraform output public_ip`):
+#   permis2.com, www.permis2.com, api.permis2.com
+
+{
+	email admin@permis2.com
+}
+
+www.permis2.com {
+	reverse_proxy web:3000
+}
+
+permis2.com {
+	redir https://www.permis2.com{uri} permanent
+}
+
+api.permis2.com {
+	reverse_proxy api:3001
+}
