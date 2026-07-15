@@ -47,8 +47,10 @@ services:
       BICTORYS_API_KEY: ${BICTORYS_API_KEY}
       BICTORYS_SECRET_KEY: ${BICTORYS_SECRET_KEY}
       PAYMENT_COUNTRY: ${PAYMENT_COUNTRY:-SN}
-    ports:
-      - "3001:3001"
+    # No published port: only Caddy talks to this, via the Docker network
+    # (api:3001) — see Caddyfile.
+    expose:
+      - "3001"
     depends_on:
       postgres:
         condition: service_healthy
@@ -73,8 +75,10 @@ services:
       # NEXT_PUBLIC_* are already baked into this image at build time (see
       # Dockerfile.web); this is just for the Node server process itself.
       NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
-    ports:
-      - "3000:3000"
+    # No published port: only Caddy talks to this, via the Docker network
+    # (web:3000) — see Caddyfile.
+    expose:
+      - "3000"
     depends_on:
       - api
     restart: unless-stopped
@@ -91,10 +95,9 @@ services:
         max-file: "5"
 
   # HTTPS reverse proxy (www.permis2.com / permis2.com / api.permis2.com) —
-  # obtains and renews Let's Encrypt certs automatically. The web/api ports
-  # above stay published during the DNS cutover so nothing goes dark if a
-  # domain doesn't resolve yet; infra/aws/security_group.tf has a note on
-  # closing them once HTTPS is confirmed working.
+  # obtains and renews Let's Encrypt certs automatically. The only entry
+  # point into web/api; both are otherwise unreachable from outside the
+  # Docker network (see their `expose` lines above).
   caddy:
     image: caddy:2-alpine
     container_name: permis2-0-caddy-prod
