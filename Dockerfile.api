@@ -24,6 +24,11 @@ COPY packages ./packages
 # so seeding is reproducible without manual copies.
 COPY categories_et_meta.json fiches_theoriques.json serie_B1.json serie_B2.json serie_B3.json panneaux_senegal.json conduite.json ./apps/
 
+# sync-content.ts resolves these relative to apps/web/public/data (as if it
+# were a full monorepo checkout) even though this image never builds the web
+# app — copy just the 3 JSON files it actually reads.
+COPY apps/web/public/data/panneaux.json apps/web/public/data/questions_doc.json apps/web/public/data/diapos.json ./apps/web/public/data/
+
 RUN pnpm install
 RUN cd apps/api && pnpm run prisma:generate
 RUN cd packages/types && pnpm run build
@@ -51,14 +56,22 @@ COPY --from=builder /app/package.json ./
 COPY --from=builder /app/pnpm-workspace.yaml ./
 COPY --from=builder /app/pnpm-lock.yaml ./
 
-# Copy data files needed for seed (run manually via docker exec)
-COPY --from=builder /app/apps/categories_et_meta.json /app/apps/
-COPY --from=builder /app/apps/fiches_theoriques.json /app/apps/
-COPY --from=builder /app/apps/serie_B1.json /app/apps/
-COPY --from=builder /app/apps/serie_B2.json /app/apps/
-COPY --from=builder /app/apps/serie_B3.json /app/apps/
-COPY --from=builder /app/apps/panneaux_senegal.json /app/apps/
-COPY --from=builder /app/apps/conduite.json /app/apps/
+# Copy data files needed for seed (run manually via docker exec).
+# seed.ts resolves them via path.join(dirname(__filename), '../../../*.json')
+# from apps/api/prisma/seed.ts (running via ts-node, not compiled dist) — that's
+# 3 levels up from apps/api/prisma, i.e. /app/*.json, NOT /app/apps/*.json.
+COPY --from=builder /app/apps/categories_et_meta.json /app/
+COPY --from=builder /app/apps/fiches_theoriques.json /app/
+COPY --from=builder /app/apps/serie_B1.json /app/
+COPY --from=builder /app/apps/serie_B2.json /app/
+COPY --from=builder /app/apps/serie_B3.json /app/
+COPY --from=builder /app/apps/panneaux_senegal.json /app/
+COPY --from=builder /app/apps/conduite.json /app/
+
+# sync-content.ts's data source — see matching comment in the builder stage.
+COPY --from=builder /app/apps/web/public/data/panneaux.json /app/apps/web/public/data/
+COPY --from=builder /app/apps/web/public/data/questions_doc.json /app/apps/web/public/data/
+COPY --from=builder /app/apps/web/public/data/diapos.json /app/apps/web/public/data/
 
 # Install production dependencies only
 RUN pnpm install --prod --frozen-lockfile

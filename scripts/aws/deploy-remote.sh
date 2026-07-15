@@ -66,6 +66,33 @@ fi
 echo "→ Applying Prisma schema (db push — this project has no migrations dir)"
 docker compose -f docker-compose.aws.yml exec -T api npx prisma db push --skip-generate
 
+# Guards against the class of bug that bit the 2026-07-15 deploy: the
+# "abo_annuel" subscription product is only ever created by prisma:seed,
+# which doesn't run automatically (by design — see DEPLOY.md step 7). A
+# schema/code change can ship without anyone re-running the seed, silently
+# leaving the boutique with no product row at all. ON CONFLICT DO NOTHING
+# means it seeds itself once and never touches a later manual price/active
+# edit made from the admin UI.
+echo "→ Ensuring the subscription product exists"
+docker compose -f docker-compose.aws.yml exec -T postgres psql -U "$DB_USER" "$DB_NAME" -v ON_ERROR_STOP=1 <<'SQL'
+INSERT INTO products (id, sku, title, description, kind, "priceXof", active, ordre, grants, "validityDays", "createdAt", "updatedAt")
+VALUES (
+  'seed-abo-annuel',
+  'abo_annuel',
+  'Abonnement Annuel',
+  'Accès illimité à toutes les séries, examens blancs et cours de conduite pendant 1 an.',
+  'subscription',
+  2900,
+  true,
+  1,
+  ARRAY['premium_all'],
+  365,
+  now(),
+  now()
+)
+ON CONFLICT (sku) DO NOTHING;
+SQL
+
 echo "→ Pruning old images"
 docker image prune -f
 

@@ -235,9 +235,22 @@ function BoutiqueInner() {
         {loading && products.length === 0 ? (
           <Skeleton className="h-96 w-full rounded-3xl" />
         ) : !subscription ? (
-          <p className="rounded-2xl border border-token bg-surface-1 p-6 text-center text-sm text-secondary">
-            L&apos;abonnement est momentanément indisponible.
-          </p>
+          <div className="rounded-2xl border border-token bg-surface-1 p-6 text-center">
+            <p className="text-sm text-secondary">
+              L&apos;abonnement est momentanément indisponible en ligne.
+            </p>
+            <a
+              href={whatsappLink(
+                "Bonjour PERMIS 2.0 ! 👋\nJe souhaite activer l'Abonnement Annuel — la page m'indique qu'il est momentanément indisponible."
+              )}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl bg-[#25D366] py-3.5 text-sm font-bold text-white shadow-md transition-transform active:scale-[0.98]"
+            >
+              <i className="ti ti-brand-whatsapp text-xl" aria-hidden="true" />
+              Nous contacter sur WhatsApp · {WHATSAPP_DISPLAY}
+            </a>
+          </div>
         ) : (
           <motion.div
             initial={{ opacity: 0, y: 16 }}
