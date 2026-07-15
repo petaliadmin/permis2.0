@@ -17,7 +17,14 @@ interface CodeInputProps {
  * Segmented numeric code input (OTP / PIN). Auto-advances on entry, supports
  * backspace navigation and paste. Mobile-friendly numeric keypad.
  */
-export function CodeInput({ length = 6, value, onChange, secret = false, autoFocus = false, onComplete }: CodeInputProps) {
+export function CodeInput({
+  length = 6,
+  value,
+  onChange,
+  secret = false,
+  autoFocus = false,
+  onComplete,
+}: CodeInputProps) {
   const refs = useRef<Array<HTMLInputElement | null>>([]);
   const chars = value.split('').slice(0, length);
 
@@ -63,7 +70,9 @@ export function CodeInput({ length = 6, value, onChange, secret = false, autoFoc
       {Array.from({ length }).map((_, i) => (
         <input
           key={i}
-          ref={(el) => { refs.current[i] = el; }}
+          ref={(el) => {
+            refs.current[i] = el;
+          }}
           type={secret ? 'password' : 'text'}
           inputMode="numeric"
           autoComplete="one-time-code"

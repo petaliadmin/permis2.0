@@ -4,6 +4,7 @@ import {
   ForbiddenException,
   BadRequestException,
 } from '@nestjs/common';
+
 import { PrismaService } from '../prisma/prisma.service';
 import { EntitlementService } from '../entitlement/entitlement.service';
 import { PaymentService } from './payment/payment.service';
@@ -20,7 +21,7 @@ export class ShopService {
   constructor(
     private prisma: PrismaService,
     private entitlements: EntitlementService,
-    private payment: PaymentService,
+    private payment: PaymentService
   ) {}
 
   /** Active catalog; flags products the user already fully owns. */
@@ -48,6 +49,20 @@ export class ShopService {
       orderBy: { createdAt: 'desc' },
     });
     return { keys: rows.map((r) => r.key), rows };
+  }
+
+  async getPurchase(userId: string, purchaseId: string) {
+    const purchase = await this.prisma.purchase.findUnique({
+      where: { id: purchaseId },
+      include: {
+        product: {
+          select: { id: true, sku: true, title: true, kind: true, priceXof: true },
+        },
+      },
+    });
+    if (!purchase) throw new NotFoundException('Purchase not found');
+    if (purchase.userId !== userId) throw new ForbiddenException('Not your purchase');
+    return purchase;
   }
 
   async getPurchases(userId: string) {
@@ -125,6 +140,8 @@ export class ShopService {
       status: 'PENDING' as const,
       providerRef: initiated.providerRef,
       redirectUrl: initiated.redirectUrl,
+      /** USSD instructions for Orange Money / Free Money (show to user, then poll). */
+      ussdMessage: initiated.ussdMessage,
     };
   }
 
@@ -133,9 +150,10 @@ export class ShopService {
     providerId: string,
     payload: unknown,
     headers: Record<string, string>,
+    rawBody?: string
   ) {
     const provider = this.payment.getProvider(providerId as any);
-    const result = await provider.parseWebhook(payload, headers);
+    const result = await provider.parseWebhook(payload, headers, rawBody);
 
     // Non-terminal provider status (e.g. Bictorys pending/authorized): acknowledge
     // without touching the purchase so a later terminal callback still decides it.
@@ -153,10 +171,7 @@ export class ShopService {
     if (result.status === 'PAID') {
       // Reject (don't fail) on an amount mismatch: leaves the purchase PENDING so
       // a spoofed amount can't cancel a legit purchase or grant the wrong one.
-      if (
-        result.amountXof !== undefined &&
-        result.amountXof !== purchase.amountXof
-      ) {
+      if (result.amountXof !== undefined && result.amountXof !== purchase.amountXof) {
         throw new BadRequestException('Webhook amount does not match purchase');
       }
       await this.markPaid(purchase.id);
@@ -208,13 +223,8 @@ export class ShopService {
         // permanent grant (validityDays null) stays non-expiring.
         let expiresAt: Date | null = null;
         if (validityDays != null) {
-          const base =
-            existing?.expiresAt && existing.expiresAt > now
-              ? existing.expiresAt
-              : now;
-          expiresAt = new Date(
-            base.getTime() + validityDays * 24 * 60 * 60 * 1000,
-          );
+          const base = existing?.expiresAt && existing.expiresAt > now ? existing.expiresAt : now;
+          expiresAt = new Date(base.getTime() + validityDays * 24 * 60 * 60 * 1000);
         }
 
         await tx.entitlement.upsert({

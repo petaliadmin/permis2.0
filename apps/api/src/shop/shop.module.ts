@@ -10,13 +10,7 @@ import { BictorysProvider } from './payment/providers/bictorys.provider';
 @Module({
   imports: [EntitlementModule],
   controllers: [ShopController],
-  providers: [
-    ShopService,
-    PrismaService,
-    PaymentService,
-    SandboxProvider,
-    BictorysProvider,
-  ],
+  providers: [ShopService, PrismaService, PaymentService, SandboxProvider, BictorysProvider],
   exports: [ShopService],
 })
 export class ShopModule {}

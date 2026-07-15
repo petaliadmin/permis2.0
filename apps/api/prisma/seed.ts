@@ -95,9 +95,7 @@ async function main() {
     // element to a readable string without losing the source data.
     const toStringArray = (arr?: unknown[]): string[] =>
       (arr || []).map((item) =>
-        typeof item === 'string'
-          ? item
-          : Object.values(item as Record<string, unknown>).join(' — ')
+        typeof item === 'string' ? item : Object.values(item as Record<string, unknown>).join(' — ')
       );
 
     // Seed lessons
@@ -128,9 +126,24 @@ async function main() {
 
     // Seed series and questions
     const series = [
-      { code: 'B1', name: 'Série 1', description: 'Première série de 25 questions', questions: serieB1 },
-      { code: 'B2', name: 'Série 2', description: 'Deuxième série de 25 questions', questions: serieB2 },
-      { code: 'B3', name: 'Série 3', description: 'Troisième série de 25 questions', questions: serieB3 },
+      {
+        code: 'B1',
+        name: 'Série 1',
+        description: 'Première série de 25 questions',
+        questions: serieB1,
+      },
+      {
+        code: 'B2',
+        name: 'Série 2',
+        description: 'Deuxième série de 25 questions',
+        questions: serieB2,
+      },
+      {
+        code: 'B3',
+        name: 'Série 3',
+        description: 'Troisième série de 25 questions',
+        questions: serieB3,
+      },
     ];
 
     for (const seriesData of series) {
@@ -184,7 +197,9 @@ async function main() {
         }
       }
 
-      console.log(`✅ Seeded series ${seriesData.code} with ${seriesData.questions.length} questions`);
+      console.log(
+        `✅ Seeded series ${seriesData.code} with ${seriesData.questions.length} questions`
+      );
     }
 
     // Seed traffic signs progressively (batch of 10) to avoid timeouts
@@ -219,11 +234,42 @@ async function main() {
           console.log(`Sign ${pan.nom} creation/update failed`);
         }
       }
-      console.log(`✅ Batch ${Math.floor(i / BATCH_SIZE) + 1}: ${Math.min(i + BATCH_SIZE, panneaux.length)}/${panneaux.length} traffic signs seeded`);
+      console.log(
+        `✅ Batch ${Math.floor(i / BATCH_SIZE) + 1}: ${Math.min(i + BATCH_SIZE, panneaux.length)}/${panneaux.length} traffic signs seeded`
+      );
       await new Promise((resolve) => setTimeout(resolve, 100));
     }
 
     console.log(`✅ Created ${panneaux.length} traffic signs`);
+
+    // Seed boutique product — annual subscription
+    await prisma.product.upsert({
+      where: { sku: 'abo_annuel' },
+      update: {
+        title: 'Abonnement Annuel',
+        description:
+          'Accès illimité à toutes les séries, examens blancs et cours de conduite pendant 1 an.',
+        kind: 'subscription',
+        priceXof: 2900,
+        active: true,
+        ordre: 1,
+        grants: ['premium_all'],
+        validityDays: 365,
+      },
+      create: {
+        sku: 'abo_annuel',
+        title: 'Abonnement Annuel',
+        description:
+          'Accès illimité à toutes les séries, examens blancs et cours de conduite pendant 1 an.',
+        kind: 'subscription',
+        priceXof: 2900,
+        active: true,
+        ordre: 1,
+        grants: ['premium_all'],
+        validityDays: 365,
+      },
+    });
+    console.log('✅ Seeded product: abo_annuel');
 
     console.log('✨ Database seeding completed successfully!');
   } catch (error) {

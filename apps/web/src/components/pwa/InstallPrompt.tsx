@@ -140,8 +140,8 @@ export function InstallPrompt() {
                   Installer PERMIS2.0
                 </h2>
                 <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                  Ajoute l&apos;application à ton écran d&apos;accueil pour un accès plus rapide,
-                  en plein écran et même hors connexion.
+                  Ajoute l&apos;application à ton écran d&apos;accueil pour un accès plus rapide, en
+                  plein écran et même hors connexion.
                 </p>
               </div>
               <button
@@ -161,9 +161,7 @@ export function InstallPrompt() {
                   className="flex flex-col items-center gap-1 rounded-2xl bg-surface-1 py-3 text-center"
                 >
                   <span className="text-xl">{f.icon}</span>
-                  <span className="text-[11px] font-semibold text-secondary">
-                    {f.label}
-                  </span>
+                  <span className="text-[11px] font-semibold text-secondary">{f.label}</span>
                 </div>
               ))}
             </div>
@@ -172,9 +170,17 @@ export function InstallPrompt() {
               <div className="mt-4 rounded-2xl bg-surface-1 p-4 text-sm text-secondary">
                 <p className="font-semibold text-foreground">Sur iPhone / iPad :</p>
                 <ol className="mt-2 space-y-1.5">
-                  <li>1. Appuie sur <span className="font-semibold">Partager</span> <span className="align-middle">􀈂</span> dans la barre Safari.</li>
-                  <li>2. Choisis <span className="font-semibold">« Sur l&apos;écran d&apos;accueil »</span>.</li>
-                  <li>3. Confirme avec <span className="font-semibold">Ajouter</span>.</li>
+                  <li>
+                    1. Appuie sur <span className="font-semibold">Partager</span>{' '}
+                    <span className="align-middle">􀈂</span> dans la barre Safari.
+                  </li>
+                  <li>
+                    2. Choisis{' '}
+                    <span className="font-semibold">« Sur l&apos;écran d&apos;accueil »</span>.
+                  </li>
+                  <li>
+                    3. Confirme avec <span className="font-semibold">Ajouter</span>.
+                  </li>
                 </ol>
                 <button
                   onClick={dismiss}

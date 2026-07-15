@@ -4,12 +4,13 @@
  * - Stale-while-revalidate for static assets.
  * - Never caches API calls or non-GET requests.
  */
-const VERSION = 'v2';
+const VERSION = 'v3';
 const SHELL_CACHE = `permis2-shell-${VERSION}`;
 const RUNTIME_CACHE = `permis2-runtime-${VERSION}`;
 
 const SHELL_ASSETS = [
   '/',
+  '/cours',
   '/manifest.json',
   '/icon-192.png',
   '/icon-512.png',
@@ -43,6 +44,35 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('message', (event) => {
   if (event.data === 'SKIP_WAITING') self.skipWaiting();
+});
+
+/* ── Web Push ─────────────────────────────────────────────────────────────── */
+self.addEventListener('push', (event) => {
+  let data = { title: 'PERMIS 2.0', body: 'Tu as une nouvelle notification.', url: '/notifications' };
+  try { if (event.data) data = { ...data, ...JSON.parse(event.data.text()) }; } catch {}
+
+  event.waitUntil(
+    self.registration.showNotification(data.title, {
+      body: data.body,
+      icon: '/icon-192.png',
+      badge: '/icon-192.png',
+      tag: 'permis-push',
+      renotify: true,
+      data: { url: data.url },
+    })
+  );
+});
+
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  const url = event.notification.data?.url || '/notifications';
+  event.waitUntil(
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clients) => {
+      const existing = clients.find((c) => c.url.includes(self.location.origin));
+      if (existing) return existing.focus().then((c) => c.navigate(url));
+      return self.clients.openWindow(url);
+    })
+  );
 });
 
 self.addEventListener('fetch', (event) => {

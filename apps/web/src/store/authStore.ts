@@ -32,8 +32,33 @@ interface AuthState {
   requestOtp: (phone: string, channel: OtpChannel) => Promise<void>;
   verifyOtp: (phone: string, otp: string) => Promise<boolean>;
   registerWithPin: (name: string, phone: string, pin: string) => Promise<void>;
+  resetPin: (phone: string, otp: string, pin: string) => Promise<void>;
   logout: () => Promise<void>;
   clearError: () => void;
+}
+
+/**
+ * Estimate the XP earned as a guest from the locally stored quiz progress,
+ * mirroring the server rule (10 XP per correct answer, +50 for a perfect run).
+ * Sessions hold ~13 questions on average.
+ */
+function computeGuestXp(): number {
+  try {
+    const raw = JSON.parse(localStorage.getItem('quizz_progress') ?? '{}') as Record<
+      string,
+      unknown
+    >;
+    let xp = 0;
+    for (const v of Object.values(raw)) {
+      if (!v || typeof v !== 'object' || !('done' in v)) continue;
+      const pct = Math.max(0, Math.min(100, Number((v as { pct?: number }).pct ?? 0)));
+      const correct = Math.round((pct / 100) * 13);
+      xp += correct * 10 + (pct === 100 ? 50 : 0);
+    }
+    return Math.min(xp, 50000);
+  } catch {
+    return 0;
+  }
 }
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
@@ -178,6 +203,48 @@ export const useAuthStore = create<AuthState>()(
           if (!response.ok) {
             const err = await response.json();
             throw new Error(err.message || 'Inscription échouée');
+          }
+          const data = await response.json();
+          set({ user: data.user, token: data.accessToken, isAuthenticated: true, phone });
+
+          // Merge guest progress into the freshly created account (best effort).
+          const guestXp = computeGuestXp();
+          if (guestXp > 0) {
+            try {
+              const res = await fetch(`${API_URL}/auth/migrate-guest`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({ xp: guestXp }),
+              });
+              if (res.ok) {
+                const migrated = await res.json();
+                if (migrated.user) set({ user: migrated.user });
+              }
+            } catch {
+              // Non-blocking: local progress stays in localStorage anyway
+            }
+          }
+        } catch (error: any) {
+          set({ error: error.message });
+          throw error;
+        } finally {
+          set({ isLoading: false });
+        }
+      },
+
+      resetPin: async (phone: string, otp: string, pin: string) => {
+        set({ isLoading: true, error: null });
+        try {
+          const response = await fetch(`${API_URL}/auth/reset-pin`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ phone, otp, pin }),
+          });
+          if (!response.ok) {
+            const err = await response.json().catch(() => ({}));
+            throw new Error(err.message || 'Code invalide ou expiré');
           }
           const data = await response.json();
           set({ user: data.user, token: data.accessToken, isAuthenticated: true, phone });

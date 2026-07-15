@@ -4,6 +4,7 @@ import {
   IsInt,
   IsOptional,
   IsString,
+  Max,
   Min,
   ValidateNested,
 } from 'class-validator';
@@ -23,15 +24,20 @@ export class MigrateGuestDto {
   @IsOptional()
   @IsInt()
   @Min(0)
+  @Max(50000)
   xp?: number;
 
   @ApiPropertyOptional({ example: 5, description: 'Best correct-answer streak as a guest' })
   @IsOptional()
   @IsInt()
   @Min(0)
+  @Max(365)
   bestStreak?: number;
 
-  @ApiPropertyOptional({ type: [GuestAnswerDto], description: 'Per-question answers recorded as a guest' })
+  @ApiPropertyOptional({
+    type: [GuestAnswerDto],
+    description: 'Per-question answers recorded as a guest',
+  })
   @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })

@@ -20,14 +20,18 @@ import { SubmitAnswerDto } from './dto/submit-answer.dto';
 export class SeriesController {
   constructor(
     private seriesService: SeriesService,
-    private entitlements: EntitlementService,
+    private entitlements: EntitlementService
   ) {}
 
   @Get()
   @UseGuards(OptionalJwtAuthGuard)
   @ApiResponse({ status: 200, description: 'List of series (with locked flag)' })
   async findAll(@Request() req) {
-    return this.seriesService.findAll(req.user?.userId);
+    const userId = req.user?.userId;
+    const series = await this.seriesService.findAll();
+    const keys = await this.entitlements.getKeys(userId);
+    const hasPremium = keys.includes('premium_all') || keys.includes('pack_quiz');
+    return series.map((s) => ({ ...s, locked: !s.isFree && !hasPremium }));
   }
 
   @Get(':id')
@@ -45,10 +49,7 @@ export class SeriesController {
   async getQuestions(@Param('id') id: string, @Request() req) {
     // Validate series exists, then gate premium content server-side.
     const series = await this.seriesService.findById(id);
-    const allowed = await this.entitlements.hasAccessToSeries(
-      req.user?.userId,
-      series,
-    );
+    const allowed = await this.entitlements.hasAccessToSeries(req.user?.userId, series);
     if (!allowed) {
       throw new ForbiddenException('premium_series');
     }
@@ -60,10 +61,7 @@ export class SeriesController {
   @ApiBearerAuth()
   @ApiResponse({ status: 200, description: 'User progress in series' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async getUserProgress(
-    @Param('id') id: string,
-    @Request() req,
-  ) {
+  async getUserProgress(@Param('id') id: string, @Request() req) {
     return this.seriesService.getUserSeriesProgress(req.user.userId, id);
   }
 
@@ -76,13 +74,9 @@ export class SeriesController {
   async submitAnswer(
     @Param('id') questionId: string,
     @Body() submitAnswerDto: SubmitAnswerDto,
-    @Request() req,
+    @Request() req
   ) {
     const answer = submitAnswerDto.answers?.[0] ?? submitAnswerDto.answer;
-    return this.seriesService.submitAnswer(
-      req.user.userId,
-      questionId,
-      answer,
-    );
+    return this.seriesService.submitAnswer(req.user.userId, questionId, answer);
   }
 }

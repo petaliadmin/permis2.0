@@ -6,11 +6,7 @@ export interface UseTimerOptions {
   onTick?: (remainingSeconds: number) => void;
 }
 
-export function useTimer({
-  initialSeconds = 0,
-  onComplete,
-  onTick,
-}: UseTimerOptions = {}) {
+export function useTimer({ initialSeconds = 0, onComplete, onTick }: UseTimerOptions = {}) {
   const [seconds, setSeconds] = useState(initialSeconds);
   const [isRunning, setIsRunning] = useState(false);
 
@@ -50,10 +46,13 @@ export function useTimer({
     setIsRunning(true);
   }, []);
 
-  const reset = useCallback((newSeconds?: number) => {
-    setIsRunning(false);
-    setSeconds(newSeconds ?? initialSeconds);
-  }, [initialSeconds]);
+  const reset = useCallback(
+    (newSeconds?: number) => {
+      setIsRunning(false);
+      setSeconds(newSeconds ?? initialSeconds);
+    },
+    [initialSeconds]
+  );
 
   return {
     seconds,

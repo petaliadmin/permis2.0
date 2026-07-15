@@ -2,1625 +2,1045 @@
   {
     "id": "PDG001",
     "categorie": "Panneaux de danger",
-    "enonce": "Un panneau triangulaire rouge avec une courbe vers la droite signale :",
-    "options": [
-      "Un virage à droite dangereux",
-      "Un virage à gauche dangereux",
-      "Une route prioritaire",
-      "Un dépassement interdit"
-    ],
-    "bonneReponse": "Un virage à droite dangereux",
-    "explication": "Le panneau A1 signale un virage dangereux à droite. Réduisez la vitesse avant ce virage et restez à droite.",
+    "enonce": "Un panneau triangulaire rouge avec une courbe dessinée vers la droite signale :",
+    "options": ["Un virage dangereux à droite", "Un virage dangereux à gauche", "Une intersection à droite", "Une route prioritaire"],
+    "bonneReponse": "Un virage dangereux à droite",
+    "explication": "Ce panneau annonce un virage serré vers la droite. Réduisez la vitesse avant d'aborder le virage et restez bien à droite.",
     "image": "/icons/panneaux/A1.svg"
   },
   {
     "id": "PDG002",
     "categorie": "Panneaux de danger",
-    "enonce": "Le panneau A15 (triangle avec silhouette d'ouvrier) indique :",
-    "options": [
-      "Une route barrée",
-      "Une zone de travaux sur la chaussée",
-      "Un chantier privé",
-      "Un stationnement réservé aux ouvriers"
-    ],
-    "bonneReponse": "Une zone de travaux sur la chaussée",
-    "explication": "A15 (travaux) signale une zone de chantier. Des ouvriers et engins peuvent être présents. Respectez la limitation temporaire.",
+    "enonce": "Un triangle rouge avec la silhouette d'un ouvrier annonce :",
+    "options": ["Une zone industrielle", "Des travaux sur la chaussée", "Un chantier privé interdit", "Un stationnement réservé"],
+    "bonneReponse": "Des travaux sur la chaussée",
+    "explication": "Ce panneau signale une zone de chantier en cours. Des ouvriers et des engins peuvent être présents. Respectez la limitation de vitesse temporaire.",
     "image": "/icons/panneaux/A15.svg"
   },
   {
     "id": "PDG003",
     "categorie": "Panneaux de danger",
-    "enonce": "Un triangle rouge avec une silhouette de piéton signale :",
-    "options": [
-      "Passage piéton obligatoire",
-      "Un passage pour piétons à proximité",
-      "Piétons interdits",
-      "Zone scolaire uniquement"
-    ],
+    "enonce": "Un triangle rouge avec la silhouette d'un piéton vous informe :",
+    "options": ["Zone piétonne obligatoire", "Un passage pour piétons à proximité", "Circulation des piétons interdite", "Présence d'un arrêt de bus"],
     "bonneReponse": "Un passage pour piétons à proximité",
-    "explication": "A12 annonce un passage piéton. Ralentissez et cédez le passage aux piétons engagés.",
+    "explication": "Ce panneau annonce un passage piéton. Réduisez la vitesse et cédez le passage aux piétons qui s'apprêtent à traverser.",
     "image": "/icons/panneaux/A12.svg"
   },
   {
     "id": "PDG004",
     "categorie": "Panneaux de danger",
     "enonce": "Un triangle rouge avec une locomotive signale :",
-    "options": [
-      "Une gare proche",
-      "Un passage à niveau avec barrières",
-      "Une zone de bruit ferroviaire",
-      "Un tunnel ferroviaire"
-    ],
+    "options": ["Une gare ferroviaire proche", "Un passage à niveau avec barrières", "Un pont ferroviaire", "Une voie ferrée à 1 km"],
     "bonneReponse": "Un passage à niveau avec barrières",
-    "explication": "A9 signale un passage à niveau avec barrières. Ne vous engagez que si les barrières sont levées et les feux éteints.",
+    "explication": "Ce panneau annonce un passage à niveau équipé de barrières. Ne vous engagez que si les barrières sont entièrement levées et les feux éteints.",
     "image": "/icons/panneaux/A9.svg"
   },
   {
     "id": "PDG005",
     "categorie": "Panneaux de danger",
-    "enonce": "Le panneau A10 avec deux lignes ondulées indique :",
-    "options": [
-      "Risque de brouillard",
-      "Chaussée glissante",
-      "Route en lacets",
-      "Zone inondable"
-    ],
-    "bonneReponse": "Chaussée glissante",
-    "explication": "A10 signale une adhérence réduite : pluie, sable ou huile possible. Réduisez la vitesse et augmentez les distances.",
+    "enonce": "Un triangle rouge avec deux lignes ondulées parallèles signale :",
+    "options": ["Une route inondée", "Une chaussée glissante", "Une route en lacets", "Un risque de brouillard fréquent"],
+    "bonneReponse": "Une chaussée glissante",
+    "explication": "Ce panneau indique une adhérence réduite : pluie, sable ou huile sur la chaussée. Réduisez la vitesse et augmentez les distances de sécurité.",
     "image": "/icons/panneaux/A10.svg"
   },
   {
     "id": "PDG006",
     "categorie": "Panneaux de danger",
-    "enonce": "Un panneau triangulaire avec des enfants qui courent indique :",
-    "options": [
-      "Une aire de jeux",
-      "Un passage d'enfants / zone scolaire",
-      "Une crèche",
-      "Zone résidentielle"
-    ],
-    "bonneReponse": "Un passage d'enfants / zone scolaire",
-    "explication": "A13 avertit d'une école ou d'un passage d'enfants. Ralentissez impérativement.",
+    "enonce": "Un triangle rouge avec des enfants qui courent indique :",
+    "options": ["Une aire de jeux", "Un passage d'enfants ou une zone scolaire", "Une crèche", "Un parc résidentiel"],
+    "bonneReponse": "Un passage d'enfants ou une zone scolaire",
+    "explication": "Ce panneau avertit d'une école ou d'un passage d'enfants. Ralentissez impérativement et restez vigilant.",
     "image": "/icons/panneaux/A13.svg"
   },
   {
     "id": "PDG007",
     "categorie": "Panneaux de danger",
-    "enonce": "Le panneau A3a (flèche descendante) vous prévient :",
-    "options": [
-      "D'une montée dangereuse",
-      "D'un creux",
-      "D'une descente dangereuse",
-      "D'un dos d'âne"
-    ],
+    "enonce": "Un triangle rouge avec une flèche pointant vers le bas vous prévient :",
+    "options": ["D'une montée dangereuse", "D'une dépression de chaussée", "D'une descente dangereuse", "D'un passage en sens inverse"],
     "bonneReponse": "D'une descente dangereuse",
-    "explication": "A3a signale une forte descente. Passez en vitesse réduite et utilisez le frein moteur.",
+    "explication": "Ce panneau signale une forte pente descendante. Réduisez la vitesse et engagez un rapport plus bas pour freiner avec le moteur.",
     "image": "/icons/panneaux/A3a.svg"
   },
   {
     "id": "PDG008",
     "categorie": "Panneaux de danger",
-    "enonce": "Un triangle rouge avec deux flèches opposées (étranglement) annonce :",
-    "options": [
-      "Un dépassement interdit",
-      "Un pont étroit",
-      "Un rétrécissement de chaussée",
-      "Une zone de travaux"
-    ],
+    "enonce": "Un triangle rouge avec deux flèches convergentes (étranglement) annonce :",
+    "options": ["Un dépassement interdit", "Un pont étroit", "Un rétrécissement de chaussée", "Une zone de travaux"],
     "bonneReponse": "Un rétrécissement de chaussée",
-    "explication": "A4 indique que la largeur de la route diminue. Adaptez la vitesse et la position.",
+    "explication": "Ce panneau indique que la largeur de la route va diminuer. Adaptez votre vitesse et votre position latérale.",
     "image": "/icons/panneaux/A4.svg"
   },
   {
     "id": "PDG009",
     "categorie": "Panneaux de danger",
-    "enonce": "Le panneau A5 (dos d'âne) vous oblige à :",
-    "options": [
-      "Klaxonner",
-      "Freiner brusquement",
-      "Réduire fortement la vitesse avant l'obstacle",
-      "Doubler rapidement"
-    ],
+    "enonce": "Un triangle rouge représentant un dos d'âne vous impose de :",
+    "options": ["Klaxonner pour avertir les autres", "Accélérer pour franchir l'obstacle", "Réduire fortement la vitesse avant l'obstacle", "Changer de voie"],
     "bonneReponse": "Réduire fortement la vitesse avant l'obstacle",
-    "explication": "Un dos d'âne peut endommager la mécanique si abordé trop vite. Ralentissez avant l'obstacle.",
+    "explication": "Un dos d'âne franchi trop vite peut endommager le véhicule et en faire perdre le contrôle. Ralentissez avant l'obstacle, pas dessus.",
     "image": "/icons/panneaux/A5.svg"
   },
   {
     "id": "PDG010",
     "categorie": "Panneaux de danger",
-    "enonce": "Le panneau A9a (PN sans barrières) vous impose :",
-    "options": [
-      "De passer à 30 km/h",
-      "De klaxonner et passer",
-      "De marquer l'arrêt et regarder des deux côtés",
-      "De chercher un autre itinéraire"
-    ],
-    "bonneReponse": "De marquer l'arrêt et regarder des deux côtés",
-    "explication": "Sans barrières, le conducteur est seul garant de la sécurité. Arrêtez-vous et vérifiez que la voie est libre.",
+    "enonce": "Un passage à niveau sans barrières vous impose en priorité de :",
+    "options": ["Passer à 30 km/h maximum", "Klaxonner et continuer", "Marquer l'arrêt et vérifier des deux côtés", "Chercher une voie alternative"],
+    "bonneReponse": "Marquer l'arrêt et vérifier des deux côtés",
+    "explication": "Sans barrières, vous êtes seul garant de votre sécurité. Arrêtez-vous et assurez-vous qu'aucun train n'est en vue ni audible.",
     "image": "/icons/panneaux/A9a.svg"
   },
   {
     "id": "PIN001",
     "categorie": "Panneaux d'interdiction",
-    "enonce": "Un panneau avec une bande blanche horizontale sur fond rouge signifie :",
-    "options": [
-      "Route prioritaire",
-      "Fin de sens interdit",
-      "Sens interdit",
-      "Vitesse limitée"
-    ],
+    "enonce": "Un panneau rond rouge avec une bande horizontale blanche signifie :",
+    "options": ["Route prioritaire", "Fin de sens interdit", "Sens interdit", "Limitation de vitesse"],
     "bonneReponse": "Sens interdit",
-    "explication": "B1 interdit formellement de s'engager dans cette direction. Faites demi-tour ou trouvez une autre voie.",
+    "explication": "Ce panneau interdit formellement de s'engager dans cette direction. Faites demi-tour ou trouvez une autre voie.",
     "image": "/icons/panneaux/B1.svg"
   },
   {
     "id": "PIN002",
     "categorie": "Panneaux d'interdiction",
-    "enonce": "Le panneau B14 \"50\" dans un cercle rouge indique :",
-    "options": [
-      "Vitesse minimale de 50 km/h",
-      "Péage à 50 m",
-      "Vitesse maximale de 50 km/h",
-      "Fin de zone limitée à 50 km/h"
-    ],
+    "enonce": "Un panneau rond rouge avec le chiffre 50 au centre indique :",
+    "options": ["Vitesse minimale de 50 km/h", "Péage à 50 km", "Vitesse maximale de 50 km/h", "Fin de zone limitée à 50 km/h"],
     "bonneReponse": "Vitesse maximale de 50 km/h",
-    "explication": "B14 est une limitation de vitesse. \"50\" en rouge signifie ne pas dépasser 50 km/h — la limite légale en agglomération.",
+    "explication": "Ce panneau de limitation de vitesse interdit de dépasser 50 km/h. C'est la limite légale standard en agglomération.",
     "image": "/icons/panneaux/B14.svg"
   },
   {
     "id": "PIN003",
     "categorie": "Panneaux d'interdiction",
-    "enonce": "Deux voitures avec dépassement barrées d'une diagonale rouge signifie :",
-    "options": [
-      "Voie réservée aux lents",
-      "Dépassement interdit",
-      "Demi-tour interdit",
-      "Croisement interdit"
-    ],
+    "enonce": "Un panneau rond rouge représentant deux voitures côte à côte avec une diagonale rouge signifie :",
+    "options": ["Voie réservée aux véhicules lents", "Dépassement interdit", "Demi-tour interdit", "Croisement interdit"],
     "bonneReponse": "Dépassement interdit",
-    "explication": "B9 interdit tout dépassement jusqu'au prochain carrefour ou panneau B10.",
+    "explication": "Ce panneau interdit tout dépassement jusqu'au prochain carrefour ou jusqu'au panneau de fin d'interdiction.",
     "image": "/icons/panneaux/B9.svg"
   },
   {
     "id": "PIN004",
     "categorie": "Panneaux d'interdiction",
-    "enonce": "Le panneau B6 (P barré) autorise-t-il l'arrêt bref avec conducteur ?",
-    "options": [
-      "Non, aucune immobilisation",
-      "Oui, l'arrêt momentané avec conducteur est toléré",
-      "Oui, jusqu'à 30 minutes",
-      "Non, même l'arrêt au feu est interdit"
-    ],
-    "bonneReponse": "Oui, l'arrêt momentané avec conducteur est toléré",
-    "explication": "B6 interdit le stationnement mais tolère l'arrêt bref (< 3 min) avec conducteur prêt à repartir.",
+    "enonce": "Le panneau d'interdiction de stationnement autorise-t-il un arrêt bref avec conducteur au volant ?",
+    "options": ["Non, toute immobilisation est interdite", "Oui, l'arrêt bref avec conducteur prêt à repartir est toléré", "Oui, jusqu'à 30 minutes", "Non, même l'arrêt au feu rouge est concerné"],
+    "bonneReponse": "Oui, l'arrêt bref avec conducteur prêt à repartir est toléré",
+    "explication": "Ce panneau interdit le stationnement mais tolère l'arrêt momentané (moins de 3 min) avec le conducteur au volant, prêt à repartir immédiatement.",
     "image": "/icons/panneaux/B6.svg"
   },
   {
     "id": "PIN005",
     "categorie": "Panneaux d'interdiction",
-    "enonce": "Le panneau B15 \"90\" (chiffre barré) signifie :",
-    "options": [
-      "Limitation à 90 km/h",
-      "Fin de la limitation de 90 km/h",
-      "Début d'une zone 90",
-      "Péage à 90 km"
-    ],
-    "bonneReponse": "Fin de la limitation de 90 km/h",
-    "explication": "B15 lève l'interdiction du B14. La vitesse maximale légale de la voie s'applique à nouveau.",
+    "enonce": "Un panneau rond rouge affichant un chiffre barré d'une diagonale noire signifie :",
+    "options": ["Une nouvelle limitation de vitesse", "La fin de la limitation de vitesse précédente", "Une vitesse minimale obligatoire", "Un péage à proximité"],
+    "bonneReponse": "La fin de la limitation de vitesse précédente",
+    "explication": "Ce panneau lève l'interdiction de la limitation précédente. La vitesse maximale légale de la voie s'applique à nouveau.",
     "image": "/icons/panneaux/B15.svg"
   },
   {
     "id": "PIN006",
     "categorie": "Panneaux d'interdiction",
-    "enonce": "Le panneau B7 (double bande rouge) interdit :",
-    "options": [
-      "Le stationnement uniquement",
-      "L'arrêt uniquement",
-      "À la fois l'arrêt et le stationnement",
-      "L'arrêt de nuit uniquement"
-    ],
+    "enonce": "Un panneau rond rouge avec deux bandes obliques rouges croisées interdit :",
+    "options": ["Le stationnement uniquement", "L'arrêt uniquement", "À la fois l'arrêt et le stationnement", "L'arrêt de nuit uniquement"],
     "bonneReponse": "À la fois l'arrêt et le stationnement",
-    "explication": "B7 est une interdiction absolue : vous ne pouvez même pas vous arrêter brièvement. Contrairement à B6 qui tolère l'arrêt avec conducteur.",
+    "explication": "Ce panneau est une interdiction absolue d'immobilisation. Contrairement au panneau de stationnement interdit, il ne tolère aucun arrêt, même avec conducteur.",
     "image": "/icons/panneaux/B7.svg"
   },
   {
     "id": "PIN007",
     "categorie": "Panneaux d'interdiction",
-    "enonce": "Le panneau B17 (U barré) interdit :",
-    "options": [
-      "Le virage dangereux",
-      "Le demi-tour",
-      "Le dépassement",
-      "Le retournement en marche arrière"
-    ],
+    "enonce": "Un panneau rond rouge avec un U barré interdit :",
+    "options": ["Un virage serré", "Le demi-tour", "Le dépassement", "Le ralentissement brusque"],
     "bonneReponse": "Le demi-tour",
-    "explication": "B17 interdit le demi-tour là où cette manœuvre serait dangereuse.",
+    "explication": "Ce panneau interdit le demi-tour à l'endroit où cette manœuvre serait dangereuse ou perturbatrice pour la circulation.",
     "image": "/icons/panneaux/B17.svg"
   },
   {
     "id": "PIN008",
     "categorie": "Panneaux d'interdiction",
-    "enonce": "Le panneau B5 \"4m50\" dans un cercle rouge concerne :",
-    "options": [
-      "La largeur maximale",
-      "La longueur du convoi",
-      "La hauteur maximale autorisée",
-      "La charge par essieu"
-    ],
+    "enonce": "Un panneau rond rouge affichant '4m50' concerne :",
+    "options": ["La largeur maximale autorisée", "La longueur maximale du convoi", "La hauteur maximale autorisée", "La charge maximale par essieu"],
     "bonneReponse": "La hauteur maximale autorisée",
-    "explication": "B5 (hauteur maximale) indique la hauteur limite des véhicules admis. Consultez la carte grise.",
+    "explication": "Ce panneau interdit aux véhicules dépassant 4m50 de hauteur de s'engager. Consultez votre carte grise pour connaître la hauteur de votre véhicule.",
     "image": "/icons/panneaux/B5.svg"
   },
   {
     "id": "PIN009",
     "categorie": "Panneaux d'interdiction",
-    "enonce": "Le panneau B10 (barre noire sur deux voitures) signifie :",
-    "options": [
-      "Fin d'interdiction de dépasser",
-      "Dépassement interdit sur 100 m",
-      "Dépassement autorisé à droite",
-      "Zone surveillée"
-    ],
-    "bonneReponse": "Fin d'interdiction de dépasser",
-    "explication": "B10 lève l'interdiction du B9. Le dépassement redevient possible si conditions réunies.",
+    "enonce": "Un panneau rond affichant deux voitures avec une barre noire (sans bordure rouge) signifie :",
+    "options": ["Fin de l'interdiction de dépasser", "Dépassement interdit sur 100 m", "Dépassement autorisé à droite", "Zone de contrôle de vitesse"],
+    "bonneReponse": "Fin de l'interdiction de dépasser",
+    "explication": "Ce panneau lève l'interdiction de dépasser. Le dépassement redevient possible si toutes les conditions de sécurité sont réunies.",
     "image": "/icons/panneaux/B10.svg"
   },
   {
     "id": "PIN010",
     "categorie": "Panneaux d'interdiction",
-    "enonce": "La limitation à 30 km/h (panneau B11) s'applique généralement :",
-    "options": [
-      "Sur les routes nationales",
-      "Dans les zones résidentielles, scolaires ou à forte présence piétonne",
-      "Sur les voies express",
-      "Uniquement de nuit"
-    ],
+    "enonce": "Une limitation à 30 km/h s'applique généralement :",
+    "options": ["Sur les routes nationales", "Dans les zones résidentielles, scolaires ou à forte présence piétonne", "Sur les voies express", "Uniquement la nuit"],
     "bonneReponse": "Dans les zones résidentielles, scolaires ou à forte présence piétonne",
-    "explication": "Les zones 30 visent à protéger les usagers vulnérables. La vitesse réduite diminue drastiquement la gravité des accidents.",
+    "explication": "Les zones 30 visent à protéger les usagers vulnérables. À 30 km/h, le risque de blessures graves en cas d'accident est considérablement réduit.",
     "image": "/icons/panneaux/B11.svg"
   },
   {
     "id": "PPR001",
     "categorie": "Panneaux de priorité",
-    "enonce": "Un losange jaune sur fond blanc représente :",
-    "options": [
-      "Un panneau de travaux",
-      "La route prioritaire (AB1)",
-      "Un panneau d'indication",
-      "La fin de route prioritaire"
-    ],
-    "bonneReponse": "La route prioritaire (AB1)",
-    "explication": "AB1 (losange jaune) : vous êtes sur une route prioritaire. Les véhicules des voies secondaires doivent vous céder le passage.",
+    "enonce": "Un losange jaune posé sur sa pointe signifie :",
+    "options": ["Zone de travaux à venir", "Vous êtes sur une route prioritaire", "Un panneau d'information", "La fin de la route prioritaire"],
+    "bonneReponse": "Vous êtes sur une route prioritaire",
+    "explication": "Ce panneau indique que vous bénéficiez de la priorité sur toutes les voies secondaires. Les véhicules des voies transversales doivent vous céder le passage.",
     "image": "/icons/panneaux/AB1.svg"
   },
   {
     "id": "PPR002",
     "categorie": "Panneaux de priorité",
-    "enonce": "Le panneau AB1 barré d'une bande noire signifie :",
-    "options": [
-      "Vitesse limitée",
-      "Route sans priorité",
-      "Fin de route prioritaire (AB2)",
-      "Priorité aux piétons"
-    ],
-    "bonneReponse": "Fin de route prioritaire (AB2)",
-    "explication": "AB2 annonce la fin de la route prioritaire. La règle de priorité à droite s'applique de nouveau.",
+    "enonce": "Le losange jaune barré d'une bande noire transversale signifie :",
+    "options": ["Limitation de vitesse à venir", "Fin de la route prioritaire", "Priorité aux piétons", "Début d'une zone 30"],
+    "bonneReponse": "Fin de la route prioritaire",
+    "explication": "Ce panneau annonce la fin de la route prioritaire. La règle de priorité à droite s'applique à nouveau aux carrefours.",
     "image": "/icons/panneaux/AB2.svg"
   },
   {
     "id": "PPR003",
     "categorie": "Panneaux de priorité",
-    "enonce": "Un triangle blanc pointé vers le bas avec liseré rouge signifie :",
-    "options": [
-      "STOP obligatoire",
-      "Cédez le passage (AB3)",
-      "Priorité à droite renforcée",
-      "Sens interdit"
-    ],
-    "bonneReponse": "Cédez le passage (AB3)",
-    "explication": "AB3 vous oblige à céder le passage. Ralentissez, arrêtez-vous si un véhicule arrive.",
+    "enonce": "Un triangle blanc pointé vers le bas, bordé de rouge, signifie :",
+    "options": ["Arrêt complet obligatoire", "Cédez le passage", "Priorité à droite renforcée", "Sens interdit"],
+    "bonneReponse": "Cédez le passage",
+    "explication": "Ce panneau vous oblige à réduire la vitesse et à laisser passer les usagers de la voie principale. L'arrêt complet n'est requis que si un véhicule arrive.",
     "image": "/icons/panneaux/AB3.svg"
   },
   {
     "id": "PPR004",
     "categorie": "Panneaux de priorité",
-    "enonce": "Un octogone rouge avec \"STOP\" en blanc impose :",
-    "options": [
-      "Un ralentissement à 30 km/h",
-      "Un arrêt complet à la ligne (AB4)",
-      "Une priorité absolue à droite",
-      "Un klaxon obligatoire"
-    ],
-    "bonneReponse": "Un arrêt complet à la ligne (AB4)",
-    "explication": "AB4 (STOP) impose un arrêt total, même si la route semble libre. Ne pas s'arrêter est une infraction grave.",
+    "enonce": "Un panneau octogonal rouge avec la mention STOP en blanc impose :",
+    "options": ["Un ralentissement à 30 km/h", "Un arrêt complet obligatoire à la ligne", "Une priorité absolue à droite", "Un signal sonore obligatoire"],
+    "bonneReponse": "Un arrêt complet obligatoire à la ligne",
+    "explication": "Le STOP impose un arrêt total, roues immobiles, même si la voie semble libre. Ne pas s'arrêter est une infraction grave.",
     "image": "/icons/panneaux/AB4.svg"
   },
   {
     "id": "PPR005",
     "categorie": "Panneaux de priorité",
-    "enonce": "Sans signalisation, un véhicule vient de votre droite. Qui passe ?",
-    "options": [
-      "Vous, car vous roulez plus vite",
-      "Le véhicule de droite",
-      "Le véhicule le plus grand",
-      "Vous, car votre route est plus large"
-    ],
-    "bonneReponse": "Le véhicule de droite",
-    "explication": "La règle de priorité à droite s'impose en l'absence de signalisation. Tout véhicule arrivant par votre droite passe en premier.",
+    "enonce": "Sans aucune signalisation à un carrefour, un véhicule arrive de votre droite. Qui est prioritaire ?",
+    "options": ["Vous, car vous roulez plus vite", "Le véhicule venant de droite", "Le véhicule le plus grand", "Vous, car votre route est plus large"],
+    "bonneReponse": "Le véhicule venant de droite",
+    "explication": "La règle de priorité à droite s'applique à tout carrefour sans signalisation. Tout véhicule arrivant par votre droite passe en premier.",
     "image": "/icons/panneaux/AB3.svg"
   },
   {
     "id": "PPR006",
     "categorie": "Panneaux de priorité",
-    "enonce": "Au STOP, où exactement devez-vous vous arrêter ?",
-    "options": [
-      "En face du panneau STOP",
-      "Au niveau de la ligne blanche transversale",
-      "3 m avant le panneau",
-      "Là où la visibilité est la meilleure"
-    ],
-    "bonneReponse": "Au niveau de la ligne blanche transversale",
-    "explication": "L'arrêt se fait au niveau de la ligne d'arrêt blanche. En l'absence de ligne, en face du panneau.",
+    "enonce": "Où exactement devez-vous vous arrêter face à un panneau STOP ?",
+    "options": ["En face du panneau STOP", "Au niveau de la ligne d'arrêt blanche", "3 mètres avant la ligne", "À l'endroit où la visibilité est la meilleure"],
+    "bonneReponse": "Au niveau de la ligne d'arrêt blanche",
+    "explication": "L'arrêt s'effectue au niveau de la ligne d'arrêt transversale. En l'absence de ligne peinte, l'arrêt se fait en face du panneau.",
     "image": "/icons/panneaux/AB4.svg"
   },
   {
     "id": "PPR007",
     "categorie": "Panneaux de priorité",
-    "enonce": "Sur route prioritaire AB1, un véhicule débouche à votre droite. Vous :",
-    "options": [
-      "Cédez le passage (priorité à droite)",
-      "Continuez, vous avez la priorité",
-      "Klaxonnez et ralentissez",
-      "Vous arrêtez par prudence"
-    ],
+    "enonce": "Sur une route prioritaire, un véhicule débouche d'une voie secondaire à votre droite. Vous :",
+    "options": ["Cédez le passage car il vient de droite", "Continuez, vous avez la priorité", "Ralentissez par précaution", "Vous arrêtez pour vérifier"],
     "bonneReponse": "Continuez, vous avez la priorité",
-    "explication": "AB1 vous confère la priorité sur tous les débouchés secondaires. La priorité à droite ne s'applique pas sur route prioritaire.",
+    "explication": "Sur une route prioritaire, la règle de priorité à droite ne s'applique pas. Les usagers des voies secondaires doivent vous céder le passage.",
     "image": "/icons/panneaux/AB1.svg"
   },
   {
     "id": "PPR008",
     "categorie": "Panneaux de priorité",
-    "enonce": "Une ambulance en intervention approche. Vous devez :",
-    "options": [
-      "Accélérer pour libérer la voie",
-      "Vous arrêter sur le côté droit",
-      "Continuer normalement",
-      "Klaxonner pour avertir"
-    ],
-    "bonneReponse": "Vous arrêter sur le côté droit",
-    "explication": "Les véhicules d'urgence en intervention ont la priorité absolue. Rabattez-vous à droite et arrêtez-vous.",
+    "enonce": "Un véhicule d'urgence en intervention (gyrophare et sirène) approche en sens inverse. Vous devez :",
+    "options": ["Accélérer pour libérer la voie", "Vous rabattre à droite et vous arrêter", "Continuer normalement", "Allumer vos feux de détresse"],
+    "bonneReponse": "Vous rabattre à droite et vous arrêter",
+    "explication": "Les véhicules d'urgence en mission ont la priorité absolue. Serrez à droite, réduisez la vitesse et arrêtez-vous pour leur laisser le passage.",
     "image": "/icons/panneaux/AB1.svg"
   },
   {
     "id": "RES001",
     "categorie": "Restrictions (hauteur/largeur/poids)",
-    "enonce": "Le panneau B3 \"3,5 t\" dans un cercle rouge indique :",
-    "options": [
-      "Vitesse max pour camions",
-      "Tonnage maximum autorisé (PTAC)",
-      "Charge par essieu",
-      "Poids à vide"
-    ],
-    "bonneReponse": "Tonnage maximum autorisé (PTAC)",
-    "explication": "B3 interdit aux véhicules dont le PTAC dépasse 3,5 t. Il protège les ponts et chaussées fragiles.",
+    "enonce": "Un panneau rond rouge affichant '3,5 t' indique :",
+    "options": ["La vitesse maximale pour les poids lourds", "Le tonnage maximal autorisé (PTAC)", "La charge maximale par essieu", "Le poids à vide du véhicule"],
+    "bonneReponse": "Le tonnage maximal autorisé (PTAC)",
+    "explication": "Ce panneau interdit aux véhicules dont le poids total autorisé en charge dépasse 3,5 tonnes. Il protège les ponts et chaussées fragiles.",
     "image": "/icons/panneaux/B3.svg"
   },
   {
     "id": "RES002",
     "categorie": "Restrictions (hauteur/largeur/poids)",
-    "enonce": "Le panneau B5 \"4m50\" concerne :",
-    "options": [
-      "La largeur maximale",
-      "La longueur du véhicule",
-      "La hauteur maximale autorisée",
-      "La distance d'arrêt"
-    ],
-    "bonneReponse": "La hauteur maximale autorisée",
-    "explication": "B5 (hauteur max) interdit aux véhicules dépassant cette hauteur. Consultez la carte grise.",
-    "image": "/icons/panneaux/B5.svg"
+    "enonce": "Un panneau rond rouge affichant '2m50' concerne :",
+    "options": ["La distance de sécurité minimale", "La largeur maximale autorisée", "La hauteur minimale requise", "La longueur maximale du véhicule"],
+    "bonneReponse": "La largeur maximale autorisée",
+    "explication": "Ce panneau interdit aux véhicules plus larges que 2m50 de s'engager sur cette voie. Cela protège les ouvrages d'art et passages étroits.",
+    "image": "/icons/panneaux/B4.svg"
   },
   {
     "id": "RES003",
     "categorie": "Restrictions (hauteur/largeur/poids)",
-    "enonce": "Le panneau B4 \"2m50\" indique :",
-    "options": [
-      "La distance de sécurité",
-      "La largeur maximale autorisée",
-      "La hauteur minimale requise",
-      "La limite de poids"
-    ],
-    "bonneReponse": "La largeur maximale autorisée",
-    "explication": "B4 (largeur max) interdit aux véhicules plus larges que la valeur indiquée de s'engager.",
-    "image": "/icons/panneaux/B4.svg"
+    "enonce": "La charge maximale autorisée par essieu simple sur les routes sénégalaises est de :",
+    "options": ["8 tonnes", "10 tonnes", "11,5 tonnes", "13 tonnes"],
+    "bonneReponse": "11,5 tonnes",
+    "explication": "La réglementation sénégalaise, alignée sur les normes CEDEAO, fixe la charge maximale par essieu simple à 11,5 tonnes.",
+    "image": "/icons/panneaux/B3.svg"
   },
   {
     "id": "RES004",
     "categorie": "Restrictions (hauteur/largeur/poids)",
-    "enonce": "La charge maximale par essieu simple sur les routes sénégalaises est :",
-    "options": [
-      "8 tonnes",
-      "10 tonnes",
-      "11,5 tonnes",
-      "13 tonnes"
-    ],
-    "bonneReponse": "11,5 tonnes",
-    "explication": "La réglementation sénégalaise (normes CEDEAO) fixe à 11,5 tonnes la charge par essieu simple.",
+    "enonce": "Un camion de 20 tonnes approche d'un pont signalé '16 t max'. Que doit-il faire ?",
+    "options": ["Passer prudemment à vitesse réduite", "Prévenir les autres conducteurs", "Emprunter un itinéraire alternatif", "S'arrêter et attendre que la voie soit libre"],
+    "bonneReponse": "Emprunter un itinéraire alternatif",
+    "explication": "La restriction de tonnage est absolue. Un véhicule trop lourd peut provoquer l'effondrement du pont. Il est impératif de contourner l'ouvrage.",
     "image": "/icons/panneaux/B3.svg"
   },
   {
     "id": "RES005",
     "categorie": "Restrictions (hauteur/largeur/poids)",
-    "enonce": "Un camion de 20 t approche d'un pont signalé \"16 t max\". Il doit :",
-    "options": [
-      "Passer prudemment à vitesse réduite",
-      "Prévenir les autres",
-      "Trouver un itinéraire alternatif",
-      "Klaxonner avant de traverser"
-    ],
-    "bonneReponse": "Trouver un itinéraire alternatif",
-    "explication": "La limitation de tonnage est absolue. Un véhicule trop lourd peut provoquer l'effondrement. Il faut impérativement un autre itinéraire.",
-    "image": "/icons/panneaux/B3.svg"
+    "enonce": "Où trouver la hauteur exacte d'un poids lourd pour vérifier les restrictions de gabarit ?",
+    "options": ["En estimant à l'œil", "Dans la carte grise (certificat d'immatriculation)", "En demandant au chargeur", "En mesurant sur place avant chaque trajet"],
+    "bonneReponse": "Dans la carte grise (certificat d'immatriculation)",
+    "explication": "Toutes les dimensions réglementaires du véhicule figurent dans la carte grise. Le conducteur doit les connaître avant tout trajet.",
+    "image": "/icons/panneaux/B5.svg"
   },
   {
     "id": "RES006",
     "categorie": "Restrictions (hauteur/largeur/poids)",
-    "enonce": "Où trouver la hauteur exacte d'un poids lourd ?",
-    "options": [
-      "En estimant visuellement",
-      "Dans la carte grise (certificat d'immatriculation)",
-      "En demandant aux autres",
-      "En mesurant sur place"
-    ],
-    "bonneReponse": "Dans la carte grise (certificat d'immatriculation)",
-    "explication": "Toutes les dimensions réglementaires figurent dans la carte grise. Le conducteur doit impérativement les connaître.",
-    "image": "/icons/panneaux/B5.svg"
+    "enonce": "Un panneau de restriction de longueur affichant '12 m' signifie :",
+    "options": ["La distance d'arrêt maximale", "La longueur maximale des véhicules autorisés", "La longueur du tronçon", "La distance minimale entre véhicules"],
+    "bonneReponse": "La longueur maximale des véhicules autorisés",
+    "explication": "Ce panneau interdit les ensembles routiers dont la longueur totale dépasse 12 mètres, notamment les camions avec remorque.",
+    "image": "/icons/panneaux/B4.svg"
   },
   {
     "id": "RES007",
     "categorie": "Restrictions (hauteur/largeur/poids)",
-    "enonce": "Un panneau de restriction de longueur \"12 m\" signifie :",
-    "options": [
-      "Distance d'arrêt",
-      "Longueur maximale des véhicules autorisés",
-      "Longueur du tronçon",
-      "Distance minimale entre véhicules"
-    ],
-    "bonneReponse": "Longueur maximale des véhicules autorisés",
-    "explication": "La restriction de longueur interdit les ensembles dont la longueur totale dépasse la valeur indiquée.",
-    "image": "/icons/panneaux/B4.svg"
+    "enonce": "Pourquoi les ponts font-ils l'objet de restrictions de charge ?",
+    "options": ["Pour limiter les embouteillages", "Pour protéger la structure du pont et la sécurité de tous", "Pour réduire la consommation de carburant", "Pour faciliter le travail des agents de contrôle"],
+    "bonneReponse": "Pour protéger la structure du pont et la sécurité de tous",
+    "explication": "Un pont soumis à une charge supérieure à sa capacité peut se déformer ou s'effondrer. Ces restrictions protègent l'ouvrage et tous ses usagers.",
+    "image": "/icons/panneaux/B3.svg"
   },
   {
     "id": "RES008",
     "categorie": "Restrictions (hauteur/largeur/poids)",
-    "enonce": "La restriction de charge d'un pont protège principalement :",
-    "options": [
-      "Les automobilistes",
-      "La structure du pont et la sécurité de tous",
-      "La flore environnante",
-      "Les piétons uniquement"
-    ],
-    "bonneReponse": "La structure du pont et la sécurité de tous",
-    "explication": "Un pont soumis à une charge excessive peut s'effondrer. Les restrictions garantissent la sécurité de l'ouvrage.",
-    "image": "/icons/panneaux/B3.svg"
+    "enonce": "Un conducteur de bus de 3m95 de hauteur ignore un panneau de restriction de gabarit à 3m80. Quel est le risque principal ?",
+    "options": ["Une simple amende administrative", "Un choc violent contre un pont ou un viaduc", "Un excès de vitesse automatique", "La perte du permis de conduire uniquement"],
+    "bonneReponse": "Un choc violent contre un pont ou un viaduc",
+    "explication": "Ignorer une restriction de hauteur expose à un choc contre un ouvrage d'art (pont, viaduc, tunnel), pouvant blesser gravement les passagers et endommager l'infrastructure.",
+    "image": "/icons/panneaux/B5.svg"
   },
   {
     "id": "PAI001",
     "categorie": "Priorité aux intersections",
-    "enonce": "Sans signalisation, un véhicule vient de votre gauche. Qui passe en premier ?",
-    "options": [
-      "Le véhicule de gauche",
-      "Vous",
-      "Le premier arrivé",
-      "Le plus rapide"
-    ],
+    "enonce": "À un carrefour sans signalisation, un véhicule arrive de votre gauche. Qui passe en premier ?",
+    "options": ["Le véhicule de gauche", "Vous", "Le premier arrivé", "Le plus rapide"],
     "bonneReponse": "Vous",
-    "explication": "Priorité à droite : ce véhicule est à votre gauche, donc vous êtes à SA droite. C'est vous qui avez la priorité.",
+    "explication": "La priorité est accordée aux véhicules venant de droite. Ce véhicule est à votre gauche, vous êtes donc à sa droite : c'est vous qui êtes prioritaire.",
     "image": "/icons/panneaux/AB3.svg"
   },
   {
     "id": "PAI002",
     "categorie": "Priorité aux intersections",
-    "enonce": "Vous sortez d'un parking privé sur la voie publique. Qui est prioritaire ?",
-    "options": [
-      "Vous, avec le clignotant",
-      "Tous les usagers de la voie publique",
-      "Vous, si la route est libre",
-      "Uniquement les piétons"
-    ],
+    "enonce": "Vous sortez d'un parking privé pour rejoindre la voie publique. Qui est prioritaire sur vous ?",
+    "options": ["Vous, avec le clignotant activé", "Tous les usagers de la voie publique", "Vous, si la chaussée est libre", "Uniquement les piétons"],
     "bonneReponse": "Tous les usagers de la voie publique",
-    "explication": "En insertion depuis une voie privée, vous devez céder à tous les usagers de la voie publique.",
+    "explication": "En sortant d'une voie privée, vous devez céder le passage à tous les usagers de la voie publique : véhicules, cyclistes et piétons.",
     "image": "/icons/panneaux/AB3.svg"
   },
   {
     "id": "PAI003",
     "categorie": "Priorité aux intersections",
-    "enonce": "Une ambulance en urgence approche par derrière. Vous devez :",
-    "options": [
-      "Accélérer",
-      "Vous arrêter sur le côté droit",
-      "Continuer normalement",
-      "Freiner brusquement"
-    ],
-    "bonneReponse": "Vous arrêter sur le côté droit",
-    "explication": "Les véhicules d'urgence en intervention ont la priorité absolue. Rabattez-vous à droite.",
-    "image": "/icons/panneaux/AB1.svg"
+    "enonce": "À un carrefour en T sans signalisation, vous êtes sur la voie qui se termine. Vous devez :",
+    "options": ["Passer en premier", "Vous insérer rapidement dans le trafic", "Céder le passage aux véhicules de la route principale", "Klaxonner pour signaler votre présence"],
+    "bonneReponse": "Céder le passage aux véhicules de la route principale",
+    "explication": "La voie qui se termine n'a aucune priorité. Les véhicules circulant sur la route principale passent en premier.",
+    "image": "/icons/panneaux/AB3.svg"
   },
   {
     "id": "PAI004",
     "categorie": "Priorité aux intersections",
-    "enonce": "À un carrefour en T sans signalisation, vous êtes sur l'impasse. Vous :",
-    "options": [
-      "Passez en premier",
-      "Klaxonnez et passez",
-      "Cédez le passage aux véhicules de la route principale",
-      "Accélérez pour vous insérer"
-    ],
-    "bonneReponse": "Cédez le passage aux véhicules de la route principale",
-    "explication": "La voie qui se termine n'a pas de priorité. Laissez passer les véhicules de la route principale.",
-    "image": "/icons/panneaux/AB3.svg"
+    "enonce": "Sur route prioritaire, la règle de priorité à droite s'applique-t-elle aux carrefours secondaires ?",
+    "options": ["Oui, toujours", "Non, la priorité de route prévaut", "Oui, uniquement la nuit", "Non, uniquement en agglomération"],
+    "bonneReponse": "Non, la priorité de route prévaut",
+    "explication": "Sur une route prioritaire, vous conservez votre priorité sur toutes les voies secondaires qui y débouchent, quelle que soit leur position.",
+    "image": "/icons/panneaux/AB1.svg"
   },
   {
     "id": "PAI005",
     "categorie": "Priorité aux intersections",
-    "enonce": "Sur route prioritaire AB1, la règle de priorité à droite s'applique-t-elle ?",
-    "options": [
-      "Oui, toujours",
-      "Non, la priorité AB1 prévaut",
-      "Oui, la nuit",
-      "Non, uniquement en agglomération"
-    ],
-    "bonneReponse": "Non, la priorité AB1 prévaut",
-    "explication": "Sur une route prioritaire, vous avez la priorité sur toutes les routes secondaires, droite comme gauche.",
-    "image": "/icons/panneaux/AB1.svg"
+    "enonce": "En zone 30, la règle de priorité à droite est-elle supprimée ?",
+    "options": ["Oui, priorité à gauche en zone 30", "Non, la priorité à droite s'applique normalement", "Oui, passage libre pour tous", "Non, priorité aux cyclistes uniquement"],
+    "bonneReponse": "Non, la priorité à droite s'applique normalement",
+    "explication": "La zone 30 impose une limitation de vitesse mais ne modifie pas les règles de priorité aux carrefours.",
+    "image": "/icons/panneaux/B11.svg"
   },
   {
     "id": "PAI006",
     "categorie": "Priorité aux intersections",
-    "enonce": "En zone 30, la règle de priorité à droite est-elle modifiée ?",
-    "options": [
-      "Oui, priorité à gauche",
-      "Non, priorité à droite comme partout",
-      "Oui, libre passage",
-      "Non, priorité aux vélos"
-    ],
-    "bonneReponse": "Non, priorité à droite comme partout",
-    "explication": "La zone 30 réduit la vitesse mais ne modifie pas les règles de priorité.",
-    "image": "/icons/panneaux/B11.svg"
+    "enonce": "Un piéton s'engage sur un passage protégé alors que vous êtes sur une route prioritaire. Que faites-vous ?",
+    "options": ["Klaxonnez et continuez", "Accélérez pour passer avant lui", "Lui cédez le passage", "Faites appel à un agent"],
+    "bonneReponse": "Lui cédez le passage",
+    "explication": "Les piétons engagés sur un passage protégé ont la priorité absolue, même sur une route prioritaire. Leur sécurité prime sur toute autre règle.",
+    "image": "/icons/panneaux/A12.svg"
   },
   {
     "id": "PAI007",
     "categorie": "Priorité aux intersections",
-    "enonce": "Un piéton traverse alors que vous êtes prioritaire. Vous :",
-    "options": [
-      "Klaxonnez et continuez",
-      "Accélérez",
-      "Lui cédez le passage",
-      "Signalez à un agent"
-    ],
-    "bonneReponse": "Lui cédez le passage",
-    "explication": "Les piétons engagés sur un passage protégé ont la priorité, même sur voie prioritaire.",
-    "image": "/icons/panneaux/A12.svg"
+    "enonce": "À un carrefour complexe en étoile sans signalisation, quel principe s'applique ?",
+    "options": ["Priorité à celui qui arrive le premier", "Priorité à la route la plus large", "Priorité à droite à chaque branche", "Tous les conducteurs s'arrêtent et négocient"],
+    "bonneReponse": "Priorité à droite à chaque branche",
+    "explication": "Dans un carrefour en étoile non réglementé, chaque conducteur vérifie si un véhicule arrive de sa droite avant de s'engager.",
+    "image": "/icons/panneaux/AB3.svg"
   },
   {
     "id": "PAI008",
     "categorie": "Priorité aux intersections",
-    "enonce": "À un carrefour en étoile sans signalisation, le principe est :",
-    "options": [
-      "L'ordre d'arrivée",
-      "Priorité à la plus grande route",
-      "Priorité à droite à chaque branche",
-      "Tous s'arrêtent et négocient"
-    ],
-    "bonneReponse": "Priorité à droite à chaque branche",
-    "explication": "Dans un carrefour complexe, chaque conducteur vérifie s'il y a un véhicule à sa droite avant de s'engager.",
-    "image": "/icons/panneaux/AB3.svg"
+    "enonce": "Une ambulance en intervention approche par l'arrière avec sirène et gyrophare. Vous devez :",
+    "options": ["Accélérer pour dégager la voie", "Vous rabattre à droite et vous arrêter", "Continuer normalement", "Freiner brusquement sur place"],
+    "bonneReponse": "Vous rabattre à droite et vous arrêter",
+    "explication": "Les véhicules d'urgence en service commandé ont la priorité absolue. Rabattez-vous progressivement sur la droite et immobilisez-vous.",
+    "image": "/icons/panneaux/AB1.svg"
   },
   {
     "id": "PAS001",
     "categorie": "Priorité & Arrêt (STOP / Cédez)",
-    "enonce": "Face à un STOP, la voie semble libre. Devez-vous quand même vous arrêter ?",
-    "options": [
-      "Non, si personne n'arrive",
-      "Oui, l'arrêt complet est obligatoire",
-      "Seulement si un véhicule arrive",
-      "Seulement la nuit"
-    ],
+    "enonce": "Face à un STOP, la voie semble totalement libre. Devez-vous quand même vous arrêter ?",
+    "options": ["Non, si personne n'arrive", "Oui, l'arrêt complet est obligatoire", "Seulement si un véhicule est visible", "Seulement de nuit"],
     "bonneReponse": "Oui, l'arrêt complet est obligatoire",
-    "explication": "Le STOP impose un arrêt total, même si aucun véhicule n'est visible. Ne pas s'arrêter est une infraction grave.",
+    "explication": "Le STOP impose un arrêt total et inconditionnel, quelle que soit la visibilité ou l'état de la route. Ne pas s'arrêter est une infraction grave.",
     "image": "/icons/panneaux/AB4.svg"
   },
   {
     "id": "PAS002",
     "categorie": "Priorité & Arrêt (STOP / Cédez)",
-    "enonce": "Le panneau AB3 (cédez le passage) impose-t-il un arrêt systématique ?",
-    "options": [
-      "Oui, comme au STOP",
-      "Non, uniquement si un véhicule arrive",
-      "Non, vous pouvez toujours passer",
-      "Oui, mais seulement la nuit"
-    ],
+    "enonce": "Le panneau Cédez le passage impose-t-il un arrêt systématique comme le STOP ?",
+    "options": ["Oui, dans tous les cas", "Non, uniquement si un véhicule arrive", "Non, vous pouvez toujours passer librement", "Oui, mais seulement de nuit"],
     "bonneReponse": "Non, uniquement si un véhicule arrive",
-    "explication": "Contrairement au STOP, AB3 vous oblige à ralentir et céder si des véhicules arrivent. L'arrêt n'est pas obligatoire si la voie est libre.",
+    "explication": "Contrairement au STOP, le Cédez oblige à ralentir et à céder si des véhicules arrivent. Si la voie est libre, l'arrêt complet n'est pas obligatoire.",
     "image": "/icons/panneaux/AB3.svg"
   },
   {
     "id": "PAS003",
     "categorie": "Priorité & Arrêt (STOP / Cédez)",
-    "enonce": "Après l'arrêt au STOP, dans quel ordre regardez-vous ?",
-    "options": [
-      "Avant, arrière, côtés",
-      "Gauche, droite, gauche",
-      "Droite, gauche, droite",
-      "Uniquement si un bruit se fait entendre"
-    ],
+    "enonce": "Après l'arrêt au STOP, dans quel ordre regardez-vous pour vérifier la sécurité ?",
+    "options": ["Devant, derrière, puis à droite", "Gauche, droite, gauche", "Droite, gauche, droite", "À droite uniquement"],
     "bonneReponse": "Gauche, droite, gauche",
-    "explication": "Gauche-droite-gauche permet d'identifier les véhicules prioritaires les plus rapides. La dernière vérification à gauche est essentielle.",
+    "explication": "L'ordre gauche-droite-gauche permet de détecter les véhicules les plus rapides venant de gauche. La seconde vérification à gauche est cruciale avant de s'engager.",
     "image": "/icons/panneaux/AB4.svg"
   },
   {
     "id": "PAS004",
     "categorie": "Priorité & Arrêt (STOP / Cédez)",
-    "enonce": "La nuit, approchant un STOP sans véhicule visible, vous :",
-    "options": [
-      "Passez, personne n'est là",
-      "Vous arrêtez : l'obligation ne dépend pas des conditions",
-      "Arrêtez seulement si un feu est allumé",
-      "Ralentissez seulement"
-    ],
-    "bonneReponse": "Vous arrêtez : l'obligation ne dépend pas des conditions",
-    "explication": "L'arrêt au STOP est légalement obligatoire de jour comme de nuit. La nuit, la visibilité réduite le rend encore plus indispensable.",
+    "enonce": "La nuit, approchant un STOP sans véhicule visible, que faites-vous ?",
+    "options": ["Passez, personne n'est là", "Vous arrêtez : l'obligation est inconditionnelle", "Arrêtez seulement si un feu est allumé", "Ralentissez simplement"],
+    "bonneReponse": "Vous arrêtez : l'obligation est inconditionnelle",
+    "explication": "L'obligation de s'arrêter au STOP est valable jour et nuit. La nuit, la visibilité réduite rend cet arrêt encore plus indispensable.",
     "image": "/icons/panneaux/AB4.svg"
   },
   {
     "id": "PAS005",
     "categorie": "Priorité & Arrêt (STOP / Cédez)",
-    "enonce": "Ne pas s'arrêter à un STOP au Sénégal entraîne :",
-    "options": [
-      "Un avertissement verbal",
-      "Une amende de 1 000 FCFA",
-      "Une infraction grave : amende et éventuelles sanctions pénales",
-      "Aucune sanction"
-    ],
-    "bonneReponse": "Une infraction grave : amende et éventuelles sanctions pénales",
-    "explication": "Le non-respect du STOP est une infraction grave, sanctionnée par une amende significative et pouvant entraîner des poursuites pénales.",
+    "enonce": "Le non-respect d'un panneau STOP au Sénégal entraîne :",
+    "options": ["Un simple avertissement verbal", "Une petite amende sans conséquence", "Une infraction grave passible d'amende et de sanctions pénales", "Aucune sanction en l'absence d'accident"],
+    "bonneReponse": "Une infraction grave passible d'amende et de sanctions pénales",
+    "explication": "Le non-respect d'un STOP est une infraction grave en droit sénégalais. Elle entraîne une amende significative et peut conduire à des poursuites pénales en cas d'accident.",
     "image": "/icons/panneaux/AB4.svg"
   },
   {
     "id": "PAS006",
     "categorie": "Priorité & Arrêt (STOP / Cédez)",
-    "enonce": "Après votre arrêt au STOP, un piéton traverse. Lui cédez-vous le passage ?",
-    "options": [
-      "Non, votre arrêt était suffisant",
-      "Oui, les piétons engagés sont prioritaires",
-      "Non, la priorité revient au véhicule",
-      "Seulement sur passage protégé marqué"
-    ],
-    "bonneReponse": "Oui, les piétons engagés sont prioritaires",
-    "explication": "Même après l'arrêt au STOP, vous devez céder le passage aux piétons qui traversent.",
+    "enonce": "Vous venez de marquer l'arrêt au STOP. Un piéton traverse devant vous. Que faites-vous ?",
+    "options": ["Avancez, votre arrêt était suffisant", "Patientez : les piétons engagés sont prioritaires", "Avancez lentement en le contournant", "Klaxonnez pour le prévenir"],
+    "bonneReponse": "Patientez : les piétons engagés sont prioritaires",
+    "explication": "Même après l'arrêt réglementaire au STOP, vous devez céder le passage aux piétons qui traversent. L'arrêt ne vous donne pas le droit de vous engager immédiatement.",
     "image": "/icons/panneaux/A12.svg"
   },
   {
     "id": "PAS007",
     "categorie": "Priorité & Arrêt (STOP / Cédez)",
-    "enonce": "La pré-signalisation cédez le passage est placée :",
-    "options": [
-      "Après l'intersection",
-      "À ~150 m et à l'entrée de l'intersection",
-      "Seulement à l'entrée",
-      "À 500 m de l'intersection"
-    ],
-    "bonneReponse": "À ~150 m et à l'entrée de l'intersection",
-    "explication": "La signalisation est doublée : pré-signalisation à ~150 m puis panneau à l'entrée du carrefour. Cela permet d'anticiper.",
-    "image": "/icons/panneaux/AB3.svg"
+    "enonce": "Quelle est la différence principale entre le STOP et le Cédez le passage ?",
+    "options": ["Le STOP s'applique aux camions, le Cédez aux voitures", "Le STOP impose un arrêt systématique ; le Cédez impose de ralentir et céder si nécessaire", "Les deux imposent un arrêt complet", "Ils sont identiques en pratique"],
+    "bonneReponse": "Le STOP impose un arrêt systématique ; le Cédez impose de ralentir et céder si nécessaire",
+    "explication": "STOP = arrêt total obligatoire dans tous les cas. Cédez le passage = ralentir et s'arrêter uniquement si un véhicule prioritaire est en vue.",
+    "image": "/icons/panneaux/AB4.svg"
   },
   {
     "id": "PAS008",
     "categorie": "Priorité & Arrêt (STOP / Cédez)",
-    "enonce": "AB3 en vue, voie libre. Une voiture arrive rapidement de la gauche. Vous :",
-    "options": [
-      "Passez car la voie était libre",
-      "Attendez que cette voiture soit passée",
-      "Accélérez pour passer avant",
-      "Klaxonnez pour qu'elle ralentisse"
-    ],
+    "enonce": "Vous approchez un Cédez le passage, la voie semble libre. Une voiture arrive rapidement de la gauche. Que faites-vous ?",
+    "options": ["Passez car la voie était libre à l'approche", "Attendez que cette voiture soit passée", "Accélérez pour passer avant elle", "Signalez votre présence au klaxon"],
     "bonneReponse": "Attendez que cette voiture soit passée",
-    "explication": "AB3 vous oblige à céder la priorité. Si un véhicule approche, attendez qu'il soit passé.",
+    "explication": "Le Cédez le passage vous oblige à céder dès qu'un véhicule prioritaire approche. La situation peut changer jusqu'au dernier moment : attendez que la voie soit effectivement libre.",
     "image": "/icons/panneaux/AB3.svg"
   },
   {
     "id": "RPG001",
     "categorie": "Rond-point & Giratoire",
-    "enonce": "À l'entrée d'un giratoire, qui a la priorité ?",
-    "options": [
-      "Vous qui entrez",
-      "Les véhicules déjà dans le giratoire",
-      "Le véhicule le plus grand",
-      "Ceux à droite dans le giratoire"
-    ],
-    "bonneReponse": "Les véhicules déjà dans le giratoire",
-    "explication": "Dans un giratoire signalisé AB3, les véhicules circulant à l'intérieur ont la priorité.",
+    "enonce": "À l'entrée d'un giratoire signalisé, qui est prioritaire ?",
+    "options": ["Les véhicules qui entrent", "Les véhicules déjà engagés dans le giratoire", "Le véhicule le plus grand", "Ceux qui circulent à droite dans le giratoire"],
+    "bonneReponse": "Les véhicules déjà engagés dans le giratoire",
+    "explication": "Dans un giratoire signalisé, les véhicules circulant à l'intérieur sont prioritaires sur ceux qui entrent. C'est l'inverse de l'ancienne règle de priorité à droite à l'entrée.",
     "image": "/icons/panneaux/C8.svg"
   },
   {
     "id": "RPG002",
     "categorie": "Rond-point & Giratoire",
     "enonce": "Dans quel sens circule-t-on dans un giratoire au Sénégal ?",
-    "options": [
-      "Sens horaire",
-      "Sens antihoraire",
-      "Au choix",
-      "Alternativement"
-    ],
-    "bonneReponse": "Sens antihoraire",
-    "explication": "Au Sénégal (conduite à droite), les giratoires se parcourent dans le sens antihoraire. L'îlot reste à votre gauche.",
+    "options": ["Dans le sens des aiguilles d'une montre", "Dans le sens inverse des aiguilles d'une montre", "Au choix selon l'espace disponible", "En alternance selon les jours"],
+    "bonneReponse": "Dans le sens inverse des aiguilles d'une montre",
+    "explication": "Au Sénégal (conduite à droite), les giratoires se parcourent dans le sens antihoraire, l'îlot central restant à votre gauche.",
     "image": "/icons/panneaux/C8.svg"
   },
   {
     "id": "RPG003",
     "categorie": "Rond-point & Giratoire",
-    "enonce": "Pour sortir d'un giratoire, quand activez-vous le clignotant droit ?",
-    "options": [
-      "Avant d'entrer",
-      "Dès que vous avez dépassé la sortie précédente",
-      "Uniquement si un autre véhicule est présent",
-      "Ce n'est pas obligatoire"
-    ],
-    "bonneReponse": "Dès que vous avez dépassé la sortie précédente",
-    "explication": "Activez le clignotant droit dès que vous avez dépassé la sortie précédant la vôtre, pour prévenir les conducteurs en attente.",
+    "enonce": "Pour signaler votre sortie d'un giratoire, quand activez-vous le clignotant droit ?",
+    "options": ["Avant d'entrer dans le giratoire", "Dès que vous avez dépassé la sortie précédant la vôtre", "Uniquement si un autre véhicule est présent à l'entrée", "Ce n'est pas obligatoire"],
+    "bonneReponse": "Dès que vous avez dépassé la sortie précédant la vôtre",
+    "explication": "Activez le clignotant droit après avoir dépassé la sortie précédente. Cela prévient les conducteurs en attente à l'entrée que vous allez sortir.",
     "image": "/icons/panneaux/C8.svg"
   },
   {
     "id": "RPG004",
     "categorie": "Rond-point & Giratoire",
-    "enonce": "Est-il autorisé de faire demi-tour dans un giratoire ?",
-    "options": [
-      "Non, toujours interdit",
-      "Oui, c'est l'un des usages légaux",
-      "Oui, si le giratoire est vide",
-      "Seulement avec permission"
-    ],
-    "bonneReponse": "Oui, c'est l'un des usages légaux",
-    "explication": "Le demi-tour dans un giratoire est légalement autorisé. Parcourez presque tout le giratoire pour ressortir en sens inverse.",
+    "enonce": "Est-il légalement autorisé de faire demi-tour dans un giratoire ?",
+    "options": ["Non, c'est toujours interdit", "Oui, c'est l'un des usages légaux du giratoire", "Oui, mais uniquement si le giratoire est vide", "Seulement avec une autorisation"],
+    "bonneReponse": "Oui, c'est l'un des usages légaux du giratoire",
+    "explication": "Le demi-tour dans un giratoire est légalement autorisé. Il suffit de parcourir presque tout le giratoire pour ressortir dans le sens inverse.",
     "image": "/icons/panneaux/C8.svg"
   },
   {
     "id": "RPG005",
     "categorie": "Rond-point & Giratoire",
-    "enonce": "Un giratoire est généralement signalé par :",
-    "options": [
-      "Un STOP",
-      "AB3 (cédez le passage) + C8 (giratoire)",
-      "A7 (giratoire dangereux) uniquement",
-      "Aucune signalisation"
-    ],
-    "bonneReponse": "AB3 (cédez le passage) + C8 (giratoire)",
-    "explication": "Un giratoire est indiqué par C8 (flèches circulaires bleues) à l'approche et AB3 (cédez) à chaque entrée.",
+    "enonce": "Un giratoire est généralement annoncé par quelle combinaison de panneaux ?",
+    "options": ["Un panneau STOP uniquement", "Un panneau Cédez le passage et un panneau de giratoire", "Un triangle de danger uniquement", "Aucune signalisation spécifique"],
+    "bonneReponse": "Un panneau Cédez le passage et un panneau de giratoire",
+    "explication": "Un giratoire est indiqué par un panneau de giratoire (flèches circulaires bleues) à l'approche et un Cédez le passage à chaque entrée.",
     "image": "/icons/panneaux/C8.svg"
   },
   {
     "id": "RPG006",
     "categorie": "Rond-point & Giratoire",
-    "enonce": "Pour quitter à la première ou deuxième sortie, vous prenez :",
-    "options": [
-      "La voie intérieure",
-      "La voie extérieure (droite)",
-      "N'importe quelle voie",
-      "La voie la moins encombrée"
-    ],
+    "enonce": "Pour quitter à la première ou deuxième sortie d'un giratoire, quelle voie prenez-vous à l'entrée ?",
+    "options": ["La voie intérieure", "La voie extérieure (droite)", "N'importe quelle voie", "La voie la moins encombrée"],
     "bonneReponse": "La voie extérieure (droite)",
-    "explication": "Pour les premières sorties, prenez la voie extérieure. Pour les sorties plus loin, prenez la voie intérieure puis déportez-vous vers l'extérieur.",
+    "explication": "Pour les sorties rapprochées, prenez la voie extérieure. Pour les sorties éloignées, prenez la voie intérieure puis déportez-vous vers l'extérieur avant de sortir.",
     "image": "/icons/panneaux/C8.svg"
   },
   {
     "id": "RPG007",
     "categorie": "Rond-point & Giratoire",
-    "enonce": "Un véhicule d'urgence entre dans le giratoire derrière vous. Vous :",
-    "options": [
-      "Accélérez pour sortir",
-      "Vous arrêtez au milieu",
-      "Sortez à la prochaine sortie et vous arrêtez sur le côté",
-      "Continuez normalement"
-    ],
-    "bonneReponse": "Sortez à la prochaine sortie et vous arrêtez sur le côté",
-    "explication": "Ne jamais s'arrêter au milieu d'un giratoire. Quittez-le à la prochaine sortie puis arrêtez-vous sur le côté droit.",
+    "enonce": "Un véhicule d'urgence entre dans le giratoire derrière vous. Quelle est la bonne conduite ?",
+    "options": ["Accélérer pour sortir immédiatement", "S'arrêter au milieu du giratoire", "Quitter le giratoire à la prochaine sortie puis s'arrêter sur le côté", "Continuer normalement"],
+    "bonneReponse": "Quitter le giratoire à la prochaine sortie puis s'arrêter sur le côté",
+    "explication": "Ne jamais s'immobiliser au milieu d'un giratoire. Quittez-le à la prochaine sortie, puis serrez à droite et arrêtez-vous pour libérer le passage.",
     "image": "/icons/panneaux/C8.svg"
   },
   {
     "id": "RPG008",
     "categorie": "Rond-point & Giratoire",
-    "enonce": "À quelle distance commencer à ralentir avant un giratoire à 90 km/h ?",
-    "options": [
-      "Juste à l'entrée",
-      "Entre 50 et 150 m avant",
-      "Seulement si des voitures sont visibles",
-      "Au dernier moment"
-    ],
-    "bonneReponse": "Entre 50 et 150 m avant",
-    "explication": "À 90 km/h, commencez à lever le pied bien avant l'entrée. La conduite anticipée évite les freinages brusques.",
+    "enonce": "À quelle distance devez-vous commencer à ralentir en approchant un giratoire à 90 km/h ?",
+    "options": ["Juste à l'entrée du giratoire", "Entre 50 et 150 mètres avant", "Seulement si des véhicules sont visibles", "Au dernier moment pour ne pas gêner"],
+    "bonneReponse": "Entre 50 et 150 mètres avant",
+    "explication": "À 90 km/h, commencez à lever le pied bien avant l'entrée du giratoire. L'anticipation évite les freinages brusques et permet d'évaluer la situation à l'intérieur.",
     "image": "/icons/panneaux/A7.svg"
   },
   {
     "id": "LDV001",
     "categorie": "Limitation de vitesse",
-    "enonce": "Quelle est la vitesse maximale en agglomération au Sénégal ?",
-    "options": [
-      "30 km/h",
-      "50 km/h",
-      "70 km/h",
-      "90 km/h"
-    ],
+    "enonce": "Quelle est la vitesse maximale autorisée en agglomération au Sénégal ?",
+    "options": ["30 km/h", "50 km/h", "70 km/h", "90 km/h"],
     "bonneReponse": "50 km/h",
-    "explication": "En agglomération, la vitesse maximale est de 50 km/h au Sénégal. Cette limite protège les usagers vulnérables.",
+    "explication": "En agglomération, la vitesse maximale est de 50 km/h au Sénégal. Cette limite protège les piétons et les usagers vulnérables.",
     "image": "/icons/panneaux/B14.svg"
   },
   {
     "id": "LDV002",
     "categorie": "Limitation de vitesse",
-    "enonce": "Quelle est la vitesse maximale sur route nationale hors agglomération ?",
-    "options": [
-      "70 km/h",
-      "80 km/h",
-      "90 km/h",
-      "110 km/h"
-    ],
+    "enonce": "Quelle est la vitesse maximale sur route nationale hors agglomération au Sénégal ?",
+    "options": ["70 km/h", "80 km/h", "90 km/h", "110 km/h"],
     "bonneReponse": "90 km/h",
-    "explication": "Sur les routes nationales hors agglomération au Sénégal, la vitesse maximale est de 90 km/h.",
+    "explication": "Sur les routes nationales hors agglomération, la vitesse maximale est de 90 km/h au Sénégal.",
     "image": "/icons/panneaux/B14c.svg"
   },
   {
     "id": "LDV003",
     "categorie": "Limitation de vitesse",
-    "enonce": "Sur une route à 2×2 voies (voie express) hors agglomération, la limite est :",
-    "options": [
-      "90 km/h",
-      "100 km/h",
-      "110 km/h",
-      "130 km/h"
-    ],
+    "enonce": "Sur une voie express à 2×2 voies hors agglomération, la vitesse maximale est de :",
+    "options": ["90 km/h", "100 km/h", "110 km/h", "130 km/h"],
     "bonneReponse": "110 km/h",
-    "explication": "Sur les voies express au Sénégal (ex. Dakar-Thiès), la vitesse maximale est de 110 km/h.",
+    "explication": "Sur les voies express au Sénégal (comme l'axe Dakar-Thiès), la vitesse maximale est de 110 km/h.",
     "image": "/icons/panneaux/B14c.svg"
   },
   {
     "id": "LDV004",
     "categorie": "Limitation de vitesse",
-    "enonce": "Par temps de pluie, la vitesse sur route nationale hors agglomération devient :",
-    "options": [
-      "90 km/h",
-      "80 km/h",
-      "70 km/h",
-      "50 km/h"
-    ],
+    "enonce": "Par temps de pluie, quelle vitesse s'applique sur route nationale hors agglomération ?",
+    "options": ["90 km/h", "80 km/h", "70 km/h", "50 km/h"],
     "bonneReponse": "80 km/h",
-    "explication": "Par pluie, la vitesse maximale hors agglomération est ramenée à 80 km/h. La chaussée mouillée allonge la distance de freinage.",
+    "explication": "Par temps de pluie, la vitesse maximale sur route nationale passe de 90 à 80 km/h. La chaussée mouillée allonge significativement la distance de freinage.",
     "image": "/icons/panneaux/A10.svg"
   },
   {
     "id": "LDV005",
     "categorie": "Limitation de vitesse",
-    "enonce": "Un conducteur roule à 70 km/h en zone limitée à 50 km/h. Son excès est de :",
-    "options": [
-      "10 km/h",
-      "20 km/h",
-      "30 km/h",
-      "40 km/h"
-    ],
+    "enonce": "Un conducteur roule à 70 km/h dans une zone limitée à 50 km/h. De combien dépasse-t-il la limite ?",
+    "options": ["10 km/h", "20 km/h", "30 km/h", "40 km/h"],
     "bonneReponse": "20 km/h",
-    "explication": "70 - 50 = 20 km/h de dépassement. Un excès de 20 km/h en zone urbaine est une infraction sérieuse.",
+    "explication": "70 − 50 = 20 km/h de dépassement. Un tel excès en zone urbaine est une infraction sérieuse, sanctionnée par une amende.",
     "image": "/icons/panneaux/B14.svg"
   },
   {
     "id": "LDV006",
     "categorie": "Limitation de vitesse",
     "enonce": "La distance totale d'arrêt à 90 km/h sur route sèche est d'environ :",
-    "options": [
-      "30 m",
-      "45 m",
-      "55 m",
-      "80 m"
-    ],
+    "options": ["30 m", "45 m", "55 m", "80 m"],
     "bonneReponse": "55 m",
-    "explication": "À 90 km/h, la distance d'arrêt (réaction + freinage) est d'environ 55-60 m sur route sèche.",
+    "explication": "À 90 km/h, la distance d'arrêt (temps de réaction + freinage) est d'environ 55 à 60 mètres sur chaussée sèche. Elle double sur route mouillée.",
     "image": "/icons/panneaux/B14c.svg"
   },
   {
     "id": "LDV007",
     "categorie": "Limitation de vitesse",
-    "enonce": "Un panneau B14 \"30\" en zone résidentielle s'applique :",
-    "options": [
-      "Uniquement de nuit",
-      "En permanence jusqu'au panneau B15 ou la sortie de zone",
-      "Les jours de semaine",
-      "Seulement aux poids lourds"
-    ],
-    "bonneReponse": "En permanence jusqu'au panneau B15 ou la sortie de zone",
-    "explication": "La limitation de 30 km/h s'applique en continu dès B14 jusqu'à B15 ou la fin de la zone.",
+    "enonce": "Une limitation de 30 km/h signalée par un panneau s'applique :",
+    "options": ["Uniquement de nuit", "En permanence jusqu'au panneau de fin de limitation ou la sortie de zone", "Seulement les jours de semaine", "Uniquement aux poids lourds"],
+    "bonneReponse": "En permanence jusqu'au panneau de fin de limitation ou la sortie de zone",
+    "explication": "La limitation s'applique 24h/24 et 7j/7, dès le panneau d'entrée jusqu'au panneau de fin de limitation ou à la sortie de la zone.",
     "image": "/icons/panneaux/B11.svg"
   },
   {
     "id": "LDV008",
     "categorie": "Limitation de vitesse",
-    "enonce": "Le panneau d'entrée d'agglomération impose de réduire à :",
-    "options": [
-      "30 km/h",
-      "50 km/h",
-      "70 km/h",
-      "Pas de changement obligatoire"
-    ],
+    "enonce": "L'entrée dans une agglomération (panneau de nom de ville) impose automatiquement de réduire la vitesse à :",
+    "options": ["30 km/h", "50 km/h", "70 km/h", "La limitation n'est effective qu'avec un panneau de vitesse explicite"],
     "bonneReponse": "50 km/h",
-    "explication": "L'entrée d'agglomération déclenche automatiquement la limitation à 50 km/h, même sans panneau B14.",
+    "explication": "L'entrée d'agglomération déclenche automatiquement la limitation à 50 km/h, même en l'absence de panneau de limitation explicite.",
     "image": "/icons/panneaux/B14.svg"
   },
   {
     "id": "DEP001",
     "categorie": "Dépassement",
-    "enonce": "Dans quel sens se fait le dépassement normal au Sénégal ?",
-    "options": [
-      "Par la droite",
-      "Par la gauche",
-      "Au choix",
-      "Par la voie la plus rapide"
-    ],
+    "enonce": "De quel côté se fait normalement le dépassement au Sénégal ?",
+    "options": ["Par la droite", "Par la gauche", "Au choix selon la situation", "Par la voie la moins encombrée"],
     "bonneReponse": "Par la gauche",
-    "explication": "Au Sénégal (conduite à droite), le dépassement se fait par la gauche. Dépasser par la droite est interdit sauf cas spécifiques.",
+    "explication": "Au Sénégal (conduite à droite), le dépassement s'effectue toujours par la gauche. Dépasser par la droite est interdit sauf cas très spécifiques.",
     "image": "/icons/panneaux/B9.svg"
   },
   {
     "id": "DEP002",
     "categorie": "Dépassement",
-    "enonce": "Peut-on dépasser sur une ligne axiale blanche continue ?",
-    "options": [
-      "Oui, si aucun véhicule ne vient",
-      "Oui, à vitesse réduite",
-      "Non, c'est formellement interdit",
-      "Oui, pour dépasser un lent"
-    ],
+    "enonce": "Peut-on franchir une ligne axiale blanche continue pour dépasser un véhicule lent ?",
+    "options": ["Oui, si aucun véhicule ne vient en sens inverse", "Oui, à condition de réduire la vitesse", "Non, c'est formellement interdit", "Oui, pour dépasser un véhicule immobilisé uniquement"],
     "bonneReponse": "Non, c'est formellement interdit",
-    "explication": "Une ligne continue interdit tout franchissement ou dépassement, sans exception. Elle marque les zones les plus dangereuses.",
+    "explication": "Une ligne continue interdit tout franchissement ou dépassement, sans exception. Elle matérialise les zones à visibilité insuffisante ou à risque élevé.",
     "image": "/icons/panneaux/M1.svg"
   },
   {
     "id": "DEP003",
     "categorie": "Dépassement",
-    "enonce": "Le dépassement est-il autorisé au sommet d'une côte ?",
-    "options": [
-      "Oui, si vous voyez loin",
-      "Non, toujours interdit",
-      "Oui, si la route est large",
-      "Oui, pour les motos uniquement"
-    ],
-    "bonneReponse": "Non, toujours interdit",
-    "explication": "Au sommet d'une côte, la visibilité est insuffisante. Le risque de collision frontale est maximum.",
+    "enonce": "Le dépassement au sommet d'une côte est-il autorisé ?",
+    "options": ["Oui, si la visibilité semble bonne", "Non, il est toujours interdit", "Oui, si la route est large", "Oui, uniquement pour les motos"],
+    "bonneReponse": "Non, il est toujours interdit",
+    "explication": "Au sommet d'une côte, la visibilité vers l'avant est nulle ou insuffisante. Le risque de collision frontale est maximal. Le dépassement y est strictement interdit.",
     "image": "/icons/panneaux/A3b.svg"
   },
   {
     "id": "DEP004",
     "categorie": "Dépassement",
-    "enonce": "Avant de dépasser, la vérification indispensable est :",
-    "options": [
-      "Vérifier le clignotant",
-      "Visibilité + rétroviseur + aucun véhicule en face",
-      "Demander la permission",
-      "Regarder uniquement devant"
-    ],
-    "bonneReponse": "Visibilité + rétroviseur + aucun véhicule en face",
-    "explication": "Avant tout dépassement : visibilité devant et derrière, rétroviseurs, aucun véhicule en sens inverse, manœuvre autorisée.",
+    "enonce": "Avant d'initier un dépassement, quelle vérification est indispensable ?",
+    "options": ["Vérifier uniquement que le clignotant fonctionne", "Vérifier la visibilité, les rétroviseurs et l'absence de véhicule en sens inverse", "S'assurer que le véhicule devant est d'accord", "Regarder uniquement devant soi"],
+    "bonneReponse": "Vérifier la visibilité, les rétroviseurs et l'absence de véhicule en sens inverse",
+    "explication": "Un dépassement sécurisé nécessite : visibilité suffisante devant, vérification des rétroviseurs, absence de véhicule en sens inverse, et aucune interdiction de dépasser.",
     "image": "/icons/panneaux/B9.svg"
   },
   {
     "id": "DEP005",
     "categorie": "Dépassement",
-    "enonce": "Le dépassement est-il autorisé à 30 m d'un passage à niveau ?",
-    "options": [
-      "Oui, si les barrières sont levées",
-      "Non, interdit dans les 50 m",
-      "Oui, à vitesse réduite",
-      "Oui, de nuit seulement"
-    ],
-    "bonneReponse": "Non, interdit dans les 50 m",
-    "explication": "Le dépassement est interdit à l'approche des passages à niveau (50 m). Un freinage d'urgence peut être nécessaire.",
+    "enonce": "Le dépassement est-il autorisé à moins de 50 mètres d'un passage à niveau ?",
+    "options": ["Oui, si les barrières sont levées", "Non, il est interdit dans cette zone", "Oui, à vitesse réduite", "Oui, de nuit seulement"],
+    "bonneReponse": "Non, il est interdit dans cette zone",
+    "explication": "Le dépassement est interdit dans les 50 mètres avant un passage à niveau. Un freinage d'urgence peut être nécessaire et tout dépassement pourrait empêcher un arrêt à temps.",
     "image": "/icons/panneaux/A9.svg"
   },
   {
     "id": "DEP006",
     "categorie": "Dépassement",
-    "enonce": "Après avoir dépassé, quand vous rabattez-vous ?",
-    "options": [
-      "Immédiatement après être devant",
-      "Quand les phares du dépassé apparaissent",
-      "Quand le véhicule dépassé est entièrement visible dans votre rétroviseur",
-      "Après 10 secondes"
-    ],
-    "bonneReponse": "Quand le véhicule dépassé est entièrement visible dans votre rétroviseur",
-    "explication": "Un rabattement prématuré peut forcer le véhicule dépassé à freiner brutalement. Attendez de voir son intégralité dans le rétroviseur.",
+    "enonce": "Après avoir dépassé, quand est-il sécuritaire de se rabattre devant le véhicule dépassé ?",
+    "options": ["Dès que vous êtes devant", "Quand les phares du véhicule dépassé apparaissent dans votre rétroviseur", "Quand le véhicule dépassé est entièrement visible dans votre rétroviseur intérieur", "Après 10 secondes"],
+    "bonneReponse": "Quand le véhicule dépassé est entièrement visible dans votre rétroviseur intérieur",
+    "explication": "Un rabattement prématuré peut obliger le véhicule dépassé à freiner brutalement. Attendez de voir l'intégralité du véhicule dans votre rétroviseur avant de vous rabattre.",
     "image": "/icons/panneaux/B9.svg"
   },
   {
     "id": "DEP007",
     "categorie": "Dépassement",
-    "enonce": "Peut-on dépasser un bus à l'arrêt dont des passagers descendent ?",
-    "options": [
-      "Oui, par la gauche lentement",
-      "Non, attendez",
-      "Oui, si la chaussée est large",
-      "Oui, en klaxonnant"
-    ],
-    "bonneReponse": "Non, attendez",
-    "explication": "Dépasser un bus à l'arrêt est dangereux : des passagers peuvent surgir. Attendez que le bus reparte.",
+    "enonce": "Peut-on dépasser un bus à l'arrêt dont des passagers descendent ou montent ?",
+    "options": ["Oui, par la gauche en ralentissant", "Non, vous devez attendre", "Oui, si la chaussée est suffisamment large", "Oui, en activant le clignotant"],
+    "bonneReponse": "Non, vous devez attendre",
+    "explication": "Dépasser un bus à l'arrêt est dangereux : des passagers peuvent surgir de l'avant ou de l'arrière. Attendez que la porte soit fermée et que le bus reparte.",
     "image": "/icons/panneaux/A12.svg"
   },
   {
     "id": "DEP008",
     "categorie": "Dépassement",
-    "enonce": "Le panneau B10 (barre noire sur deux voitures) signifie :",
-    "options": [
-      "Fin d'interdiction de dépasser",
-      "Dépassement interdit sur 100 m",
-      "Dépassement autorisé à droite",
-      "Zone surveillée"
-    ],
-    "bonneReponse": "Fin d'interdiction de dépasser",
-    "explication": "B10 lève l'interdiction du B9. Le dépassement redevient possible si les conditions sont réunies.",
-    "image": "/icons/panneaux/B10.svg"
+    "enonce": "Vous souhaitez dépasser, mais le véhicule derrière vous a déjà initié sa propre manœuvre de dépassement. Que faites-vous ?",
+    "options": ["Dépassez quand même pour être en tête", "Renoncez et laissez-le passer en premier", "Accélérez pour maintenir votre position", "Klaxonnez pour lui signaler votre intention"],
+    "bonneReponse": "Renoncez et laissez-le passer en premier",
+    "explication": "Deux dépassements simultanés créent un risque grave de collision. Si un autre véhicule a déjà commencé sa manœuvre, renoncez et reprenez votre position.",
+    "image": "/icons/panneaux/B9.svg"
   },
   {
     "id": "STA001",
     "categorie": "Stationnement & Arrêt",
-    "enonce": "Quelle est la différence entre arrêt et stationnement ?",
-    "options": [
-      "Aucune",
-      "Arrêt < 5 min sans conducteur",
-      "Arrêt = bref avec conducteur; stationnement = plus long ou sans conducteur",
-      "Arrêt gratuit, stationnement payant"
-    ],
-    "bonneReponse": "Arrêt = bref avec conducteur; stationnement = plus long ou sans conducteur",
-    "explication": "L'arrêt est une immobilisation brève avec le conducteur au volant prêt à repartir (< 3 min). Le stationnement implique l'absence du conducteur ou une durée plus longue.",
+    "enonce": "Quelle est la différence entre un arrêt et un stationnement ?",
+    "options": ["Aucune différence", "L'arrêt dure moins de 5 minutes sans conducteur", "L'arrêt est bref avec conducteur au volant ; le stationnement implique l'absence du conducteur ou une durée prolongée", "L'arrêt est gratuit, le stationnement est payant"],
+    "bonneReponse": "L'arrêt est bref avec conducteur au volant ; le stationnement implique l'absence du conducteur ou une durée prolongée",
+    "explication": "Un arrêt est une immobilisation courte (moins de 3 min) avec le conducteur présent et prêt à repartir. Le stationnement implique l'absence du conducteur ou une durée plus longue.",
     "image": "/icons/panneaux/B6.svg"
   },
   {
     "id": "STA002",
     "categorie": "Stationnement & Arrêt",
-    "enonce": "À quelle distance d'un carrefour le stationnement est-il interdit ?",
-    "options": [
-      "5 m",
-      "10 m",
-      "15 m",
-      "20 m"
-    ],
+    "enonce": "À quelle distance minimale d'un carrefour est-il interdit de stationner ?",
+    "options": ["5 m", "10 m", "15 m", "20 m"],
     "bonneReponse": "10 m",
-    "explication": "Stationner à moins de 10 m d'un carrefour est interdit. Cela réduit la visibilité des conducteurs qui approchent.",
+    "explication": "Stationner à moins de 10 mètres d'un carrefour est interdit. Un véhicule garé trop près masque la visibilité des conducteurs qui approchent.",
     "image": "/icons/panneaux/B6.svg"
   },
   {
     "id": "STA003",
     "categorie": "Stationnement & Arrêt",
-    "enonce": "Peut-on s'arrêter brièvement sur un passage piéton ?",
-    "options": [
-      "Oui, moins d'une minute",
-      "Oui, de nuit",
-      "Non, strictement interdit",
-      "Oui, pour déposer quelqu'un"
-    ],
-    "bonneReponse": "Non, strictement interdit",
-    "explication": "L'arrêt et le stationnement sont strictement interdits sur les passages piétons. Un véhicule arrêté crée un danger grave.",
+    "enonce": "Peut-on s'arrêter brièvement sur un passage piéton pour déposer un passager ?",
+    "options": ["Oui, pour moins d'une minute", "Oui, uniquement de nuit", "Non, tout arrêt est strictement interdit sur un passage piéton", "Oui, avec le conducteur au volant"],
+    "bonneReponse": "Non, tout arrêt est strictement interdit sur un passage piéton",
+    "explication": "L'arrêt et le stationnement sont strictement interdits sur les passages piétons. Un véhicule immobilisé à cet endroit crée un danger grave pour les personnes qui traversent.",
     "image": "/icons/panneaux/M3.svg"
   },
   {
     "id": "STA004",
     "categorie": "Stationnement & Arrêt",
-    "enonce": "À quelle distance d'un arrêt de bus est-il interdit de stationner ?",
-    "options": [
-      "5 m",
-      "10 m",
-      "15 m",
-      "20 m"
-    ],
+    "enonce": "À quelle distance minimale d'un arrêt de bus est-il interdit de stationner ?",
+    "options": ["5 m", "10 m", "15 m", "20 m"],
     "bonneReponse": "15 m",
-    "explication": "Il est interdit de stationner à moins de 15 m d'un arrêt de bus ou de car rapide pour que le transport en commun puisse s'approcher.",
+    "explication": "Il est interdit de stationner à moins de 15 mètres d'un arrêt de transport en commun afin que le bus puisse accéder au quai sans obstruction.",
     "image": "/icons/panneaux/B6.svg"
   },
   {
     "id": "STA005",
     "categorie": "Stationnement & Arrêt",
-    "enonce": "Le stationnement en double file est-il autorisé ?",
-    "options": [
-      "Oui, moteur tournant",
-      "Oui, moins de 2 minutes",
-      "Non, formellement interdit",
-      "Oui, si passage suffisant"
-    ],
-    "bonneReponse": "Non, formellement interdit",
-    "explication": "Le stationnement en double file est interdit. Il bloque la circulation et peut empêcher l'accès aux services d'urgence.",
+    "enonce": "Le stationnement en double file est-il autorisé, même moteur tournant ?",
+    "options": ["Oui, moteur tournant avec conducteur", "Oui, pour moins de 2 minutes", "Non, il est formellement interdit", "Oui, si la largeur de la voie le permet"],
+    "bonneReponse": "Non, il est formellement interdit",
+    "explication": "Le stationnement en double file est interdit en toute circonstance. Il bloque la circulation et peut empêcher l'accès des services d'urgence.",
     "image": "/icons/panneaux/B7.svg"
   },
   {
     "id": "STA006",
     "categorie": "Stationnement & Arrêt",
-    "enonce": "Peut-on se garer devant la sortie d'un garage privé ?",
-    "options": [
-      "Oui, avec son numéro de téléphone",
-      "Oui, la nuit et le dimanche",
-      "Non, toujours interdit",
-      "Oui, moins de 15 minutes"
-    ],
-    "bonneReponse": "Non, toujours interdit",
-    "explication": "Stationner devant une sortie de garage est interdit en toute circonstance. Cela prive les riverains de l'accès à leur propriété.",
+    "enonce": "Peut-on se garer devant la sortie d'un garage privé, même si le propriétaire est absent ?",
+    "options": ["Oui, avec son numéro de téléphone visible", "Oui, la nuit et le week-end", "Non, c'est interdit en permanence", "Oui, pour moins de 15 minutes"],
+    "bonneReponse": "Non, c'est interdit en permanence",
+    "explication": "Stationner devant une sortie de garage ou d'entrée privée est interdit en permanence. Cela prive les riverains de l'accès à leur propriété.",
     "image": "/icons/panneaux/B6.svg"
   },
   {
     "id": "STA007",
     "categorie": "Stationnement & Arrêt",
-    "enonce": "Le panneau B7 interdit :",
-    "options": [
-      "Le stationnement uniquement",
-      "L'arrêt uniquement",
-      "L'arrêt et le stationnement",
-      "Le stationnement de nuit"
-    ],
-    "bonneReponse": "L'arrêt et le stationnement",
-    "explication": "B7 est une interdiction absolue d'immobilisation. Contrairement à B6, B7 n'autorise aucune immobilisation.",
-    "image": "/icons/panneaux/B7.svg"
+    "enonce": "Est-il autorisé de stationner sur un trottoir, même si les quatre roues y sont placées ?",
+    "options": ["Oui, si l'espace est suffisant pour les piétons", "Oui, si toutes les roues sont sur le trottoir", "Non, sauf indication contraire spécifique", "Oui, pour moins de 30 minutes"],
+    "bonneReponse": "Non, sauf indication contraire spécifique",
+    "explication": "Stationner sur le trottoir est interdit sauf autorisation spécifique signalée. Le trottoir est réservé aux piétons, y compris les personnes à mobilité réduite.",
+    "image": "/icons/panneaux/B6.svg"
   },
   {
     "id": "STA008",
     "categorie": "Stationnement & Arrêt",
-    "enonce": "Le stationnement sur un trottoir est-il autorisé ?",
-    "options": [
-      "Oui, si espace disponible",
-      "Oui, si les 4 roues sont sur le trottoir",
-      "Non, sauf indication contraire",
-      "Oui, pour moins de 30 min"
-    ],
-    "bonneReponse": "Non, sauf indication contraire",
-    "explication": "Stationner sur le trottoir est interdit sauf autorisation spécifique. Le trottoir est réservé aux piétons.",
+    "enonce": "Lors d'un stationnement en pente, que devez-vous faire en plus de serrer le frein à main ?",
+    "options": ["Rien de plus", "Enclencher une vitesse adaptée et braquer les roues vers le trottoir", "Laisser le moteur en marche", "Placer un triangle de signalisation"],
+    "bonneReponse": "Enclencher une vitesse adaptée et braquer les roues vers le trottoir",
+    "explication": "En pente : enclenchez la 1ère (montée) ou la marche arrière (descente) pour bloquer la transmission, et braqez les roues vers le trottoir pour arrêter le véhicule s'il bouge.",
     "image": "/icons/panneaux/B6.svg"
   },
   {
     "id": "FTR001",
     "categorie": "Feux tricolores",
-    "enonce": "Un feu orange (jaune) fixe vous oblige à :",
-    "options": [
-      "Accélérer pour passer",
-      "Marquer l'arrêt si possible sans danger",
-      "Continuer à même vitesse",
-      "Klaxonner"
-    ],
-    "bonneReponse": "Marquer l'arrêt si possible sans danger",
-    "explication": "Le feu orange signifie que le rouge va s'allumer. Arrêtez-vous si vous le pouvez sans danger. Si trop près, franchissez prudemment.",
+    "enonce": "Un feu orange fixe vous oblige à :",
+    "options": ["Accélérer pour passer avant le rouge", "Marquer l'arrêt si vous pouvez le faire sans danger", "Continuer à la même vitesse", "Vous arrêter immédiatement"],
+    "bonneReponse": "Marquer l'arrêt si vous pouvez le faire sans danger",
+    "explication": "Le feu orange annonce le passage au rouge. Arrêtez-vous si vous en avez la possibilité sans risque. Si vous êtes trop proche de la ligne, franchissez-la prudemment.",
     "image": "/icons/panneaux/FEU1.svg"
   },
   {
     "id": "FTR002",
     "categorie": "Feux tricolores",
-    "enonce": "Un feu vert vous autorise-t-il à traverser sans vérifier ?",
-    "options": [
-      "Oui, priorité absolue",
-      "Non, vérifiez que l'intersection est dégagée",
-      "Oui, tous les autres sont arrêtés",
-      "Oui, sauf pour les piétons"
-    ],
-    "bonneReponse": "Non, vérifiez que l'intersection est dégagée",
-    "explication": "Le feu vert vous donne le droit de passer, pas la garantie de sécurité. Un véhicule peut griller un rouge. Regardez avant de vous engager.",
+    "enonce": "Un feu vert vous autorise-t-il à traverser l'intersection sans vérification préalable ?",
+    "options": ["Oui, priorité absolue", "Non, vérifiez que l'intersection est dégagée avant de vous engager", "Oui, tous les autres véhicules sont arrêtés", "Oui, sauf en présence de piétons"],
+    "bonneReponse": "Non, vérifiez que l'intersection est dégagée avant de vous engager",
+    "explication": "Le feu vert autorise à avancer, mais ne garantit pas la sécurité. Un conducteur peut griller le rouge. Regardez toujours des deux côtés avant de vous engager.",
     "image": "/icons/panneaux/FEU1.svg"
   },
   {
     "id": "FTR003",
     "categorie": "Feux tricolores",
-    "enonce": "Une flèche verte sur fond rouge vous autorise :",
-    "options": [
-      "À passer dans toutes les directions",
-      "À passer uniquement dans la direction de la flèche",
-      "À klaxonner",
-      "À passer si personne n'arrive"
-    ],
-    "bonneReponse": "À passer uniquement dans la direction de la flèche",
-    "explication": "La flèche verte autorise uniquement la direction indiquée. Cédez quand même le passage aux piétons traversant légalement.",
+    "enonce": "Une flèche verte sur fond noir ou rouge vous autorise :",
+    "options": ["À passer dans toutes les directions", "À passer uniquement dans la direction indiquée par la flèche", "À passer si aucun véhicule ne vient", "À vous engager sans regarder les piétons"],
+    "bonneReponse": "À passer uniquement dans la direction indiquée par la flèche",
+    "explication": "La flèche directionnelle verte autorise exclusivement la direction indiquée. Cédez néanmoins le passage aux piétons qui traversent légalement.",
     "image": "/icons/panneaux/FEU2.svg"
   },
   {
     "id": "FTR004",
     "categorie": "Feux tricolores",
     "enonce": "Un feu orange clignotant à une intersection signifie :",
-    "options": [
-      "Feu en panne, priorité à vous",
-      "Prudence et priorité à droite",
-      "Accélérer",
-      "Arrêt complet obligatoire"
-    ],
-    "bonneReponse": "Prudence et priorité à droite",
-    "explication": "Le feu orange clignotant (souvent la nuit) indique que l'intersection fonctionne sans régulation. Ralentissez et appliquez la priorité à droite.",
+    "options": ["Feu en panne, vous êtes prioritaire", "Prudence : ralentissez et appliquez la priorité à droite", "Accélérez pour libérer l'intersection", "Arrêt complet obligatoire"],
+    "bonneReponse": "Prudence : ralentissez et appliquez la priorité à droite",
+    "explication": "Le feu orange clignotant indique une intersection sans régulation. Ralentissez et cédez aux véhicules venant de votre droite.",
     "image": "/icons/panneaux/FEU4.svg"
   },
   {
     "id": "FTR005",
     "categorie": "Feux tricolores",
-    "enonce": "Au feu rouge, peut-on tourner à droite sans s'arrêter ?",
-    "options": [
-      "Oui, si la route est libre",
-      "Non, l'arrêt est obligatoire au rouge",
-      "Non, sauf flèche verte autorisée",
-      "Oui, avec le clignotant"
-    ],
-    "bonneReponse": "Non, sauf flèche verte autorisée",
-    "explication": "Au Sénégal, le feu rouge impose l'arrêt dans toutes les directions sauf s'il existe une flèche verte spécifique.",
+    "enonce": "Au feu rouge, peut-on tourner à droite sans s'arrêter si la route est libre ?",
+    "options": ["Oui, si la route semble libre", "Non, le feu rouge impose l'arrêt dans toutes les directions", "Non, sauf s'il existe une flèche verte spécifique", "Oui, avec le clignotant activé"],
+    "bonneReponse": "Non, sauf s'il existe une flèche verte spécifique",
+    "explication": "Au Sénégal, le feu rouge impose l'arrêt dans toutes les directions. Tourner à droite au rouge est interdit sauf présence d'une flèche verte dédiée.",
     "image": "/icons/panneaux/FEU1.svg"
   },
   {
     "id": "FTR006",
     "categorie": "Feux tricolores",
-    "enonce": "Le signal piéton vert signifie que les piétons :",
-    "options": [
-      "Ont la priorité totale",
-      "Attendent les voitures",
-      "Peuvent traverser mais restent vigilants",
-      "Seuls les cyclistes peuvent passer"
-    ],
-    "bonneReponse": "Ont la priorité totale",
-    "explication": "Quand le signal piéton est vert, les piétons ont la priorité absolue sur tous les véhicules, y compris ceux qui tournent.",
+    "enonce": "Quand le signal lumineux piéton est vert, les piétons :",
+    "options": ["Ont la priorité absolue sur tous les véhicules", "Doivent attendre que les voitures passent d'abord", "Peuvent traverser mais restent vigilants face aux voitures", "Seuls les cyclistes peuvent passer"],
+    "bonneReponse": "Ont la priorité absolue sur tous les véhicules",
+    "explication": "Lorsque le signal piéton est vert, les piétons ont la priorité absolue, y compris sur les véhicules qui tournent. Tout conducteur doit les laisser traverser.",
     "image": "/icons/panneaux/FEU3.svg"
   },
   {
     "id": "FTR007",
     "categorie": "Feux tricolores",
     "enonce": "Un feu rouge clignotant à un passage à niveau signifie :",
-    "options": [
-      "Les barrières vont se lever",
-      "Un train approche — arrêt obligatoire",
-      "Feu en panne",
-      "Passage libre mais prudence"
-    ],
-    "bonneReponse": "Un train approche — arrêt obligatoire",
-    "explication": "Le feu rouge clignotant au PN indique qu'un train arrive. Arrêtez-vous impérativement avant les rails.",
+    "options": ["Les barrières vont se lever", "Un train approche : arrêt obligatoire avant les rails", "Feu en panne : passage libre", "Passage autorisé en restant vigilant"],
+    "bonneReponse": "Un train approche : arrêt obligatoire avant les rails",
+    "explication": "Le feu rouge clignotant au passage à niveau signale l'approche imminente d'un train. Arrêtez-vous avant les rails et attendez que les feux s'éteignent.",
     "image": "/icons/panneaux/A9.svg"
   },
   {
     "id": "FTR008",
     "categorie": "Feux tricolores",
-    "enonce": "La séquence avant le vert (après le rouge) est :",
-    "options": [
-      "Directement au vert",
-      "Rouge + orange simultanément, puis vert",
-      "Orange seul, puis vert",
-      "Rouge seul, puis vert"
-    ],
-    "bonneReponse": "Rouge + orange simultanément, puis vert",
-    "explication": "La séquence : rouge → rouge + orange → vert. L'orange avec le rouge vous prépare au démarrage. Attendez le vert pour partir.",
+    "enonce": "Quelle est la séquence des feux juste avant le passage au vert (après le rouge) ?",
+    "options": ["Directement au vert", "Rouge et orange simultanément, puis vert", "Orange seul, puis vert", "Rouge clignotant, puis vert"],
+    "bonneReponse": "Rouge et orange simultanément, puis vert",
+    "explication": "La séquence est : rouge → rouge + orange en même temps → vert. L'allumage simultané prépare le conducteur au démarrage. Attendez le vert pour partir.",
     "image": "/icons/panneaux/FEU1.svg"
   },
   {
     "id": "SIT001",
     "categorie": "Signalisation temporaire",
-    "enonce": "Les panneaux de chantier (travaux) sont généralement de quelle couleur ?",
-    "options": [
-      "Bleus",
-      "Verts",
-      "Oranges ou jaunes",
-      "Rouges et blancs"
-    ],
-    "bonneReponse": "Oranges ou jaunes",
-    "explication": "La signalisation temporaire est orange ou jaune fluo. Elle se distingue de la signalisation permanente et la remplace dans sa zone d'application.",
+    "enonce": "Quelle couleur distingue les panneaux de chantier des panneaux permanents ?",
+    "options": ["Bleu", "Vert", "Orange ou jaune fluo", "Rouge et blanc"],
+    "bonneReponse": "Orange ou jaune fluo",
+    "explication": "La signalisation temporaire est orange ou jaune fluo pour se distinguer clairement de la signalisation permanente.",
     "image": "/icons/panneaux/KD1.svg"
   },
   {
     "id": "SIT002",
     "categorie": "Signalisation temporaire",
-    "enonce": "Une limitation temporaire de 30 km/h sur chantier :",
-    "options": [
-      "S'ajoute à la limite permanente",
-      "Remplace la limite permanente",
-      "N'a pas de valeur légale",
-      "S'applique uniquement aux poids lourds"
-    ],
-    "bonneReponse": "Remplace la limite permanente",
-    "explication": "Les panneaux temporaires ont force de loi et remplacent la signalisation permanente dans leur zone d'application.",
+    "enonce": "Une limitation de vitesse temporaire à 30 km/h dans une zone de chantier :",
+    "options": ["S'ajoute à la limitation permanente", "Remplace la limitation permanente et s'impose à tous", "N'a pas de valeur légale", "Ne s'applique qu'aux poids lourds"],
+    "bonneReponse": "Remplace la limitation permanente et s'impose à tous",
+    "explication": "Les panneaux temporaires ont la même valeur légale que les panneaux permanents et les remplacent dans leur zone d'application.",
     "image": "/icons/panneaux/KD1.svg"
   },
   {
     "id": "SIT003",
     "categorie": "Signalisation temporaire",
-    "enonce": "Les cônes orange sur la route indiquent :",
-    "options": [
-      "Une zone de péage",
-      "Une délimitation temporaire ou zone de travaux",
-      "Un stationnement réservé",
-      "Une zone de lavage"
-    ],
-    "bonneReponse": "Une délimitation temporaire ou zone de travaux",
-    "explication": "Les cônes délimitent les zones de chantier et canalisent la circulation.",
+    "enonce": "Les cônes orange disposés sur la chaussée servent à :",
+    "options": ["Signaler une zone de péage", "Délimiter une zone de travaux et canaliser la circulation", "Indiquer un emplacement de stationnement réservé", "Marquer une zone de lavage"],
+    "bonneReponse": "Délimiter une zone de travaux et canaliser la circulation",
+    "explication": "Les cônes délimitent les zones de chantier, protègent les ouvriers et guident les conducteurs pour contourner les obstacles en toute sécurité.",
     "image": "/icons/panneaux/KC1.svg"
   },
   {
     "id": "SIT004",
     "categorie": "Signalisation temporaire",
-    "enonce": "Un panneau TRAVAUX à 150 m vous oblige à :",
-    "options": [
-      "Vous arrêter",
-      "Réduire la vitesse et vous préparer au chantier",
-      "Doubler rapidement avant le chantier",
-      "Éteindre vos feux"
-    ],
-    "bonneReponse": "Réduire la vitesse et vous préparer au chantier",
-    "explication": "Le signal avancé vous prévient d'un chantier à venir. Levez le pied et augmentez votre vigilance pour la sécurité des ouvriers.",
+    "enonce": "Un signal avancé TRAVAUX à 150 m vous oblige à :",
+    "options": ["Vous arrêter immédiatement", "Réduire la vitesse et vous préparer à circuler dans la zone de chantier", "Doubler rapidement avant la zone de chantier", "Éteindre vos feux de croisement"],
+    "bonneReponse": "Réduire la vitesse et vous préparer à circuler dans la zone de chantier",
+    "explication": "Le signal avancé vous alerte à 150 mètres. Levez le pied, augmentez votre vigilance et préparez-vous à respecter les limitations temporaires.",
     "image": "/icons/panneaux/A15.svg"
   },
   {
     "id": "SIT005",
     "categorie": "Signalisation temporaire",
     "enonce": "Des flèches orange clignotantes sur un panneau de chantier indiquent :",
-    "options": [
-      "L'emplacement d'un piège",
-      "La direction de la déviation à suivre",
-      "Un arrêt de bus temporaire",
-      "La direction des secours"
-    ],
-    "bonneReponse": "La direction de la déviation à suivre",
-    "explication": "Les flèches clignotantes indiquent la trajectoire à suivre pour contourner le chantier.",
+    "options": ["L'emplacement d'une zone dangereuse à éviter", "La direction de déviation à suivre", "Un arrêt de bus temporaire", "La direction des services de secours"],
+    "bonneReponse": "La direction de déviation à suivre",
+    "explication": "Les flèches clignotantes directionnelles indiquent la trajectoire à suivre pour contourner le chantier en toute sécurité.",
     "image": "/icons/panneaux/K1.svg"
   },
   {
     "id": "SIT006",
     "categorie": "Signalisation temporaire",
-    "enonce": "En zone de travaux la nuit, les mesures supplémentaires obligatoires sont :",
-    "options": [
-      "Aucune mesure spéciale",
-      "Balises lumineuses et feux de signalisation",
-      "Gardes armés",
-      "Fermeture totale"
-    ],
+    "enonce": "La nuit, une zone de travaux doit obligatoirement être équipée de :",
+    "options": ["Aucune mesure supplémentaire", "Balises lumineuses et feux de signalisation", "Gardes en uniforme", "Fermeture totale de la voie"],
     "bonneReponse": "Balises lumineuses et feux de signalisation",
-    "explication": "La nuit, les chantiers doivent être équipés de balises clignotantes orange et de flèches lumineuses directionnelles.",
+    "explication": "La nuit, les chantiers doivent être signalés par des balises clignotantes orange et des panneaux lumineux directionnels pour assurer la visibilité.",
     "image": "/icons/panneaux/K5.svg"
   },
   {
     "id": "SIT007",
     "categorie": "Signalisation temporaire",
-    "enonce": "Un panneau temporaire \"30\" sur chantier : pouvez-vous l'ignorer si la voie est libre ?",
-    "options": [
-      "Oui, si personne n'est là",
-      "Non, même valeur légale qu'un panneau permanent",
-      "Oui, la nuit",
-      "Non, uniquement pour les camions"
-    ],
-    "bonneReponse": "Non, même valeur légale qu'un panneau permanent",
-    "explication": "La signalisation temporaire est juridiquement obligatoire. L'ignorer expose à des sanctions et à des accidents.",
+    "enonce": "Pouvez-vous ignorer une limitation temporaire à 30 km/h sur un chantier si la voie semble libre ?",
+    "options": ["Oui, si personne n'est visible", "Non, elle a la même valeur légale qu'un panneau permanent", "Oui, de nuit", "Non, uniquement pour les camions"],
+    "bonneReponse": "Non, elle a la même valeur légale qu'un panneau permanent",
+    "explication": "La signalisation temporaire est juridiquement contraignante. L'ignorer expose à des sanctions et à des accidents graves, notamment avec des ouvriers non visibles.",
     "image": "/icons/panneaux/KD1.svg"
   },
   {
     "id": "SIT008",
     "categorie": "Signalisation temporaire",
-    "enonce": "Qui est responsable de la signalisation temporaire d'un chantier ?",
-    "options": [
-      "Les riverains",
-      "L'entreprise de travaux sous responsabilité du gestionnaire de voirie",
-      "La police uniquement",
-      "Les conducteurs"
-    ],
-    "bonneReponse": "L'entreprise de travaux sous responsabilité du gestionnaire de voirie",
-    "explication": "La signalisation temporaire est sous la responsabilité de l'entreprise exécutant les travaux, en accord avec AGEROUTE au Sénégal.",
+    "enonce": "Qui est responsable de la mise en place de la signalisation temporaire sur un chantier routier ?",
+    "options": ["Les riverains", "L'entreprise de travaux, sous la supervision du gestionnaire de voirie", "La police uniquement", "Les conducteurs qui empruntent la voie"],
+    "bonneReponse": "L'entreprise de travaux, sous la supervision du gestionnaire de voirie",
+    "explication": "La signalisation de chantier est à la charge de l'entreprise exécutant les travaux, en conformité avec les prescriptions d'AGEROUTE au Sénégal.",
     "image": "/icons/panneaux/A15.svg"
   },
   {
     "id": "PAN001",
     "categorie": "Passage à niveau",
-    "enonce": "Trois panneaux en X (croix de Saint-André) avant un PN indiquent :",
-    "options": [
-      "3 voies ferrées",
-      "Distances décroissantes : 3e=450 m, 2e=300 m, 1er=150 m",
-      "Arrêter 3 fois",
-      "Vitesse réduite à 3 km/h"
-    ],
-    "bonneReponse": "Distances décroissantes : 3e=450 m, 2e=300 m, 1er=150 m",
-    "explication": "Les panneaux en X à 3, 2, 1 barre(s) indiquent la distance au PN. Ils permettent d'anticiper et de ralentir progressivement.",
+    "enonce": "Les panneaux en croix de Saint-André (X à 3, 2, 1 barres) placés avant un passage à niveau indiquent :",
+    "options": ["Le nombre de voies ferrées à traverser", "Les distances jusqu'au PN : 3 barres = 450 m, 2 barres = 300 m, 1 barre = 150 m", "Le nombre d'arrêts obligatoires", "Une réduction de vitesse obligatoire par étape"],
+    "bonneReponse": "Les distances jusqu'au PN : 3 barres = 450 m, 2 barres = 300 m, 1 barre = 150 m",
+    "explication": "Ces panneaux jalonnent l'approche du passage à niveau à 450, 300 et 150 mètres. Ils permettent d'anticiper et de décélérer progressivement.",
     "image": "/icons/panneaux/A9.svg"
   },
   {
     "id": "PAN002",
     "categorie": "Passage à niveau",
-    "enonce": "Un PN avec barrières semi-baissées et feux rouges : vous devez :",
-    "options": [
-      "Passer vite sous les barrières",
-      "Attendre que les barrières soient entièrement levées",
-      "Klaxonner et attendre",
-      "Vérifier le panneau et avancer"
-    ],
-    "bonneReponse": "Attendre que les barrières soient entièrement levées",
-    "explication": "Les barrières semi-baissées signalent qu'un train passe ou qu'un deuxième est attendu. Ne vous engagez jamais tant qu'elles ne sont pas entièrement levées.",
+    "enonce": "Les barrières d'un passage à niveau sont semi-abaissées et les feux rouges clignotent. Que faites-vous ?",
+    "options": ["Passez rapidement sous les barrières", "Attendez que les barrières soient entièrement relevées et les feux éteints", "Engagez-vous si aucun train n'est visible", "Klaxonnez et attendez une autorisation"],
+    "bonneReponse": "Attendez que les barrières soient entièrement relevées et les feux éteints",
+    "explication": "Les barrières semi-abaissées signalent qu'un train passe ou qu'un second est attendu. Ne vous engagez jamais avant la levée complète des barrières.",
     "image": "/icons/panneaux/A9.svg"
   },
   {
     "id": "PAN003",
     "categorie": "Passage à niveau",
-    "enonce": "Votre voiture tombe en panne sur les voies ferrées. En priorité absolue :",
-    "options": [
-      "Appelez une dépanneuse",
-      "Restez dans la voiture",
-      "Faites descendre les passagers et alertez les secours",
-      "Poussez la voiture seul"
-    ],
-    "bonneReponse": "Faites descendre les passagers et alertez les secours",
-    "explication": "Panne sur un PN : 1) Tout le monde descend immédiatement, 2) On s'éloigne dans la direction d'où vient le train, 3) On alerte la SETER ou la police.",
+    "enonce": "Votre véhicule tombe en panne sur des voies ferrées. Quelle est votre priorité absolue ?",
+    "options": ["Appeler une dépanneuse", "Rester dans le véhicule et allumer les feux de détresse", "Faire descendre tous les passagers et alerter les secours immédiatement", "Pousser seul le véhicule hors des voies"],
+    "bonneReponse": "Faire descendre tous les passagers et alerter les secours immédiatement",
+    "explication": "En cas de panne sur un PN : 1) Tout le monde descend immédiatement. 2) On s'éloigne dans la direction d'où le train peut venir. 3) On alerte le gestionnaire ferroviaire ou la police.",
     "image": "/icons/panneaux/A9.svg"
   },
   {
     "id": "PAN004",
     "categorie": "Passage à niveau",
-    "enonce": "Le dépassement est-il autorisé à 30 m d'un passage à niveau ?",
-    "options": [
-      "Oui, si les barrières sont levées",
-      "Non, interdit dans les 50 m",
-      "Oui, à vitesse réduite",
-      "Oui, de nuit uniquement"
-    ],
-    "bonneReponse": "Non, interdit dans les 50 m",
-    "explication": "Le dépassement est interdit dans les 50 m avant un PN. Un freinage d'urgence peut être nécessaire et un dépassement peut empêcher l'arrêt à temps.",
+    "enonce": "Les barrières d'un passage à niveau sont levées. Cela garantit-il l'absence de tout train ?",
+    "options": ["Oui, absolument, le système est infaillible", "Non, une défaillance technique est possible", "Oui, si la sonnerie d'alarme n'a pas retenti", "Oui, si aucun voyant n'est allumé"],
+    "bonneReponse": "Non, une défaillance technique est possible",
+    "explication": "Les systèmes automatiques peuvent connaître des défaillances. Même barrières levées, regardez toujours des deux côtés avant de traverser un passage à niveau.",
     "image": "/icons/panneaux/A9.svg"
   },
   {
     "id": "PAN005",
     "categorie": "Passage à niveau",
-    "enonce": "Les barrières d'un PN sont levées. Cela garantit-il qu'aucun train n'arrive ?",
-    "options": [
-      "Oui, absolument",
-      "Non, une défaillance technique est possible",
-      "Oui, le système est infaillible",
-      "Oui, si la sonnerie a retenti"
-    ],
-    "bonneReponse": "Non, une défaillance technique est possible",
-    "explication": "Les systèmes automatiques peuvent subir des pannes. Même barrières levées, regardez toujours des deux côtés avant de traverser.",
-    "image": "/icons/panneaux/A9.svg"
+    "enonce": "Face à un passage à niveau sans barrières, quelle est la règle absolue avant de s'engager ?",
+    "options": ["Accélérer pour traverser rapidement", "Marquer l'arrêt et vérifier qu'aucun train n'est en vue ni audible", "Klaxonner deux fois avant de traverser", "Continuer si le feu n'est pas allumé"],
+    "bonneReponse": "Marquer l'arrêt et vérifier qu'aucun train n'est en vue ni audible",
+    "explication": "Le passage à niveau sans barrières est le plus dangereux. Arrêtez-vous, regardez des deux côtés et écoutez. Ne vous engagez que si la voie est libre.",
+    "image": "/icons/panneaux/A9a.svg"
   },
   {
     "id": "PAN006",
     "categorie": "Passage à niveau",
-    "enonce": "Le panneau A9 (triangle avec locomotive) signale :",
-    "options": [
-      "Une gare ferroviaire",
-      "Un PN avec barrières à moins de 150 m",
-      "Une voie ferrée à 1 km",
-      "Un PN sans barrière"
-    ],
-    "bonneReponse": "Un PN avec barrières à moins de 150 m",
-    "explication": "A9 signale un PN équipé de barrières à proximité. Il est accompagné des panneaux croix de Saint-André.",
+    "enonce": "Le dépassement à moins de 50 mètres d'un passage à niveau est-il autorisé ?",
+    "options": ["Oui, si les barrières sont levées", "Non, il est interdit dans cette zone", "Oui, à vitesse réduite", "Oui, uniquement pour les motocyclettes"],
+    "bonneReponse": "Non, il est interdit dans cette zone",
+    "explication": "Le dépassement est interdit dans les 50 mètres d'un passage à niveau. Un freinage d'urgence soudain doit rester possible à tout moment.",
     "image": "/icons/panneaux/A9.svg"
   },
   {
     "id": "PAN007",
     "categorie": "Passage à niveau",
-    "enonce": "Avant de s'engager sur un PN sans barrières (A9a), vous devez :",
-    "options": [
-      "Accélérer pour passer vite",
-      "Marquer l'arrêt et regarder des deux côtés",
-      "Klaxonner deux fois",
-      "Continuer si le feu n'est pas rouge"
-    ],
-    "bonneReponse": "Marquer l'arrêt et regarder des deux côtés",
-    "explication": "Le PN sans barrières est le plus dangereux. Arrêtez-vous, regardez des deux côtés et n'avancez que si aucun train n'est visible ni audible.",
-    "image": "/icons/panneaux/A9a.svg"
+    "enonce": "À quelle vitesse faut-il traverser un passage à niveau ?",
+    "options": ["À la vitesse habituelle de la route", "Toujours à 50 km/h maximum", "À une vitesse permettant un arrêt immédiat si nécessaire", "À 30 km/h minimum"],
+    "bonneReponse": "À une vitesse permettant un arrêt immédiat si nécessaire",
+    "explication": "Aucune vitesse fixe n'est imposée au passage à niveau, mais vous devez pouvoir vous arrêter à tout moment si un train approche à l'improviste.",
+    "image": "/icons/panneaux/A9.svg"
   },
   {
     "id": "PAN008",
     "categorie": "Passage à niveau",
-    "enonce": "À quelle vitesse traverser un passage à niveau en toute sécurité ?",
-    "options": [
-      "À la vitesse normale",
-      "Toujours à 50 km/h max",
-      "À une vitesse permettant l'arrêt immédiat si nécessaire",
-      "À 30 km/h minimum"
-    ],
-    "bonneReponse": "À une vitesse permettant l'arrêt immédiat si nécessaire",
-    "explication": "Aucune vitesse fixe n'est imposée au PN, mais vous devez pouvoir vous arrêter à tout moment si un train approche.",
+    "enonce": "Les barrières commencent à descendre alors que vous êtes déjà engagé sur le passage à niveau. Que faites-vous ?",
+    "options": ["Vous immobilisez votre véhicule et attendez", "Franchissez rapidement le passage sans vous arrêter", "Faites marche arrière", "Activez vos feux de détresse et attendez"],
+    "bonneReponse": "Franchissez rapidement le passage sans vous arrêter",
+    "explication": "Si vous êtes déjà sur les voies, ne vous arrêtez jamais. Accélérez pour quitter le passage à niveau avant que les barrières ne soient complètement abaissées.",
     "image": "/icons/panneaux/A9.svg"
   },
   {
     "id": "PDI001",
     "categorie": "Panneaux de direction",
-    "enonce": "Un panneau rectangulaire bleu avec flèche blanche et une destination indique :",
-    "options": [
-      "Une obligation de direction",
-      "Un panneau d'information touristique",
-      "Une direction sur route nationale ou express",
-      "Un itinéraire de détour"
-    ],
-    "bonneReponse": "Une direction sur route nationale ou express",
-    "explication": "Les panneaux directionnels bleus indiquent les directions sur les routes nationales et express au Sénégal.",
+    "enonce": "Un panneau rectangulaire bleu avec une flèche et un nom de ville indique :",
+    "options": ["Une obligation de suivre cette direction", "Un panneau d'information touristique", "Une direction sur route nationale ou voie express", "Un itinéraire de déviation temporaire"],
+    "bonneReponse": "Une direction sur route nationale ou voie express",
+    "explication": "Les panneaux directionnels bleus signalent les itinéraires sur routes nationales et voies express au Sénégal.",
     "image": "/icons/panneaux/D1.svg"
   },
   {
     "id": "PDI002",
     "categorie": "Panneaux de direction",
-    "enonce": "Un panneau de direction vert indique généralement :",
-    "options": [
-      "Une route de campagne",
-      "Un itinéraire bis",
-      "Un itinéraire sur autoroute ou voie rapide",
-      "Un itinéraire touristique"
-    ],
+    "enonce": "Un panneau de direction de couleur verte indique généralement :",
+    "options": ["Un itinéraire rural", "Un itinéraire secondaire bis", "Un itinéraire sur autoroute ou voie rapide", "Un itinéraire touristique"],
     "bonneReponse": "Un itinéraire sur autoroute ou voie rapide",
-    "explication": "Le vert est réservé aux voies rapides et autoroutes. Au Sénégal, l'axe Dakar-Thiès utilise cette signalisation.",
+    "explication": "La couleur verte est réservée aux voies rapides et autoroutes. Au Sénégal, l'axe Dakar-Thiès utilise cette signalisation verte.",
     "image": "/icons/panneaux/D2.svg"
   },
   {
     "id": "PDI003",
     "categorie": "Panneaux de direction",
-    "enonce": "Le panneau blanc avec nom de ville et kilométrage indique :",
-    "options": [
-      "Une zone interdite",
-      "La distance jusqu'à la prochaine localité",
-      "La vitesse maximale sur cet axe",
-      "Le numéro de la route"
-    ],
-    "bonneReponse": "La distance jusqu'à la prochaine localité",
-    "explication": "Les panneaux kilométriques blancs informent la distance jusqu'aux prochaines villes ou localités.",
+    "enonce": "Un panneau blanc indiquant un nom de ville avec une distance en km vous renseigne sur :",
+    "options": ["Une zone interdite", "La distance jusqu'à cette localité", "La vitesse maximale sur cet axe", "Le numéro de la route"],
+    "bonneReponse": "La distance jusqu'à cette localité",
+    "explication": "Les panneaux kilométriques blancs indiquent la distance en kilomètres jusqu'aux prochaines villes ou localités.",
     "image": "/icons/panneaux/D3.svg"
   },
   {
     "id": "PDI004",
     "categorie": "Panneaux de direction",
-    "enonce": "Un panneau avec une croix rouge et 'FIN' sur fond blanc signifie :",
-    "options": [
-      "Voie bloquée",
-      "Fin de la signalisation directionnelle de cet axe",
-      "Fin de la route",
-      "Début d'une zone industrielle"
-    ],
-    "bonneReponse": "Fin de la signalisation directionnelle de cet axe",
-    "explication": "Ce panneau indique la fin d'un itinéraire ou d'une déviation balisée. Reprenez votre propre navigation.",
-    "image": "/icons/panneaux/D4.svg"
+    "enonce": "Les panneaux directionnels de couleur jaune sur une route indiquent :",
+    "options": ["Un itinéraire prioritaire", "Un itinéraire de substitution temporaire (déviation)", "Une zone scolaire", "Un passage interdit aux poids lourds"],
+    "bonneReponse": "Un itinéraire de substitution temporaire (déviation)",
+    "explication": "Les panneaux de déviation jaunes indiquent un itinéraire alternatif temporaire, mis en place lors de travaux ou d'un accident.",
+    "image": "/icons/panneaux/KD1.svg"
   },
   {
     "id": "PDI005",
     "categorie": "Panneaux de direction",
-    "enonce": "Un panneau marron avec pictogramme (palmier, musée…) indique :",
-    "options": [
-      "Une zone industrielle",
-      "Un service d'urgence",
-      "Un site touristique ou culturel",
-      "Une zone résidentielle"
-    ],
+    "enonce": "Un panneau marron avec un pictogramme (palmier, musée, plage) signale :",
+    "options": ["Une zone industrielle", "Un service d'urgence", "Un site touristique ou culturel", "Une zone résidentielle protégée"],
     "bonneReponse": "Un site touristique ou culturel",
-    "explication": "Les panneaux marrons signalent les sites touristiques, culturels et naturels : parcs, musées, plages, réserves.",
+    "explication": "Les panneaux marrons signalent les sites d'intérêt touristique, culturel ou naturel : parcs nationaux, musées, plages, réserves naturelles.",
     "image": "/icons/panneaux/D5.svg"
   },
   {
     "id": "PDI006",
     "categorie": "Panneaux de direction",
-    "enonce": "Que signifie le numéro sur fond rouge affiché sur la route (ex: N1) ?",
-    "options": [
-      "La limitation de vitesse",
-      "Le numéro de la route nationale",
-      "Le numéro du carrefour",
-      "La distance en km"
-    ],
+    "enonce": "Que désigne la mention 'N1' sur fond rouge sur un panneau routier au Sénégal ?",
+    "options": ["Une limitation de vitesse à un chiffre", "Le numéro de la route nationale", "Le numéro du carrefour", "La priorité numéro 1"],
     "bonneReponse": "Le numéro de la route nationale",
-    "explication": "N1, N2... sont les routes nationales sénégalaises. N1 est l'axe principal Dakar-Kaolack-Tambacounda.",
+    "explication": "N1, N2, N3… désignent les routes nationales sénégalaises. La N1 est l'axe principal Dakar-Kaolack-Tambacounda.",
     "image": "/icons/panneaux/D6.svg"
   },
   {
     "id": "PDI007",
     "categorie": "Panneaux de direction",
-    "enonce": "Un panneau de pré-signalisation directionnelle est placé :",
-    "options": [
-      "Juste à l'intersection",
-      "À 150-500 m avant le carrefour",
-      "Après le carrefour",
-      "À 1 km exactement"
-    ],
-    "bonneReponse": "À 150-500 m avant le carrefour",
-    "explication": "La pré-signalisation permet d'anticiper : changer de voie, réduire la vitesse et prendre la bonne direction.",
+    "enonce": "Un panneau de pré-signalisation directionnelle est placé avant un carrefour. À quelle distance environ ?",
+    "options": ["Juste à l'intersection", "Entre 150 et 500 mètres avant", "Après le carrefour", "À exactement 1 kilomètre"],
+    "bonneReponse": "Entre 150 et 500 mètres avant",
+    "explication": "La pré-signalisation est placée en amont pour permettre aux conducteurs d'anticiper : changer de voie, adapter la vitesse et prendre la bonne direction.",
     "image": "/icons/panneaux/D1.svg"
   },
   {
     "id": "PDI008",
     "categorie": "Panneaux de direction",
     "enonce": "La couleur jaune sur un panneau de direction (déviation) indique :",
-    "options": [
-      "Un itinéraire prioritaire",
-      "Un itinéraire de substitution temporaire (déviation)",
-      "Une zone d'école",
-      "Un passage interdit aux camions"
-    ],
-    "bonneReponse": "Un itinéraire de substitution temporaire (déviation)",
-    "explication": "Les panneaux de déviation jaunes indiquent un itinéraire alternatif temporaire (travaux, accident). Suivez les flèches jaunes.",
+    "options": ["Un itinéraire prioritaire permanent", "Un itinéraire de substitution temporaire", "Une zone d'école", "Un passage interdit aux camions"],
+    "bonneReponse": "Un itinéraire de substitution temporaire",
+    "explication": "Les panneaux de déviation jaunes signalent un itinéraire alternatif temporaire (travaux, accident). Suivez les flèches jaunes jusqu'à la fin de la déviation.",
     "image": "/icons/panneaux/KD1.svg"
   }
 ]

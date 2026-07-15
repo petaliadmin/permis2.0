@@ -36,19 +36,16 @@ export function useStreak(): UseStreakState & UseStreakActions {
     }
   }, []);
 
-  const saveStreak = useCallback(
-    (current: number, longest: number, lastDate: Date | null) => {
-      localStorage.setItem(
-        STREAK_KEY,
-        JSON.stringify({
-          currentStreak: current,
-          longestStreak: longest,
-          lastActivityDate: lastDate?.toISOString(),
-        })
-      );
-    },
-    []
-  );
+  const saveStreak = useCallback((current: number, longest: number, lastDate: Date | null) => {
+    localStorage.setItem(
+      STREAK_KEY,
+      JSON.stringify({
+        currentStreak: current,
+        longestStreak: longest,
+        lastActivityDate: lastDate?.toISOString(),
+      })
+    );
+  }, []);
 
   const isStreakActive = useCallback(() => {
     if (!lastActivityDate) return false;

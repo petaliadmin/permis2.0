@@ -35,12 +35,20 @@ services:
       DATABASE_URL: postgresql://${DB_USER}:${DB_PASSWORD}@postgres:5432/${DB_NAME}
       JWT_SECRET: ${JWT_SECRET}
       FRONTEND_URL: ${FRONTEND_URL}
-      # Google OAuth
-      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
-      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      WEB_URL: ${WEB_URL:-${FRONTEND_URL}}
+      # SMS / WhatsApp OTP (Termii)
+      TERMII_API_KEY: ${TERMII_API_KEY}
+      TERMII_SENDER_ID: ${TERMII_SENDER_ID:-PERMIS}
+      # Web Push (VAPID)
+      VAPID_PUBLIC_KEY: ${VAPID_PUBLIC_KEY:-}
+      VAPID_PRIVATE_KEY: ${VAPID_PRIVATE_KEY:-}
+      VAPID_EMAIL: ${VAPID_EMAIL:-mailto:admin@permis2.com}
       # Payment provider (Bictorys)
+      PAYMENT_LIVE: ${PAYMENT_LIVE:-true}
+      BICTORYS_API_URL: ${BICTORYS_API_URL:-https://api.bictorys.com}
       BICTORYS_API_KEY: ${BICTORYS_API_KEY}
       BICTORYS_SECRET_KEY: ${BICTORYS_SECRET_KEY}
+      PAYMENT_COUNTRY: ${PAYMENT_COUNTRY:-SN}
     ports:
       - "3001:3001"
     depends_on:

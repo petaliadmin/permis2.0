@@ -1,13 +1,4 @@
-import {
-  Controller,
-  Post,
-  Get,
-  Param,
-  Body,
-  UseGuards,
-  Request,
-  Query,
-} from '@nestjs/common';
+import { Controller, Post, Get, Param, Body, UseGuards, Request, Query } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiTags, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { ExamService } from './exam.service';
@@ -24,11 +15,23 @@ export class ExamController {
   @ApiBearerAuth()
   @ApiResponse({ status: 201, description: 'Exam started' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async startExam(
-    @Request() req,
-    @Body() dto: StartExamDto,
-  ) {
+  async startExam(@Request() req, @Body() dto: StartExamDto) {
     return this.examService.startExam(req.user.userId, dto);
+  }
+
+  // Diapo (image-based) mock-exam content — public: the page itself gates
+  // premium series behind entitlements.
+  @Get('diapos')
+  @ApiResponse({ status: 200, description: 'List of diapo exam series' })
+  async listDiapos() {
+    return this.examService.listDiapos();
+  }
+
+  @Get('diapos/:id')
+  @ApiResponse({ status: 200, description: 'Single diapo exam with its questions' })
+  @ApiResponse({ status: 404, description: 'Diapo not found' })
+  async getDiapo(@Param('id') id: string) {
+    return this.examService.getDiapo(parseInt(id, 10));
   }
 
   @Get(':id')
@@ -50,7 +53,7 @@ export class ExamController {
   async submitAnswer(
     @Param('id') examId: string,
     @Body() submitAnswerDto: SubmitAnswerDto & { questionId: string; timeSpent?: number },
-    @Request() req,
+    @Request() req
   ) {
     return this.examService.submitAnswer(
       examId,
@@ -86,15 +89,11 @@ export class ExamController {
   @ApiBearerAuth()
   @ApiResponse({ status: 200, description: 'User exam history' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async getHistory(
-    @Request() req,
-    @Query('skip') skip?: string,
-    @Query('take') take?: string,
-  ) {
+  async getHistory(@Request() req, @Query('skip') skip?: string, @Query('take') take?: string) {
     return this.examService.getExamHistory(
       req.user.userId,
       parseInt(skip ?? '0', 10),
-      parseInt(take ?? '10', 10),
+      parseInt(take ?? '10', 10)
     );
   }
 }

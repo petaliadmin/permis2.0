@@ -71,9 +71,8 @@ export class StatisticsService {
     });
 
     const totalTests = exams.length;
-    const averageScore = exams.length > 0
-      ? exams.reduce((sum, e) => sum + e.percentage, 0) / exams.length
-      : 0;
+    const averageScore =
+      exams.length > 0 ? exams.reduce((sum, e) => sum + e.percentage, 0) / exams.length : 0;
     const bestScore = exams.length > 0 ? Math.max(...exams.map((e) => e.percentage)) : 0;
 
     // Get all answers (from exams) using aggregations to avoid unbounded scans
@@ -88,9 +87,8 @@ export class StatisticsService {
 
     const totalQuestionsAnswered = answerAgg._count._all;
     const totalIncorrectAnswers = totalQuestionsAnswered - totalCorrectAnswers;
-    const overallAccuracy = totalQuestionsAnswered > 0
-      ? (totalCorrectAnswers / totalQuestionsAnswered) * 100
-      : 0;
+    const overallAccuracy =
+      totalQuestionsAnswered > 0 ? (totalCorrectAnswers / totalQuestionsAnswered) * 100 : 0;
 
     // Calculate time spent
     const timeSpentTraining = answerAgg._sum.timeSpent ?? 0;
@@ -111,32 +109,44 @@ export class StatisticsService {
   }
 
   async getCategoryStatistics(userId: string): Promise<CategoryStats[]> {
-    const categories = await this.prisma.category.findMany();
+    const [categories, allAnswers] = await Promise.all([
+      this.prisma.category.findMany(),
+      this.prisma.examQuestion.findMany({
+        where: { exam: { userId } },
+        select: {
+          isCorrect: true,
+          timeSpent: true,
+          question: {
+            select: { categoryId: true },
+          },
+        },
+      }),
+    ]);
+
+    // Build a map of categoryId -> aggregated stats in memory
+    const statsMap = new Map<string, { correct: number; total: number; timeSpent: number }>();
+    for (const answer of allAnswers) {
+      const catId = answer.question.categoryId;
+      const entry = statsMap.get(catId) ?? { correct: 0, total: 0, timeSpent: 0 };
+      entry.total += 1;
+      entry.timeSpent += answer.timeSpent;
+      if (answer.isCorrect) entry.correct += 1;
+      statsMap.set(catId, entry);
+    }
 
     const stats: CategoryStats[] = [];
-
     for (const category of categories) {
-      const answers = await this.prisma.examQuestion.findMany({
-        where: {
-          exam: { userId },
-          question: { categoryId: category.id },
-        },
-      });
+      const entry = statsMap.get(category.id);
+      if (!entry || entry.total === 0) continue;
 
-      if (answers.length === 0) continue;
-
-      const correctAnswers = answers.filter((a) => a.isCorrect).length;
-      const totalAnswers = answers.length;
-      const successRate = (correctAnswers / totalAnswers) * 100;
-      const averageTimePerQuestion = answers.length > 0
-        ? answers.reduce((sum, a) => sum + a.timeSpent, 0) / answers.length
-        : 0;
+      const successRate = (entry.correct / entry.total) * 100;
+      const averageTimePerQuestion = entry.timeSpent / entry.total;
 
       stats.push({
         categoryId: category.id,
         categoryName: category.label,
-        correctAnswers,
-        totalAnswers,
+        correctAnswers: entry.correct,
+        totalAnswers: entry.total,
         successRate: Math.round(successRate * 100) / 100,
         averageTimePerQuestion: Math.round(averageTimePerQuestion),
       });
@@ -186,9 +196,7 @@ export class StatisticsService {
       existing.cumulativeXP = cumulativeXP;
     }
 
-    return Array.from(progressMap.values()).sort((a, b) =>
-      a.date.getTime() - b.date.getTime()
-    );
+    return Array.from(progressMap.values()).sort((a, b) => a.date.getTime() - b.date.getTime());
   }
 
   async getDailyActivity(userId: string, days = 30): Promise<DailyActivity[]> {
@@ -228,9 +236,7 @@ export class StatisticsService {
       activity.xpEarned += exam.score * 10;
     }
 
-    return Array.from(activityMap.values()).sort((a, b) =>
-      a.date.getTime() - b.date.getTime()
-    );
+    return Array.from(activityMap.values()).sort((a, b) => a.date.getTime() - b.date.getTime());
   }
 
   async getWeakAreas(userId: string, limit = 5): Promise<CategoryStats[]> {
@@ -280,21 +286,18 @@ export class StatisticsService {
     // Get global statistics using aggregations to avoid unbounded full-table scans
     const examAgg = await this.prisma.examResult.aggregate({
       _avg: { percentage: true },
-      _count: { _all: true },
     });
     const globalAverageScore = examAgg._avg.percentage ?? 0;
 
     const answerAgg = await this.prisma.examQuestion.aggregate({
-      _avg: { timeSpent: true },
       _count: { _all: true },
+      _avg: { timeSpent: true },
     });
-    const correctAnswerCount = await this.prisma.examQuestion.count({
+    const globalCorrect = await this.prisma.examQuestion.count({
       where: { isCorrect: true },
     });
-    const totalAnswerCount = answerAgg._count._all;
-    const globalAccuracy = totalAnswerCount > 0
-      ? (correctAnswerCount / totalAnswerCount) * 100
-      : 0;
+    const globalAccuracy =
+      answerAgg._count._all > 0 ? (globalCorrect / answerAgg._count._all) * 100 : 0;
     const globalAverageTime = answerAgg._avg.timeSpent ?? 0;
 
     // Calculate user percentile
@@ -305,9 +308,8 @@ export class StatisticsService {
     });
 
     const totalUsers = await this.prisma.user.count();
-    const userPercentile = totalUsers > 0
-      ? ((totalUsers - usersWithBetterScore) / totalUsers) * 100
-      : 0;
+    const userPercentile =
+      totalUsers > 0 ? ((totalUsers - usersWithBetterScore) / totalUsers) * 100 : 0;
 
     return {
       userStats,
@@ -350,9 +352,7 @@ export class StatisticsService {
     }
 
     if (stats.totalTests > 0 && stats.averageScore < stats.bestScore - 10) {
-      suggestions.push(
-        'Vos derniers résultats sont en baisse - prenez une pause et révisez'
-      );
+      suggestions.push('Vos derniers résultats sont en baisse - prenez une pause et révisez');
     }
 
     return {

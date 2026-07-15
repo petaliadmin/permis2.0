@@ -7,17 +7,21 @@ export class CheckoutDto {
   @IsString()
   productId: string;
 
-  @ApiProperty({ example: '+221770000000', description: 'Mobile Money phone number' })
+  @ApiProperty({
+    example: '+221770000000',
+    description: 'Mobile Money phone number (optional pre-fill)',
+  })
+  @IsOptional()
   @IsString()
-  phone: string;
+  phone?: string;
 
   @ApiProperty({
     example: 'orange_money',
-    enum: ['orange_money', 'wave', 'card'],
+    enum: ['orange_money', 'wave', 'free_money', 'card'],
     required: false,
-    description: 'Payment method chosen by the user (mapped to a Bictorys payment_type)',
+    description: 'Tracking hint only — all methods are handled by the Bictorys hosted checkout',
   })
   @IsOptional()
-  @IsIn(['orange_money', 'wave', 'card'])
+  @IsIn(['orange_money', 'wave', 'free_money', 'card'])
   method?: PaymentMethod;
 }

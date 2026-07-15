@@ -1,13 +1,4 @@
-import {
-  Controller,
-  Post,
-  Get,
-  Body,
-  UseGuards,
-  Request,
-  Res,
-  HttpCode,
-} from '@nestjs/common';
+import { Controller, Post, Get, Body, UseGuards, Request, Res, HttpCode } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Throttle } from '@nestjs/throttler';
 import { ApiBearerAuth, ApiTags, ApiResponse } from '@nestjs/swagger';
@@ -22,6 +13,7 @@ import { RequestOtpDto } from './dto/request-otp.dto';
 import { VerifyOtpDto } from './dto/verify-otp.dto';
 import { LoginPinDto } from './dto/login-pin.dto';
 import { RegisterPinDto } from './dto/register-pin.dto';
+import { ResetPinDto } from './dto/reset-pin.dto';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -52,10 +44,7 @@ export class AuthController {
   @HttpCode(200)
   @ApiResponse({ status: 200, description: 'Login with phone + PIN' })
   @ApiResponse({ status: 401, description: 'Invalid credentials' })
-  async loginWithPin(
-    @Body() dto: LoginPinDto,
-    @Res({ passthrough: true }) res: Response,
-  ) {
+  async loginWithPin(@Body() dto: LoginPinDto, @Res({ passthrough: true }) res: Response) {
     const result = await this.authService.loginWithPin(dto.phone, dto.pin);
     res.cookie('access_token', result.accessToken, {
       httpOnly: true,
@@ -72,11 +61,25 @@ export class AuthController {
   @HttpCode(201)
   @ApiResponse({ status: 201, description: 'Account created with phone + PIN' })
   @ApiResponse({ status: 409, description: 'Phone number already in use' })
-  async registerWithPin(
-    @Body() dto: RegisterPinDto,
-    @Res({ passthrough: true }) res: Response,
-  ) {
+  async registerWithPin(@Body() dto: RegisterPinDto, @Res({ passthrough: true }) res: Response) {
     const result = await this.authService.registerWithPin(dto.name, dto.phone, dto.pin);
+    res.cookie('access_token', result.accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 24 * 60 * 60 * 1000,
+      path: '/',
+    });
+    return result;
+  }
+
+  @Throttle({ default: { limit: 5, ttl: 60_000 } })
+  @Post('reset-pin')
+  @HttpCode(200)
+  @ApiResponse({ status: 200, description: 'PIN reset after OTP verification; user logged in' })
+  @ApiResponse({ status: 400, description: 'Invalid or expired OTP' })
+  async resetPin(@Body() dto: ResetPinDto, @Res({ passthrough: true }) res: Response) {
+    const result = await this.authService.resetPinWithOtp(dto.phone, dto.otp, dto.pin);
     res.cookie('access_token', result.accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
@@ -94,10 +97,7 @@ export class AuthController {
   @HttpCode(201)
   @ApiResponse({ status: 201, description: 'User successfully registered' })
   @ApiResponse({ status: 409, description: 'User already exists' })
-  async register(
-    @Body() registerDto: RegisterDto,
-    @Res({ passthrough: true }) res: Response,
-  ) {
+  async register(@Body() registerDto: RegisterDto, @Res({ passthrough: true }) res: Response) {
     const result = await this.authService.register(registerDto);
     res.cookie('access_token', result.accessToken, {
       httpOnly: true,
@@ -114,10 +114,7 @@ export class AuthController {
   @HttpCode(200)
   @ApiResponse({ status: 200, description: 'Login successful' })
   @ApiResponse({ status: 401, description: 'Invalid credentials' })
-  async login(
-    @Body() loginDto: LoginDto,
-    @Res({ passthrough: true }) res: Response,
-  ) {
+  async login(@Body() loginDto: LoginDto, @Res({ passthrough: true }) res: Response) {
     const result = await this.authService.login(loginDto.email, loginDto.password);
     res.cookie('access_token', result.accessToken, {
       httpOnly: true,

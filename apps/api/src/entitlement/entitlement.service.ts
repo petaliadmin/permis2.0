@@ -38,7 +38,7 @@ export class EntitlementService {
 
   async hasAccessToSeries(
     userId: string | undefined,
-    series: { isFree?: boolean },
+    series: { isFree?: boolean }
   ): Promise<boolean> {
     if (series.isFree) return true;
     const keys = await this.getKeys(userId);
@@ -47,7 +47,7 @@ export class EntitlementService {
 
   async hasAccessToCourse(
     userId: string | undefined,
-    course: { isFree?: boolean },
+    course: { isFree?: boolean }
   ): Promise<boolean> {
     if (course.isFree) return true;
     const keys = await this.getKeys(userId);
@@ -56,7 +56,7 @@ export class EntitlementService {
 
   async hasAccessToExamTemplate(
     userId: string | undefined,
-    template: { id: string; isFree?: boolean },
+    template: { id: string; isFree?: boolean }
   ): Promise<boolean> {
     if (template.isFree) return true;
     const keys = await this.getKeys(userId);

@@ -49,9 +49,15 @@ function Sheet({ open, onClose, children, ariaLabel, className }: SheetProps) {
         const first = focusable[0];
         const last = focusable[focusable.length - 1];
         if (e.shiftKey) {
-          if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+          if (document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+          }
         } else {
-          if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+          if (document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+          }
         }
       }
     };
@@ -87,10 +93,7 @@ function Sheet({ open, onClose, children, ariaLabel, className }: SheetProps) {
       )}
     >
       {/* Backdrop */}
-      <div
-        onClick={onClose}
-        className="absolute inset-0 bg-dark/40 backdrop-blur-sm"
-      />
+      <div onClick={onClose} className="absolute inset-0 bg-dark/40 backdrop-blur-sm" />
 
       {/* Panel */}
       <div

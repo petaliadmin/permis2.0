@@ -8,13 +8,13 @@
 
 L'objectif n'est pas uniquement de produire du code fonctionnel, mais de livrer une application :
 
-* professionnelle
-* moderne
-* cohérente
-* intuitive
-* rapide
-* accessible
-* prête pour la production
+- professionnelle
+- moderne
+- cohérente
+- intuitive
+- rapide
+- accessible
+- prête pour la production
 
 Le résultat final doit être comparable à une application développée par une équipe expérimentée de designers et d'ingénieurs.
 
@@ -28,16 +28,16 @@ Toujours construire un design cohérent.
 
 Définir dès le départ :
 
-* palette de couleurs principale
-* couleurs secondaires
-* couleurs d'accentuation
-* couleurs d'erreur
-* couleurs de succès
-* couleurs d'avertissement
-* couleurs d'information
-* couleurs de fond
-* couleurs des cartes
-* couleurs des bordures
+- palette de couleurs principale
+- couleurs secondaires
+- couleurs d'accentuation
+- couleurs d'erreur
+- couleurs de succès
+- couleurs d'avertissement
+- couleurs d'information
+- couleurs de fond
+- couleurs des cartes
+- couleurs des bordures
 
 Aucune couleur ne doit être choisie au hasard.
 
@@ -51,23 +51,23 @@ Utiliser une hiérarchie claire.
 
 Respecter :
 
-* taille des titres
-* taille des sous-titres
-* taille des paragraphes
-* taille des labels
-* taille des boutons
-* taille des tableaux
-* taille des menus
+- taille des titres
+- taille des sous-titres
+- taille des paragraphes
+- taille des labels
+- taille des boutons
+- taille des tableaux
+- taille des menus
 
 Choisir une police moderne adaptée au contexte.
 
 Exemples :
 
-* Inter
-* Geist
-* Manrope
-* SF Pro
-* Roboto
+- Inter
+- Geist
+- Manrope
+- SF Pro
+- Roboto
 
 Les tailles doivent rester cohérentes dans toute l'application.
 
@@ -79,14 +79,14 @@ Respecter un système de spacing constant.
 
 Exemple :
 
-* 4 px
-* 8 px
-* 12 px
-* 16 px
-* 24 px
-* 32 px
-* 48 px
-* 64 px
+- 4 px
+- 8 px
+- 12 px
+- 16 px
+- 24 px
+- 32 px
+- 48 px
+- 64 px
 
 Éviter les espacements arbitraires.
 
@@ -98,11 +98,11 @@ Utiliser des rayons cohérents.
 
 Exemple :
 
-* petites cartes
-* boutons
-* champs
-* modales
-* tableaux
+- petites cartes
+- boutons
+- champs
+- modales
+- tableaux
 
 Le style doit être uniforme.
 
@@ -124,9 +124,9 @@ Toujours utiliser une seule bibliothèque.
 
 Exemples :
 
-* Lucide
-* Heroicons
-* Tabler Icons
+- Lucide
+- Heroicons
+- Tabler Icons
 
 Ne jamais mélanger plusieurs styles d'icônes.
 
@@ -138,39 +138,39 @@ Chaque interface doit respecter les standards modernes.
 
 Les composants doivent être :
 
-* homogènes
-* élégants
-* simples
-* lisibles
-* accessibles
+- homogènes
+- élégants
+- simples
+- lisibles
+- accessibles
 
 Chaque écran doit posséder :
 
-* une hiérarchie visuelle claire
-* une navigation intuitive
-* des actions facilement identifiables
-* un bon équilibre des espaces
+- une hiérarchie visuelle claire
+- une navigation intuitive
+- des actions facilement identifiables
+- un bon équilibre des espaces
 
 ---
 
 Les formulaires doivent comporter :
 
-* labels explicites
-* placeholders utiles
-* validations en temps réel
-* messages d'erreur compréhensibles
-* messages de succès
+- labels explicites
+- placeholders utiles
+- validations en temps réel
+- messages d'erreur compréhensibles
+- messages de succès
 
 ---
 
 Les tableaux doivent intégrer :
 
-* recherche
-* tri
-* filtres
-* pagination
-* export si nécessaire
-* sélection multiple si utile
+- recherche
+- tri
+- filtres
+- pagination
+- export si nécessaire
+- sélection multiple si utile
 
 ---
 
@@ -184,9 +184,9 @@ Les actions destructrices doivent être confirmées.
 
 Les chargements doivent utiliser :
 
-* skeletons
-* loaders
-* placeholders
+- skeletons
+- loaders
+- placeholders
 
 Jamais une page vide.
 
@@ -196,12 +196,12 @@ Les états doivent toujours être gérés.
 
 Exemple :
 
-* vide
-* chargement
-* erreur
-* succès
-* absence de données
-* réseau indisponible
+- vide
+- chargement
+- erreur
+- succès
+- absence de données
+- réseau indisponible
 
 ---
 
@@ -211,13 +211,13 @@ Toujours réfléchir comme l'utilisateur final.
 
 Avant chaque implémentation, répondre aux questions suivantes :
 
-* Est-ce intuitif ?
-* Est-ce simple ?
-* Est-ce rapide ?
-* Est-ce évident ?
-* Peut-on réduire le nombre de clics ?
-* Peut-on éviter une confusion ?
-* Peut-on améliorer la lisibilité ?
+- Est-ce intuitif ?
+- Est-ce simple ?
+- Est-ce rapide ?
+- Est-ce évident ?
+- Peut-on réduire le nombre de clics ?
+- Peut-on éviter une confusion ?
+- Peut-on améliorer la lisibilité ?
 
 L'expérience utilisateur doit toujours primer sur la complexité technique.
 
@@ -227,10 +227,10 @@ Limiter la charge cognitive.
 
 Éviter :
 
-* les interfaces surchargées
-* les formulaires interminables
-* les menus complexes
-* les actions inutiles
+- les interfaces surchargées
+- les formulaires interminables
+- les menus complexes
+- les actions inutiles
 
 ---
 
@@ -238,11 +238,11 @@ Chaque action utilisateur doit produire un retour immédiat.
 
 Exemples :
 
-* animation
-* notification
-* changement visuel
-* loader
-* confirmation
+- animation
+- notification
+- changement visuel
+- loader
+- confirmation
 
 ---
 
@@ -250,11 +250,11 @@ Exemples :
 
 Chaque écran doit fonctionner parfaitement sur :
 
-* Mobile
-* Tablette
-* Laptop
-* Desktop
-* Écran large
+- Mobile
+- Tablette
+- Laptop
+- Desktop
+- Écran large
 
 Le responsive ne doit jamais être une réflexion secondaire.
 
@@ -268,13 +268,13 @@ Respecter les standards WCAG.
 
 Toujours vérifier :
 
-* contraste
-* navigation clavier
-* focus visibles
-* aria-label
-* lecteurs d'écran
-* taille des textes
-* taille des zones cliquables
+- contraste
+- navigation clavier
+- focus visibles
+- aria-label
+- lecteurs d'écran
+- taille des textes
+- taille des zones cliquables
 
 ---
 
@@ -282,14 +282,14 @@ Toujours vérifier :
 
 Optimiser systématiquement :
 
-* images
-* requêtes réseau
-* composants
-* rendu
-* lazy loading
-* pagination
-* cache
-* bundle JavaScript
+- images
+- requêtes réseau
+- composants
+- rendu
+- lazy loading
+- pagination
+- cache
+- bundle JavaScript
 
 Éviter les re-rendus inutiles.
 
@@ -315,13 +315,13 @@ Tester entièrement le composant.
 
 Vérifier :
 
-* tous les boutons
-* tous les liens
-* tous les formulaires
-* toutes les validations
-* toutes les erreurs
-* toutes les permissions
-* tous les cas limites
+- tous les boutons
+- tous les liens
+- tous les formulaires
+- toutes les validations
+- toutes les erreurs
+- toutes les permissions
+- tous les cas limites
 
 Aucun bouton ne doit être inactif sans justification.
 
@@ -373,16 +373,16 @@ Faire une revue complète.
 
 Vérifier :
 
-* cohérence graphique
-* responsive
-* performances
-* UX
-* UI
-* accessibilité
-* lisibilité
-* cohérence des couleurs
-* cohérence des espacements
-* cohérence des composants
+- cohérence graphique
+- responsive
+- performances
+- UX
+- UI
+- accessibilité
+- lisibilité
+- cohérence des couleurs
+- cohérence des espacements
+- cohérence des composants
 
 Corriger immédiatement toute incohérence.
 
@@ -410,12 +410,12 @@ L'IA ne doit jamais se contenter de produire du code.
 
 Elle doit constamment se demander :
 
-* Puis-je améliorer cette interface ?
-* Puis-je rendre ce parcours plus fluide ?
-* Existe-t-il une meilleure pratique ?
-* Est-ce que ce design paraît professionnel ?
-* Est-ce que je serais satisfait d'utiliser cette application tous les jours ?
-* Est-ce que cette fonctionnalité est réellement terminée ?
+- Puis-je améliorer cette interface ?
+- Puis-je rendre ce parcours plus fluide ?
+- Existe-t-il une meilleure pratique ?
+- Est-ce que ce design paraît professionnel ?
+- Est-ce que je serais satisfait d'utiliser cette application tous les jours ?
+- Est-ce que cette fonctionnalité est réellement terminée ?
 
 Si une amélioration est possible, elle doit être proposée ou intégrée automatiquement.
 
@@ -425,15 +425,15 @@ Si une amélioration est possible, elle doit être proposée ou intégrée autom
 
 Une fonctionnalité n'est considérée comme terminée que si :
 
-* le code est propre, lisible et maintenable ;
-* le design est cohérent avec l'ensemble de l'application ;
-* l'expérience utilisateur est fluide et intuitive ;
-* tous les composants sont responsives ;
-* l'accessibilité est respectée ;
-* les performances sont optimisées ;
-* tous les liens et boutons fonctionnent correctement ;
-* les cas d'erreur et les états particuliers sont gérés ;
-* l'ensemble du parcours utilisateur a été testé de bout en bout ;
-* aucune anomalie visuelle ou fonctionnelle n'est détectée.
+- le code est propre, lisible et maintenable ;
+- le design est cohérent avec l'ensemble de l'application ;
+- l'expérience utilisateur est fluide et intuitive ;
+- tous les composants sont responsives ;
+- l'accessibilité est respectée ;
+- les performances sont optimisées ;
+- tous les liens et boutons fonctionnent correctement ;
+- les cas d'erreur et les états particuliers sont gérés ;
+- l'ensemble du parcours utilisateur a été testé de bout en bout ;
+- aucune anomalie visuelle ou fonctionnelle n'est détectée.
 
 La qualité du produit livré doit être équivalente à celle d'une application SaaS moderne prête pour un déploiement en production.

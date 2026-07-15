@@ -19,14 +19,8 @@ export class TrafficSignController {
 
   @Get()
   @ApiResponse({ status: 200, description: 'List of traffic signs' })
-  async findAll(
-    @Query('skip') skip?: string,
-    @Query('take') take?: string,
-  ) {
-    return this.trafficSignService.findAll(
-      parseInt(skip ?? '0', 10),
-      parseInt(take ?? '20', 10),
-    );
+  async findAll(@Query('skip') skip?: string, @Query('take') take?: string) {
+    return this.trafficSignService.findAll(parseInt(skip ?? '0', 10), parseInt(take ?? '20', 10));
   }
 
   @Get('categories')
@@ -40,12 +34,16 @@ export class TrafficSignController {
   async search(
     @Query('q') query: string,
     @Query('skip') skip?: string,
-    @Query('take') take?: string,
+    @Query('take') take?: string
   ) {
     if (!query || query.length < 2) {
       return { data: [], query, total: 0, message: 'Query too short' };
     }
-    return this.trafficSignService.search(query, parseInt(skip ?? '0', 10), parseInt(take ?? '20', 10));
+    return this.trafficSignService.search(
+      query,
+      parseInt(skip ?? '0', 10),
+      parseInt(take ?? '20', 10)
+    );
   }
 
   @Get('category/:category')
@@ -53,9 +51,13 @@ export class TrafficSignController {
   async findByCategory(
     @Param('category') category: string,
     @Query('skip') skip?: string,
-    @Query('take') take?: string,
+    @Query('take') take?: string
   ) {
-    return this.trafficSignService.findByCategory(category, parseInt(skip ?? '0', 10), parseInt(take ?? '20', 10));
+    return this.trafficSignService.findByCategory(
+      category,
+      parseInt(skip ?? '0', 10),
+      parseInt(take ?? '20', 10)
+    );
   }
 
   @Get(':id/related')

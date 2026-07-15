@@ -1,4 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 60">
-  <rect x="2" y="2" width="136" height="56" rx="6" fill="#1565C0"/>
-  <text x="70" y="38" text-anchor="middle" font-size="18" font-weight="900" fill="white" font-family="Arial">CENTRE-VILLE</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100">
+  <rect x="4" y="4" width="192" height="92" rx="8" fill="#fff" stroke="#1a1a1a" stroke-width="5"/>
+  <text x="100" y="44" font-family="Arial, sans-serif" font-size="21" font-weight="bold" text-anchor="middle" fill="#1a1a1a">CENTRE-VILLE</text>
+  <path d="M60 70 H128 M128 70 l-13 -9 M128 70 l-13 9" stroke="#1a1a1a" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

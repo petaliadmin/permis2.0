@@ -7,8 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "vitest",
-    "test:e2e": "playwright test",
+    "test": "vitest run --passWithNoTests",
     "clean": "rm -rf .next dist",
     "type-check": "tsc --noEmit"
   },

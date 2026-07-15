@@ -39,6 +39,7 @@ export class UserService {
           avatar: true,
           xp: true,
           level: true,
+          role: true,
           createdAt: true,
         },
       }),
@@ -76,5 +77,50 @@ export class UserService {
     const user = await this.findById(id);
     if (!user) throw new NotFoundException('User not found');
     return this.prisma.user.delete({ where: { id } });
+  }
+
+  async getUserStats(userId: string) {
+    const [user, streak, progress, examCount] = await Promise.all([
+      this.prisma.user.findUnique({
+        where: { id: userId },
+        select: { xp: true, level: true, createdAt: true },
+      }),
+      this.prisma.dailyStreak.findUnique({
+        where: { userId },
+        select: { currentStreak: true },
+      }),
+      this.prisma.progress.findMany({
+        where: { userId },
+        select: { totalQuestions: true, correctAnswers: true },
+      }),
+      this.prisma.examResult.count({ where: { userId } }),
+    ]);
+
+    if (!user) {
+      return {
+        daysOnApp: 0,
+        quizAnswered: 0,
+        examCount: 0,
+        streak: 0,
+        xp: 0,
+        level: 'Débutant',
+        progressPct: 0,
+      };
+    }
+
+    const daysOnApp = Math.max(1, Math.ceil((Date.now() - user.createdAt.getTime()) / 86_400_000));
+    const quizAnswered = progress.reduce((sum, p) => sum + p.totalQuestions, 0);
+    const totalCorrect = progress.reduce((sum, p) => sum + p.correctAnswers, 0);
+    const progressPct = quizAnswered > 0 ? Math.round((totalCorrect / quizAnswered) * 100) : 0;
+
+    return {
+      daysOnApp,
+      quizAnswered,
+      examCount,
+      streak: streak?.currentStreak ?? 0,
+      xp: user.xp,
+      level: user.level,
+      progressPct,
+    };
   }
 }

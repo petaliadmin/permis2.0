@@ -1,12 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Param,
-  Query,
-  UseGuards,
-  Request,
-} from '@nestjs/common';
+import { Controller, Get, Post, Param, Query, UseGuards, Request } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiTags, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { QuestionService } from './question.service';
@@ -18,11 +10,21 @@ export class QuestionController {
 
   @Get('random')
   @ApiResponse({ status: 200, description: 'Random questions' })
-  async getRandom(
-    @Query('categoryId') categoryId?: string,
-    @Query('limit') limit?: string,
-  ) {
+  async getRandom(@Query('categoryId') categoryId?: string, @Query('limit') limit?: string) {
     return this.questionService.getRandomQuestions(categoryId, parseInt(limit ?? '10', 10));
+  }
+
+  @Get('quiz')
+  @ApiResponse({
+    status: 200,
+    description: 'Quiz question bank for the given category labels (comma-separated)',
+  })
+  async getQuizBank(@Query('categories') categories?: string) {
+    const labels = (categories ?? '')
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean);
+    return this.questionService.getQuizBank(labels);
   }
 
   @Get('category/:categoryId')
@@ -30,12 +32,12 @@ export class QuestionController {
   async findByCategory(
     @Param('categoryId') categoryId: string,
     @Query('skip') skip?: string,
-    @Query('take') take?: string,
+    @Query('take') take?: string
   ) {
     return this.questionService.findByCategory(
       categoryId,
       parseInt(skip ?? '0', 10),
-      parseInt(take ?? '10', 10),
+      parseInt(take ?? '10', 10)
     );
   }
 
@@ -44,15 +46,11 @@ export class QuestionController {
   @ApiBearerAuth()
   @ApiResponse({ status: 200, description: 'User favorite questions' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async getFavorites(
-    @Request() req,
-    @Query('skip') skip?: string,
-    @Query('take') take?: string,
-  ) {
+  async getFavorites(@Request() req, @Query('skip') skip?: string, @Query('take') take?: string) {
     return this.questionService.getFavoriteQuestions(
       req.user.userId,
       parseInt(skip ?? '0', 10),
-      parseInt(take ?? '10', 10),
+      parseInt(take ?? '10', 10)
     );
   }
 
@@ -61,10 +59,7 @@ export class QuestionController {
   @ApiBearerAuth()
   @ApiResponse({ status: 200, description: 'Favorite toggled' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async toggleFavorite(
-    @Param('id') id: string,
-    @Request() req,
-  ) {
+  async toggleFavorite(@Param('id') id: string, @Request() req) {
     return this.questionService.toggleFavoriteQuestion(id, req.user.userId);
   }
 

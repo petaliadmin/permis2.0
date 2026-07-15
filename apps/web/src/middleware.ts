@@ -4,9 +4,7 @@ import type { NextRequest } from 'next/server';
 // Only routes that are entirely meaningless without an account.
 // Everything else is accessible as a guest; individual pages prompt for
 // login only when a specific action requires it (saving progress, purchasing…).
-const PROTECTED_ROUTES = [
-  '/notifications',
-];
+const PROTECTED_ROUTES = ['/notifications', '/admin'];
 
 const AUTH_ROUTES = ['/auth/login', '/auth/register', '/auth/forgot-password'];
 
@@ -30,7 +28,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|public|manifest.json|sw.js|icon|api).*)',
-  ],
+  matcher: ['/((?!_next/static|_next/image|favicon.ico|public|manifest.json|sw.js|icon|api).*)'],
 };

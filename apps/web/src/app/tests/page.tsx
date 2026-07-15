@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AppShell } from '@/components/AppShell';
+import { loadData } from '@/lib/dataSource';
 
 interface Question {
   id: string;
@@ -39,10 +40,9 @@ export default function TestsPage() {
   const [score, setScore] = useState(0);
 
   useEffect(() => {
-    fetch('/data/questions_doc.json')
-      .then((r) => r.json())
+    loadData<Question[]>('/questions/quiz', '/data/questions_doc.json')
       .then((d) => {
-        setAllQuestions(Array.isArray(d) ? d : (d.questions ?? []));
+        setAllQuestions(Array.isArray(d) ? d : []);
       })
       .catch(console.error);
   }, []);
@@ -107,10 +107,20 @@ export default function TestsPage() {
         >
           {/* Score ring */}
           <div className="relative flex h-36 w-36 items-center justify-center">
-            <svg viewBox="0 0 120 120" className="absolute inset-0 -rotate-90" width="144" height="144">
+            <svg
+              viewBox="0 0 120 120"
+              className="absolute inset-0 -rotate-90"
+              width="144"
+              height="144"
+            >
               <circle cx="60" cy="60" r="50" fill="none" stroke="#E2E8F0" strokeWidth="10" />
               <motion.circle
-                cx="60" cy="60" r="50" fill="none" stroke={color} strokeWidth="10"
+                cx="60"
+                cy="60"
+                r="50"
+                fill="none"
+                stroke={color}
+                strokeWidth="10"
                 strokeLinecap="round"
                 strokeDasharray={`${2 * Math.PI * 50}`}
                 initial={{ strokeDashoffset: 2 * Math.PI * 50 }}
@@ -119,8 +129,12 @@ export default function TestsPage() {
               />
             </svg>
             <div className="text-center">
-              <p className="text-3xl font-extrabold" style={{ color }}>{pct}%</p>
-              <p className="text-xs font-semibold text-slate-400">{score}/{total}</p>
+              <p className="text-3xl font-extrabold" style={{ color }}>
+                {pct}%
+              </p>
+              <p className="text-xs font-semibold text-slate-400">
+                {score}/{total}
+              </p>
             </div>
           </div>
 
@@ -156,7 +170,9 @@ export default function TestsPage() {
             transition={{ ease: [0.22, 1, 0.36, 1], duration: 0.3 }}
           />
         </div>
-        <span className="shrink-0 text-xs font-bold text-slate-400">{index + 1}/{total}</span>
+        <span className="shrink-0 text-xs font-bold text-slate-400">
+          {index + 1}/{total}
+        </span>
       </div>
 
       <AnimatePresence mode="wait">
@@ -173,9 +189,7 @@ export default function TestsPage() {
           </p>
 
           {/* Question */}
-          <p className="mb-6 text-base font-bold leading-snug text-foreground">
-            {q.enonce}
-          </p>
+          <p className="mb-6 text-base font-bold leading-snug text-foreground">{q.enonce}</p>
 
           {/* Options */}
           <div className="space-y-2.5">
@@ -214,7 +228,9 @@ export default function TestsPage() {
                   onClick={() => confirm(opt)}
                   className={`flex w-full items-center gap-3 rounded-2xl border px-4 py-3 text-left transition-colors ${bg} ${border}`}
                 >
-                  <span className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-extrabold ${indicator}`}>
+                  <span
+                    className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-extrabold ${indicator}`}
+                  >
                     {confirmed && correct ? '✓' : confirmed && isSelected ? '✗' : ''}
                   </span>
                   <span className={`text-sm leading-snug ${text}`}>{opt}</span>
@@ -233,11 +249,13 @@ export default function TestsPage() {
                 className="mt-5 space-y-3"
               >
                 {q.explication && (
-                  <p className={`rounded-2xl px-4 py-3 text-sm leading-relaxed ${
-                    isCorrect
-                      ? 'bg-green-500/10 border border-green-500/25 text-green-300'
-                      : 'bg-red-500/10 border border-red-500/25 text-red-300'
-                  }`}>
+                  <p
+                    className={`rounded-2xl px-4 py-3 text-sm leading-relaxed ${
+                      isCorrect
+                        ? 'bg-green-500/10 border border-green-500/25 text-green-300'
+                        : 'bg-red-500/10 border border-red-500/25 text-red-300'
+                    }`}
+                  >
                     {q.explication}
                   </p>
                 )}

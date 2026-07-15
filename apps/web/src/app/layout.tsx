@@ -5,6 +5,8 @@ import './globals.css';
 import { ServiceWorkerRegister } from '@/components/pwa/ServiceWorkerRegister';
 import { InstallPrompt } from '@/components/pwa/InstallPrompt';
 import { ThemeInit } from '@/components/ThemeInit';
+import { PushPermissionBanner } from '@/components/PushPermissionBanner';
+import { EntitlementProvider } from '@/components/EntitlementProvider';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -55,11 +57,7 @@ export const viewport: Viewport = {
   viewportFit: 'cover',
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     // Light edtech theme is the default across the app.
     <html
@@ -83,8 +81,9 @@ export default function RootLayout({
         >
           Aller au contenu principal
         </a>
-        {children}
+        <EntitlementProvider>{children}</EntitlementProvider>
         <InstallPrompt />
+        <PushPermissionBanner />
         <ServiceWorkerRegister />
       </body>
     </html>

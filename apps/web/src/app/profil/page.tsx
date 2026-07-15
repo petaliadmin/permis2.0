@@ -1,50 +1,175 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { AppShell, PageHeader } from '@/components/AppShell';
 import { useAuthStore, formatPhone } from '@/store/authStore';
-import { useThemeStore } from '@/store/themeStore';
-import { QUIZ_CATEGORIES, TOTAL_QUIZZES } from '../quizz/config';
+import { useThemeStore, type ThemeMode } from '@/store/themeStore';
+import { useSettingsStore } from '@/store/settingsStore';
+import { usePurchasesStore } from '@/store/purchasesStore';
+import { useNotificationStore } from '@/store/notificationStore';
+import { SUBSCRIPTION_PRICE_ANNUAL } from '@permis2.0/shared';
 
-interface LocalUser { name: string; streak: number; xp: number; }
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
-const BADGES = [
-  { id: 'first',    icon: '🎯', label: 'Premier quiz',    earned: false },
-  { id: 'streak3',  icon: '🔥', label: 'Streak 3 jours',  earned: false },
-  { id: 'signs',    icon: '🚦', label: 'Expert panneaux', earned: false },
-  { id: 'perfect',  icon: '⭐', label: 'Parfait !',       earned: false },
-  { id: 'streak7',  icon: '💎', label: 'Streak 7 jours',  earned: false },
-  { id: 'champion', icon: '🏆', label: 'Champion',        earned: false },
-];
-
-function StatCard({ icon, label, value, color }: { icon: string; label: string; value: string | number; color: string }) {
-  return (
-    <div className="rounded-2xl border border-token bg-surface-1 p-3 text-center shadow-soft">
-      <i className={`ti ${icon} text-lg ${color}`} aria-hidden="true" />
-      <p className="mt-1 font-display text-lg font-black text-foreground">{value}</p>
-      <p className="mt-0.5 text-[10px] leading-tight text-muted">{label}</p>
-    </div>
-  );
+interface UserStats {
+  daysOnApp: number;
+  quizAnswered: number;
+  examCount: number;
+  streak: number;
+  xp: number;
+  level: string;
+  progressPct: number;
 }
 
-function SettingRow({ icon, label, value, onClick, danger = false }: {
-  icon: string; label: string; value?: string; onClick: () => void; danger?: boolean;
+const LEVEL_META: Record<string, { next: number; color: string; chip: string }> = {
+  Débutant: { next: 100, color: 'bg-slate-500', chip: 'bg-slate-100 text-slate-700' },
+  Intermédiaire: { next: 300, color: 'bg-sky-500', chip: 'bg-sky-100 text-sky-700' },
+  Confirmé: { next: 600, color: 'bg-violet-500', chip: 'bg-violet-100 text-violet-700' },
+  Expert: { next: 9999, color: 'bg-amber-500', chip: 'bg-amber-100 text-amber-700' },
+};
+
+const THEME_LABEL: Record<ThemeMode, string> = {
+  light: '☀️ Clair',
+  dark: '🌙 Sombre',
+  system: '🖥 Système',
+};
+const THEME_NEXT: Record<ThemeMode, ThemeMode> = { light: 'dark', dark: 'system', system: 'light' };
+
+/* ── Rows ───────────────────────────────────────────────────────────────────── */
+function SettingRow({
+  icon,
+  label,
+  value,
+  onClick,
+  danger = false,
+  chevron = true,
+}: {
+  icon: string;
+  label: string;
+  value?: React.ReactNode;
+  onClick: () => void;
+  danger?: boolean;
+  chevron?: boolean;
 }) {
   return (
-    <button onClick={onClick} className="flex w-full items-center gap-3 border-b border-token py-3.5 last:border-0">
-      <div className={`flex h-9 w-9 items-center justify-center rounded-xl ${danger ? 'bg-red-50' : 'bg-surface-2'}`}>
-        <i className={`ti ${icon} text-base ${danger ? 'text-danger-500' : 'text-secondary'}`} aria-hidden="true" />
+    <button
+      onClick={onClick}
+      className="flex w-full items-center gap-3 border-b border-token py-3.5 last:border-0"
+    >
+      <div
+        className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${danger ? 'bg-red-50' : 'bg-surface-2'}`}
+      >
+        <i
+          className={`ti ${icon} text-base ${danger ? 'text-red-500' : 'text-secondary'}`}
+          aria-hidden="true"
+        />
       </div>
-      <span className={`flex-1 text-left text-sm font-medium ${danger ? 'text-danger-500' : 'text-foreground'}`}>{label}</span>
-      {value && <span className="text-xs text-muted">{value}</span>}
-      {!danger && <i className="ti ti-chevron-right text-sm text-slate-300" aria-hidden="true" />}
+      <span
+        className={`flex-1 text-left text-sm font-medium ${danger ? 'text-red-500' : 'text-foreground'}`}
+      >
+        {label}
+      </span>
+      {value !== undefined && <span className="text-xs text-muted">{value}</span>}
+      {chevron && !danger && (
+        <i className="ti ti-chevron-right text-sm text-slate-300" aria-hidden="true" />
+      )}
     </button>
   );
 }
 
+/* ── Edit name sheet ─────────────────────────────────────────────────────────── */
+function EditNameSheet({ initial, onClose }: { initial: string; onClose: () => void }) {
+  const [val, setVal] = useState(initial);
+  const [saving, setSaving] = useState(false);
+  const [err, setErr] = useState('');
+  const setUser = useAuthStore((s) => s.setUser);
+  const currentUser = useAuthStore((s) => s.user);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
+
+  const save = async () => {
+    const trimmed = val.trim();
+    if (trimmed.length < 2) {
+      setErr('Minimum 2 caractères.');
+      return;
+    }
+    setSaving(true);
+    try {
+      const res = await fetch(`${API_URL}/users/profile`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ name: trimmed }),
+      });
+      if (!res.ok) throw new Error();
+      const updated = await res.json();
+      if (currentUser) setUser({ ...currentUser, name: updated.name });
+      onClose();
+    } catch {
+      setErr('Erreur lors de la sauvegarde.');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 px-4 pb-6"
+      onClick={onClose}
+    >
+      <motion.div
+        initial={{ y: 60, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        exit={{ y: 60, opacity: 0 }}
+        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+        className="w-full max-w-sm rounded-3xl bg-surface-1 p-6 shadow-xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <h3 className="mb-4 font-display text-lg font-extrabold text-foreground">
+          Modifier le prénom
+        </h3>
+        <input
+          ref={inputRef}
+          value={val}
+          onChange={(e) => {
+            setVal(e.target.value);
+            setErr('');
+          }}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') save();
+          }}
+          maxLength={50}
+          className="w-full rounded-xl border border-token bg-surface-2 px-4 py-3 text-sm text-foreground placeholder-muted focus:border-violet-400 focus:outline-none focus:ring-2 focus:ring-violet-100"
+          placeholder="Ton prénom"
+        />
+        {err && <p className="mt-2 text-xs font-medium text-red-500">{err}</p>}
+        <div className="mt-4 flex gap-2">
+          <button
+            onClick={onClose}
+            className="flex-1 rounded-xl border border-token py-3 text-sm font-semibold text-secondary"
+          >
+            Annuler
+          </button>
+          <button
+            onClick={save}
+            disabled={saving}
+            className="flex-1 rounded-xl bg-violet-600 py-3 text-sm font-bold text-white disabled:opacity-60"
+          >
+            {saving ? 'Sauvegarde…' : 'Enregistrer'}
+          </button>
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
+/* ── Page ─────────────────────────────────────────────────────────────────── */
 export default function ProfilPage() {
   const router = useRouter();
   const authUser = useAuthStore((s) => s.user);
@@ -52,167 +177,298 @@ export default function ProfilPage() {
   const isAuth = useAuthStore((s) => s.isAuthenticated);
   const logout = useAuthStore((s) => s.logout);
   const { theme, setTheme } = useThemeStore();
+  const soundEnabled = useSettingsStore((s) => s.soundEnabled);
+  const setSoundEnabled = useSettingsStore((s) => s.setSoundEnabled);
 
-  const [localUser, setLocalUser] = useState<LocalUser>({ name: 'Conducteur', streak: 0, xp: 0 });
-  const [progress, setProgress] = useState<Record<string, boolean>>({});
-  const [showTheme, setShowTheme] = useState(false);
+  const hasKey = usePurchasesStore((s) => s.hasKey);
+  const premiumExpiresAt = usePurchasesStore((s) => s.premiumExpiresAt);
+  const unreadCount = useNotificationStore((s) => s.unreadCount);
+  const fetchNotifCount = useNotificationStore((s) => s.fetchCount);
+
+  const [stats, setStats] = useState<UserStats | null>(null);
+  const [editName, setEditName] = useState(false);
+  const [confirmReset, setConfirmReset] = useState(false);
 
   useEffect(() => {
-    try {
-      const u = JSON.parse(localStorage.getItem('permis_user') || '{}');
-      if (u.name) setLocalUser(u);
-      setProgress(JSON.parse(localStorage.getItem('quizz_progress') || '{}'));
-    } catch {}
-  }, []);
+    if (!isAuth) return;
+    fetchNotifCount();
+    fetch(`${API_URL}/users/stats`, { credentials: 'include' })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((s) => s && setStats(s))
+      .catch(() => {});
+  }, [isAuth, fetchNotifCount]);
 
-  const name = authUser?.name || localUser.name;
-  const xp = authUser?.xp || localUser.xp;
-  const streak = localUser.streak || 7;
-  const completedCnt = Object.values(progress).filter(Boolean).length;
-  const initial = name.charAt(0).toUpperCase();
+  const name = authUser?.name || 'Conducteur';
+  const level = stats?.level || authUser?.level || 'Débutant';
+  const levelMeta = LEVEL_META[level] ?? LEVEL_META['Débutant'];
+  const isPremium = hasKey('premium_all');
 
-  const handleLogout = () => { logout(); router.push('/auth/login'); };
-  const handleResetProgress = () => {
-    if (confirm('Réinitialiser toute ta progression ?')) {
-      try { localStorage.removeItem('quizz_progress'); } catch {}
-      setProgress({});
-    }
+  const xp = stats?.xp ?? authUser?.xp ?? 0;
+  const xpPct = level === 'Expert' ? 100 : Math.min(100, Math.round((xp / levelMeta.next) * 100));
+
+  const handleLogout = async () => {
+    await logout();
+    router.push('/auth/login');
   };
+  const handleReset = () => {
+    try {
+      localStorage.removeItem('quizz_progress');
+      localStorage.removeItem('quizz_errors');
+    } catch {}
+    setConfirmReset(false);
+  };
+
+  const formatExpiry = (iso: string) =>
+    new Date(iso).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
 
   return (
     <AppShell>
-      <PageHeader title="Profil" accent="violet"
+      <PageHeader
+        title="Profil"
+        accent="violet"
+        menu
         actions={
-          <button className="flex h-9 w-9 items-center justify-center rounded-full bg-white/15" aria-label="Paramètres">
-            <i className="ti ti-settings text-lg" aria-hidden="true" />
-          </button>
+          <Link
+            href="/notifications"
+            className="relative flex h-9 w-9 items-center justify-center rounded-full bg-white/15"
+            aria-label="Notifications"
+          >
+            <i className="ti ti-bell text-base" aria-hidden="true" />
+            {unreadCount > 0 && (
+              <span className="absolute right-1.5 top-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-orange-400 text-[9px] font-black text-white ring-2 ring-primary-700">
+                {unreadCount > 9 ? '9+' : unreadCount}
+              </span>
+            )}
+          </Link>
         }
       />
 
-      <div className="px-5">
-        {/* Avatar card overlapping header */}
-        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
-          className="-mt-6 flex flex-col items-center rounded-3xl border border-token bg-surface-1 p-5 text-center shadow-card">
-          <div className="relative -mt-14 mb-3">
-            <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-violet-700 shadow-lg ring-4 ring-white">
-              <span className="font-display text-3xl font-black text-white">{initial}</span>
+      <div className="px-5 pb-10">
+        {/* ── Identity card : avatar + niveau + stats ─── */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="-mt-6 rounded-3xl border border-token bg-surface-1 p-5 shadow-card"
+        >
+          <div className="flex items-center gap-4">
+            <div className="relative shrink-0">
+              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-violet-700 shadow-lg">
+                <span className="font-display text-2xl font-black text-white">
+                  {name.charAt(0).toUpperCase()}
+                </span>
+              </div>
+              {isAuth && (
+                <button
+                  onClick={() => setEditName(true)}
+                  className="absolute -bottom-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full border border-token bg-surface-1 shadow-sm"
+                  aria-label="Modifier le nom"
+                >
+                  <i className="ti ti-pencil text-[10px] text-secondary" aria-hidden="true" />
+                </button>
+              )}
             </div>
-            <div className="absolute -bottom-1 -right-1 flex h-7 w-7 items-center justify-center rounded-full border border-token bg-surface-1">
-              <i className="ti ti-pencil text-xs text-secondary" aria-hidden="true" />
+            <div className="min-w-0 flex-1">
+              <h2 className="truncate font-display text-lg font-black text-foreground">{name}</h2>
+              {isAuth && (authPhone || authUser?.email) && (
+                <p className="truncate text-xs text-muted">
+                  {authPhone ? `+221 ${formatPhone(authPhone)}` : authUser?.email}
+                </p>
+              )}
+              <span
+                className={`mt-1.5 inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[11px] font-bold ${levelMeta.chip}`}
+              >
+                <i className="ti ti-award text-[11px]" aria-hidden="true" /> {level}
+              </span>
             </div>
           </div>
-          <h2 className="font-display text-xl font-black text-foreground">{name}</h2>
-          {isAuth && authPhone && <p className="mt-0.5 text-xs text-muted">+221 {formatPhone(authPhone)}</p>}
-          {isAuth && !authPhone && authUser?.email && <p className="mt-0.5 text-xs text-muted">{authUser.email}</p>}
-          <span className="mt-2 chip chip-violet"><i className="ti ti-award" aria-hidden="true" /> Débutant</span>
+
+          {/* XP progress */}
+          {isAuth && (
+            <div className="mt-4">
+              <div className="mb-1 flex justify-between text-[10px] text-muted">
+                <span>{xp} XP</span>
+                {level !== 'Expert' && <span>→ {levelMeta.next} XP</span>}
+              </div>
+              <div className="h-1.5 overflow-hidden rounded-full bg-surface-3">
+                <motion.div
+                  className={`h-full rounded-full ${levelMeta.color}`}
+                  initial={{ width: 0 }}
+                  animate={{ width: `${xpPct}%` }}
+                  transition={{ delay: 0.3, duration: 0.8 }}
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Compact stats */}
+          {isAuth && (
+            <div className="mt-4 grid grid-cols-3 divide-x divide-token rounded-2xl bg-surface-2 py-3 text-center">
+              {[
+                { label: 'Série', value: stats ? `${stats.streak} j` : '—', icon: 'ti-flame' },
+                { label: 'Quiz', value: stats ? stats.quizAnswered : '—', icon: 'ti-cards' },
+                {
+                  label: 'Précision',
+                  value: stats ? `${stats.progressPct}%` : '—',
+                  icon: 'ti-target',
+                },
+              ].map((s) => (
+                <div key={s.label}>
+                  <p className="font-display text-base font-black text-foreground">{s.value}</p>
+                  <p className="text-[10px] text-muted">{s.label}</p>
+                </div>
+              ))}
+            </div>
+          )}
         </motion.div>
 
-        {/* Stats */}
-        <div className="mt-5 grid grid-cols-4 gap-2.5">
-          <StatCard icon="ti-flame"  label="Jours"     value={streak} color="text-orange-500" />
-          <StatCard icon="ti-star"   label="XP total"  value={xp} color="text-xp-500" />
-          <StatCard icon="ti-trophy" label="Quiz OK"   value={completedCnt} color="text-success-600" />
-          <StatCard icon="ti-target" label="Précision" value="—" color="text-primary-600" />
-        </div>
-
-        {/* Progression */}
-        <div className="mt-6">
-          <div className="mb-2.5 flex items-center justify-between">
-            <p className="font-display text-sm font-bold text-foreground">Progression</p>
-            <span className="text-xs text-muted">{completedCnt}/{TOTAL_QUIZZES}</span>
-          </div>
-          <div className="rounded-2xl border border-token bg-surface-1 p-4 shadow-soft">
-            <div className="mb-3 h-2 overflow-hidden rounded-full bg-surface-3">
-              <motion.div className="h-full rounded-full bg-gradient-to-r from-violet-500 to-violet-600"
-                initial={{ width: 0 }} animate={{ width: `${Math.round((completedCnt / TOTAL_QUIZZES) * 100)}%` }}
-                transition={{ delay: 0.3, duration: 0.8 }} />
+        {/* ── Premium ─── */}
+        {isPremium ? (
+          <div className="mt-4 flex items-center gap-3 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3">
+            <span className="text-2xl">👑</span>
+            <div className="flex-1">
+              <p className="text-sm font-bold text-amber-800">Abonnement Premium actif</p>
+              {premiumExpiresAt && (
+                <p className="text-xs text-amber-700">Expire le {formatExpiry(premiumExpiresAt)}</p>
+              )}
             </div>
-            <div className="space-y-2.5">
-              {QUIZ_CATEGORIES.map((cat) => {
-                const done = cat.quizzes.filter((q) => progress[`${cat.slug}_${q.id}`]).length;
-                const pct = cat.quizzes.length ? Math.round((done / cat.quizzes.length) * 100) : 0;
-                return (
-                  <div key={cat.slug} className="flex items-center gap-2.5">
-                    <span className="w-5 shrink-0 text-sm">{cat.icon}</span>
-                    <span className="w-24 shrink-0 truncate text-xs text-secondary">{cat.title}</span>
-                    <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-surface-3">
-                      <motion.div className="h-full rounded-full bg-violet-500" animate={{ width: `${pct}%` }} transition={{ duration: 0.6 }} />
-                    </div>
-                    <span className="w-8 shrink-0 text-right text-[10px] text-muted">{done}/{cat.quizzes.length}</span>
-                  </div>
-                );
-              })}
-            </div>
+            <Link href="/boutique" className="text-xs font-bold text-amber-700">
+              Renouveler
+            </Link>
           </div>
-        </div>
-
-        {/* Badges */}
-        <div className="mt-6">
-          <p className="mb-2.5 font-display text-sm font-bold text-foreground">Badges</p>
-          <div className="grid grid-cols-3 gap-2.5">
-            {BADGES.map((b, i) => (
-              <motion.div key={b.id} initial={{ opacity: 0, scale: 0.85 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: i * 0.04 }}
-                className={`rounded-2xl border p-3 text-center shadow-soft ${b.earned ? 'border-violet-200 bg-violet-50' : 'border-token bg-surface-1 opacity-60'}`}>
-                <div className="mb-1 text-2xl">{b.icon}</div>
-                <p className="text-[10px] font-semibold leading-tight text-secondary">{b.label}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-
-        {/* Settings */}
-        <div className="mt-6">
-          <p className="mb-2.5 font-display text-sm font-bold text-foreground">Paramètres</p>
-          <div className="rounded-2xl border border-token bg-surface-1 px-4 shadow-soft">
-            <SettingRow icon="ti-palette" label="Thème"
-              value={theme === 'dark' ? 'Sombre' : theme === 'light' ? 'Clair' : 'Système'}
-              onClick={() => setShowTheme(!showTheme)} />
-            {showTheme && (
-              <div className="flex gap-2 border-b border-token py-2">
-                {(['light', 'dark', 'system'] as const).map((t) => (
-                  <button key={t} onClick={() => { setTheme(t); setShowTheme(false); }}
-                    className={`flex-1 rounded-xl py-2 text-xs font-semibold transition-all ${theme === t ? 'bg-violet-100 text-violet-700' : 'bg-surface-2 text-muted'}`}>
-                    {t === 'light' ? '☀️ Clair' : t === 'dark' ? '🌙 Sombre' : '🖥 Système'}
-                  </button>
-                ))}
-              </div>
-            )}
-            <SettingRow icon="ti-bell" label="Notifications" value="Activées" onClick={() => {}} />
-            <SettingRow icon="ti-headset" label="Assistance" onClick={() => router.push('/assistance')} />
-            <SettingRow icon="ti-info-circle" label="À propos — v2.0" onClick={() => {}} />
-          </div>
-        </div>
-
-        {/* Account */}
-        <div className="mt-6">
-          <p className="mb-2.5 font-display text-sm font-bold text-foreground">Compte</p>
-          <div className="rounded-2xl border border-token bg-surface-1 px-4 shadow-soft">
-            {isAuth ? (
-              <SettingRow icon="ti-logout" label="Se déconnecter" onClick={handleLogout} danger />
-            ) : (
-              <>
-                <SettingRow icon="ti-login" label="Se connecter" onClick={() => router.push('/auth/login')} />
-                <SettingRow icon="ti-user-plus" label="Créer un compte" onClick={() => router.push('/auth/register')} />
-              </>
-            )}
-            <SettingRow icon="ti-refresh" label="Réinitialiser la progression" onClick={handleResetProgress} danger />
-          </div>
-        </div>
-
-        {/* Premium */}
-        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="mt-6">
+        ) : (
           <Link href="/boutique">
-            <div className="flex items-center gap-3 rounded-2xl bg-gradient-to-r from-orange-500 to-orange-600 px-4 py-4 text-white shadow-md">
+            <div className="mt-4 flex items-center gap-3 rounded-2xl bg-gradient-to-r from-orange-500 to-orange-600 px-4 py-4 text-white shadow-md">
               <i className="ti ti-crown text-2xl" aria-hidden="true" />
               <div className="flex-1">
                 <p className="font-display text-sm font-bold">Passer Premium</p>
-                <p className="text-xs text-white/85">Accès illimité — 2 500 FCFA/mois</p>
+                <p className="text-xs text-white/85">
+                  Accès illimité — {SUBSCRIPTION_PRICE_ANNUAL}
+                </p>
               </div>
               <i className="ti ti-chevron-right" aria-hidden="true" />
             </div>
           </Link>
-        </motion.div>
+        )}
+
+        {/* ── Réglages ─── */}
+        <div className="mt-6 rounded-2xl border border-token bg-surface-1 px-4 shadow-soft">
+          <SettingRow
+            icon="ti-palette"
+            label="Thème"
+            value={THEME_LABEL[theme]}
+            chevron={false}
+            onClick={() => setTheme(THEME_NEXT[theme])}
+          />
+          <SettingRow
+            icon={soundEnabled ? 'ti-volume' : 'ti-volume-off'}
+            label="Sons des quiz"
+            chevron={false}
+            value={
+              <span
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${soundEnabled ? 'bg-violet-500' : 'bg-slate-300'}`}
+                role="switch"
+                aria-checked={soundEnabled}
+              >
+                <span
+                  className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition-transform ${soundEnabled ? 'translate-x-5' : 'translate-x-0.5'}`}
+                />
+              </span>
+            }
+            onClick={() => setSoundEnabled(!soundEnabled)}
+          />
+          <SettingRow
+            icon="ti-headset"
+            label="Assistance"
+            onClick={() => router.push('/assistance')}
+          />
+          {String(authUser?.role) === 'ADMIN' && (
+            <SettingRow
+              icon="ti-shield-lock"
+              label="Administration"
+              onClick={() => router.push('/admin')}
+            />
+          )}
+        </div>
+
+        {/* ── Compte ─── */}
+        <div className="mt-4 rounded-2xl border border-token bg-surface-1 px-4 shadow-soft">
+          {isAuth ? (
+            <>
+              <SettingRow
+                icon="ti-refresh"
+                label="Réinitialiser la progression"
+                onClick={() => setConfirmReset(true)}
+                danger
+              />
+              <SettingRow icon="ti-logout" label="Se déconnecter" onClick={handleLogout} danger />
+            </>
+          ) : (
+            <>
+              <SettingRow
+                icon="ti-login"
+                label="Se connecter"
+                onClick={() => router.push('/auth/login')}
+              />
+              <SettingRow
+                icon="ti-user-plus"
+                label="Créer un compte"
+                onClick={() => router.push('/auth/register')}
+              />
+            </>
+          )}
+        </div>
+
+        <p className="mt-8 text-center text-[10px] text-muted">
+          PERMIS 2.0 · v2.0 · Made with ❤️ in Dakar
+        </p>
       </div>
+
+      {/* ── Edit name sheet ─── */}
+      <AnimatePresence>
+        {editName && <EditNameSheet initial={name} onClose={() => setEditName(false)} />}
+      </AnimatePresence>
+
+      {/* ── Confirm reset ─── */}
+      <AnimatePresence>
+        {confirmReset && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-6"
+            onClick={() => setConfirmReset(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="w-full max-w-sm rounded-3xl bg-surface-1 p-6 text-center shadow-xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-amber-100 text-3xl">
+                ⚠️
+              </div>
+              <h3 className="font-display text-lg font-extrabold text-foreground">
+                Réinitialiser ?
+              </h3>
+              <p className="mt-1 text-sm text-secondary">
+                Ta progression locale (quiz terminés, erreurs à revoir) sera effacée. Irréversible.
+              </p>
+              <div className="mt-5 flex gap-2">
+                <button
+                  onClick={() => setConfirmReset(false)}
+                  className="flex-1 rounded-xl border border-token py-3 text-sm font-semibold text-secondary"
+                >
+                  Annuler
+                </button>
+                <button
+                  onClick={handleReset}
+                  className="flex-1 rounded-xl bg-amber-500 py-3 text-sm font-bold text-white"
+                >
+                  Réinitialiser
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </AppShell>
   );
 }

@@ -5,14 +5,14 @@ export enum Role {
 
 export interface User {
   id: string;
-  email: string;
+  email?: string | null;
+  phone?: string | null;
   name: string;
   avatar?: string | null;
-  passwordHash?: string | null;
-  googleId?: string | null;
   xp: number;
   level: string;
   role: Role;
+  currentStreak?: number;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -261,7 +261,16 @@ export interface TrafficSign {
   code?: string;
   name: string;
   meaning: string;
-  category: 'Danger' | 'Interdiction' | 'Obligation' | 'Priorité' | 'Indication' | 'Direction' | 'Temporaire' | 'Restriction' | 'Stationnement';
+  category:
+    | 'Danger'
+    | 'Interdiction'
+    | 'Obligation'
+    | 'Priorité'
+    | 'Indication'
+    | 'Direction'
+    | 'Temporaire'
+    | 'Restriction'
+    | 'Stationnement';
   description: string;
   contexte_usage?: string;
   regle_associee?: string;
@@ -313,7 +322,7 @@ export interface Subscription {
 
 // ─── Boutique / Premium (Sprint 6) ────────────────────────────────────────────
 
-export type ProductKind = 'PACK' | 'EXAM';
+export type ProductKind = 'PACK' | 'EXAM' | 'subscription';
 export type PurchaseStatus = 'PENDING' | 'PAID' | 'FAILED';
 
 /**
@@ -325,7 +334,7 @@ export type PurchaseStatus = 'PENDING' | 'PAID' | 'FAILED';
  *   Mobile Money (direct).
  */
 export type PaymentProviderId = 'bictorys' | 'sandbox';
-export type PaymentMethod = 'orange_money' | 'wave' | 'card';
+export type PaymentMethod = 'orange_money' | 'wave' | 'free_money' | 'card';
 
 /**
  * Entitlement keys. `exam:<templateId>` is dynamic (per-unit exam purchase);
@@ -360,7 +369,7 @@ export interface Product {
   sku: string;
   kind: ProductKind;
   title: string;
-  description: string;
+  description?: string | null;
   priceXof: number;
   grants: string[];
   /** Grant duration in days when purchased; null/undefined = permanent. */

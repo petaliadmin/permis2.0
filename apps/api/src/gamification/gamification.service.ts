@@ -14,10 +14,10 @@ export const XP_RULES: XPReward = {
 };
 
 export const LEVEL_THRESHOLDS = {
-  'Débutant': 0,
-  'Intermédiaire': 100,
-  'Confirmé': 300,
-  'Expert': 600,
+  Débutant: 0,
+  Intermédiaire: 100,
+  Confirmé: 300,
+  Expert: 600,
 };
 
 @Injectable()
@@ -162,21 +162,17 @@ export class GamificationService {
 
     // Series completion badges
     const series = await this.prisma.series.findMany();
+    const seriesIds = series.map((s) => s.id);
+    const foundProgress = await this.prisma.progress.findMany({
+      where: { userId, serieId: { in: seriesIds } },
+    });
+    const completedSet = new Set(
+      foundProgress.filter((p) => p.accuracy === 100).map((p) => p.serieId)
+    );
     for (const s of series) {
-      const progress = await this.prisma.progress.findUnique({
-        where: {
-          userId_serieId: { userId, serieId: s.id },
-        },
-      });
-
-      if (progress && progress.accuracy === 100) {
+      if (completedSet.has(s.id)) {
         const badgeName = `series_${s.code.toLowerCase()}_master`;
-        const result = await this.unlockBadge(
-          userId,
-          badgeName,
-          `Mastered Series ${s.code}`,
-          '⭐'
-        );
+        const result = await this.unlockBadge(userId, badgeName, `Mastered Series ${s.code}`, '⭐');
         if (result.unlocked) unlockedBadges.push(`${s.code} Master`);
       }
     }
@@ -203,12 +199,7 @@ export class GamificationService {
     }
 
     if (user.xp >= 600) {
-      const result = await this.unlockBadge(
-        userId,
-        'level_expert',
-        'Reached Expert level',
-        '👑'
-      );
+      const result = await this.unlockBadge(userId, 'level_expert', 'Reached Expert level', '👑');
       if (result.unlocked) unlockedBadges.push('Expert');
     }
 
@@ -223,7 +214,7 @@ export class GamificationService {
   }
 
   async getLeaderboard(limit = 20) {
-    const safeLimit = Math.min(limit || 20, 100);
+    const safeLimit = Math.max(1, Math.min(limit || 20, 100));
     return this.prisma.user.findMany({
       select: {
         id: true,
@@ -235,6 +226,21 @@ export class GamificationService {
       orderBy: { xp: 'desc' },
       take: safeLimit,
     });
+  }
+
+  async recordQuiz(userId: string, correct: number, total: number) {
+    const xpEarned =
+      correct * XP_RULES.correctAnswer +
+      (total > 0 && correct === total ? XP_RULES.seriesPerfect : 0);
+
+    const [xpResult, streakResult] = await Promise.all([
+      this.addXP(userId, xpEarned),
+      this.checkDailyStreak(userId),
+    ]);
+
+    const newAchievements = await this.checkAndUnlockAchievements(userId);
+
+    return { xpEarned, xpResult, streakResult, newAchievements };
   }
 
   async getLeaderboardRank(userId: string) {
@@ -253,21 +259,6 @@ export class GamificationService {
       xp: user.xp,
       level: user.level,
     };
-  }
-
-  async recordQuiz(userId: string, correct: number, total: number) {
-    const xpEarned =
-      correct * XP_RULES.correctAnswer +
-      (total > 0 && correct === total ? XP_RULES.seriesPerfect : 0);
-
-    const [xpResult, streakResult] = await Promise.all([
-      this.addXP(userId, xpEarned),
-      this.checkDailyStreak(userId),
-    ]);
-
-    const newAchievements = await this.checkAndUnlockAchievements(userId);
-
-    return { xpEarned, xpResult, streakResult, newAchievements };
   }
 
   private calculateLevel(xp: number): string {

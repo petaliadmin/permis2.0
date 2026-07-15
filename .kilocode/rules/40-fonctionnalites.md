@@ -13,6 +13,7 @@ Tout le contenu vient des fichiers JSON à la racine, importés via les seeders 
 - `serie_B1.json`, `serie_B2.json`, `serie_B3.json` — séries d'entraînement (25 questions chacune, 75 au total)
 
 Règles :
+
 - N'écris jamais une question, réponse, catégorie ou leçon directement dans le code/JSX.
 - Valide les données JSON avant seed (types, relations catégorie↔question↔série, présence des champs).
 - Toute nouvelle donnée de contenu passe par un JSON + seeder, pas par une constante.

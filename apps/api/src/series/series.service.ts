@@ -6,7 +6,7 @@ import { calculateScore, getLevelFromXP, XP_RULES } from '@permis2.0/utils';
 export class SeriesService {
   constructor(private prisma: PrismaService) {}
 
-  async findAll(_userId?: string) {
+  async findAll() {
     return this.prisma.series.findMany({
       include: {
         _count: {
@@ -74,8 +74,7 @@ export class SeriesService {
     });
 
     const correctAnswers = userAnswers.filter((a) => a.isCorrect).length;
-    const accuracy =
-      userAnswers.length > 0 ? (correctAnswers / userAnswers.length) * 100 : 0;
+    const accuracy = userAnswers.length > 0 ? (correctAnswers / userAnswers.length) * 100 : 0;
 
     return {
       series,
@@ -103,54 +102,51 @@ export class SeriesService {
     // Check if answer is correct
     const isCorrect = question.reponses_correctes.includes(userAnswer);
 
-    // Award XP and update progress atomically
-    await this.prisma.$transaction(async (tx) => {
-      // Award XP if correct
-      if (isCorrect) {
-        const user = await tx.user.findUnique({ where: { id: userId } });
-        if (user) {
-          const newXP = user.xp + XP_RULES.correctAnswer;
-          const newLevel = this.calculateLevel(newXP);
+    // Award XP if correct
+    if (isCorrect) {
+      const user = await this.prisma.user.findUnique({ where: { id: userId } });
+      if (user) {
+        const newXP = user.xp + XP_RULES.correctAnswer;
+        const newLevel = getLevelFromXP(newXP);
 
-          await tx.user.update({
-            where: { id: userId },
-            data: { xp: newXP, level: newLevel },
-          });
-        }
+        await this.prisma.user.update({
+          where: { id: userId },
+          data: { xp: newXP, level: newLevel },
+        });
       }
+    }
 
-      // Update or create progress
-      const progress = await tx.progress.findUnique({
-        where: {
-          userId_serieId: { userId, serieId: question.serieId },
+    // Update or create progress
+    const progress = await this.prisma.progress.findUnique({
+      where: {
+        userId_serieId: { userId, serieId: question.serieId },
+      },
+    });
+
+    if (progress) {
+      const newCorrect = isCorrect ? progress.correctAnswers + 1 : progress.correctAnswers;
+      const newTotal = progress.totalQuestions + 1;
+      const newAccuracy = (newCorrect / newTotal) * 100;
+
+      await this.prisma.progress.update({
+        where: { id: progress.id },
+        data: {
+          correctAnswers: newCorrect,
+          totalQuestions: newTotal,
+          accuracy: newAccuracy,
         },
       });
-
-      if (progress) {
-        const newCorrect = isCorrect ? progress.correctAnswers + 1 : progress.correctAnswers;
-        const newTotal = progress.totalQuestions + 1;
-        const newAccuracy = (newCorrect / newTotal) * 100;
-
-        await tx.progress.update({
-          where: { id: progress.id },
-          data: {
-            correctAnswers: newCorrect,
-            totalQuestions: newTotal,
-            accuracy: newAccuracy,
-          },
-        });
-      } else {
-        await tx.progress.create({
-          data: {
-            userId,
-            serieId: question.serieId,
-            correctAnswers: isCorrect ? 1 : 0,
-            totalQuestions: 1,
-            accuracy: isCorrect ? 100 : 0,
-          },
-        });
-      }
-    });
+    } else {
+      await this.prisma.progress.create({
+        data: {
+          userId,
+          serieId: question.serieId,
+          correctAnswers: isCorrect ? 1 : 0,
+          totalQuestions: 1,
+          accuracy: isCorrect ? 100 : 0,
+        },
+      });
+    }
 
     return {
       isCorrect,
@@ -179,12 +175,5 @@ export class SeriesService {
     });
 
     return questions;
-  }
-
-  private calculateLevel(xp: number): string {
-    if (xp >= 600) return 'Expert';
-    if (xp >= 300) return 'Confirmé';
-    if (xp >= 100) return 'Intermédiaire';
-    return 'Débutant';
   }
 }

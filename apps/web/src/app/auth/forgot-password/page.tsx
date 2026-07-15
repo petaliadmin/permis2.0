@@ -44,9 +44,7 @@ export default function ForgotPasswordPage() {
       </div>
 
       <div className="mx-auto w-full max-w-md rounded-3xl bg-surface-2 border border-token p-6 shadow-2xl animate-fade-in sm:p-8">
-        <h2 className="mb-1 text-xl font-extrabold text-foreground">
-          Mot de passe oublié
-        </h2>
+        <h2 className="mb-1 text-xl font-extrabold text-foreground">Mot de passe oublié</h2>
         <p className="mb-6 text-sm text-muted">
           Saisis ton adresse email et nous t&apos;enverrons un lien de réinitialisation.
         </p>
@@ -56,7 +54,10 @@ export default function ForgotPasswordPage() {
             <div className="rounded-lg border border-primary/40 bg-primary/10 px-4 py-3 text-sm text-primary-300">
               {message}
             </div>
-            <Link href="/auth/login" className="block text-center font-semibold text-primary hover:underline">
+            <Link
+              href="/auth/login"
+              className="block text-center font-semibold text-primary hover:underline"
+            >
               Retour à la connexion
             </Link>
           </div>

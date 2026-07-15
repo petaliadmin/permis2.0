@@ -1,11 +1,4 @@
-import {
-  Controller,
-  Get,
-  Param,
-  UseGuards,
-  Request,
-  ForbiddenException,
-} from '@nestjs/common';
+import { Controller, Get, Param, UseGuards, Request, ForbiddenException } from '@nestjs/common';
 import { ApiTags, ApiResponse } from '@nestjs/swagger';
 import { ConduiteService } from './conduite.service';
 import { EntitlementService } from '../entitlement/entitlement.service';
@@ -16,7 +9,7 @@ import { OptionalJwtAuthGuard } from '../auth/guards/optional-jwt-auth.guard';
 export class ConduiteController {
   constructor(
     private conduiteService: ConduiteService,
-    private entitlements: EntitlementService,
+    private entitlements: EntitlementService
   ) {}
 
   @Get()
@@ -29,7 +22,7 @@ export class ConduiteController {
       courses.map(async (c) => ({
         ...c,
         locked: !(await this.entitlements.hasAccessToCourse(userId, c)),
-      })),
+      }))
     );
   }
 
@@ -47,10 +40,7 @@ export class ConduiteController {
   @ApiResponse({ status: 404, description: 'Course not found' })
   async getQuestions(@Param('slug') slug: string, @Request() req) {
     const course = await this.conduiteService.findBySlug(slug);
-    const allowed = await this.entitlements.hasAccessToCourse(
-      req.user?.userId,
-      course,
-    );
+    const allowed = await this.entitlements.hasAccessToCourse(req.user?.userId, course);
     if (!allowed) {
       throw new ForbiddenException('premium_course');
     }

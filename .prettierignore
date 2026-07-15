@@ -1,0 +1,29 @@
+# Agent worktrees / tooling
+.claude
+
+# Build output
+dist
+.next
+.turbo
+coverage
+node_modules
+tsconfig.tsbuildinfo
+
+# Lockfiles
+pnpm-lock.yaml
+
+# Large data files (source datasets — formatting churn without value)
+/categories_et_meta.json
+/conduite.json
+/fiches_theoriques.json
+/panneaux_senegal.json
+/serie_B1.json
+/serie_B2.json
+/serie_B3.json
+apps/web/public/data
+apps/web/public/icons
+apps/web/public/sw.js
+apps/web/messages
+
+# Prisma migrations (generated)
+apps/api/prisma/migrations

@@ -1,6 +1,6 @@
-import { Injectable, NotFoundException, BadRequestException, ForbiddenException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { XP_RULES } from '@permis2.0/utils';
+import { XP_RULES, getLevelFromXP } from '@permis2.0/utils';
 
 interface ExamStartRequest {
   numberOfQuestions?: number; // default: 40
@@ -16,8 +16,20 @@ export class ExamService {
   async startExam(userId: string, config: ExamStartRequest = {}) {
     const { numberOfQuestions = this.DEFAULT_QUESTIONS } = config;
 
-    // Get all questions from all series
-    const allQuestions = await this.prisma.question.findMany({
+    // Get random questions directly from DB using offset sampling
+    const count = await this.prisma.question.count();
+    const numberOfQ = numberOfQuestions;
+
+    if (count < numberOfQ) {
+      throw new BadRequestException(
+        `Not enough questions available. Need ${numberOfQ}, found ${count}`
+      );
+    }
+
+    const skip = Math.max(0, Math.floor(Math.random() * Math.max(0, count - numberOfQ)));
+    const selectedQuestions = await this.prisma.question.findMany({
+      take: numberOfQ,
+      skip,
       include: {
         choices: {
           orderBy: { order: 'asc' },
@@ -29,17 +41,8 @@ export class ExamService {
           },
         },
       },
+      orderBy: { id: 'asc' },
     });
-
-    if (allQuestions.length < numberOfQuestions) {
-      throw new BadRequestException(
-        `Not enough questions available. Need ${numberOfQuestions}, found ${allQuestions.length}`
-      );
-    }
-
-    // Shuffle and select random questions
-    const shuffled = this.shuffleArray(allQuestions);
-    const selectedQuestions = shuffled.slice(0, numberOfQuestions);
 
     // Create exam record
     const exam = await this.prisma.exam.create({
@@ -189,57 +192,55 @@ export class ExamService {
 
     if (!exam.startedAt) {
       throw new NotFoundException('Exam start time not found');
-   }
+    }
     const totalTime = Date.now() - exam.startedAt.getTime();
     const answeredQuestions = exam.questions.filter((q) => q.userAnswer !== null);
     const correctAnswers = answeredQuestions.filter((q) => q.isCorrect).length;
     const score = answeredQuestions.length;
-    const percentage = answeredQuestions.length > 0
-      ? Math.round((correctAnswers / answeredQuestions.length) * 100)
-      : 0;
+    const percentage =
+      answeredQuestions.length > 0
+        ? Math.round((correctAnswers / answeredQuestions.length) * 100)
+        : 0;
     const passed = percentage >= 70; // 70% threshold
 
-    // Execute XP update, result creation, and exam completion atomically
-    await this.prisma.$transaction(async (tx) => {
-      // Award XP
-      const user = await tx.user.findUnique({
+    // Award XP
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (user) {
+      const xpEarned = correctAnswers * XP_RULES.correctAnswer;
+      const newXP = user.xp + xpEarned;
+      const newLevel = getLevelFromXP(newXP);
+
+      await this.prisma.user.update({
         where: { id: userId },
+        data: { xp: newXP, level: newLevel },
       });
+    }
 
-      if (user) {
-        const xpEarned = correctAnswers * XP_RULES.correctAnswer;
-        const newXP = user.xp + xpEarned;
-        const newLevel = this.calculateLevel(newXP);
+    // Create exam result
+    const result = await this.prisma.examResult.create({
+      data: {
+        examId,
+        userId,
+        score,
+        percentage,
+        passed,
+        timeUsed: Math.round(totalTime / 1000), // seconds
+        totalTime: Math.round(this.EXAM_DURATION / 1000), // seconds
+        startedAt: exam.startedAt ?? new Date(),
+        completedAt: new Date(),
+      },
+    });
 
-        await tx.user.update({
-          where: { id: userId },
-          data: { xp: newXP, level: newLevel },
-        });
-      }
-
-      // Create exam result
-      await tx.examResult.create({
-        data: {
-          examId,
-          userId,
-          score,
-          percentage,
-          passed,
-          timeUsed: Math.round(totalTime / 1000), // seconds
-          totalTime: Math.round(this.EXAM_DURATION / 1000), // seconds
-          startedAt: exam.startedAt ?? new Date(),
-          completedAt: new Date(),
-        },
-      });
-
-      // Mark exam as completed
-      await tx.exam.update({
-        where: { id: examId },
-        data: {
-          status: 'completed',
-          completedAt: new Date(),
-        },
-      });
+    // Mark exam as completed
+    await this.prisma.exam.update({
+      where: { id: examId },
+      data: {
+        status: 'completed',
+        completedAt: new Date(),
+      },
     });
 
     return {
@@ -251,7 +252,7 @@ export class ExamService {
         timeUsed: Math.round(totalTime / 1000),
         xpEarned: correctAnswers * XP_RULES.correctAnswer,
         message: passed
-          ? 'Felicitations! Vous avez réussi l\'examen!'
+          ? "Felicitations! Vous avez réussi l'examen!"
           : 'Vous avez besoin de 70% pour réussir. Réessayez!',
       },
     };
@@ -277,12 +278,8 @@ export class ExamService {
       },
     });
 
-    if (!result) {
+    if (!result || (userId && result.userId !== userId)) {
       throw new NotFoundException('Exam result not found');
-    }
-
-    if (userId && result.userId !== userId) {
-      throw new ForbiddenException('Access denied');
     }
 
     // Calculate category breakdown
@@ -362,19 +359,22 @@ export class ExamService {
     return exam;
   }
 
-  private shuffleArray<T>(array: T[]): T[] {
-    const shuffled = [...array];
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-    return shuffled;
+  // ─── Diapo (image-based) mock exams ─────────────────────────────────────────
+
+  async listDiapos() {
+    const diapos = await this.prisma.diapoExam.findMany({ orderBy: { id: 'asc' } });
+    return {
+      exams: diapos.map((d) => ({
+        id: d.id,
+        title: d.title,
+        questions: d.questions,
+      })),
+    };
   }
 
-  private calculateLevel(xp: number): string {
-    if (xp >= 600) return 'Expert';
-    if (xp >= 300) return 'Confirmé';
-    if (xp >= 100) return 'Intermédiaire';
-    return 'Débutant';
+  async getDiapo(id: number) {
+    const diapo = await this.prisma.diapoExam.findUnique({ where: { id } });
+    if (!diapo) throw new NotFoundException('Diapo exam not found');
+    return { id: diapo.id, title: diapo.title, questions: diapo.questions };
   }
 }

@@ -23,7 +23,11 @@ export class SandboxProvider implements PaymentProvider {
     };
   }
 
-  async parseWebhook(payload: unknown): Promise<WebhookResult> {
+  async parseWebhook(
+    payload: unknown,
+    _headers?: Record<string, string>,
+    _rawBody?: string
+  ): Promise<WebhookResult> {
     const body = (payload ?? {}) as { providerRef?: string; status?: string };
     return {
       providerRef: body.providerRef ?? '',

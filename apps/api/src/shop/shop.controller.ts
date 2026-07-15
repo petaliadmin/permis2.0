@@ -7,9 +7,12 @@ import {
   Headers,
   UseGuards,
   Request,
+  Req,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiTags, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import { RawBodyRequest } from '@nestjs/common';
+import { Request as ExpressRequest } from 'express';
 import { ShopService } from './shop.service';
 import { CheckoutDto } from './dto/checkout.dto';
 import { OptionalJwtAuthGuard } from '../auth/guards/optional-jwt-auth.guard';
@@ -42,10 +45,21 @@ export class ShopController {
     return this.shopService.getPurchases(req.user.userId);
   }
 
+  @Get('purchases/:purchaseId')
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
+  @ApiResponse({ status: 200, description: 'Single purchase' })
+  async getPurchase(@Request() req, @Param('purchaseId') purchaseId: string) {
+    return this.shopService.getPurchase(req.user.userId, purchaseId);
+  }
+
   @Get('checkout')
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth()
-  @ApiResponse({ status: 200, description: 'Latest pending checkout for the current user (null if none)' })
+  @ApiResponse({
+    status: 200,
+    description: 'Latest pending checkout for the current user (null if none)',
+  })
   async getPendingCheckout(@Request() req) {
     return this.shopService.getPendingCheckout(req.user.userId);
   }
@@ -64,12 +78,14 @@ export class ShopController {
     @Param('provider') provider: string,
     @Body() payload: unknown,
     @Headers() headers: Record<string, string>,
+    @Req() req: RawBodyRequest<ExpressRequest>
   ) {
-    return this.shopService.handleWebhook(provider, payload, headers);
+    const rawBody = req.rawBody?.toString('utf-8');
+    return this.shopService.handleWebhook(provider, payload, headers, rawBody);
   }
 
   // Dev-only: simulate a Mobile Money confirmation for a sandbox purchase.
-  @Post('confirm/:purchaseId')
+  @Post('purchases/:purchaseId/simulate-confirm')
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth()
   @ApiResponse({ status: 201, description: 'Purchase confirmed (sandbox/dev)' })

@@ -17,9 +17,7 @@ interface PullToRefreshState {
  * Usage:
  *   const { refreshing, pullDistance } = usePullToRefresh(handleRefresh);
  */
-export function usePullToRefresh(
-  onRefresh: () => Promise<void>,
-): PullToRefreshState {
+export function usePullToRefresh(onRefresh: () => Promise<void>): PullToRefreshState {
   const [pulling, setPulling] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [pullDistance, setPullDistance] = useState(0);

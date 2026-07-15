@@ -3,8 +3,9 @@ import type { PaymentProviderId, PaymentMethod } from '@permis2.0/types';
 export interface InitiateInput {
   purchaseId: string;
   amountXof: number;
-  phone: string;
-  /** Method the user picked; the provider maps it to its own payment_type. */
+  /** Optional phone pre-fill; formatted as +221XXXXXXXXX before sending to provider. */
+  phone?: string;
+  /** Chosen method — mapped to the provider's payment_type for better UX. */
   method?: PaymentMethod;
   /** Customer identity, forwarded to the provider when available. */
   email?: string;
@@ -13,8 +14,17 @@ export interface InitiateInput {
 
 export interface InitiateResult {
   providerRef: string;
-  /** Present when the customer must be redirected (hosted checkout / card). */
+  /**
+   * Bictorys `link`: for Wave this is a deep-link to Wave; for card / hosted checkout
+   * it's the Bictorys payment page. Frontend should redirect to it when present.
+   */
   redirectUrl?: string;
+  /**
+   * USSD instruction string returned by Bictorys for Orange Money / Free Money
+   * (e.g. "Validez la demande de paiement reçue sur votre téléphone").
+   * Frontend should display this message and poll for the webhook confirmation.
+   */
+  ussdMessage?: string;
   status: 'PENDING';
 }
 
@@ -22,7 +32,7 @@ export interface WebhookResult {
   providerRef: string;
   /**
    * Terminal verdict, or `PENDING` for non-terminal provider statuses
-   * (e.g. Bictorys `pending`/`authorized`) — the caller must treat PENDING as a
+   * (e.g. Bictorys `pending`/`authorized`) — the caller treats PENDING as a
    * no-op so an intermediate callback can't corrupt an in-flight purchase.
    */
   status: 'PAID' | 'FAILED' | 'PENDING';
@@ -32,11 +42,9 @@ export interface WebhookResult {
 }
 
 /**
- * A payment adapter: either Bictorys (aggregates Orange Money / Wave / card) or
- * the offline sandbox. The flow is always: initiate() returns a PENDING reference
- * (plus a redirect URL for card/hosted checkout), then the provider calls our
- * webhook asynchronously once the customer confirms — parseWebhook() turns that
- * callback into a PAID/FAILED/PENDING verdict.
+ * A payment adapter: either Bictorys (aggregates Orange Money / Wave / Free Money / card)
+ * or the offline sandbox. Flow: initiate() → PENDING + optional redirect or USSD message;
+ * provider calls our webhook asynchronously → parseWebhook() returns PAID/FAILED/PENDING.
  */
 export interface PaymentProvider {
   readonly id: PaymentProviderId;
@@ -44,5 +52,6 @@ export interface PaymentProvider {
   parseWebhook(
     payload: unknown,
     headers: Record<string, string>,
+    rawBody?: string
   ): Promise<WebhookResult>;
 }

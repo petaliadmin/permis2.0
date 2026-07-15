@@ -21,10 +21,7 @@ const trackSizes: Record<NonNullable<ProgressProps['size']>, string> = {
 };
 
 const Progress = React.forwardRef<HTMLDivElement, ProgressProps>(
-  (
-    { className, value = 0, max = 100, variant = 'primary', size = 'md', ...props },
-    ref
-  ) => {
+  ({ className, value = 0, max = 100, variant = 'primary', size = 'md', ...props }, ref) => {
     const percentage = Math.min(Math.max((value / max) * 100, 0), 100);
 
     return (

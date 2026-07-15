@@ -4,15 +4,22 @@ import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { PrismaExceptionFilter } from './filters/prisma-exception.filter';
+import { LoggingInterceptor } from './interceptors/logging.interceptor';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  // rawBody is required to verify payment-webhook HMAC signatures (Bictorys).
+  const app = await NestFactory.create(AppModule, { rawBody: true });
 
   // Security headers
   app.use(helmet());
 
   // Cookie parser — required for httpOnly JWT cookie extraction in JwtStrategy.
   app.use(cookieParser());
+
+  // Global exception filter and interceptor
+  app.useGlobalFilters(new PrismaExceptionFilter());
+  app.useGlobalInterceptors(new LoggingInterceptor());
 
   // Global pipe for validation
   app.useGlobalPipes(

@@ -11,7 +11,10 @@ export interface StatProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const Stat = React.forwardRef<HTMLDivElement, StatProps>(
-  ({ className, icon, label, value, accent = 'bg-primary-100 text-primary-700', ...props }, ref) => (
+  (
+    { className, icon, label, value, accent = 'bg-primary-100 text-primary-700', ...props },
+    ref
+  ) => (
     <div
       ref={ref}
       className={cn(
@@ -31,12 +34,8 @@ const Stat = React.forwardRef<HTMLDivElement, StatProps>(
         </div>
       )}
       <div className="min-w-0">
-        <p className="truncate text-xs font-medium uppercase tracking-wide text-muted">
-          {label}
-        </p>
-        <p className="mt-0.5 text-2xl font-extrabold leading-none text-foreground">
-          {value}
-        </p>
+        <p className="truncate text-xs font-medium uppercase tracking-wide text-muted">{label}</p>
+        <p className="mt-0.5 text-2xl font-extrabold leading-none text-foreground">{value}</p>
       </div>
     </div>
   )

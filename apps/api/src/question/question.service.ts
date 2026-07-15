@@ -103,16 +103,17 @@ export class QuestionService {
       },
     });
 
-    const successRate =
-      totalAttempts > 0 ? (correctAttempts / totalAttempts) * 100 : 0;
+    const successRate = totalAttempts > 0 ? (correctAttempts / totalAttempts) * 100 : 0;
 
     const avgTimeSpent =
       totalAttempts > 0
         ? Math.round(
-            (await this.prisma.examQuestion.aggregate({
-              where: { questionId },
-              _avg: { timeSpent: true },
-            }))._avg.timeSpent || 0
+            (
+              await this.prisma.examQuestion.aggregate({
+                where: { questionId },
+                _avg: { timeSpent: true },
+              })
+            )._avg.timeSpent || 0
           )
         : 0;
 
@@ -202,5 +203,30 @@ export class QuestionService {
       page: Math.floor(skip / take) + 1,
       pages: Math.ceil(total / take),
     };
+  }
+
+  /**
+   * Question bank for the thematic Quiz mode. Returns every question whose
+   * category label is in `labels`, shaped exactly like the web player expects.
+   */
+  async getQuizBank(labels: string[]) {
+    const questions = await this.prisma.question.findMany({
+      where: labels.length > 0 ? { category: { label: { in: labels } } } : {},
+      include: {
+        choices: { orderBy: { order: 'asc' } },
+        category: { select: { label: true } },
+      },
+      orderBy: [{ categoryId: 'asc' }, { numero: 'asc' }],
+    });
+
+    return questions.map((q) => ({
+      id: q.id,
+      categorie: q.category.label,
+      enonce: q.enonce,
+      options: q.choices.map((c) => c.text),
+      bonneReponse: q.reponses_correctes[0] ?? '',
+      explication: q.explication,
+      ...(q.image ? { image: q.image } : {}),
+    }));
   }
 }

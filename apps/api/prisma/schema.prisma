@@ -26,6 +26,7 @@ model User {
   xp            Int        @default(0)
   level         String     @default("Débutant")
   role          Role       @default(USER)
+  blocked       Boolean    @default(false)
   createdAt     DateTime   @default(now())
   updatedAt     DateTime   @updatedAt
 
@@ -38,6 +39,7 @@ model User {
   streak              DailyStreak?
   subscriptions       Subscription[]
   notifications       Notification[]
+  pushSubscriptions   PushSubscription[]
   passwordResetTokens PasswordResetToken[]
   entitlements        Entitlement[]
   purchases           Purchase[]
@@ -196,6 +198,7 @@ model ExamResult {
 
   @@index([examId])
   @@index([userId])
+  @@index([userId, completedAt])
   @@map("exam_results")
 }
 
@@ -236,6 +239,7 @@ model Statistic {
 
   @@index([userId])
   @@index([categoryId])
+  @@unique([userId, categoryId])
   @@map("statistics")
 }
 
@@ -306,8 +310,23 @@ model Notification {
   user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
-  @@index([read])
+  @@index([userId, read, createdAt])
   @@map("notifications")
+}
+
+model PushSubscription {
+  id        String   @id @default(cuid())
+  userId    String
+  endpoint  String   @unique
+  p256dh    String
+  auth      String
+  createdAt DateTime @default(now())
+
+  // Relations
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("push_subscriptions")
 }
 
 model Subscription {
@@ -337,12 +356,15 @@ model TrafficSign {
   description     String
   contexte_usage  String?
   regle_associee  String?
+  advice          String[]   @default([])
+  ordre           Int        @default(0)
   icone           String?
   image           String?
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
 
   @@index([category])
+  @@index([name])
   @@map("traffic_signs")
 }
 
@@ -380,6 +402,7 @@ model Product {
   id           String     @id @default(cuid())
   sku          String     @unique
   title        String
+  description  String?
   kind         String
   priceXof     Int
   active       Boolean    @default(true)
@@ -411,6 +434,7 @@ model Purchase {
   product     Product   @relation(fields: [productId], references: [id])
 
   @@index([userId])
+  @@unique([providerRef])
   @@map("purchases")
 }
 
@@ -472,5 +496,27 @@ model OtpToken {
   createdAt DateTime  @default(now())
 
   @@index([phone])
+  @@index([phone, expiresAt])
   @@map("otp_tokens")
+}
+
+model SmsLog {
+  id        String   @id @default(cuid())
+  phone     String
+  channel   String   @default("sms")
+  simulated Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+  @@map("sms_logs")
+}
+
+/// Image-based mock-exam series (diapos) — content served to the web app.
+model DiapoExam {
+  id        Int      @id
+  title     String
+  questions Json
+  updatedAt DateTime @updatedAt
+
+  @@map("diapo_exams")
 }

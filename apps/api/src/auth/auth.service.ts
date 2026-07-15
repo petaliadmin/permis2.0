@@ -22,7 +22,7 @@ export class AuthService {
     private userService: UserService,
     private jwtService: JwtService,
     private prisma: PrismaService,
-    private smsService: SmsService,
+    private smsService: SmsService
   ) {}
 
   // ─── Phone / OTP / PIN ───────────────────────────────────────────────────────
@@ -38,7 +38,7 @@ export class AuthService {
       },
     });
 
-    const rawCode = Math.floor(100000 + Math.random() * 900000).toString();
+    const rawCode = crypto.randomInt(100000, 1000000).toString();
     const codeHash = crypto.createHash('sha256').update(rawCode).digest('hex');
 
     await this.prisma.otpToken.create({
@@ -94,6 +94,10 @@ export class AuthService {
       throw new UnauthorizedException('Numéro ou code incorrect');
     }
 
+    if (user.blocked) {
+      throw new UnauthorizedException('Ce compte a été bloqué. Contactez le support.');
+    }
+
     return { accessToken: this.generateAccessToken(user), user: this.sanitizeUser(user) };
   }
 
@@ -104,8 +108,25 @@ export class AuthService {
       throw new ConflictException('Ce numéro est déjà utilisé');
     }
 
-    const pinHash = await bcrypt.hash(pin, 10);
+    const pinHash = await bcrypt.hash(pin, 12);
     const user = await this.userService.create({ name, phone, pinHash });
+
+    return { accessToken: this.generateAccessToken(user), user: this.sanitizeUser(user) };
+  }
+
+  /** Reset the 4-digit PIN after verifying a fresh SMS OTP. */
+  async resetPinWithOtp(rawPhone: string, otp: string, newPin: string) {
+    const phone = this.normalizePhone(rawPhone);
+
+    const user = await this.userService.findByPhone(phone);
+    // Same error whether the phone is unknown or the OTP is wrong — no enumeration.
+    if (!user) throw new BadRequestException('Code invalide ou expiré');
+
+    const verified = await this.verifyOtp(phone, otp);
+    if (!verified) throw new BadRequestException('Code invalide ou expiré');
+
+    const pinHash = await bcrypt.hash(newPin, 12);
+    await this.prisma.user.update({ where: { id: user.id }, data: { pinHash } });
 
     return { accessToken: this.generateAccessToken(user), user: this.sanitizeUser(user) };
   }
@@ -120,7 +141,7 @@ export class AuthService {
       throw new ConflictException('User with this email already exists');
     }
 
-    const hashedPassword: string = await bcrypt.hash(password, 10);
+    const hashedPassword: string = await bcrypt.hash(password, 12);
 
     const user = await this.userService.create({
       email,
@@ -144,6 +165,10 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
+    if (user.blocked) {
+      throw new UnauthorizedException('Ce compte a été bloqué. Contactez le support.');
+    }
+
     return { accessToken: this.generateAccessToken(user), user: this.sanitizeUser(user) };
   }
 
@@ -151,6 +176,9 @@ export class AuthService {
     const user = await this.userService.findById(userId);
     if (!user) {
       throw new UnauthorizedException('User not found');
+    }
+    if (user.blocked) {
+      throw new UnauthorizedException('Ce compte a été bloqué. Contactez le support.');
     }
     return this.sanitizeUser(user);
   }
@@ -190,8 +218,7 @@ export class AuthService {
     }
 
     return {
-      message:
-        'Si un compte existe pour cette adresse, un lien de réinitialisation a été envoyé.',
+      message: 'Si un compte existe pour cette adresse, un lien de réinitialisation a été envoyé.',
     };
   }
 
@@ -203,7 +230,7 @@ export class AuthService {
       throw new BadRequestException('Lien de réinitialisation invalide ou expiré.');
     }
 
-    const passwordHash = await bcrypt.hash(newPassword, 10);
+    const passwordHash = await bcrypt.hash(newPassword, 12);
 
     await this.prisma.$transaction([
       this.prisma.user.update({ where: { id: record.userId }, data: { passwordHash } }),

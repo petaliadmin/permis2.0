@@ -2,8 +2,8 @@
   "name": "PERMIS2.0 — Code de la route Sénégal",
   "short_name": "PERMIS2.0",
   "description": "Préparez votre examen du permis de conduire sénégalais : leçons, séries d'entraînement et examens blancs.",
-  "id": "/",
-  "start_url": "/",
+  "id": "/cours",
+  "start_url": "/cours",
   "scope": "/",
   "display": "standalone",
   "display_override": ["standalone", "minimal-ui"],
@@ -44,13 +44,23 @@
       "name": "Entraînement",
       "short_name": "Entraînement",
       "url": "/training",
-      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
     },
     {
       "name": "Examen blanc",
       "short_name": "Examen",
       "url": "/exam",
-      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
     }
   ]
 }

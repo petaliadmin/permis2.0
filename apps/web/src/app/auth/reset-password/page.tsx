@@ -61,16 +61,17 @@ function ResetPasswordInner() {
       </div>
 
       <div className="mx-auto w-full max-w-md rounded-3xl bg-surface-2 border border-token p-6 shadow-2xl animate-fade-in sm:p-8">
-        <h2 className="mb-1 text-xl font-extrabold text-foreground">
-          Nouveau mot de passe
-        </h2>
+        <h2 className="mb-1 text-xl font-extrabold text-foreground">Nouveau mot de passe</h2>
 
         {!token ? (
           <div className="mt-4 space-y-5">
             <div className="rounded-lg border border-danger/40 bg-danger/10 px-4 py-3 text-sm text-danger">
               Lien de réinitialisation invalide.
             </div>
-            <Link href="/auth/forgot-password" className="block text-center font-semibold text-primary hover:underline">
+            <Link
+              href="/auth/forgot-password"
+              className="block text-center font-semibold text-primary hover:underline"
+            >
               Demander un nouveau lien
             </Link>
           </div>
@@ -84,16 +85,32 @@ function ResetPasswordInner() {
               <label htmlFor="password" className="mb-2 block text-sm font-medium text-secondary">
                 Nouveau mot de passe
               </label>
-              <Input id="password" name="password" type="password" required placeholder="••••••••"
-                value={password} onChange={(e) => setPassword(e.target.value)} disabled={status === 'loading'} />
+              <Input
+                id="password"
+                name="password"
+                type="password"
+                required
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                disabled={status === 'loading'}
+              />
             </div>
 
             <div>
               <label htmlFor="confirm" className="mb-2 block text-sm font-medium text-secondary">
                 Confirmer le mot de passe
               </label>
-              <Input id="confirm" name="confirm" type="password" required placeholder="••••••••"
-                value={confirm} onChange={(e) => setConfirm(e.target.value)} disabled={status === 'loading'} />
+              <Input
+                id="confirm"
+                name="confirm"
+                type="password"
+                required
+                placeholder="••••••••"
+                value={confirm}
+                onChange={(e) => setConfirm(e.target.value)}
+                disabled={status === 'loading'}
+              />
             </div>
 
             {error && (
