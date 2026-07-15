@@ -20,9 +20,14 @@ function isStandalone(): boolean {
   );
 }
 
-function isIos(): boolean {
-  if (typeof navigator === 'undefined') return false;
-  return /iphone|ipad|ipod/i.test(navigator.userAgent);
+type Platform = 'ios' | 'android' | 'desktop';
+
+function detectPlatform(): Platform {
+  if (typeof navigator === 'undefined') return 'desktop';
+  const ua = navigator.userAgent;
+  if (/iphone|ipad|ipod/i.test(ua)) return 'ios';
+  if (/android/i.test(ua)) return 'android';
+  return 'desktop';
 }
 
 const FEATURES = [
@@ -31,20 +36,47 @@ const FEATURES = [
   { icon: '🏠', label: "Écran d'accueil" },
 ];
 
+const MANUAL_STEPS: Record<Platform, string[]> = {
+  ios: [
+    'Appuie sur Partager (icône avec une flèche) dans la barre Safari.',
+    "Choisis « Sur l'écran d'accueil ».",
+    'Confirme avec Ajouter.',
+  ],
+  android: [
+    'Ouvre le menu ⋮ en haut à droite de Chrome.',
+    'Choisis « Installer l\'application » (ou « Ajouter à l\'écran d\'accueil »).',
+    "Confirme l'installation.",
+  ],
+  desktop: [
+    "Clique sur l'icône d'installation dans la barre d'adresse (ou le menu ⋮ → « Installer PERMIS2.0 »).",
+    "Confirme dans la fenêtre qui s'ouvre.",
+  ],
+};
+
+/**
+ * Fully custom install invite — deliberately independent of the browser's
+ * native beforeinstallprompt banner. That event only fires under strict
+ * conditions (HTTPS, specific engagement heuristics, etc.) and simply never
+ * shows up at all on an http:// origin, so relying on it left this feature
+ * invisible in practice. This component always offers to install; if the
+ * native one-tap prompt happens to be available it's used, otherwise a
+ * platform-appropriate manual walkthrough is shown instead.
+ */
 export function InstallPrompt() {
   const [deferred, setDeferred] = useState<BeforeInstallPromptEvent | null>(null);
   const [visible, setVisible] = useState(false);
-  const [iosHelp, setIosHelp] = useState(false);
+  const [showManual, setShowManual] = useState(false);
+  const [platform, setPlatform] = useState<Platform>('desktop');
 
   useEffect(() => {
     if (isStandalone()) return;
+    setPlatform(detectPlatform());
 
-    // Android / Chromium: capture the native prompt, then surface our sheet
-    // shortly after so it lands gently rather than mid-page-load.
+    // Captured opportunistically — used for a real one-tap install when the
+    // browser supports it, but the invite itself never waits on this.
     const onBeforeInstall = (e: Event) => {
       e.preventDefault();
       setDeferred(e as BeforeInstallPromptEvent);
-      setTimeout(() => setVisible(true), 800);
     };
     window.addEventListener('beforeinstallprompt', onBeforeInstall);
 
@@ -54,33 +86,32 @@ export function InstallPrompt() {
     };
     window.addEventListener('appinstalled', onInstalled);
 
-    // iOS has no beforeinstallprompt — show manual instructions after a short delay.
-    let iosTimer: ReturnType<typeof setTimeout> | undefined;
-    if (isIos()) {
-      iosTimer = setTimeout(() => {
-        setIosHelp(true);
-        setVisible(true);
-      }, 1200);
-    }
+    const timer = setTimeout(() => setVisible(true), 1200);
 
     return () => {
       window.removeEventListener('beforeinstallprompt', onBeforeInstall);
       window.removeEventListener('appinstalled', onInstalled);
-      if (iosTimer) clearTimeout(iosTimer);
+      clearTimeout(timer);
     };
   }, []);
 
   const dismiss = () => {
     setVisible(false);
+    setShowManual(false);
   };
 
   const install = async () => {
-    if (!deferred) return;
-    await deferred.prompt();
-    const { outcome } = await deferred.userChoice;
-    if (outcome === 'accepted') setVisible(false);
-    else dismiss();
-    setDeferred(null);
+    if (deferred) {
+      await deferred.prompt();
+      const { outcome } = await deferred.userChoice;
+      if (outcome === 'accepted') setVisible(false);
+      else dismiss();
+      setDeferred(null);
+      return;
+    }
+    // No native prompt available — walk the user through it manually
+    // instead of doing nothing.
+    setShowManual(true);
   };
 
   return (
@@ -149,21 +180,13 @@ export function InstallPrompt() {
               ))}
             </div>
 
-            {iosHelp ? (
+            {showManual ? (
               <div className="mt-4 rounded-2xl bg-surface-1 p-4 text-sm text-secondary">
-                <p className="font-semibold text-foreground">Sur iPhone / iPad :</p>
-                <ol className="mt-2 space-y-1.5">
-                  <li>
-                    1. Appuie sur <span className="font-semibold">Partager</span>{' '}
-                    <span className="align-middle">􀈂</span> dans la barre Safari.
-                  </li>
-                  <li>
-                    2. Choisis{' '}
-                    <span className="font-semibold">« Sur l&apos;écran d&apos;accueil »</span>.
-                  </li>
-                  <li>
-                    3. Confirme avec <span className="font-semibold">Ajouter</span>.
-                  </li>
+                <p className="font-semibold text-foreground">Comment installer :</p>
+                <ol className="mt-2 list-inside list-decimal space-y-1.5">
+                  {MANUAL_STEPS[platform].map((step, i) => (
+                    <li key={i}>{step}</li>
+                  ))}
                 </ol>
                 <button
                   onClick={dismiss}
