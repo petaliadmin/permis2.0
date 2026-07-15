@@ -8,21 +8,9 @@ interface BeforeInstallPromptEvent extends Event {
   userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
 }
 
-const DISMISS_KEY = 'pwa-install-dismissed-at';
-// Re-show the prompt only after this many days if previously dismissed.
-const DISMISS_DAYS = 3;
-
-function recentlyDismissed(): boolean {
-  try {
-    const ts = localStorage.getItem(DISMISS_KEY);
-    if (!ts) return false;
-    const days = (Date.now() - Number(ts)) / (1000 * 60 * 60 * 24);
-    return days < DISMISS_DAYS;
-  } catch {
-    return false;
-  }
-}
-
+// No "remind me later" cooldown by design: the prompt should resurface on
+// every visit until the app is actually installed — isStandalone() below is
+// the only thing that stops it for good.
 function isStandalone(): boolean {
   if (typeof window === 'undefined') return false;
   return (
@@ -49,7 +37,7 @@ export function InstallPrompt() {
   const [iosHelp, setIosHelp] = useState(false);
 
   useEffect(() => {
-    if (isStandalone() || recentlyDismissed()) return;
+    if (isStandalone()) return;
 
     // Android / Chromium: capture the native prompt, then surface our sheet
     // shortly after so it lands gently rather than mid-page-load.
@@ -84,11 +72,6 @@ export function InstallPrompt() {
 
   const dismiss = () => {
     setVisible(false);
-    try {
-      localStorage.setItem(DISMISS_KEY, String(Date.now()));
-    } catch {
-      /* ignore */
-    }
   };
 
   const install = async () => {
