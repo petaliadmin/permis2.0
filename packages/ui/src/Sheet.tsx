@@ -30,6 +30,9 @@ const FOCUSABLE = [
 function Sheet({ open, onClose, children, ariaLabel, className }: SheetProps) {
   const panelRef = React.useRef<HTMLDivElement>(null);
   const triggerRef = React.useRef<Element | null>(null);
+  const [dragY, setDragY] = React.useState(0);
+  const [dragging, setDragging] = React.useState(false);
+  const dragState = React.useRef<{ startY: number; startTime: number } | null>(null);
 
   // Lock body scroll, handle Escape key, and manage focus.
   React.useEffect(() => {
@@ -84,6 +87,37 @@ function Sheet({ open, onClose, children, ariaLabel, className }: SheetProps) {
     };
   }, [open, onClose]);
 
+  // Reset any leftover drag offset whenever the sheet is opened.
+  React.useEffect(() => {
+    if (open) setDragY(0);
+  }, [open]);
+
+  const onHandlePointerDown = (e: React.PointerEvent) => {
+    dragState.current = { startY: e.clientY, startTime: Date.now() };
+    setDragging(true);
+    e.currentTarget.setPointerCapture(e.pointerId);
+  };
+
+  const onHandlePointerMove = (e: React.PointerEvent) => {
+    if (!dragState.current) return;
+    const delta = e.clientY - dragState.current.startY;
+    if (delta > 0) setDragY(delta);
+  };
+
+  const onHandlePointerUp = (e: React.PointerEvent) => {
+    if (!dragState.current) return;
+    const delta = e.clientY - dragState.current.startY;
+    const elapsed = Date.now() - dragState.current.startTime;
+    const velocity = delta / Math.max(elapsed, 1);
+    dragState.current = null;
+    setDragging(false);
+    if (delta > 120 || velocity > 0.5) {
+      onClose();
+    } else {
+      setDragY(0);
+    }
+  };
+
   return (
     <div
       aria-hidden={!open}
@@ -102,14 +136,23 @@ function Sheet({ open, onClose, children, ariaLabel, className }: SheetProps) {
         aria-modal="true"
         aria-label={ariaLabel}
         className={cn(
-          'absolute inset-x-0 bottom-0 rounded-t-3xl bg-surface-1 shadow-card transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]',
+          'absolute inset-x-0 bottom-0 rounded-t-3xl bg-surface-1 shadow-card',
           'pb-[env(safe-area-inset-bottom)]',
-          open ? 'translate-y-0' : 'translate-y-full',
           className
         )}
+        style={{
+          transform: open ? `translateY(${dragY}px)` : 'translateY(100%)',
+          transition: dragging ? 'none' : 'transform 300ms cubic-bezier(0.22,1,0.36,1)',
+        }}
       >
         {/* Drag handle */}
-        <div className="flex justify-center pt-3">
+        <div
+          className="flex touch-none justify-center pt-3"
+          onPointerDown={onHandlePointerDown}
+          onPointerMove={onHandlePointerMove}
+          onPointerUp={onHandlePointerUp}
+          onPointerCancel={onHandlePointerUp}
+        >
           <span className="h-1.5 w-10 rounded-full bg-surface-3" />
         </div>
         <div className="px-5 pb-6 pt-4">{children}</div>

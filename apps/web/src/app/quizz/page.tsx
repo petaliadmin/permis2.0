@@ -6,17 +6,23 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { AppShell, PageHeader } from '@/components/AppShell';
 import { useAuthStore } from '@/store/authStore';
-import { QUIZ_CATEGORIES, TOTAL_QUIZZES, type SeriesProgress } from './config';
+import { usePurchasesStore } from '@/store/purchasesStore';
+import { QUIZ_CATEGORIES, TOTAL_QUIZZES, FREE_SERIES_UP_TO, type SeriesProgress } from './config';
 import { countErrors } from '@/lib/errorBank';
 
-/* Per-category visual identity (icon + color) */
-const CAT_STYLE: Record<string, { icon: string; color: string; soft: string }> = {
-  panneaux: { icon: 'ti-road-sign', color: '#F97316', soft: 'bg-orange-50' },
-  priorites: { icon: 'ti-arrows-cross', color: '#F59E0B', soft: 'bg-amber-50' },
-  circulation: { icon: 'ti-car', color: '#2563EB', soft: 'bg-blue-50' },
-  signaux: { icon: 'ti-traffic-lights', color: '#16A34A', soft: 'bg-green-50' },
-  situations: { icon: 'ti-alert-triangle', color: '#EF4444', soft: 'bg-red-50' },
-};
+function Stars({ count }: { count: number }) {
+  return (
+    <div className="flex gap-0.5" aria-label={`${count} étoile${count !== 1 ? 's' : ''} sur 3`}>
+      {[1, 2, 3].map((n) => (
+        <i
+          key={n}
+          className={`ti ti-star-filled text-sm ${n <= count ? 'text-amber-400' : 'text-slate-200 dark:text-slate-700'}`}
+          aria-hidden="true"
+        />
+      ))}
+    </div>
+  );
+}
 
 function useProgress() {
   const [progress, setProgress] = useState<Record<string, SeriesProgress>>({});
@@ -40,9 +46,25 @@ function useProgress() {
 export default function QuizzPage() {
   const router = useRouter();
   const user = useAuthStore((s) => s.user);
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const isPremium = usePurchasesStore((s) => s.hasKey('premium_all'));
   const currentStreak = user?.currentStreak ?? 0;
   const progress = useProgress();
-  const completed = Object.values(progress).filter((p) => p?.done).length;
+  const category = QUIZ_CATEGORIES[0];
+
+  const handleStart = (quizId: string) => {
+    const unlocked = Number(quizId) <= FREE_SERIES_UP_TO || isPremium;
+    if (!unlocked) {
+      router.push(isAuthenticated ? '/boutique' : '/auth/login');
+      return;
+    }
+    router.push(`/quizz/${category.slug}/${quizId}`);
+  };
+  // Only count series that still exist — ignore stale keys left over from a
+  // previous quiz structure (e.g. localStorage entries from removed series).
+  const completed = category.quizzes.filter(
+    (qz) => progress[`${category.slug}_${qz.id}`]?.done
+  ).length;
   const [errorCount, setErrorCount] = useState(0);
   useEffect(() => setErrorCount(countErrors()), []);
 
@@ -119,63 +141,68 @@ export default function QuizzPage() {
           </motion.div>
         )}
 
-        <p className="mb-3 font-display text-base font-bold text-foreground">
-          Choisir une catégorie
-        </p>
+        <p className="mb-3 font-display text-base font-bold text-foreground">Choisir une série</p>
         <div className="space-y-3">
-          {QUIZ_CATEGORIES.map((cat, i) => {
-            const s = CAT_STYLE[cat.slug] ?? {
-              icon: 'ti-cards',
-              color: '#7C3AED',
-              soft: 'bg-violet-50',
-            };
-            const done = cat.quizzes.filter((qz) => progress[`${cat.slug}_${qz.id}`]?.done).length;
-            const total = cat.quizzes.length;
-            const finished = done === total && total > 0;
+          {category.quizzes.map((quiz, i) => {
+            const key = `${category.slug}_${quiz.id}`;
+            const prog = progress[key] ?? { done: false, pct: 0, stars: 0 };
+            const scoreColor = prog.pct >= 80 ? '#16A34A' : prog.pct >= 60 ? '#F59E0B' : '#EF4444';
+            const isFree = Number(quiz.id) <= FREE_SERIES_UP_TO;
+            const unlocked = isFree || isPremium;
+
             return (
               <motion.div
-                key={cat.slug}
+                key={quiz.id}
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.06 }}
               >
-                <Link href={`/quizz/${cat.slug}`}>
-                  <div className="flex items-center gap-4 rounded-2xl border border-token bg-surface-1 p-4 shadow-soft transition-transform active:scale-[0.98]">
-                    <div
-                      className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl ${s.soft}`}
-                    >
-                      <i
-                        className={`ti ${s.icon} text-2xl`}
-                        style={{ color: s.color }}
-                        aria-hidden="true"
-                      />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-2">
-                        <p className="font-display text-base font-bold text-foreground">
-                          {cat.title}
-                        </p>
-                        {finished && <span className="chip chip-success">✓</span>}
-                      </div>
-                      <p className="mt-0.5 text-xs text-secondary">{cat.description}</p>
-                      <div className="mt-2 flex items-center gap-2">
-                        <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-surface-3">
-                          <div
-                            className="h-full rounded-full"
-                            style={{
-                              width: `${total ? (done / total) * 100 : 0}%`,
-                              backgroundColor: s.color,
-                            }}
-                          />
-                        </div>
-                        <span className="text-[11px] font-bold tabular-nums text-muted">
-                          {done}/{total}
-                        </span>
-                      </div>
-                    </div>
-                    <i className="ti ti-chevron-right text-lg text-slate-300" aria-hidden="true" />
+                <button
+                  onClick={() => handleStart(quiz.id)}
+                  className="flex w-full items-center gap-4 rounded-2xl border border-token bg-surface-1 p-4 text-left shadow-soft transition-transform active:scale-[0.98]"
+                >
+                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-surface-2 text-2xl">
+                    {unlocked ? quiz.emoji : <i className="ti ti-lock text-xl text-slate-400" aria-hidden="true" />}
                   </div>
-                </Link>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      <p className="font-display text-sm font-bold text-foreground">
+                        {quiz.title}
+                      </p>
+                      {prog.done && (
+                        <span className="rounded-full bg-success-50 px-2 py-0.5 text-[10px] font-bold text-success-600">
+                          ✓ Complété
+                        </span>
+                      )}
+                      {!unlocked && <span className="chip chip-orange">Premium</span>}
+                      {unlocked && !isFree && (
+                        <span className="chip chip-primary">Débloqué</span>
+                      )}
+                    </div>
+                    <div className="mt-1.5 flex items-center gap-3">
+                      <Stars count={prog.stars} />
+                      <span className="text-[11px] text-muted">
+                        {prog.done ? `${prog.pct}%` : `${quiz.questionsPerSession} questions`}
+                      </span>
+                    </div>
+                    {prog.done && (
+                      <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-surface-3">
+                        <motion.div
+                          className="h-full rounded-full"
+                          style={{ backgroundColor: scoreColor }}
+                          initial={{ width: 0 }}
+                          animate={{ width: `${prog.pct}%` }}
+                          transition={{
+                            duration: 0.6,
+                            delay: i * 0.06 + 0.3,
+                            ease: [0.22, 1, 0.36, 1],
+                          }}
+                        />
+                      </div>
+                    )}
+                  </div>
+                  <i className="ti ti-chevron-right text-lg text-slate-300" aria-hidden="true" />
+                </button>
               </motion.div>
             );
           })}

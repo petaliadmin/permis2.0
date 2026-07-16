@@ -1,8 +1,10 @@
 // ─── Quiz Configuration ───────────────────────────────────────────────────────
-// Chaque série mélange TOUTES les sous-catégories de sa thématique.
-// Le tirage est aléatoire à chaque session → chaque partie est différente.
+// 10 séries de 15 questions, chacune piochant dans TOUTES les catégories
+// (panneaux, priorités, circulation, signaux, situations) pour une couverture
+// complète à chaque série. Le tirage est aléatoire à chaque session.
 
-export const FREE_QUESTIONS = 3; // questions gratuites pour les utilisateurs non-abonnés
+/** Séries 1 à 5 gratuites ; le reste nécessite premium_all (même logique que les examens). */
+export const FREE_SERIES_UP_TO = 5;
 
 export type QuizItem = {
   id: string;
@@ -25,187 +27,45 @@ export type QuizCategory = {
   quizzes: QuizItem[];
 };
 
-// ─── Catégories disponibles dans questions_doc.json ───────────────────────────
-const PANNEAU_KEYS = [
+// ─── Toutes les catégories disponibles dans questions_doc.json ───────────────
+// Chaque série pioche dans TOUTES ces catégories (panneaux, priorités,
+// circulation, signaux, situations) pour garantir une couverture complète
+// des règles, de la reconnaissance des panneaux et du code à chaque série.
+export const ALL_CATEGORY_KEYS = [
   'Panneaux de danger',
   "Panneaux d'interdiction",
   'Panneaux de priorité',
   'Panneaux de direction',
   'Restrictions (hauteur/largeur/poids)',
-];
-
-const PRIORITE_KEYS = [
   'Priorité aux intersections',
   'Priorité & Arrêt (STOP / Cédez)',
   'Rond-point & Giratoire',
+  'Limitation de vitesse',
+  'Dépassement',
+  'Stationnement & Arrêt',
+  'Feux tricolores',
+  'Signalisation temporaire',
+  'Passage à niveau',
 ];
 
-const CIRCULATION_KEYS = ['Limitation de vitesse', 'Dépassement', 'Stationnement & Arrêt'];
-
-const SIGNAUX_KEYS = ['Feux tricolores', 'Signalisation temporaire'];
-
-const SITUATIONS_KEYS = ['Passage à niveau'];
+const SERIES_EMOJIS = ['🎯', '🚦', '🔺', '⚡', '🚗', '🛑', '🔀', '⚠️', '🚂', '🏁'];
 
 export const QUIZ_CATEGORIES: QuizCategory[] = [
   {
-    slug: 'panneaux',
-    title: 'Panneaux',
-    icon: '🔺',
-    gradient: 'from-orange-500 to-red-500',
-    shadowColor: 'shadow-orange-200/60 dark:shadow-orange-900/30',
-    ringColor: '#f97316',
-    description: 'Danger, interdiction, priorité, direction… tous les panneaux mélangés',
-    quizzes: [
-      {
-        id: '1',
-        title: 'Panneaux — Série 1',
-        categoryKeys: PANNEAU_KEYS,
-        emoji: '🔺',
-        questionsPerSession: 15,
-      },
-      {
-        id: '2',
-        title: 'Panneaux — Série 2',
-        categoryKeys: PANNEAU_KEYS,
-        emoji: '⚠️',
-        questionsPerSession: 15,
-      },
-      {
-        id: '3',
-        title: 'Panneaux — Série 3',
-        categoryKeys: PANNEAU_KEYS,
-        emoji: '🚫',
-        questionsPerSession: 15,
-      },
-      {
-        id: '4',
-        title: 'Panneaux — Maîtrise',
-        categoryKeys: PANNEAU_KEYS,
-        emoji: '🏆',
-        questionsPerSession: 0,
-      },
-    ],
-  },
-  {
-    slug: 'priorites',
-    title: 'Priorités',
-    icon: '⚡',
-    gradient: 'from-yellow-400 to-amber-500',
-    shadowColor: 'shadow-yellow-200/60 dark:shadow-yellow-900/30',
-    ringColor: '#f59e0b',
-    description: 'Intersections, STOP, cédez le passage, giratoires — tout en un',
-    quizzes: [
-      {
-        id: '1',
-        title: 'Priorités — Série 1',
-        categoryKeys: PRIORITE_KEYS,
-        emoji: '🔀',
-        questionsPerSession: 12,
-      },
-      {
-        id: '2',
-        title: 'Priorités — Série 2',
-        categoryKeys: PRIORITE_KEYS,
-        emoji: '🛑',
-        questionsPerSession: 12,
-      },
-      {
-        id: '3',
-        title: 'Priorités — Maîtrise',
-        categoryKeys: PRIORITE_KEYS,
-        emoji: '🏆',
-        questionsPerSession: 0,
-      },
-    ],
-  },
-  {
-    slug: 'circulation',
-    title: 'Circulation',
-    icon: '🚗',
-    gradient: 'from-blue-500 to-cyan-500',
-    shadowColor: 'shadow-blue-200/60 dark:shadow-blue-900/30',
-    ringColor: '#3b82f6',
-    description: 'Vitesse, dépassement et stationnement mélangés',
-    quizzes: [
-      {
-        id: '1',
-        title: 'Circulation — Série 1',
-        categoryKeys: CIRCULATION_KEYS,
-        emoji: '🏎️',
-        questionsPerSession: 12,
-      },
-      {
-        id: '2',
-        title: 'Circulation — Série 2',
-        categoryKeys: CIRCULATION_KEYS,
-        emoji: '↔️',
-        questionsPerSession: 12,
-      },
-      {
-        id: '3',
-        title: 'Circulation — Maîtrise',
-        categoryKeys: CIRCULATION_KEYS,
-        emoji: '🏆',
-        questionsPerSession: 0,
-      },
-    ],
-  },
-  {
-    slug: 'signaux',
-    title: 'Signaux & Feux',
-    icon: '🚦',
-    gradient: 'from-green-500 to-emerald-500',
-    shadowColor: 'shadow-green-200/60 dark:shadow-green-900/30',
-    ringColor: '#16a34a',
-    description: 'Feux tricolores et signalisation temporaire ensemble',
-    quizzes: [
-      {
-        id: '1',
-        title: 'Signaux — Série 1',
-        categoryKeys: SIGNAUX_KEYS,
-        emoji: '🚦',
-        questionsPerSession: 10,
-      },
-      {
-        id: '2',
-        title: 'Signaux — Série 2',
-        categoryKeys: SIGNAUX_KEYS,
-        emoji: '🔶',
-        questionsPerSession: 10,
-      },
-      {
-        id: '3',
-        title: 'Signaux — Maîtrise',
-        categoryKeys: SIGNAUX_KEYS,
-        emoji: '🏆',
-        questionsPerSession: 0,
-      },
-    ],
-  },
-  {
-    slug: 'situations',
-    title: 'Situations',
-    icon: '⚠️',
-    gradient: 'from-rose-500 to-pink-600',
-    shadowColor: 'shadow-rose-200/60 dark:shadow-rose-900/30',
-    ringColor: '#f43f5e',
-    description: 'Passages à niveau et situations dangereuses',
-    quizzes: [
-      {
-        id: '1',
-        title: 'Passage à niveau — Série 1',
-        categoryKeys: SITUATIONS_KEYS,
-        emoji: '🚂',
-        questionsPerSession: 8,
-      },
-      {
-        id: '2',
-        title: 'Passage à niveau — Maîtrise',
-        categoryKeys: SITUATIONS_KEYS,
-        emoji: '🏆',
-        questionsPerSession: 0,
-      },
-    ],
+    slug: 'general',
+    title: 'Quiz général',
+    icon: '🎯',
+    gradient: 'from-violet-500 to-purple-600',
+    shadowColor: 'shadow-violet-200/60 dark:shadow-violet-900/30',
+    ringColor: '#7c3aed',
+    description: 'Panneaux, priorités, circulation, signaux, situations — tout mélangé',
+    quizzes: Array.from({ length: 10 }, (_, i) => ({
+      id: String(i + 1),
+      title: `Série ${i + 1}`,
+      categoryKeys: ALL_CATEGORY_KEYS,
+      emoji: SERIES_EMOJIS[i],
+      questionsPerSession: 15,
+    })),
   },
 ];
 
@@ -252,16 +112,29 @@ export function buildSessionQuestions<T extends RawQuestion>(
   }
 
   const total = categoryKeys.reduce((s, k) => s + (grouped[k]?.length ?? 0), 0);
-  const sliced = Object.fromEntries(
-    categoryKeys.map((k) => [
-      k,
-      grouped[k].slice(
-        0,
-        Math.max(1, Math.round((grouped[k].length / total) * questionsPerSession))
-      ),
-    ])
-  );
-  return interleave(sliced, categoryKeys).slice(0, questionsPerSession);
+  const target = Math.min(questionsPerSession, total);
+
+  // Largest-remainder apportionment: guarantees the picked counts sum to
+  // exactly `target` (instead of independent rounding, which can undershoot
+  // once there are many categories — e.g. 14 categories for 15 questions).
+  const shares = categoryKeys.map((k) => {
+    const available = grouped[k]?.length ?? 0;
+    const raw = total > 0 ? (available / total) * target : 0;
+    const base = Math.min(Math.floor(raw), available);
+    return { key: k, available, base, remainder: raw - base };
+  });
+
+  let allocated = shares.reduce((s, sh) => s + sh.base, 0);
+  for (const sh of [...shares].sort((a, b) => b.remainder - a.remainder)) {
+    if (allocated >= target) break;
+    if (sh.base < sh.available) {
+      sh.base += 1;
+      allocated += 1;
+    }
+  }
+
+  const sliced = Object.fromEntries(shares.map((sh) => [sh.key, grouped[sh.key].slice(0, sh.base)]));
+  return interleave(sliced, categoryKeys).slice(0, target);
 }
 
 function interleave<T>(grouped: Record<string, T[]>, keys: string[]): T[] {

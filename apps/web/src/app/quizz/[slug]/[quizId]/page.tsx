@@ -8,13 +8,14 @@ import { Sheet } from '@permis2.0/ui';
 import {
   getCategoryBySlug,
   getQuizById,
-  FREE_QUESTIONS,
+  FREE_SERIES_UP_TO,
   TOTAL_QUIZZES,
   buildSessionQuestions,
   calcStars,
   shuffle,
 } from '../../config';
 import { SUBSCRIPTION_PRICE_ANNUAL } from '@permis2.0/shared';
+import { useAuthStore } from '@/store/authStore';
 import { usePurchasesStore } from '@/store/purchasesStore';
 import { useSettingsStore } from '@/store/settingsStore';
 import { addError, removeError } from '@/lib/errorBank';
@@ -314,7 +315,7 @@ function GameOverScreen({
   );
 }
 
-function PaywallScreen({ quizTitle }: { quizTitle: string }) {
+function PaywallScreen({ quizTitle, ctaHref }: { quizTitle: string; ctaHref: string }) {
   return (
     <div className="flex min-h-screen flex-col bg-surface">
       <div className="flex-1 px-6 pt-16 text-center">
@@ -325,8 +326,8 @@ function PaywallScreen({ quizTitle }: { quizTitle: string }) {
           Continue ton apprentissage
         </h2>
         <p className="mt-2 text-sm text-secondary">
-          Tu as utilisé tes {FREE_QUESTIONS} questions gratuites sur{' '}
-          <span className="font-semibold text-foreground">{quizTitle}</span>
+          <span className="font-semibold text-foreground">{quizTitle}</span> fait partie des
+          séries premium
         </p>
         <div className="mx-auto mt-8 max-w-xs space-y-3 text-left">
           {[
@@ -343,7 +344,7 @@ function PaywallScreen({ quizTitle }: { quizTitle: string }) {
         </div>
       </div>
       <div className="space-y-3 px-6 pb-10 pt-5">
-        <Link href="/boutique" className="btn-violet w-full">
+        <Link href={ctaHref} className="btn-violet w-full">
           🚀 Débloquer — {SUBSCRIPTION_PRICE_ANNUAL}
         </Link>
         <p className="text-center text-xs text-muted">Sans engagement · Annulation facile</p>
@@ -424,14 +425,20 @@ export default function QuizPlayerPage() {
 
   const category = getCategoryBySlug(slug);
   const quizConfig = category ? getQuizById(category, quizId) : undefined;
+  const isFreeSeries = Number(quizId) <= FREE_SERIES_UP_TO;
 
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const isPremium = usePurchasesStore((s) => s.hasKey('premium_all'));
+  const entitlementsReady = usePurchasesStore((s) => s.entitlementsReady);
+  const fetchEntitlements = usePurchasesStore((s) => s.fetchEntitlements);
   const soundEnabled = useSettingsStore((s) => s.soundEnabled);
 
+  useEffect(() => {
+    if (isAuthenticated) fetchEntitlements();
+  }, [isAuthenticated, fetchEntitlements]);
+
   const [questions, setQuestions] = useState<Question[]>([]);
-  const [phase, setPhase] = useState<'loading' | 'quiz' | 'paywall' | 'done' | 'gameover'>(
-    'loading'
-  );
+  const [phase, setPhase] = useState<'loading' | 'quiz' | 'done' | 'gameover'>('loading');
   const [index, setIndex] = useState(0);
   const [selected, setSelected] = useState<string | null>(null);
   const [confirmed, setConfirmed] = useState(false);
@@ -451,6 +458,7 @@ export default function QuizPlayerPage() {
 
   useEffect(() => {
     if (!quizConfig) return;
+    if (!isFreeSeries && !isPremium) return; // locked series — nothing to load
     loadData<Question[]>(
       `/questions/quiz?categories=${encodeURIComponent(quizConfig.categoryKeys.join(','))}`,
       '/data/questions_doc.json'
@@ -468,7 +476,7 @@ export default function QuizPlayerPage() {
         startRef.current = Date.now();
       })
       .catch(() => setPhase('loading'));
-  }, [quizConfig]);
+  }, [quizConfig, isFreeSeries, isPremium]);
 
   useEffect(() => {
     const q = questions[index];
@@ -479,7 +487,7 @@ export default function QuizPlayerPage() {
   }, [index, questions]);
 
   const q = questions[index];
-  const displayTotal = isPremium ? questions.length : Math.min(questions.length, FREE_QUESTIONS);
+  const displayTotal = questions.length;
   const isCorrect = confirmed && selected === q?.bonneReponse;
 
   const handleVerify = () => {
@@ -530,10 +538,6 @@ export default function QuizPlayerPage() {
       setPhase('done');
       return;
     }
-    if (!isPremium && next >= FREE_QUESTIONS) {
-      setPhase('paywall');
-      return;
-    }
     setIndex(next);
     setSelected(null);
     setConfirmed(false);
@@ -573,6 +577,24 @@ export default function QuizPlayerPage() {
       </div>
     );
   }
+  // Locked series (id > FREE_SERIES_UP_TO, no premium_all) — wait for entitlements
+  // to resolve before deciding, so a premium user on a slow connection doesn't
+  // flash the paywall.
+  if (!isFreeSeries && !entitlementsReady) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-surface">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-violet-500 border-t-transparent" />
+      </div>
+    );
+  }
+  if (!isFreeSeries && !isPremium) {
+    return (
+      <PaywallScreen
+        quizTitle={quizConfig.title}
+        ctaHref={isAuthenticated ? '/boutique' : '/auth/login'}
+      />
+    );
+  }
   if (phase === 'loading' || (phase === 'quiz' && !q)) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-surface">
@@ -593,7 +615,6 @@ export default function QuizPlayerPage() {
         onRetry={resetGame}
       />
     );
-  if (phase === 'paywall') return <PaywallScreen quizTitle={quizConfig.title} />;
 
   /* ── Quiz question ── */
   return (

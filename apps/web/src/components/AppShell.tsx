@@ -221,9 +221,8 @@ function SideMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
 
 /* ─── Navigation ─────────────────────────────────────────────────────────────── */
 const TAB_LINKS: { href: string; label: string; icon: string; accent: Accent }[] = [
-  { href: '/cours', label: 'Cours', icon: 'ti-book', accent: 'blue' },
   { href: '/traffic-signs', label: 'Panneaux', icon: 'ti-road-sign', accent: 'blue' },
-  { href: '/quizz', label: 'Quiz', icon: 'ti-cards', accent: 'violet' },
+  { href: '/quizz', label: "Je m'entraine", icon: 'ti-cards', accent: 'violet' },
   { href: '/exam', label: 'Examens', icon: 'ti-clipboard-check', accent: 'orange' },
   { href: '/profil', label: 'Profil', icon: 'ti-user', accent: 'violet' },
 ];
@@ -257,13 +256,13 @@ export function AppShell({ children, hideNav = false, padded = false }: AppShell
           <PageTransition>{children}</PageTransition>
         </main>
 
-        {/* ── Bottom navigation — 5 tabs (mockup) */}
+        {/* ── Bottom navigation — 4 tabs (mockup) */}
         {!hideNav && (
           <nav
             className="fixed inset-x-0 bottom-0 z-40 mx-auto max-w-md border-t border-token bg-surface-1/95 shadow-nav backdrop-blur-xl pb-[env(safe-area-inset-bottom)]"
             aria-label="Navigation principale"
           >
-            <div className="grid grid-cols-5">
+            <div className="grid grid-cols-4">
               {TAB_LINKS.map((tab) => {
                 const active = isActive(tab.href);
                 const a = ACCENT[tab.accent];

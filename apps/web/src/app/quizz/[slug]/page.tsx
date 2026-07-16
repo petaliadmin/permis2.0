@@ -3,9 +3,11 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { AppShell, PageHeader } from '@/components/AppShell';
-import { getCategoryBySlug, type SeriesProgress } from '../config';
+import { useAuthStore } from '@/store/authStore';
+import { usePurchasesStore } from '@/store/purchasesStore';
+import { getCategoryBySlug, FREE_SERIES_UP_TO, type SeriesProgress } from '../config';
 
 const CAT_STYLE: Record<
   string,
@@ -52,12 +54,24 @@ function Stars({ count }: { count: number }) {
 
 export default function CategoryPage() {
   const { slug } = useParams<{ slug: string }>();
+  const router = useRouter();
   const category = getCategoryBySlug(slug);
   const [progress, setProgress] = useState<Record<string, SeriesProgress>>({});
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const isPremium = usePurchasesStore((s) => s.hasKey('premium_all'));
 
   useEffect(() => {
     setProgress(readProgress());
   }, []);
+
+  const handleStart = (quizId: string) => {
+    const unlocked = Number(quizId) <= FREE_SERIES_UP_TO || isPremium;
+    if (!unlocked) {
+      router.push(isAuthenticated ? '/boutique' : '/auth/login');
+      return;
+    }
+    router.push(`/quizz/${slug}/${quizId}`);
+  };
 
   if (!category) {
     return (
@@ -116,6 +130,8 @@ export default function CategoryPage() {
             const prog = progress[key] ?? { done: false, pct: 0, stars: 0 };
             const isMaitrise = quiz.questionsPerSession === 0;
             const scoreColor = prog.pct >= 80 ? '#16A34A' : prog.pct >= 60 ? '#F59E0B' : '#EF4444';
+            const isFree = Number(quiz.id) <= FREE_SERIES_UP_TO;
+            const unlocked = isFree || isPremium;
 
             return (
               <motion.div
@@ -124,69 +140,73 @@ export default function CategoryPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.07 }}
               >
-                <Link href={`/quizz/${slug}/${quiz.id}`}>
+                <button
+                  onClick={() => handleStart(quiz.id)}
+                  className={`flex w-full items-center gap-4 rounded-2xl border p-4 text-left shadow-soft transition-transform active:scale-[0.98] ${isMaitrise ? 'border-amber-200 bg-amber-50/60 dark:border-amber-800/40 dark:bg-amber-950/20' : 'border-token bg-surface-1'}`}
+                >
+                  {/* Emoji badge */}
                   <div
-                    className={`flex items-center gap-4 rounded-2xl border p-4 shadow-soft transition-transform active:scale-[0.98] ${isMaitrise ? 'border-amber-200 bg-amber-50/60 dark:border-amber-800/40 dark:bg-amber-950/20' : 'border-token bg-surface-1'}`}
+                    className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl text-2xl ${isMaitrise ? 'bg-amber-100 dark:bg-amber-900/30' : 'bg-surface-2'}`}
                   >
-                    {/* Emoji badge */}
-                    <div
-                      className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl text-2xl ${isMaitrise ? 'bg-amber-100 dark:bg-amber-900/30' : 'bg-surface-2'}`}
-                    >
-                      {quiz.emoji}
-                    </div>
-
-                    <div className="min-w-0 flex-1">
-                      <div className="flex flex-wrap items-center gap-1.5">
-                        <p className="font-display text-sm font-bold text-foreground">
-                          {quiz.title}
-                        </p>
-                        {isMaitrise && (
-                          <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-bold text-amber-700 dark:bg-amber-900/40 dark:text-amber-400">
-                            Maîtrise
-                          </span>
-                        )}
-                        {prog.done && (
-                          <span className="rounded-full bg-success-50 px-2 py-0.5 text-[10px] font-bold text-success-600">
-                            ✓ Complété
-                          </span>
-                        )}
-                      </div>
-
-                      <div className="mt-1.5 flex items-center gap-3">
-                        <Stars count={prog.stars} />
-                        <span className="text-[11px] text-muted">
-                          {prog.done
-                            ? `${prog.pct}%`
-                            : quiz.questionsPerSession === 0
-                              ? 'Toutes les questions'
-                              : `${quiz.questionsPerSession} questions`}
-                        </span>
-                      </div>
-
-                      {/* Score progress bar (only when done) */}
-                      {prog.done && (
-                        <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-surface-3">
-                          <motion.div
-                            className="h-full rounded-full"
-                            style={{ backgroundColor: scoreColor }}
-                            initial={{ width: 0 }}
-                            animate={{ width: `${prog.pct}%` }}
-                            transition={{
-                              duration: 0.6,
-                              delay: i * 0.07 + 0.3,
-                              ease: [0.22, 1, 0.36, 1],
-                            }}
-                          />
-                        </div>
-                      )}
-                    </div>
-
-                    <i
-                      className="ti ti-chevron-right shrink-0 text-lg text-slate-300"
-                      aria-hidden="true"
-                    />
+                    {unlocked ? (
+                      quiz.emoji
+                    ) : (
+                      <i className="ti ti-lock text-xl text-slate-400" aria-hidden="true" />
+                    )}
                   </div>
-                </Link>
+
+                  <div className="min-w-0 flex-1">
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      <p className="font-display text-sm font-bold text-foreground">
+                        {quiz.title}
+                      </p>
+                      {isMaitrise && (
+                        <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-bold text-amber-700 dark:bg-amber-900/40 dark:text-amber-400">
+                          Maîtrise
+                        </span>
+                      )}
+                      {prog.done && (
+                        <span className="rounded-full bg-success-50 px-2 py-0.5 text-[10px] font-bold text-success-600">
+                          ✓ Complété
+                        </span>
+                      )}
+                      {!unlocked && <span className="chip chip-orange">Premium</span>}
+                    </div>
+
+                    <div className="mt-1.5 flex items-center gap-3">
+                      <Stars count={prog.stars} />
+                      <span className="text-[11px] text-muted">
+                        {prog.done
+                          ? `${prog.pct}%`
+                          : quiz.questionsPerSession === 0
+                            ? 'Toutes les questions'
+                            : `${quiz.questionsPerSession} questions`}
+                      </span>
+                    </div>
+
+                    {/* Score progress bar (only when done) */}
+                    {prog.done && (
+                      <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-surface-3">
+                        <motion.div
+                          className="h-full rounded-full"
+                          style={{ backgroundColor: scoreColor }}
+                          initial={{ width: 0 }}
+                          animate={{ width: `${prog.pct}%` }}
+                          transition={{
+                            duration: 0.6,
+                            delay: i * 0.07 + 0.3,
+                            ease: [0.22, 1, 0.36, 1],
+                          }}
+                        />
+                      </div>
+                    )}
+                  </div>
+
+                  <i
+                    className="ti ti-chevron-right shrink-0 text-lg text-slate-300"
+                    aria-hidden="true"
+                  />
+                </button>
               </motion.div>
             );
           })}

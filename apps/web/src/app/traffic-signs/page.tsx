@@ -80,7 +80,6 @@ export default function TrafficSignsPage() {
   const [selectedCat, setSelectedCat] = useState<string | null>(null);
   const [selectedSign, setSelectedSign] = useState<PanneauRaw | null>(null);
   const [query, setQuery] = useState('');
-  const [speaking, setSpeaking] = useState(false);
 
   useEffect(() => {
     // Content lives in the database; the bundled JSON is only an offline fallback.
@@ -113,20 +112,9 @@ export default function TrafficSignsPage() {
 
   // Ordre pédagogique : dangers → règles de priorité → interdictions → obligations,
   // puis panneaux d'information et signalisation complémentaire.
-  const catOrder = [
-    'danger',
-    'priorité',
-    'interdiction',
-    'obligation',
-    'indication',
-    'information',
-    'direction',
-    'temporaires',
-    'balises',
-    'marquage',
-    'feux',
-    'agents',
-  ];
+  const catOrder = ['danger', 'priorité', 'interdiction', 'obligation', 'indication', 'information', 'direction'];
+  // Catégories retirées de la liste (trop peu de panneaux pour justifier leur propre carte).
+  const HIDDEN_CATS = ['temporaires', 'balises', 'marquage', 'feux', 'agents'];
 
   const grouped = useMemo(() => {
     const g: Record<string, PanneauRaw[]> = {};
@@ -136,7 +124,7 @@ export default function TrafficSignsPage() {
 
   const allCats = [
     ...catOrder.filter((c) => grouped[c]),
-    ...Object.keys(grouped).filter((c) => !catOrder.includes(c)),
+    ...Object.keys(grouped).filter((c) => !catOrder.includes(c) && !HIDDEN_CATS.includes(c)),
   ];
 
   const searchResults = useMemo(() => {
@@ -166,39 +154,8 @@ export default function TrafficSignsPage() {
   );
 
   const closeSheet = () => {
-    if (typeof window !== 'undefined' && window.speechSynthesis) window.speechSynthesis.cancel();
     wolof.stop();
-    setSpeaking(false);
     setSelectedSign(null);
-  };
-
-  const speak = () => {
-    if (!selectedSign || typeof window === 'undefined' || !window.speechSynthesis) return;
-    wolof.stop();
-    if (speaking) {
-      window.speechSynthesis.cancel();
-      setSpeaking(false);
-      return;
-    }
-    const u = new SpeechSynthesisUtterance(`${selectedSign.name}. ${selectedSign.description}`);
-    u.lang = 'fr-FR';
-    u.onend = () => setSpeaking(false);
-    setSpeaking(true);
-    window.speechSynthesis.speak(u);
-  };
-
-  const share = async () => {
-    if (!selectedSign) return;
-    const text = `${selectedSign.name} — ${selectedSign.description}`;
-    try {
-      if (navigator.share) await navigator.share({ title: selectedSign.name, text });
-      else {
-        await navigator.clipboard.writeText(text);
-        alert('Copié dans le presse-papier');
-      }
-    } catch {
-      /* user cancelled */
-    }
   };
 
   const SignCard = ({ sign }: { sign: PanneauRaw }) => (
@@ -287,14 +244,18 @@ export default function TrafficSignsPage() {
                     className="flex w-full items-center gap-4 rounded-2xl border border-token bg-surface-1 px-4 py-3 text-left shadow-soft transition-transform active:scale-[0.98]"
                   >
                     <div
-                      className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl"
+                      className="flex h-16 w-16 shrink-0 items-center justify-center rounded-xl p-2"
                       style={{ backgroundColor: m.color + '18' }}
                     >
-                      <i
-                        className={`ti ${m.icon} text-2xl`}
-                        style={{ color: m.color }}
-                        aria-hidden="true"
-                      />
+                      {list[0] ? (
+                        <SignImg code={list[0].code} name={m.label} size={56} />
+                      ) : (
+                        <i
+                          className={`ti ${m.icon} text-2xl`}
+                          style={{ color: m.color }}
+                          aria-hidden="true"
+                        />
+                      )}
                     </div>
                     <div className="min-w-0 flex-1">
                       <p className="font-display text-base font-bold text-foreground">{m.label}</p>
@@ -482,18 +443,11 @@ export default function TrafficSignsPage() {
               </div>
             )}
 
-            <div className="mt-1 flex w-full gap-3">
-              <button onClick={speak} className="btn-ghost flex-1">
-                <i
-                  className={`ti ${speaking ? 'ti-player-stop-filled' : 'ti-volume'}`}
-                  aria-hidden="true"
-                />
-                {speaking ? 'Stop' : 'Écouter'}
-              </button>
-              {wolof.available && (
+            {wolof.available && (
+              <div className="mt-1 flex w-full gap-3">
                 <button
                   onClick={wolof.toggle}
-                  className="btn-ghost flex-1"
+                  className="btn-primary flex-1"
                   aria-label="Écouter en wolof"
                 >
                   <i
@@ -502,11 +456,8 @@ export default function TrafficSignsPage() {
                   />
                   {wolof.playing ? 'Stop' : 'Wolof'}
                 </button>
-              )}
-              <button onClick={share} className="btn-primary flex-1">
-                <i className="ti ti-share" aria-hidden="true" /> Partager
-              </button>
-            </div>
+              </div>
+            )}
           </div>
         )}
       </Sheet>
