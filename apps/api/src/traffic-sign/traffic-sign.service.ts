@@ -17,13 +17,13 @@ export const SIGN_CATEGORIES: Record<string, TrafficSignCategory> = {
   },
   interdiction: {
     id: 'interdiction',
-    name: 'Signaux d\'interdiction',
+    name: "Signaux d'interdiction",
     description: 'Signaux circulaires avec bordure rouge',
     icon: '🚫',
   },
   obligation: {
     id: 'obligation',
-    name: 'Signaux d\'obligation',
+    name: "Signaux d'obligation",
     description: 'Signaux circulaires avec fond bleu',
     icon: '🔵',
   },
@@ -35,7 +35,7 @@ export const SIGN_CATEGORIES: Record<string, TrafficSignCategory> = {
   },
   indication: {
     id: 'indication',
-    name: 'Signaux d\'indication',
+    name: "Signaux d'indication",
     description: 'Signaux rectangulaires avec informations',
     icon: 'ℹ️',
   },
@@ -60,7 +60,7 @@ export const SIGN_CATEGORIES: Record<string, TrafficSignCategory> = {
   stationnement: {
     id: 'stationnement',
     name: 'Signalisation de stationnement',
-    description: 'Panneaux réglementant le stationnement et l\'arrêt',
+    description: "Panneaux réglementant le stationnement et l'arrêt",
     icon: '🅿️',
   },
 };
@@ -74,7 +74,7 @@ export class TrafficSignService {
       this.prisma.trafficSign.findMany({
         skip,
         take,
-        orderBy: { name: 'asc' },
+        orderBy: [{ ordre: 'asc' }, { name: 'asc' }],
       }),
       this.prisma.trafficSign.count(),
     ]);
@@ -110,7 +110,7 @@ export class TrafficSignService {
         },
         skip,
         take,
-        orderBy: { name: 'asc' },
+        orderBy: [{ ordre: 'asc' }, { name: 'asc' }],
       }),
       this.prisma.trafficSign.count({
         where: {
@@ -143,7 +143,7 @@ export class TrafficSignService {
         },
         skip,
         take,
-        orderBy: { name: 'asc' },
+        orderBy: [{ ordre: 'asc' }, { name: 'asc' }],
       }),
       this.prisma.trafficSign.count({
         where: {
@@ -236,20 +236,12 @@ export class TrafficSignService {
       const lower = signName.toLowerCase();
 
       // Danger signs
-      if (
-        lower.includes('danger') ||
-        lower.includes('attention') ||
-        lower.includes('travaux')
-      ) {
+      if (lower.includes('danger') || lower.includes('attention') || lower.includes('travaux')) {
         return 'danger';
       }
 
       // Interdiction signs
-      if (
-        lower.includes('interdit') ||
-        lower.includes('pas') ||
-        lower.includes('no')
-      ) {
+      if (lower.includes('interdit') || lower.includes('pas') || lower.includes('no')) {
         return 'interdiction';
       }
 

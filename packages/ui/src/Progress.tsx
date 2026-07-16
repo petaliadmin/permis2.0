@@ -21,10 +21,7 @@ const trackSizes: Record<NonNullable<ProgressProps['size']>, string> = {
 };
 
 const Progress = React.forwardRef<HTMLDivElement, ProgressProps>(
-  (
-    { className, value = 0, max = 100, variant = 'primary', size = 'md', ...props },
-    ref
-  ) => {
+  ({ className, value = 0, max = 100, variant = 'primary', size = 'md', ...props }, ref) => {
     const percentage = Math.min(Math.max((value / max) * 100, 0), 100);
 
     return (
@@ -35,7 +32,7 @@ const Progress = React.forwardRef<HTMLDivElement, ProgressProps>(
         aria-valuemin={0}
         aria-valuemax={100}
         className={cn(
-          'relative w-full overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700',
+          'relative w-full overflow-hidden rounded-full bg-surface-3',
           trackSizes[size],
           className
         )}

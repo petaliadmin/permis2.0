@@ -47,4 +47,18 @@ Thumbs.db
 /ios/
 
 # Generated
-prisma/migrations/
+# prisma migrations MUST be committed (needed by prisma migrate deploy in prod)
+.claude/worktrees/
+web-dev.log
+
+# Terraform
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+*.tfvars
+!*.tfvars.example
+
+# Real production secrets — pushed to SSM via scripts/aws/set-secrets.sh,
+# never committed. Only the .example template is tracked.
+.env.aws.prod

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100">
+  <rect x="4" y="4" width="192" height="92" rx="6" fill="#FFD100" stroke="#1a1a1a" stroke-width="5"/>
+  <text x="100" y="47" font-family="Arial, sans-serif" font-size="26" font-weight="bold" text-anchor="middle" fill="#1a1a1a">DÉVIATION</text>
+  <path d="M55 72 H130 M130 72 l-14 -9 M130 72 l-14 9" stroke="#1a1a1a" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

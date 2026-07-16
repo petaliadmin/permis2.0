@@ -27,6 +27,17 @@ services:
       DATABASE_URL: postgresql://${DB_USER:-permis2.0}:${DB_PASSWORD:-password123}@postgres:5432/${DB_NAME:-permis2.0}
       JWT_SECRET: ${JWT_SECRET:-dev-secret-key-change-in-production}
       FRONTEND_URL: http://localhost:3000
+      WEB_URL: http://localhost:3000
+      TERMII_API_KEY: ${TERMII_API_KEY:-}
+      TERMII_SENDER_ID: ${TERMII_SENDER_ID:-PERMIS}
+      VAPID_PUBLIC_KEY: ${VAPID_PUBLIC_KEY:-}
+      VAPID_PRIVATE_KEY: ${VAPID_PRIVATE_KEY:-}
+      VAPID_EMAIL: ${VAPID_EMAIL:-mailto:admin@permis2.com}
+      PAYMENT_LIVE: ${PAYMENT_LIVE:-false}
+      BICTORYS_API_URL: ${BICTORYS_API_URL:-https://api.test.bictorys.com}
+      BICTORYS_API_KEY: ${BICTORYS_API_KEY:-}
+      BICTORYS_SECRET_KEY: ${BICTORYS_SECRET_KEY:-}
+      PAYMENT_COUNTRY: ${PAYMENT_COUNTRY:-SN}
     ports:
       - "3001:3001"
     depends_on:
@@ -43,17 +54,23 @@ services:
       - ./serie_B2.json:/app/apps/serie_B2.json
       - ./serie_B3.json:/app/apps/serie_B3.json
       - ./panneaux_senegal.json:/app/apps/panneaux_senegal.json
+      - ./conduite.json:/app/apps/conduite.json
     working_dir: /app/apps/api
-    command: sh -c "npx prisma db push --accept-data-loss && node dist/prisma/seed.js && node dist/src/main.js"
+    # Migrations must be run manually via: docker compose exec api npx prisma migrate deploy
+    # Seeding must also be run manually. Never use db push --accept-data-loss in automated startup
+    # as it can silently drop columns/tables.
+    command: node dist/src/main.js
 
   web:
     build:
       context: .
       dockerfile: Dockerfile.web
+      target: builder
     container_name: permis2.0-web
     environment:
       NODE_ENV: development
       NEXT_PUBLIC_API_URL: http://localhost:3001
+      NEXT_PUBLIC_PAYMENT_MODE: ${NEXT_PUBLIC_PAYMENT_MODE:-manual}
     ports:
       - "3000:3000"
     depends_on:

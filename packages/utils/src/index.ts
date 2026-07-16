@@ -30,6 +30,22 @@ export function getScoreLabel(score: number): 'Excellent' | 'Bon' | 'Moyen' | 'F
   return 'Faible';
 }
 
+// Answer-checking utilities — a question can have one or several correct answers
+// (Question.reponses_correctes is a string[]). Normalise both sides and compare
+// as sets so single- and multi-answer questions are graded correctly.
+export function normalizeAnswers(input: string | string[] | undefined | null): string[] {
+  if (input == null) return [];
+  return (Array.isArray(input) ? input : [input]).map((s) => s.trim()).filter(Boolean);
+}
+
+export function isAnswerCorrect(correct: string | string[], user: string | string[]): boolean {
+  const c = normalizeAnswers(correct);
+  const u = normalizeAnswers(user);
+  if (c.length === 0 || c.length !== u.length) return false;
+  const set = new Set(c);
+  return u.every((a) => set.has(a));
+}
+
 // XP utilities
 export const XP_RULES = {
   correctAnswer: 10,
@@ -38,11 +54,7 @@ export const XP_RULES = {
   streakMultiplier: 1.5,
 };
 
-export function calculateXP(
-  correct: number,
-  total: number,
-  streakBonus: number = 1
-): number {
+export function calculateXP(correct: number, total: number, streakBonus: number = 1): number {
   let xp = correct * XP_RULES.correctAnswer;
   if (correct === total) {
     xp += XP_RULES.perfectSeries;
@@ -84,7 +96,9 @@ export function getProgressToNextLevel(currentXP: number): number {
       currentLevelThreshold = threshold;
     }
   }
-  return Math.round(((currentXP - currentLevelThreshold) / (nextLevel - currentLevelThreshold)) * 100);
+  return Math.round(
+    ((currentXP - currentLevelThreshold) / (nextLevel - currentLevelThreshold)) * 100
+  );
 }
 
 // Validation utilities
@@ -121,7 +135,7 @@ export function deepMerge<T extends Record<string, any>>(target: T, source: Part
   for (const key in source) {
     const sourceValue = source[key];
     if (sourceValue && typeof sourceValue === 'object' && !Array.isArray(sourceValue)) {
-      result[key] = deepMerge(result[key] as any || {}, sourceValue as any) as any;
+      result[key] = deepMerge((result[key] as any) || {}, sourceValue as any) as any;
     } else if (sourceValue !== undefined) {
       result[key] = sourceValue as any;
     }

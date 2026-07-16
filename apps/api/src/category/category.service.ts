@@ -68,59 +68,50 @@ export class CategoryService {
   }
 
   async getUserCategoryProgress(userId: string, skip = 0, take = 10) {
-    const categories = await this.prisma.category.findMany({
-      skip,
-      take,
-      include: {
-        _count: {
-          select: { questions: true },
+    const [categories, total, allExamQuestions] = await Promise.all([
+      this.prisma.category.findMany({
+        skip,
+        take,
+        include: {
+          _count: {
+            select: { questions: true },
+          },
         },
-      },
+      }),
+      this.prisma.category.count(),
+      this.prisma.examQuestion.findMany({
+        where: { exam: { userId } },
+        select: { isCorrect: true, question: { select: { categoryId: true } } },
+      }),
+    ]);
+
+    // Build a map of categoryId -> { correct, total } in memory
+    const progressMap = new Map<string, { correct: number; total: number }>();
+    for (const eq of allExamQuestions) {
+      const catId = eq.question?.categoryId;
+      if (!catId) continue;
+      const entry = progressMap.get(catId) ?? { correct: 0, total: 0 };
+      entry.total += 1;
+      if (eq.isCorrect) entry.correct += 1;
+      progressMap.set(catId, entry);
+    }
+
+    const progress = categories.map((category) => {
+      const entry = progressMap.get(category.id) ?? { correct: 0, total: 0 };
+      const accuracy = entry.total > 0 ? (entry.correct / entry.total) * 100 : 0;
+
+      return {
+        id: category.id,
+        label: category.label,
+        description: category.description,
+        couleur: category.couleur,
+        icone: category.icone,
+        questionCount: category._count.questions,
+        correctAnswers: entry.correct,
+        totalAnswered: entry.total,
+        accuracy: Math.round(accuracy),
+      };
     });
-
-    const progress = await Promise.all(
-      categories.map(async (category) => {
-        // Get user's correct answers for this category
-        const correctAnswers = await this.prisma.examQuestion.count({
-          where: {
-            question: {
-              categoryId: category.id,
-            },
-            isCorrect: true,
-            exam: {
-              userId,
-            },
-          },
-        });
-
-        const totalAnswered = await this.prisma.examQuestion.count({
-          where: {
-            question: {
-              categoryId: category.id,
-            },
-            exam: {
-              userId,
-            },
-          },
-        });
-
-        const accuracy = totalAnswered > 0 ? (correctAnswers / totalAnswered) * 100 : 0;
-
-        return {
-          id: category.id,
-          label: category.label,
-          description: category.description,
-          couleur: category.couleur,
-          icone: category.icone,
-          questionCount: category._count.questions,
-          correctAnswers,
-          totalAnswered,
-          accuracy: Math.round(accuracy),
-        };
-      })
-    );
-
-    const total = await this.prisma.category.count();
 
     return {
       data: progress,

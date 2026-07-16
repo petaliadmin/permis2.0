@@ -33,9 +33,12 @@ export function useFavorites(): UseFavoritesState & UseFavoritesActions {
     localStorage.setItem(FAVORITES_KEY, JSON.stringify(Array.from(newFavorites)));
   }, []);
 
-  const isFavorite = useCallback((id: string) => {
-    return favorites.has(id);
-  }, [favorites]);
+  const isFavorite = useCallback(
+    (id: string) => {
+      return favorites.has(id);
+    },
+    [favorites]
+  );
 
   const toggleFavorite = useCallback(
     async (id: string) => {

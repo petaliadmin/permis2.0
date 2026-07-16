@@ -56,19 +56,10 @@ export class AiCoachService {
     const recentProgress = await this.getRecentProgress(userId);
 
     // Generate insights
-    const insights = this.generateInsights(
-      stats,
-      weakAreas,
-      strongAreas,
-      recentProgress
-    );
+    const insights = this.generateInsights(stats, weakAreas, strongAreas, recentProgress);
 
     // Generate recommendations
-    const recommendations = this.generateRecommendations(
-      weakAreas,
-      strongAreas,
-      stats
-    );
+    const recommendations = this.generateRecommendations(weakAreas, strongAreas, stats);
 
     // Create personalized quiz
     const quiz = this.createPersonalizedQuiz(weakAreas, stats);
@@ -112,9 +103,8 @@ export class AiCoachService {
 
     return {
       totalTests: exams.length,
-      averageScore: exams.length > 0
-        ? exams.reduce((sum, e) => sum + e.percentage, 0) / exams.length
-        : 0,
+      averageScore:
+        exams.length > 0 ? exams.reduce((sum, e) => sum + e.percentage, 0) / exams.length : 0,
       bestScore: exams.length > 0 ? Math.max(...exams.map((e) => e.percentage)) : 0,
       overallAccuracy: totalAnswered > 0 ? (totalCorrect / totalAnswered) * 100 : 0,
       totalXP: user?.xp || 0,
@@ -203,8 +193,7 @@ export class AiCoachService {
     const newestScore = recentExams[0].percentage;
     const improvement = newestScore - oldestScore;
 
-    const trend =
-      improvement > 5 ? 'improving' : improvement < -5 ? 'declining' : 'stable';
+    const trend = improvement > 5 ? 'improving' : improvement < -5 ? 'declining' : 'stable';
 
     return { trend, improvement: Math.round(improvement * 100) / 100 };
   }
@@ -347,18 +336,11 @@ export class AiCoachService {
     return recommendations;
   }
 
-  private createPersonalizedQuiz(
-    weakAreas: WeakCategory[],
-    stats: any
-  ): PersonalizedQuiz {
+  private createPersonalizedQuiz(weakAreas: WeakCategory[], stats: any): PersonalizedQuiz {
     const targetCategories = weakAreas.slice(0, 3).map((a) => a.categoryId);
 
     const difficulty =
-      stats.overallAccuracy < 50
-        ? 'easy'
-        : stats.overallAccuracy < 70
-          ? 'medium'
-          : 'hard';
+      stats.overallAccuracy < 50 ? 'easy' : stats.overallAccuracy < 70 ? 'medium' : 'hard';
 
     const questionCount = difficulty === 'easy' ? 10 : difficulty === 'medium' ? 15 : 20;
     const estimatedTime = Math.ceil(questionCount * 1.5); // ~1.5 min per question
@@ -402,24 +384,24 @@ export class AiCoachService {
   private generateMotivationalMessage(stats: any, progress: any): string {
     const messages = {
       beginner: [
-        "Vous commencez votre apprentissage - chaque question vous rapproche de votre objectif! 🎯",
-        "Premiers pas vers le permis! Continuez comme ça! 💪",
-        "Bienvenue! Vous avez choisi un excellent moment pour commencer! 🚀",
+        'Vous commencez votre apprentissage - chaque question vous rapproche de votre objectif! 🎯',
+        'Premiers pas vers le permis! Continuez comme ça! 💪',
+        'Bienvenue! Vous avez choisi un excellent moment pour commencer! 🚀',
       ],
       improving: [
-        "Votre progression est impressionnante! Vous êtes sur la bonne voie! 📈",
-        "Continuez avec ce momentum - vous êtes en train de réussir! 🔥",
+        'Votre progression est impressionnante! Vous êtes sur la bonne voie! 📈',
+        'Continuez avec ce momentum - vous êtes en train de réussir! 🔥',
         "Les résultats parlent d'eux-mêmes - keep going! 💯",
       ],
       strong: [
         "Vous êtes bien préparé pour l'examen! Faites confiance à votre travail! 🏆",
         "Vous maîtrisez les sujets - c'est votre moment! ✨",
-        "Excellent travail! Vous êtes prêt à réussir! 🎉",
+        'Excellent travail! Vous êtes prêt à réussir! 🎉',
       ],
       stable: [
         "Vous êtes constant dans votre apprentissage - c'est une force! 💎",
         "La régularité c'est la clé du succès! Continuez! 🔑",
-        "Vous avancez régulièrement vers votre objectif! 🎯",
+        'Vous avancez régulièrement vers votre objectif! 🎯',
       ],
     };
 

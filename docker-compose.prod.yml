@@ -8,8 +8,8 @@ services:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
-    ports:
-      - "5432:5432"
+    # No external port mapping: the API reaches postgres via the internal Docker
+    # network on postgres:5432. Exposing 5432 externally is a security risk.
     volumes:
       - postgres_data_prod:/var/lib/postgresql/data
     healthcheck:
@@ -18,6 +18,11 @@ services:
       timeout: 5s
       retries: 5
     restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "5"
 
   api:
     build:
@@ -30,12 +35,37 @@ services:
       DATABASE_URL: postgresql://${DB_USER}:${DB_PASSWORD}@postgres:5432/${DB_NAME}
       JWT_SECRET: ${JWT_SECRET}
       FRONTEND_URL: ${FRONTEND_URL}
+      WEB_URL: ${WEB_URL:-${FRONTEND_URL}}
+      # SMS / WhatsApp OTP (Termii)
+      TERMII_API_KEY: ${TERMII_API_KEY}
+      TERMII_SENDER_ID: ${TERMII_SENDER_ID:-PERMIS}
+      # Web Push (VAPID)
+      VAPID_PUBLIC_KEY: ${VAPID_PUBLIC_KEY:-}
+      VAPID_PRIVATE_KEY: ${VAPID_PRIVATE_KEY:-}
+      VAPID_EMAIL: ${VAPID_EMAIL:-mailto:admin@permis2.com}
+      # Payment provider (Bictorys)
+      PAYMENT_LIVE: ${PAYMENT_LIVE:-true}
+      BICTORYS_API_URL: ${BICTORYS_API_URL:-https://api.bictorys.com}
+      BICTORYS_API_KEY: ${BICTORYS_API_KEY}
+      BICTORYS_SECRET_KEY: ${BICTORYS_SECRET_KEY}
+      PAYMENT_COUNTRY: ${PAYMENT_COUNTRY:-SN}
     ports:
       - "3001:3001"
     depends_on:
       postgres:
         condition: service_healthy
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3001/health', (r) => process.exit(r.statusCode === 200 ? 0 : 1)).on('error', () => process.exit(1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "5"
 
   web:
     build:
@@ -50,6 +80,17 @@ services:
     depends_on:
       - api
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000', (r) => process.exit(r.statusCode < 400 ? 0 : 1)).on('error', () => process.exit(1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "5"
 
 volumes:
   postgres_data_prod:

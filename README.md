@@ -9,6 +9,7 @@ Inspired by **Duolingo**, **Ornikar**, and **En Voiture Simone** with a mobile-f
 ## 🎨 Features
 
 ### Core Modules
+
 - ✅ **Theory Training** - Learn from theoretical lessons with multimedia content
 - ✅ **Training Series** - Practice with 3 series (B1, B2, B3) of 25 questions each
 - ✅ **Mock Exam** - Timed 30-minute exam with 40 random questions
@@ -18,6 +19,7 @@ Inspired by **Duolingo**, **Ornikar**, and **En Voiture Simone** with a mobile-f
 - ✅ **Gamification** - XP, levels, badges, and daily streaks
 
 ### User Features
+
 - 🌙 Dark Mode support
 - 📱 Mobile-first design
 - ⭐ Favorites system
@@ -27,6 +29,7 @@ Inspired by **Duolingo**, **Ornikar**, and **En Voiture Simone** with a mobile-f
 - 💾 Offline mode with service worker
 
 ### PWA Features
+
 - 📲 Installable app
 - 🔌 Offline functionality
 - 🔔 Push notifications
@@ -38,6 +41,7 @@ Inspired by **Duolingo**, **Ornikar**, and **En Voiture Simone** with a mobile-f
 ### Tech Stack
 
 **Frontend:**
+
 - Next.js 15
 - TypeScript
 - TailwindCSS
@@ -48,6 +52,7 @@ Inspired by **Duolingo**, **Ornikar**, and **En Voiture Simone** with a mobile-f
 - Recharts (visualizations)
 
 **Backend:**
+
 - NestJS
 - Prisma ORM
 - PostgreSQL
@@ -55,6 +60,7 @@ Inspired by **Duolingo**, **Ornikar**, and **En Voiture Simone** with a mobile-f
 - Google OAuth
 
 **Infrastructure:**
+
 - Docker & Docker Compose
 - GitHub Actions CI/CD
 - Supabase Storage
@@ -90,23 +96,27 @@ permis2.0/
 ### Installation
 
 1. **Clone the repository**
+
 ```bash
 git clone <repository-url>
 cd permis2.0
 ```
 
 2. **Install dependencies**
+
 ```bash
 npm install
 ```
 
 3. **Set up environment variables**
+
 ```bash
 cp .env.example .env
 # Edit .env with your configuration
 ```
 
 4. **Initialize database**
+
 ```bash
 cd apps/api
 npx prisma migrate dev
@@ -116,16 +126,19 @@ npm run prisma:seed
 ### Development
 
 **Start all services:**
+
 ```bash
 npm run dev
 ```
 
 This will start:
+
 - Frontend: http://localhost:3000
 - Backend API: http://localhost:3001
 - API Docs: http://localhost:3001/api/docs
 
 **Individual services:**
+
 ```bash
 npm run dev --workspace=@permis2.0/web
 npm run dev --workspace=@permis2.0/api
@@ -215,22 +228,19 @@ npm run format:check
 
 ## 🚢 Deployment
 
-### Build
+Production deployment target: a single AWS EC2 instance running
+`docker-compose.aws.yml`, images built and pushed to Docker Hub by GitHub
+Actions (`.github/workflows/deploy.yml`), infrastructure defined in
+`infra/aws/` (Terraform). No SSH — the instance is managed via AWS SSM.
+
+**[→ DEPLOY.md](DEPLOY.md)** is the full step-by-step checklist (accounts,
+Terraform, secrets, GitHub config, first deploy, data seeding, ongoing ops).
+
+### Local Docker build (dev/manual testing only)
 
 ```bash
-npm run build
-```
-
-### Docker
-
-```bash
-# Build images
 docker build -f Dockerfile.api -t permis2.0-api:latest .
 docker build -f Dockerfile.web -t permis2.0-web:latest .
-
-# Push to registry
-docker push your-registry/permis2.0-api:latest
-docker push your-registry/permis2.0-web:latest
 ```
 
 ## 📚 API Documentation
@@ -260,6 +270,7 @@ GET    /traffic-signs
 ## 🎨 Design System
 
 Colors:
+
 - **Primary:** #16A34A (Green)
 - **Secondary:** #FACC15 (Yellow)
 - **Danger:** #DC2626 (Red)
@@ -279,6 +290,7 @@ Colors:
 ## 🌍 Internationalization
 
 Currently supports:
+
 - 🇫🇷 Français (French)
 - 🇸🇳 Wolof
 

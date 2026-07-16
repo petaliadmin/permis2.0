@@ -1,7 +1,121 @@
+@import '@tabler/icons-webfont/dist/tabler-icons.min.css';
+
+/* ── Icônes « filled » ─────────────────────────────────────────────────────────
+   La CSS filled de Tabler écrase la police de toutes les .ti (!important) :
+   on déclare donc uniquement les glyphes pleins utilisés par l'app, servis
+   par la police copiée dans /public/fonts. */
+@font-face {
+  font-family: 'tabler-icons-filled';
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url('/fonts/tabler-icons-filled.woff2') format('woff2');
+}
+.ti-heart-filled:before,
+.ti-star-filled:before,
+.ti-circle-check-filled:before,
+.ti-circle-x-filled:before,
+.ti-player-stop-filled:before {
+  font-family: 'tabler-icons-filled' !important;
+}
+.ti-heart-filled:before {
+  content: '\f67c';
+}
+.ti-star-filled:before {
+  content: '\f6a6';
+}
+.ti-circle-check-filled:before {
+  content: '\f704';
+}
+.ti-circle-x-filled:before {
+  content: '\f739';
+}
+.ti-player-stop-filled:before {
+  content: '\f695';
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* ─── Design tokens — light edtech system (blue / violet / orange / green) ───── */
+:root {
+  --font-sans: var(--font-inter, 'Inter', system-ui, sans-serif);
+  --font-display: var(--font-baloo, var(--font-jakarta, 'Plus Jakarta Sans'), var(--font-sans));
+
+  --color-surface: #f5f7fa;
+  --color-surface-1: #ffffff;
+  --color-surface-2: #f1f5f9;
+  --color-surface-3: #e2e8f0;
+  --color-border: #e8edf3;
+  --color-border-strong: #d7dfe8;
+
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #475569;
+  --color-text-muted: #94a3b8;
+
+  --color-primary: #2563eb;
+  --color-primary-light: #3b82f6;
+  --color-primary-dim: rgba(37, 99, 235, 0.1);
+  --color-violet: #7c3aed;
+  --color-violet-dim: rgba(124, 58, 237, 0.1);
+  --color-orange: #f97316;
+  --color-orange-dim: rgba(249, 115, 22, 0.12);
+  --color-success: #16a34a;
+  --color-success-dim: rgba(22, 163, 74, 0.1);
+  --color-xp: #d97706;
+  --color-xp-dim: rgba(245, 158, 11, 0.14);
+  --color-danger: #ef4444;
+  --color-danger-dim: rgba(239, 68, 68, 0.1);
+
+  --shadow-soft: 0 1px 2px rgba(15, 23, 42, 0.04), 0 4px 12px -4px rgba(15, 23, 42, 0.08);
+  --shadow-card: 0 1px 3px rgba(15, 23, 42, 0.05), 0 8px 24px -12px rgba(15, 23, 42, 0.12);
+}
+
+/* ─── Dark mode overrides ────────────────────────────────────────────────────── */
+.dark {
+  --color-surface: #0f172a;
+  --color-surface-1: #1e293b;
+  --color-surface-2: #334155;
+  --color-surface-3: #475569;
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-border-strong: rgba(255, 255, 255, 0.14);
+
+  --color-text-primary: #f1f5f9;
+  --color-text-secondary: #94a3b8;
+  --color-text-muted: #64748b;
+
+  --color-primary: #3b82f6;
+  --color-primary-light: #60a5fa;
+  --color-primary-dim: rgba(59, 130, 246, 0.15);
+  --color-violet: #a78bfa;
+  --color-violet-dim: rgba(167, 139, 250, 0.15);
+  --color-orange: #fb923c;
+  --color-orange-dim: rgba(251, 146, 60, 0.15);
+  --color-success: #4ade80;
+  --color-success-dim: rgba(74, 222, 128, 0.12);
+  --color-xp: #fbbf24;
+  --color-xp-dim: rgba(251, 191, 36, 0.15);
+  --color-danger: #f87171;
+  --color-danger-dim: rgba(248, 113, 113, 0.12);
+
+  --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.3), 0 4px 12px -4px rgba(0, 0, 0, 0.4);
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.3), 0 8px 24px -12px rgba(0, 0, 0, 0.5);
+}
+
+/* Dark surface for immersive feedback/exam-result screens (used via .on-ink) */
+.on-ink {
+  --color-surface: #0f172a;
+  --color-surface-1: #1e293b;
+  --color-surface-2: #334155;
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-border-strong: rgba(255, 255, 255, 0.14);
+  --color-text-primary: #f8fafc;
+  --color-text-secondary: #cbd5e1;
+  --color-text-muted: #94a3b8;
+}
+
+/* ─── Base ───────────────────────────────────────────────────────────────────── */
 * {
   margin: 0;
   padding: 0;
@@ -10,24 +124,30 @@
 
 html {
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: var(--font-sans);
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #f9fafb;
-  color: #111827;
-  /* App-like feel: kill the browser pull-to-refresh / overscroll bounce
-     and the tap flash, so the PWA behaves like a native shell. */
   overscroll-behavior-y: none;
   -webkit-tap-highlight-color: transparent;
+  line-height: 1.5;
 }
 
-/* Prevent accidental text selection on the chrome (nav, buttons, labels)
-   while keeping real content (question text, lessons) selectable. */
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
 button,
 a,
 [role='button'],
@@ -38,59 +158,304 @@ label {
   -webkit-touch-callout: none;
 }
 
-.dark body {
-  background-color: #0b1120;
-  color: #f9fafb;
-}
-
-/* Subtle, themed scrollbar */
+/* ─── Scrollbar ──────────────────────────────────────────────────────────────── */
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: var(--color-border-strong);
   border-radius: 9999px;
-  border: 2px solid transparent;
-  background-clip: content-box;
-}
-.dark ::-webkit-scrollbar-thumb {
-  background: #334155;
-  background-clip: content-box;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #16a34a;
-  background-clip: content-box;
+  background: var(--color-primary);
 }
 
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* ─── Utility classes (token-aware) ──────────────────────────────────────────── */
+@layer utilities {
+  .font-display {
+    font-family: var(--font-display);
+  }
+
+  .text-foreground {
+    color: var(--color-text-primary);
+  }
+  .text-secondary {
+    color: var(--color-text-secondary);
+  }
+  .text-muted {
+    color: var(--color-text-muted);
+  }
+
+  .bg-surface {
+    background-color: var(--color-surface);
+  }
+  .bg-surface-1 {
+    background-color: var(--color-surface-1);
+  }
+  .bg-surface-2 {
+    background-color: var(--color-surface-2);
+  }
+  .bg-surface-3 {
+    background-color: var(--color-surface-3);
+  }
+
+  .border-token {
+    border-color: var(--color-border);
+  }
+  .border-token-strong {
+    border-color: var(--color-border-strong);
+  }
+
+  .pt-safe {
+    padding-top: env(safe-area-inset-top);
+  }
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* ─── Components ─────────────────────────────────────────────────────────────── */
 @layer components {
-  /* Loading shimmer overlay used by skeletons */
-  .skeleton-shimmer {
+  /* Shared button base */
+  .btn {
+    @apply inline-flex select-none items-center justify-center gap-2 rounded-full px-6 py-3.5 text-[0.95rem] font-bold transition-all duration-150 active:scale-[0.97] disabled:pointer-events-none disabled:opacity-40;
+    font-family: var(--font-display);
+  }
+
+  /* Blue — brand primary action */
+  .btn-primary {
+    @apply btn bg-gradient-to-b from-primary-600 to-primary-700 text-white shadow-[0_4px_14px_-4px_rgba(37,99,235,0.5)] hover:from-primary-700 hover:to-primary-800 active:shadow-none;
+  }
+  /* Violet — quiz primary action */
+  .btn-violet {
+    @apply btn bg-gradient-to-b from-violet-500 to-violet-600 text-white shadow-[0_4px_14px_-4px_rgba(124,58,237,0.55)] hover:from-violet-600 hover:to-violet-700 active:shadow-none;
+  }
+  /* Orange — exams primary action */
+  .btn-orange {
+    @apply btn bg-gradient-to-b from-orange-500 to-orange-600 text-white shadow-[0_4px_14px_-4px_rgba(249,115,22,0.5)] hover:from-orange-600 hover:to-orange-700 active:shadow-none;
+  }
+  /* Green — correct answer confirmation */
+  .btn-success {
+    @apply btn bg-gradient-to-b from-success-500 to-success-600 text-white shadow-[0_4px_14px_-4px_rgba(34,197,94,0.5)] hover:from-success-600 hover:to-success-700 active:shadow-none;
+  }
+  /* Red — wrong answer next step */
+  .btn-danger {
+    @apply btn bg-gradient-to-b from-danger-500 to-danger-600 text-white shadow-[0_4px_14px_-4px_rgba(239,68,68,0.45)] hover:from-danger-600 hover:to-danger-700 active:shadow-none;
+  }
+  /* Ghost — secondary / outline */
+  .btn-ghost {
+    @apply btn border-2 border-token bg-surface-1 text-secondary hover:border-violet-400 hover:text-violet-600;
+  }
+
+  /* Chips */
+  .chip {
+    @apply inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-bold;
+  }
+  .chip-primary {
+    background: var(--color-primary-dim);
+    color: var(--color-primary);
+  }
+  .chip-violet {
+    background: var(--color-violet-dim);
+    color: var(--color-violet);
+  }
+  .chip-orange {
+    background: var(--color-orange-dim);
+    color: #c2410c;
+  }
+  .chip-success {
+    background: var(--color-success-dim);
+    color: var(--color-success);
+  }
+  .chip-xp {
+    background: var(--color-xp-dim);
+    color: var(--color-xp);
+  }
+  .chip-danger {
+    background: var(--color-danger-dim);
+    color: var(--color-danger);
+  }
+
+  /* Cards */
+  .card {
+    background-color: var(--color-surface-1);
+    border: 1px solid var(--color-border);
+    border-radius: 18px;
+    padding: 1rem 1.25rem;
+    box-shadow: var(--shadow-card);
+  }
+  .card-clay {
+    background-color: var(--color-surface-1);
+    border: 1px solid var(--color-border);
+    border-radius: 22px;
+    padding: 1.25rem;
+    box-shadow: var(--shadow-card);
+  }
+
+  /* Progress */
+  .progress {
+    height: 8px;
+    background: var(--color-surface-3);
+    border-radius: 9999px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-primary), var(--color-primary-light));
+    border-radius: 9999px;
+    transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* Skeleton */
+  .skeleton {
+    background: var(--color-surface-2);
+    border-radius: 14px;
     position: relative;
     overflow: hidden;
   }
+  .skeleton::after,
   .skeleton-shimmer::after {
     content: '';
     position: absolute;
     inset: 0;
     transform: translateX(-100%);
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(255, 255, 255, 0.45),
-      transparent
-    );
-    animation: shimmer 1.5s infinite;
+    background: linear-gradient(90deg, transparent, rgba(15, 23, 42, 0.05), transparent);
+    animation: shimmer 1.4s infinite;
   }
-  .dark .skeleton-shimmer::after {
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(255, 255, 255, 0.06),
-      transparent
-    );
+  .skeleton-shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+}
+
+/* ─── Animations ─────────────────────────────────────────────────────────────── */
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes pulse-ring {
+  0% {
+    box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.35);
+  }
+  70% {
+    box-shadow: 0 0 0 12px rgba(37, 99, 235, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(37, 99, 235, 0);
+  }
+}
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+@keyframes pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes wiggle {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  25% {
+    transform: rotate(-6deg);
+  }
+  75% {
+    transform: rotate(6deg);
+  }
+}
+
+@layer utilities {
+  .animate-fade-in-up {
+    animation: fadeInUp 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .animate-scale-in {
+    animation: scaleIn 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+  .animate-pulse-ring {
+    animation: pulse-ring 2s ease-out infinite;
+  }
+  .animate-pop {
+    animation: pop 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .animate-wiggle {
+    animation: wiggle 0.5s ease-in-out;
+  }
+  .delay-100 {
+    animation-delay: 0.1s;
+  }
+  .delay-200 {
+    animation-delay: 0.2s;
+  }
+  .delay-300 {
+    animation-delay: 0.3s;
+  }
+  .delay-400 {
+    animation-delay: 0.4s;
+  }
+  .delay-500 {
+    animation-delay: 0.5s;
+  }
+}
+
+/* ─── Accessibility ──────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
   }
 }

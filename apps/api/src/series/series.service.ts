@@ -74,8 +74,7 @@ export class SeriesService {
     });
 
     const correctAnswers = userAnswers.filter((a) => a.isCorrect).length;
-    const accuracy =
-      userAnswers.length > 0 ? (correctAnswers / userAnswers.length) * 100 : 0;
+    const accuracy = userAnswers.length > 0 ? (correctAnswers / userAnswers.length) * 100 : 0;
 
     return {
       series,
@@ -108,7 +107,7 @@ export class SeriesService {
       const user = await this.prisma.user.findUnique({ where: { id: userId } });
       if (user) {
         const newXP = user.xp + XP_RULES.correctAnswer;
-        const newLevel = this.calculateLevel(newXP);
+        const newLevel = getLevelFromXP(newXP);
 
         await this.prisma.user.update({
           where: { id: userId },
@@ -176,12 +175,5 @@ export class SeriesService {
     });
 
     return questions;
-  }
-
-  private calculateLevel(xp: number): string {
-    if (xp >= 600) return 'Expert';
-    if (xp >= 300) return 'Confirmé';
-    if (xp >= 100) return 'Intermédiaire';
-    return 'Débutant';
   }
 }

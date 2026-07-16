@@ -1,0 +1,6472 @@
+{
+  "exams": [
+    {
+      "id": 1,
+      "title": "Série 1 — Série de Test B1 — Permis de conduire Sénégal",
+      "questions": [
+        {
+          "q": 1,
+          "image": "serie1_q1.webp",
+          "enonce": "Pour aller tout droit, je m'arrête au niveau du signal ou au niveau de la bande blanche",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je m'arrête au niveau du signal"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je m'arrête au niveau de la bande blanche"
+            },
+            {
+              "lettre": "C",
+              "texte": "Je passerai avant les voitures venant de gauche – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "Je passerai avant les voitures venant de gauche – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "D"
+          ]
+        },
+        {
+          "q": 2,
+          "image": "serie1_q2.webp",
+          "enonce": "Je peux rouler à 50 km/h ou à 70 km/h (panneau de limitation à 60 km/h visible)",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je peux rouler à 50 km/h – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je peux rouler à 50 km/h – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "Je peux rouler à 70 km/h – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "Je peux rouler à 70 km/h – NON"
+            }
+          ],
+          "answer": [
+            "A",
+            "D"
+          ]
+        },
+        {
+          "q": 3,
+          "image": "serie1_q3.webp",
+          "enonce": "Je ralentis (panneau PASSAGE PROTÉGÉ visible)",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 4,
+          "image": "serie1_q4.webp",
+          "enonce": "Derrière la voiture bleue : je peux stationner / je peux m'arrêter (panneau interdiction de stationner visible)",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je peux stationner – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je peux stationner – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "Je peux m'arrêter – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "Je peux m'arrêter – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "C"
+          ]
+        },
+        {
+          "q": 5,
+          "image": "serie1_q5.webp",
+          "enonce": "À 150 mètres, si le feu clignote : je passerai au ralenti ou je m'arrêterai (passage à niveau avec signal automatique)",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je passerai au ralenti"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je m'arrêterai"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 6,
+          "image": "serie1_q6.webp",
+          "enonce": "Je dépasse (voiture en train de tourner, portière ouverte)",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 7,
+          "image": "serie1_q7.webp",
+          "enonce": "Je peux rouler derrière le cyclomotoriste (voie cyclable signalée)",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 8,
+          "image": "serie1_q8.webp",
+          "enonce": "Le premier virage sera à droite ou à gauche (panneau virages sur 1 km)",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "À droite"
+            },
+            {
+              "lettre": "B",
+              "texte": "À gauche"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 9,
+          "image": "serie1_q9.webp",
+          "enonce": "Les signaux indiquent une déviation de la circulation / un virage dangereux à gauche (chantier avec flèches rouges et blanches)",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Une déviation de la circulation – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Une déviation de la circulation – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "Un virage dangereux à gauche – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "Un virage dangereux à gauche – NON"
+            }
+          ],
+          "answer": [
+            "A",
+            "D"
+          ]
+        },
+        {
+          "q": 10,
+          "image": "serie1_q10.webp",
+          "enonce": "Je dépasse (camion devant, voiture dans le rétroviseur)",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 11,
+          "image": "serie1_q11.webp",
+          "enonce": "Pour dépasser ce cycliste, je m'écarte au minimum de : 0,50 m / 1,00 m / 1,50 m",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "0,50 mètre"
+            },
+            {
+              "lettre": "B",
+              "texte": "1,00 mètre"
+            },
+            {
+              "lettre": "C",
+              "texte": "1,50 mètre"
+            }
+          ],
+          "answer": [
+            "C"
+          ]
+        },
+        {
+          "q": 12,
+          "image": "serie1_q12.webp",
+          "enonce": "Ce signal annonce une entrée d'autoroute ou un carrefour routier",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Une entrée d'autoroute – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Une entrée d'autoroute – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "Un carrefour routier – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "Un carrefour routier – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "C"
+          ]
+        },
+        {
+          "q": 13,
+          "image": "serie1_q13.webp",
+          "enonce": "Je peux rouler en feux de croisement / en feux de route (nuit en ville éclairée)",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "En feux de croisement – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "En feux de croisement – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "En feux de route – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "En feux de route – NON"
+            }
+          ],
+          "answer": [
+            "A",
+            "D"
+          ]
+        },
+        {
+          "q": 14,
+          "image": "serie1_q14.webp",
+          "enonce": "À la prochaine intersection, je passerai avant les voitures venant de droite / de gauche (panneau PASSAGE PROTÉGÉ)",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je passerai avant les voitures venant de droite – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je passerai avant les voitures venant de droite – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "Je passerai avant les voitures venant de gauche – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "Je passerai avant les voitures venant de gauche – NON"
+            }
+          ],
+          "answer": [
+            "A",
+            "C"
+          ]
+        },
+        {
+          "q": 15,
+          "image": "serie1_q15.webp",
+          "enonce": "Je ralentis (panneau route glissante par temps de pluie)",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 16,
+          "image": "serie1_q16.webp",
+          "enonce": "Je dépasse (camion devant sur route droite, rétroviseur libre)",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 17,
+          "image": "serie1_q17.webp",
+          "enonce": "Je peux m'arrêter ici (marquage au sol – bande d'arrêt d'urgence)",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 18,
+          "image": "serie1_q18.webp",
+          "enonce": "Ce signal indique l'entrée d'une autoroute ou la sortie d'une autoroute",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "L'entrée d'une autoroute"
+            },
+            {
+              "lettre": "B",
+              "texte": "La sortie d'une autoroute"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 19,
+          "image": "serie1_q19.webp",
+          "enonce": "Je vais rencontrer des feux de signalisation à 150 mètres ou à 50 mètres",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "À 150 mètres"
+            },
+            {
+              "lettre": "B",
+              "texte": "À 50 mètres"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 20,
+          "image": "serie1_q20.webp",
+          "enonce": "En marche normale, je suis bien placé (route de campagne, courbe douce)",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 21,
+          "image": null,
+          "enonce": "Lorsque je roule hors agglomération, ma ceinture de sécurité doit être bouclée de jour comme de nuit",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 22,
+          "image": null,
+          "enonce": "Lorsqu'il y a un blessé sur la route, je dois prévenir en premier : une pharmacie ou la police/gendarmerie",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Une pharmacie"
+            },
+            {
+              "lettre": "B",
+              "texte": "La police ou la gendarmerie"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 23,
+          "image": "serie1_q23.webp",
+          "enonce": "Entre ces lignes bleues, le disque de stationnement est obligatoire",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 24,
+          "image": "serie1_q24.webp",
+          "enonce": "Dans cette rue à double sens, je suis bien placé pour tourner à gauche",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 25,
+          "image": "serie1_q25.webp",
+          "enonce": "Je passe avant la voiture blanche (camion avec matières dangereuses, voiture blanche stationnée à droite)",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Série 2 — Série de Test B2 — Permis de conduire Sénégal",
+      "questions": [
+        {
+          "q": 1,
+          "image": "serie2_q1.webp",
+          "enonce": "Ce signal indique une route prioritaire / une interdiction de stationner",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Une route prioritaire – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Une route prioritaire – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "Une interdiction de stationner – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "Une interdiction de stationner – NON"
+            }
+          ],
+          "answer": [
+            "A",
+            "D"
+          ]
+        },
+        {
+          "q": 2,
+          "image": "serie2_q2.webp",
+          "enonce": "Pour aller tout droit, je m'arrête au niveau du signal ou au niveau de la bande blanche / je passerai avant les voitures venant de gauche",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je m'arrête au niveau du signal"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je m'arrête au niveau de la bande blanche"
+            },
+            {
+              "lettre": "C",
+              "texte": "Je passerai avant les voitures venant de gauche – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "Je passerai avant les voitures venant de gauche – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "D"
+          ]
+        },
+        {
+          "q": 3,
+          "image": "serie2_q3.webp",
+          "enonce": "Je m'arrête au niveau du signal / Je passerai avant les voitures venant de gauche (cédez-le-passage avec STOP à 50 m)",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je m'arrête au niveau du signal – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je m'arrête au niveau du signal – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "Je passerai avant les voitures venant de gauche – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "Je passerai avant les voitures venant de gauche – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "D"
+          ]
+        },
+        {
+          "q": 4,
+          "image": "serie2_q4.webp",
+          "enonce": "Cette balise annonce un virage ou un passage à niveau",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Un virage"
+            },
+            {
+              "lettre": "B",
+              "texte": "Un passage à niveau"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 5,
+          "image": "serie2_q5.webp",
+          "enonce": "Ce signal indique une hauteur limitée / une largeur limitée",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Une hauteur limitée – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Une hauteur limitée – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "Une largeur limitée – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "Une largeur limitée – NON"
+            }
+          ],
+          "answer": [
+            "A",
+            "D"
+          ]
+        },
+        {
+          "q": 6,
+          "image": "serie2_q6.webp",
+          "enonce": "Je reste sur cette voie ou je me rabats à droite (autoroute, camion devant change de voie)",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je reste sur cette voie"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je me rabats à droite"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 7,
+          "image": "serie2_q7.webp",
+          "enonce": "Je peux rouler en feux de croisement / en feux de route (brouillard, véhicule devant)",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "En feux de croisement – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "En feux de croisement – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "En feux de route – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "En feux de route – NON"
+            }
+          ],
+          "answer": [
+            "A",
+            "D"
+          ]
+        },
+        {
+          "q": 8,
+          "image": "serie2_q8.webp",
+          "enonce": "Pour tourner à droite, je m'arrête ou je passe (feux verts, piétons traversent)",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je m'arrête"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je passe"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 9,
+          "image": "serie2_q9.webp",
+          "enonce": "Pour tourner à gauche, je passe avant la voiture blanche / je passe avant la voiture rouge",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je passe avant la voiture blanche – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je passe avant la voiture blanche – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "Je passe avant la voiture rouge – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "Je passe avant la voiture rouge – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "D"
+          ]
+        },
+        {
+          "q": 10,
+          "image": "serie2_q10.webp",
+          "enonce": "Je suis bien placé pour aller tout droit (flèche au sol indiquant gauche)",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 11,
+          "image": "serie2_q11.webp",
+          "enonce": "Je dépasse (véhicule lent devant, ligne discontinue, rétroviseur libre)",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 12,
+          "image": "serie2_q12.webp",
+          "enonce": "Je peux dépasser / Je peux klaxonner (panneau interdiction de dépasser + interdiction de klaxon)",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je peux dépasser – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je peux dépasser – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "Je peux klaxonner – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "Je peux klaxonner – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "D"
+          ]
+        },
+        {
+          "q": 13,
+          "image": "serie2_q13.webp",
+          "enonce": "Pour aller tout droit, je passe avant la voiture blanche (intersection avec feux, camion-citerne à droite)",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 14,
+          "image": "serie2_q14.webp",
+          "enonce": "Ce véhicule a annoncé son approche. Je passe avant lui (véhicule de police)",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 15,
+          "image": "serie2_q15.webp",
+          "enonce": "La vitesse est limitée pour tous les véhicules ou seulement pour les véhicules de plus de 16 tonnes (panneaux 16t + 10 km/h)",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Pour tous les véhicules"
+            },
+            {
+              "lettre": "B",
+              "texte": "Seulement pour les véhicules de plus de 16 tonnes"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 16,
+          "image": "serie2_q16.webp",
+          "enonce": "Je roule à la même vitesse que cette voiture, je suis bien placé (autoroute, voiture devant dans voie centrale)",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 17,
+          "image": "serie2_q17.webp",
+          "enonce": "En tournant à droite à la prochaine intersection, je serai sur une route prioritaire (panneau losange jaune + panneau bifurcation)",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 18,
+          "image": "serie2_q18.webp",
+          "enonce": "Je peux rouler sans feux / en feux de croisement (nuit en ville, voiture garée à droite)",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Sans feux – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Sans feux – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "En feux de croisement – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "En feux de croisement – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "C"
+          ]
+        },
+        {
+          "q": 19,
+          "image": "serie2_q19.webp",
+          "enonce": "Je dépasse (route de campagne, voiture bleue devant, ligne discontinue, brouillard léger)",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 20,
+          "image": "serie2_q20.webp",
+          "enonce": "Après ce signal, ma vitesse sera limitée à 60 km/h",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 21,
+          "image": null,
+          "enonce": "Pour dépasser, la nuit, en campagne, je fais des appels : feux de croisement/feux de route ou feux de croisement/feux de position",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Feux de croisement / feux de route"
+            },
+            {
+              "lettre": "B",
+              "texte": "Feux de croisement / feux de position"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 22,
+          "image": null,
+          "enonce": "En ville, la nuit, je dois mettre ma ceinture de sécurité",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 23,
+          "image": "serie2_q23.webp",
+          "enonce": "Je vais rencontrer un endroit fréquenté par des enfants / Je ralentis (panneau attention enfants)",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je vais rencontrer un endroit fréquenté par des enfants – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je vais rencontrer un endroit fréquenté par des enfants – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "Je ralentis – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "Je ralentis – NON"
+            }
+          ],
+          "answer": [
+            "A",
+            "C"
+          ]
+        },
+        {
+          "q": 24,
+          "image": "serie2_q24.webp",
+          "enonce": "Le long du trottoir, je peux m'arrêter / je peux stationner (flèches au sol bidirectionnelles)",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je peux m'arrêter – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je peux m'arrêter – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "Je peux stationner – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "Je peux stationner – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "D"
+          ]
+        },
+        {
+          "q": 25,
+          "image": "serie2_q25.webp",
+          "enonce": "Derrière la voiture bleue, je peux stationner / je peux m'arrêter (panneau interdiction de stationner)",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je peux stationner – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je peux stationner – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "Je peux m'arrêter – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "Je peux m'arrêter – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "C"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Série 3 — Série de Test B3 — Permis de conduire Sénégal",
+      "questions": [
+        {
+          "q": 1,
+          "image": "serie3_q1.webp",
+          "enonce": "Pour aller tout droit, je m'arrête au niveau du signal ou au niveau de la bande blanche / je passerai avant les voitures venant de gauche",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je m'arrête au niveau du signal"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je m'arrête au niveau de la bande blanche"
+            },
+            {
+              "lettre": "C",
+              "texte": "Je passerai avant les voitures venant de gauche – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "Je passerai avant les voitures venant de gauche – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "D"
+          ]
+        },
+        {
+          "q": 2,
+          "image": "serie3_q2.webp",
+          "enonce": "Je ralentis / Je passerai avant les voitures venant de droite (panneau PASSAGE PROTÉGÉ)",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je ralentis – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je ralentis – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "Je passerai avant les voitures venant de droite – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "Je passerai avant les voitures venant de droite – NON"
+            }
+          ],
+          "answer": [
+            "A",
+            "C"
+          ]
+        },
+        {
+          "q": 3,
+          "image": "serie3_q3.webp",
+          "enonce": "Je peux aller tout droit (panneau interdiction aux voitures et motos)",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 4,
+          "image": "serie3_q4.webp",
+          "enonce": "Je peux dépasser / Je peux klaxonner (panneaux : interdiction dépassement + vitesse 40 + interdiction klaxon)",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je peux dépasser – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je peux dépasser – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "Je peux klaxonner – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "Je peux klaxonner – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "D"
+          ]
+        },
+        {
+          "q": 5,
+          "image": "serie3_q5.webp",
+          "enonce": "Après ce signal, la route est prioritaire (panneau fin de route prioritaire – losange barré, panneau localité LE GAY)",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 6,
+          "image": "serie3_q6.webp",
+          "enonce": "Je dépasse (Citroën 2CV sur route de campagne, ligne discontinue)",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 7,
+          "image": "serie3_q7.webp",
+          "enonce": "Je vais rencontrer un débouché sur un quai ou une descente dangereuse / Je ralentis (panneau 3,5t + pente 15%)",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Un débouché sur un quai"
+            },
+            {
+              "lettre": "B",
+              "texte": "Une descente dangereuse"
+            },
+            {
+              "lettre": "C",
+              "texte": "Je ralentis – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "Je ralentis – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "C"
+          ]
+        },
+        {
+          "q": 8,
+          "image": "serie3_q8.webp",
+          "enonce": "Je suis en stationnement. Je peux partir tout de suite (camion à gauche, moto devant)",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 9,
+          "image": "serie3_q9.webp",
+          "enonce": "Je dépasse (camion, panneau interdiction de dépasser visible)",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 10,
+          "image": "serie3_q10.webp",
+          "enonce": "Je dois rouler en feux de position / en feux de croisement (brouillard, cyclomotoriste)",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "En feux de position – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "En feux de position – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "En feux de croisement – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "En feux de croisement – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "C"
+          ]
+        },
+        {
+          "q": 11,
+          "image": "serie3_q11.webp",
+          "enonce": "Je passe ou je m'arrête (policier au milieu de la route, dos tourné, main levée)",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je passe"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je m'arrête"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 12,
+          "image": "serie3_q12.webp",
+          "enonce": "Cette voiture ne démarre pas : je l'avertis avec mes feux de route / je klaxonne (nuit, embouteillage)",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je l'avertis avec mes feux de route – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je l'avertis avec mes feux de route – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "Je klaxonne – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "Je klaxonne – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "D"
+          ]
+        },
+        {
+          "q": 13,
+          "image": "serie3_q13.webp",
+          "enonce": "Je peux stationner derrière le signal (autoroute, panneau parking 500m)",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 14,
+          "image": "serie3_q14.webp",
+          "enonce": "Derrière la voiture blanche, je peux stationner / je peux m'arrêter (centre-ville, trottoir avec piétons)",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je peux stationner – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je peux stationner – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "Je peux m'arrêter – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "Je peux m'arrêter – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "C"
+          ]
+        },
+        {
+          "q": 15,
+          "image": "serie3_q15.webp",
+          "enonce": "La file de gauche avance plus vite, je peux la prendre (embouteillage, 2 files)",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 16,
+          "image": "serie3_q16.webp",
+          "enonce": "Je dépasse (Citroën 2CV, route de campagne, rétroviseur avec voiture derrière)",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 17,
+          "image": "serie3_q17.webp",
+          "enonce": "Je peux rouler sans feux / en feux de croisement (nuit en ville, rue bien éclairée)",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Sans feux – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Sans feux – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "En feux de croisement – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "En feux de croisement – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "C"
+          ]
+        },
+        {
+          "q": 18,
+          "image": "serie3_q18.webp",
+          "enonce": "Après avoir dépassé cette voiture, je reprends la voie de droite ou je reste sur cette voie pour dépasser l'autre voiture",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je reprends la voie de droite"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je reste sur cette voie pour dépasser l'autre voiture"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 19,
+          "image": "serie3_q19.webp",
+          "enonce": "Je peux stationner derrière les cyclistes (piste cyclable, cyclistes visibles)",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 20,
+          "image": "serie3_q20.webp",
+          "enonce": "Je reste sur cette voie pour dépasser ou je suis obligé de tourner à gauche (flèche au sol tournant à gauche, camion à droite)",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je reste sur cette voie pour dépasser"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je suis obligé de tourner à gauche"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 21,
+          "image": "serie3_q21.webp",
+          "enonce": "Pour tourner à gauche, je suis bien placé (grand carrefour urbain, camion à droite)",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 22,
+          "image": "serie3_q22.webp",
+          "enonce": "Cette balise annonce un passage à niveau / une intersection à 50 mètres / une intersection à 100 mètres",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Un passage à niveau"
+            },
+            {
+              "lettre": "B",
+              "texte": "Une intersection à 50 mètres"
+            },
+            {
+              "lettre": "C",
+              "texte": "Une intersection à 100 mètres"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 23,
+          "image": null,
+          "enonce": "La ceinture de sécurité est utile pour le conducteur / pour le passager à côté du conducteur",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Pour le conducteur – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Pour le conducteur – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "Pour le passager à côté du conducteur – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "Pour le passager à côté du conducteur – NON"
+            }
+          ],
+          "answer": [
+            "A",
+            "C"
+          ]
+        },
+        {
+          "q": 24,
+          "image": "serie3_q24.webp",
+          "enonce": "Pour tourner à gauche, je passe avant les voitures venant de droite / je passe avant les voitures venant de gauche (rond-point avec cédez-le-passage)",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je passe avant les voitures venant de droite – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je passe avant les voitures venant de droite – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "Je passe avant les voitures venant de gauche – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "Je passe avant les voitures venant de gauche – NON"
+            }
+          ],
+          "answer": [
+            "A",
+            "D"
+          ]
+        },
+        {
+          "q": 25,
+          "image": null,
+          "enonce": "Lorsqu'il y a un blessé sur la route, je dois prévenir en premier : une pharmacie ou la police/gendarmerie",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Une pharmacie"
+            },
+            {
+              "lettre": "B",
+              "texte": "La police ou la gendarmerie"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Série 4 — Série de Test B4 — Permis de conduire Sénégal",
+      "questions": [
+        {
+          "q": 1,
+          "image": "serie4_q1.webp",
+          "enonce": "Pour aller tout droit,",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "je m'arrête au niveau du signal"
+            },
+            {
+              "lettre": "B",
+              "texte": "je m'arrête au niveau de la bande blanche"
+            },
+            {
+              "lettre": "C",
+              "texte": "je passerai avant les voitures venant de gauche – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "je passerai avant les voitures venant de gauche – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "D"
+          ]
+        },
+        {
+          "q": 2,
+          "image": "serie4_q2.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "La vitesse est limitée à 60 km/h – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "La vitesse est limitée à 60 km/h – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "La route est prioritaire – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "La route est prioritaire – NON"
+            }
+          ],
+          "answer": [
+            "A",
+            "D"
+          ]
+        },
+        {
+          "q": 3,
+          "image": "serie4_q3.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je vais tout droit"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je tourne à droite"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 4,
+          "image": "serie4_q4.webp",
+          "enonce": "Je peux rouler :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "à 30 km/h – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "à 30 km/h – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "à 50 km/h – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "à 50 km/h – NON"
+            }
+          ],
+          "answer": [
+            "A",
+            "C"
+          ]
+        },
+        {
+          "q": 5,
+          "image": "serie4_q5.webp",
+          "enonce": "A la prochaine intersection,",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "je passerai avant les voitures venant de droite – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "je passerai avant les voitures venant de droite – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "je passerai avant les voitures venant de gauche – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "je passerai avant les voitures venant de gauche – NON"
+            }
+          ],
+          "answer": [
+            "A",
+            "C"
+          ]
+        },
+        {
+          "q": 6,
+          "image": null,
+          "enonce": "En ville, la nuit,",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "je dois mettre ma ceinture de sécurité – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "je dois mettre ma ceinture de sécurité – NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 7,
+          "image": "serie4_q7.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je suis bien placé pour stationner – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je suis bien placé pour stationner – NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 8,
+          "image": "serie4_q8.webp",
+          "enonce": "Dans cette rue à sens unique, pour tourner à gauche,",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "je suis bien placé – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "je suis bien placé – NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 9,
+          "image": "serie4_q9.webp",
+          "enonce": "A 400 mètres, ce sera :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "l'entrée de l'autoroute"
+            },
+            {
+              "lettre": "B",
+              "texte": "la sortie de l'autoroute"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 10,
+          "image": "serie4_q10.webp",
+          "enonce": "Je suis bien placé :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "pour tourner à droite – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "pour tourner à droite – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "pour tourner à gauche – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "pour tourner à gauche – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "C"
+          ]
+        },
+        {
+          "q": 11,
+          "image": "serie4_q11.webp",
+          "enonce": "Pour tourner à gauche,",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "je passe avant le camion – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "je passe avant le camion – NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 12,
+          "image": "serie4_q12.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je dépasse – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je dépasse – NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 13,
+          "image": "serie4_q13.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je peux dépasser cette voiture par la droite – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je peux dépasser cette voiture par la droite – NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 14,
+          "image": "serie4_q14.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je dépasse – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je dépasse – NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 15,
+          "image": "serie4_q15.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "En marche normale, je suis bien placé – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "En marche normale, je suis bien placé – NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 16,
+          "image": "serie4_q16.webp",
+          "enonce": "La circulation s'établit en files ininterrompues ; La file de droite avance plus vite,",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "je peux la prendre – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "je peux la prendre – NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 17,
+          "image": "serie4_q17.webp",
+          "enonce": "Pour tourner à droite :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "je passe"
+            },
+            {
+              "lettre": "B",
+              "texte": "je m'arrête"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 18,
+          "image": "serie4_q18.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je dépasse – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je dépasse – NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 19,
+          "image": "serie4_q19.webp",
+          "enonce": "Ce signal indique :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "une route à double sens – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "une route à double sens – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "une chaussée rétrécie par la gauche – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "une chaussée rétrécie par la gauche – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "C"
+          ]
+        },
+        {
+          "q": 20,
+          "image": "serie4_q20.webp",
+          "enonce": "Je peux rouler :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "en feux de croisement – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "en feux de croisement – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "en feux de route – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "en feux de route – NON"
+            }
+          ],
+          "answer": [
+            "A",
+            "D"
+          ]
+        },
+        {
+          "q": 21,
+          "image": "serie4_q21.webp",
+          "enonce": "Pour dépasser ce cycliste, je m'écarte au minimum de :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "0,50 m"
+            },
+            {
+              "lettre": "B",
+              "texte": "0,80 m"
+            },
+            {
+              "lettre": "C",
+              "texte": "1,00 m"
+            }
+          ],
+          "answer": [
+            "C"
+          ]
+        },
+        {
+          "q": 22,
+          "image": "serie4_q22.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je suis bien placé pour stationner – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je suis bien placé pour stationner – NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 23,
+          "image": "serie4_q23.webp",
+          "enonce": "Ce signal indique :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "un débouché éventuel de cyclistes – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "un débouché éventuel de cyclistes – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "une piste cyclable obligatoire – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "une piste cyclable obligatoire – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "C"
+          ]
+        },
+        {
+          "q": 24,
+          "image": "serie4_q24.webp",
+          "enonce": "Je sors du garage :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "je passe avant les piétons – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "je passe avant les piétons – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "je passe avant le camion – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "je passe avant le camion – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "D"
+          ]
+        },
+        {
+          "q": 25,
+          "image": "serie4_q25.webp",
+          "enonce": "Je dois rouler :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "en feux de position – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "en feux de position – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "en feux de croisement – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "en feux de croisement – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "C"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "Série 5 — Série de Test B5 — Permis de conduire Sénégal",
+      "questions": [
+        {
+          "q": 1,
+          "image": "serie5_q1.webp",
+          "enonce": "Ce signal indique :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "une route prioritaire – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "une route prioritaire – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "une interdiction de stationner – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "une interdiction de stationner – NON"
+            }
+          ],
+          "answer": [
+            "A",
+            "D"
+          ]
+        },
+        {
+          "q": 2,
+          "image": "serie5_q2.webp",
+          "enonce": "Pour aller tout droit,",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "je m'arrête au niveau du signal"
+            },
+            {
+              "lettre": "B",
+              "texte": "je m'arrête au niveau de la bande blanche"
+            },
+            {
+              "lettre": "C",
+              "texte": "je passerai avant les voitures venant de gauche – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "je passerai avant les voitures venant de gauche – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "D"
+          ]
+        },
+        {
+          "q": 3,
+          "image": "serie5_q3.webp",
+          "enonce": "Pour tourner à gauche,",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "je passe avant les voitures venant de droite – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "je passe avant les voitures venant de droite – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "je passe avant les voitures venant de gauche – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "je passe avant les voitures venant de gauche – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "D"
+          ]
+        },
+        {
+          "q": 4,
+          "image": "serie5_q4.webp",
+          "enonce": "Ce signal indique :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "un stationnement interdit des deux côtés – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "un stationnement interdit des deux côtés – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "un arrêt interdit – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "un arrêt interdit – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "C"
+          ]
+        },
+        {
+          "q": 5,
+          "image": "serie5_q5.webp",
+          "enonce": "Je peux rouler :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "à 50 km/h – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "à 50 km/h – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "à 70 km/h – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "à 70 km/h – NON"
+            }
+          ],
+          "answer": [
+            "A",
+            "D"
+          ]
+        },
+        {
+          "q": 6,
+          "image": "serie5_q6.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Pour aller à Mantes par l'autoroute, je dépasse – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Pour aller à Mantes par l'autoroute, je dépasse – NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 7,
+          "image": "serie5_q7.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je dépasse – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je dépasse – NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 8,
+          "image": "serie5_q8.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je peux rouler derrière la voiture noire – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je peux rouler derrière la voiture noire – NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 9,
+          "image": "serie5_q9.webp",
+          "enonce": "Pour dépasser ce cycliste, je m'écarte au minimum de :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "0,50 m"
+            },
+            {
+              "lettre": "B",
+              "texte": "0,80 m"
+            },
+            {
+              "lettre": "C",
+              "texte": "1,00 m"
+            }
+          ],
+          "answer": [
+            "C"
+          ]
+        },
+        {
+          "q": 10,
+          "image": "serie5_q10.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "En tournant à droite à la prochaine intersection je serai sur une route prioritaire – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "En tournant à droite à la prochaine intersection je serai sur une route prioritaire – NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 11,
+          "image": "serie5_q11.webp",
+          "enonce": "Pour aller tout droit,",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "je suis bien placé – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "je suis bien placé – NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 12,
+          "image": "serie5_q12.webp",
+          "enonce": "Derrière la voiture de droite,",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "je peux stationner sans feux – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "je peux stationner sans feux – NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 13,
+          "image": "serie5_q13.webp",
+          "enonce": "Cette voiture sort du garage,",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "je passe avant – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "je passe avant – NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 14,
+          "image": "serie5_q14.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je suis bien placé pour tourner à gauche – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je suis bien placé pour tourner à gauche – NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 15,
+          "image": "serie5_q15.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je peux tourner à gauche avant le rond-point – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je peux tourner à gauche avant le rond-point – NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 16,
+          "image": "serie5_q16.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je passe avant le camion – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je passe avant le camion – NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 17,
+          "image": "serie5_q17.webp",
+          "enonce": "Je suis en stationnement.",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je peux partir tout de suite derrière la voiture blanche – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je peux partir tout de suite derrière la voiture blanche – NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 18,
+          "image": "serie5_q18.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je passe avant la voiture jaune – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je passe avant la voiture jaune – NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 19,
+          "image": "serie5_q19.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je m'arrête au niveau du signal"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je m'arrête au niveau de la bande blanche"
+            },
+            {
+              "lettre": "C",
+              "texte": "Je passe avant la voiture jaune – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "Je passe avant la voiture jaune – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "D"
+          ]
+        },
+        {
+          "q": 20,
+          "image": "serie5_q20.webp",
+          "enonce": "Ces voitures roulent à 40 km/h.",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je peux les dépasser – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je peux les dépasser – NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 21,
+          "image": null,
+          "enonce": "Sur l'autoroute, dans la journée",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "je dois mettre ma ceinture de sécurité – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "je dois mettre ma ceinture de sécurité – NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 22,
+          "image": "serie5_q22.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je peux prendre la route à droite – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je peux prendre la route à droite – NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 23,
+          "image": "serie5_q23.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je peux tourner à droite – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je peux tourner à droite – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "Je peux tourner à gauche – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "Je peux tourner à gauche – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "C"
+          ]
+        },
+        {
+          "q": 24,
+          "image": "serie5_q24.webp",
+          "enonce": "Le premier signal annonce :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "une circulation à double sens – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "une circulation à double sens – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "l'interdiction de faire demi-tour – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "l'interdiction de faire demi-tour – NON"
+            }
+          ],
+          "answer": [
+            "A",
+            "D"
+          ]
+        },
+        {
+          "q": 25,
+          "image": "serie5_q25.webp",
+          "enonce": "A ce feu jaune clignotant,",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "je ralentis – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "je ralentis – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "je m'arrête – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "je m'arrête – NON"
+            }
+          ],
+          "answer": [
+            "A",
+            "C"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "title": "Série 6 — Série de Test B6 — Permis de conduire Sénégal",
+      "questions": [
+        {
+          "q": 1,
+          "image": "serie6_q1.webp",
+          "enonce": "Ce signal indique :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "une route prioritaire – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "une route prioritaire – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "une interdiction de stationner – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "une interdiction de stationner – NON"
+            }
+          ],
+          "answer": [
+            "A",
+            "D"
+          ]
+        },
+        {
+          "q": 2,
+          "image": "serie6_q2.webp",
+          "enonce": "Pour aller tout droit,",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je m'arrête : - au niveau du signal"
+            },
+            {
+              "lettre": "B",
+              "texte": "ou bien - au niveau de la bande blanche"
+            },
+            {
+              "lettre": "C",
+              "texte": "Je passerai avant les voitures venant de gauche – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "Je passerai avant les voitures venant de gauche – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "D"
+          ]
+        },
+        {
+          "q": 3,
+          "image": "serie6_q3.webp",
+          "enonce": "Je vais rencontrer un passage à niveau :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "avec barrières"
+            },
+            {
+              "lettre": "B",
+              "texte": "ou bien - sans barrières"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 4,
+          "image": "serie6_q4.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je tourne à droite"
+            },
+            {
+              "lettre": "B",
+              "texte": "ou bien - Je vais tout droit"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 5,
+          "image": "serie6_q5.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je peux faire demi-tour – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je peux faire demi-tour – NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 6,
+          "image": null,
+          "enonce": "En ville, la nuit,",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "je dois mettre ma ceinture de sécurité – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "je dois mettre ma ceinture de sécurité – NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 7,
+          "image": "serie6_q7.webp",
+          "enonce": "Dans cette rue à double sens,",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "je peux stationner à gauche – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "je peux stationner à gauche – NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 8,
+          "image": "serie6_q8.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je dépasse – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je dépasse – NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 9,
+          "image": "serie6_q9.webp",
+          "enonce": "Je peux rouler :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "en feux de croisement – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "en feux de croisement – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "en feux de route – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "en feux de route – NON"
+            }
+          ],
+          "answer": [
+            "A",
+            "D"
+          ]
+        },
+        {
+          "q": 10,
+          "image": "serie6_q10.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je peux prendre la route à droite – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je peux prendre la route à droite – NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 11,
+          "image": "serie6_q11.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je passe au ralenti"
+            },
+            {
+              "lettre": "B",
+              "texte": "ou bien - Je m'arrête"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 12,
+          "image": "serie6_q12.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je suis bien placé pour stationner ici – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je suis bien placé pour stationner ici – NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 13,
+          "image": "serie6_q13.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je peux rencontrer des animaux domestiques – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je peux rencontrer des animaux domestiques – NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 14,
+          "image": "serie6_q14.webp",
+          "enonce": "Pour tourner à droite,",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "je passe"
+            },
+            {
+              "lettre": "B",
+              "texte": "ou bien - je m'arrête"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 15,
+          "image": "serie6_q15.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "En marche normale, je suis bien placé – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "En marche normale, je suis bien placé – NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 16,
+          "image": "serie6_q16.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je dépasse – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je dépasse – NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 17,
+          "image": "serie6_q17.webp",
+          "enonce": "Pour tourner à gauche,",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "je passe avant la voiture orange – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "je passe avant la voiture orange – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "je passe avant la voiture noire – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "je passe avant la voiture noire – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "D"
+          ]
+        },
+        {
+          "q": 18,
+          "image": "serie6_q18.webp",
+          "enonce": "Je peux rouler :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "en feux de position – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "en feux de position – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "en feux de croisement – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "en feux de croisement – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "C"
+          ]
+        },
+        {
+          "q": 19,
+          "image": "serie6_q19.webp",
+          "enonce": "Ce signal indique :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "une interdiction de tourner à gauche – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "une interdiction de tourner à gauche – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "une interdiction de faire demi-tour – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "une interdiction de faire demi-tour – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "C"
+          ]
+        },
+        {
+          "q": 20,
+          "image": "serie6_q20.webp",
+          "enonce": "Ce signal annonce :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "une chaussée rétrécie par la droite – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "une chaussée rétrécie par la droite – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "une rue à double sens – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "une rue à double sens – NON"
+            }
+          ],
+          "answer": [
+            "A",
+            "D"
+          ]
+        },
+        {
+          "q": 21,
+          "image": "serie6_q21.webp",
+          "enonce": "A la prochaine intersection,",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "je passerai avant les voitures venant de droite – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "je passerai avant les voitures venant de droite – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "je passerai avant les voitures venant de gauche – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "je passerai avant les voitures venant de gauche – NON"
+            }
+          ],
+          "answer": [
+            "A",
+            "C"
+          ]
+        },
+        {
+          "q": 22,
+          "image": "serie6_q22.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je peux encore tourner à gauche – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je peux encore tourner à gauche – NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 23,
+          "image": "serie6_q23.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je dépasse – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je dépasse – NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 24,
+          "image": "serie6_q24.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je dépasse – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je dépasse – NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 25,
+          "image": null,
+          "enonce": "La nuit, je fais des appels lumineux :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "pour prévenir avant de dépasser – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "pour prévenir avant de dépasser – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "pour passer le premier en intersection – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "pour passer le premier en intersection – NON"
+            }
+          ],
+          "answer": [
+            "A",
+            "D"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "title": "Série 7 — Série de Test B7 — Permis de conduire Sénégal",
+      "questions": [
+        {
+          "q": 1,
+          "image": "serie7_q1.webp",
+          "enonce": "Ce signal indique :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "une route prioritaire – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "une route prioritaire – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "une interdiction de stationner – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "une interdiction de stationner – NON"
+            }
+          ],
+          "answer": [
+            "A",
+            "D"
+          ]
+        },
+        {
+          "q": 2,
+          "image": "serie7_q2.webp",
+          "enonce": "Pour aller tout droit,",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je m'arrête au niveau du signal"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je m'arrête au niveau de la bande blanche"
+            },
+            {
+              "lettre": "C",
+              "texte": "Je passerai avant les voitures venant de gauche – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "Je passerai avant les voitures venant de gauche – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "D"
+          ]
+        },
+        {
+          "q": 3,
+          "image": "serie7_q3.webp",
+          "enonce": "A la prochaine intersection,",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "je passerai avant les voitures venant de droite – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "je passerai avant les voitures venant de droite – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "je passerai avant les voitures venant de gauche – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "je passerai avant les voitures venant de gauche – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "D"
+          ]
+        },
+        {
+          "q": 4,
+          "image": "serie7_q4.webp",
+          "enonce": "A la prochaine intersection,",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "je passerai avant les véhicules venant de droite – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "je passerai avant les véhicules venant de droite – NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 5,
+          "image": "serie7_q5.webp",
+          "enonce": "A la prochaine intersection,",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "je suis prioritaire sur les véhicules venant de droite et de gauche – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "je suis prioritaire sur les véhicules venant de droite et de gauche – NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 6,
+          "image": "serie7_q6.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je dépasse – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je dépasse – NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 7,
+          "image": "serie7_q7.webp",
+          "enonce": "A droite de la ligne discontinue,",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "je peux m'arrêter – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "je peux m'arrêter – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "je peux stationner – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "je peux stationner – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "D"
+          ]
+        },
+        {
+          "q": 8,
+          "image": "serie7_q8.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je dépasse le camion – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je dépasse le camion – NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 9,
+          "image": "serie7_q9.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je dois m'arrêter à côté de ce signal – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je dois m'arrêter à côté de ce signal – NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 10,
+          "image": "serie7_q10.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je m'arrête"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je passe"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 11,
+          "image": "serie7_q11.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je peux m'arrêter derrière le camion – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je peux m'arrêter derrière le camion – NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 12,
+          "image": "serie7_q12.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je passe avant la camionnette – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je passe avant la camionnette – NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 13,
+          "image": "serie7_q13.webp",
+          "enonce": "A cette intersection, je peux faire des appels :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "feux de croisement / feux de position"
+            },
+            {
+              "lettre": "B",
+              "texte": "feux de croisement / feux de route"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 14,
+          "image": "serie7_q14.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je peux tourner à droite – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je peux tourner à droite – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "Je peux aller tout droit – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "Je peux aller tout droit – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "C"
+          ]
+        },
+        {
+          "q": 15,
+          "image": "serie7_q15.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je dépasse – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je dépasse – NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 16,
+          "image": "serie7_q16.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je passe avant la voiture rouge – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je passe avant la voiture rouge – NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 17,
+          "image": "serie7_q17.webp",
+          "enonce": "Ce panneau indique :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "une interdiction de tourner à droite – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "une interdiction de tourner à droite – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "un virage dangereux – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "un virage dangereux – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "C"
+          ]
+        },
+        {
+          "q": 18,
+          "image": "serie7_q18.webp",
+          "enonce": "En marche normale,",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "je suis bien placé – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "je suis bien placé – NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 19,
+          "image": "serie7_q19.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je dépasse – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je dépasse – NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 20,
+          "image": "serie7_q20.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je dépasse la voiture jaune – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je dépasse la voiture jaune – NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 21,
+          "image": "serie7_q21.webp",
+          "enonce": "Ce camion me dépasse :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "J'accélère"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je garde la même vitesse"
+            },
+            {
+              "lettre": "C",
+              "texte": "Je ralentis"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 22,
+          "image": "serie7_q22.webp",
+          "enonce": "Pour tourner à gauche, je passe",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "à gauche du rond-point"
+            },
+            {
+              "lettre": "B",
+              "texte": "à droite du rond-point"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 23,
+          "image": "serie7_q23.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je peux m'arrêter sur les bandes blanches – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je peux m'arrêter sur les bandes blanches – NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 24,
+          "image": "serie7_q24.webp",
+          "enonce": "Je peux rouler :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "en feux de croisement – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "en feux de croisement – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "en feux de route – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "en feux de route – NON"
+            }
+          ],
+          "answer": [
+            "A",
+            "D"
+          ]
+        },
+        {
+          "q": 25,
+          "image": null,
+          "enonce": "Sur route, la ceinture de sécurité est obligatoire :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "pour le conducteur – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "pour le conducteur – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "pour le passager à l'avant – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "pour le passager à l'avant – NON"
+            }
+          ],
+          "answer": [
+            "A",
+            "C"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "title": "Série 8 — Série de Test B8 — Permis de conduire Sénégal",
+      "questions": [
+        {
+          "q": 1,
+          "image": "serie8_q1.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je peux stationner après le signal – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je peux stationner après le signal – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "Je peux m'arrêter après le signal – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "Je peux m'arrêter après le signal – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "D"
+          ]
+        },
+        {
+          "q": 2,
+          "image": "serie8_q2.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je tourne à droite"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je vais tout droit"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 3,
+          "image": "serie8_q3.webp",
+          "enonce": "A la prochaine intersection,",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je passerai avant les voitures venant de droite – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je passerai avant les voitures venant de droite – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "Je passerai avant les voitures venant de gauche – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "Je passerai avant les voitures venant de gauche – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "C"
+          ]
+        },
+        {
+          "q": 4,
+          "image": "serie8_q4.webp",
+          "enonce": "Ce signal indique :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "la fin de la route prioritaire – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "la fin de la route prioritaire – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "la fin des prescriptions précédemment signalées – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "la fin des prescriptions précédemment signalées – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "C"
+          ]
+        },
+        {
+          "q": 5,
+          "image": "serie8_q5.webp",
+          "enonce": "Je peux rouler dans cette rue :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "avec ma voiture – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "avec ma voiture – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "avec une camionnette de transport de marchandises – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "avec une camionnette de transport de marchandises – NON"
+            }
+          ],
+          "answer": [
+            "A",
+            "D"
+          ]
+        },
+        {
+          "q": 6,
+          "image": "serie8_q6.webp",
+          "enonce": "Ce signal annonce un risque de :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "projection de gravillons"
+            },
+            {
+              "lettre": "B",
+              "texte": "chute de pierres"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 7,
+          "image": "serie8_q7.webp",
+          "enonce": "Je m'arrête au niveau :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "de la ligne pointillée"
+            },
+            {
+              "lettre": "B",
+              "texte": "du passage pour piétons"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 8,
+          "image": "serie8_q8.webp",
+          "enonce": "Je suis en stationnement.",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je peux partir tout de suite – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je peux partir tout de suite – NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 9,
+          "image": "serie8_q9.webp",
+          "enonce": "Pour stationner,",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "je me mets en double file sur le trottoir – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "je me mets en double file sur le trottoir – NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 10,
+          "image": "serie8_q10.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je dépasse – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je dépasse – NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 11,
+          "image": "serie8_q11.webp",
+          "enonce": "Je peux stationner :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "sur l'accotement – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "sur l'accotement – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "sur la chaussée – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "sur la chaussée – NON"
+            }
+          ],
+          "answer": [
+            "A",
+            "D"
+          ]
+        },
+        {
+          "q": 12,
+          "image": null,
+          "enonce": "De nuit, pour éviter l'éblouissement, il faut :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "regarder le bord droit de la chaussée"
+            },
+            {
+              "lettre": "B",
+              "texte": "fermer les yeux pendant un court instant"
+            },
+            {
+              "lettre": "C",
+              "texte": "porter des verres teintés"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 13,
+          "image": "serie8_q13.webp",
+          "enonce": "Ce signal indique :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "l'entrée d'une agglomération"
+            },
+            {
+              "lettre": "B",
+              "texte": "la sortie d'une agglomération"
+            },
+            {
+              "lettre": "C",
+              "texte": "Je peux rouler à 80 km/h – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "Je peux rouler à 80 km/h – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "C"
+          ]
+        },
+        {
+          "q": 14,
+          "image": "serie8_q14.webp",
+          "enonce": "Je roule sur une autoroute :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je dépasse – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je dépasse – NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 15,
+          "image": "serie8_q15.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je passe avant la voiture rouge – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je passe avant la voiture rouge – NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 16,
+          "image": "serie8_q16.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je peux rouler tout de suite derrière le camion – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je peux rouler tout de suite derrière le camion – NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 17,
+          "image": "serie8_q17.webp",
+          "enonce": "Je roule à la même vitesse que la voiture de droite.",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je suis bien placé – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je suis bien placé – NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 18,
+          "image": "serie8_q18.webp",
+          "enonce": "Je me suis trompé de route.",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je fais demi-tour ici – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je fais demi-tour ici – NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 19,
+          "image": "serie8_q19.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je suis bien placé pour aller tout droit – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je suis bien placé pour aller tout droit – NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 20,
+          "image": "serie8_q20.webp",
+          "enonce": "Pour aller tout droit,",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "je passe avant la voiture jaune – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "je passe avant la voiture jaune – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "je passe avant la voiture orange – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "je passe avant la voiture orange – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "C"
+          ]
+        },
+        {
+          "q": 21,
+          "image": "serie8_q21.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je peux encore tourner à gauche – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je peux encore tourner à gauche – NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 22,
+          "image": "serie8_q22.webp",
+          "enonce": "A la prochaine intersection,",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "je passerai avant les voitures venant de droite – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "je passerai avant les voitures venant de droite – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "je passerai avant les voitures venant de gauche – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "je passerai avant les voitures venant de gauche – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "D"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "title": "Série 9 — Série de Test B9 — Permis de conduire Sénégal",
+      "questions": [
+        {
+          "q": 1,
+          "image": "serie9_q1.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je ralentis – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je ralentis – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "Je vais rencontrer un endroit fréquenté par des enfants – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "Je vais rencontrer un endroit fréquenté par des enfants – NON"
+            }
+          ],
+          "answer": [
+            "A",
+            "C"
+          ]
+        },
+        {
+          "q": 2,
+          "image": "serie9_q2.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je dois marquer un temps d'arrêt au niveau du signal – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je dois marquer un temps d'arrêt au niveau du signal – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "Si une voiture arrive ici sur la voie de gauche, je passe avant – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "Si une voiture arrive ici sur la voie de gauche, je passe avant – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "D"
+          ]
+        },
+        {
+          "q": 3,
+          "image": "serie9_q3.webp",
+          "enonce": "Je peux rouler :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "à 30 km/h – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "à 30 km/h – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "à 40 km/h – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "à 40 km/h – NON"
+            }
+          ],
+          "answer": [
+            "A",
+            "C"
+          ]
+        },
+        {
+          "q": 4,
+          "image": "serie9_q4.webp",
+          "enonce": "Sur cet accotement stabilisé, je peux stationner :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "devant le signal"
+            },
+            {
+              "lettre": "B",
+              "texte": "immédiatement derrière le signal"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 5,
+          "image": "serie9_q5.webp",
+          "enonce": "Je vais rencontrer un passage à niveau :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "à 50 m"
+            },
+            {
+              "lettre": "B",
+              "texte": "à 150 m"
+            },
+            {
+              "lettre": "C",
+              "texte": "avec barrières"
+            },
+            {
+              "lettre": "D",
+              "texte": "sans barrières"
+            }
+          ],
+          "answer": [
+            "B",
+            "D"
+          ]
+        },
+        {
+          "q": 6,
+          "image": "serie9_q6.webp",
+          "enonce": "Je dépasse",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je dépasse – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je dépasse – NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 7,
+          "image": "serie9_q7.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je m'arrête"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je passe"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 8,
+          "image": "serie9_q8.webp",
+          "enonce": "Je passe avant la voiture de droite",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je passe avant la voiture de droite – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je passe avant la voiture de droite – NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 9,
+          "image": "serie9_q9.webp",
+          "enonce": "Je passe avant le piéton",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je passe avant le piéton – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je passe avant le piéton – NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 10,
+          "image": "serie9_q10.webp",
+          "enonce": "Je dépasse",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je dépasse – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je dépasse – NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 11,
+          "image": "serie9_q11.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Ce signal indique un passage pour piétons – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Ce signal indique un passage pour piétons – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "Je ralentis – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "Je ralentis – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "C"
+          ]
+        },
+        {
+          "q": 12,
+          "image": "serie9_q12.webp",
+          "enonce": "En marche normale, je suis bien placé",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "En marche normale, je suis bien placé – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "En marche normale, je suis bien placé – NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 13,
+          "image": "serie9_q13.webp",
+          "enonce": "Ces signaux indiquent :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "une chaussée rétrécie – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "une chaussée rétrécie – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "une rue à sens unique – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "une rue à sens unique – NON"
+            }
+          ],
+          "answer": [
+            "A",
+            "D"
+          ]
+        },
+        {
+          "q": 14,
+          "image": "serie9_q14.webp",
+          "enonce": "Je peux prendre la voie de droite",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je peux prendre la voie de droite – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je peux prendre la voie de droite – NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 15,
+          "image": "serie9_q15.webp",
+          "enonce": "Sur cette autoroute, je peux m'arrêter à droite de la ligne blanche :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "si ma voiture est en panne – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "si ma voiture est en panne – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "pour regarder la carte routière – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "pour regarder la carte routière – NON"
+            }
+          ],
+          "answer": [
+            "A",
+            "D"
+          ]
+        },
+        {
+          "q": 16,
+          "image": "serie9_q16.webp",
+          "enonce": "Je suis bien placé pour aller tout droit",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je suis bien placé pour aller tout droit – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je suis bien placé pour aller tout droit – NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 17,
+          "image": "serie9_q17.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je peux tourner à droite – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je peux tourner à droite – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "Je peux tourner à gauche – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "Je peux tourner à gauche – NON"
+            }
+          ],
+          "answer": [
+            "A",
+            "D"
+          ]
+        },
+        {
+          "q": 18,
+          "image": "serie9_q18.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je peux stationner le long du trottoir – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je peux stationner le long du trottoir – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "Je peux m'arrêter le long du trottoir – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "Je peux m'arrêter le long du trottoir – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "C"
+          ]
+        },
+        {
+          "q": 19,
+          "image": "serie9_q19.webp",
+          "enonce": "Je dépasse",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je dépasse – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je dépasse – NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 20,
+          "image": "serie9_q20.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je dépasse les deux véhicules"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je me rabats derrière le camion"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 21,
+          "image": "serie9_q21.webp",
+          "enonce": "Je passe avant la voiture de gauche",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je passe avant la voiture de gauche – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je passe avant la voiture de gauche – NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 22,
+          "image": "serie9_q22.webp",
+          "enonce": "Pour tourner à gauche,",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "je passe avant la voiture blanche – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "je passe avant la voiture blanche – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "je passe avant la voiture rouge – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "je passe avant la voiture rouge – NON"
+            }
+          ],
+          "answer": [
+            "A",
+            "C"
+          ]
+        },
+        {
+          "q": 23,
+          "image": "serie9_q23.webp",
+          "enonce": "Je dépasse",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je dépasse – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je dépasse – NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 24,
+          "image": "serie9_q24.webp",
+          "enonce": "Je peux rouler :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "en feux de position – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "en feux de position – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "en feux de croisement – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "en feux de croisement – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "C"
+          ]
+        },
+        {
+          "q": 25,
+          "image": "serie9_q25.webp",
+          "enonce": "Je suis en stationnement :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je peux partir tout de suite – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je peux partir tout de suite – NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "title": "Série 10 — Série de Test B10 — Permis de conduire Sénégal",
+      "questions": [
+        {
+          "q": 1,
+          "image": "serie10_q1.webp",
+          "enonce": "Ce signal indique :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "une route prioritaire – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "une route prioritaire – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "une interdiction de stationner – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "une interdiction de stationner – NON"
+            }
+          ],
+          "answer": [
+            "A",
+            "D"
+          ]
+        },
+        {
+          "q": 2,
+          "image": "serie10_q2.webp",
+          "enonce": "Je peux faire demi-tour",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 3,
+          "image": "serie10_q3.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je dois marquer un temps d'arrêt au niveau de ce signal – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je dois marquer un temps d'arrêt au niveau de ce signal – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "Si une voiture arrive ici, sur ma gauche, je passe avant – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "Si une voiture arrive ici, sur ma gauche, je passe avant – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "D"
+          ]
+        },
+        {
+          "q": 4,
+          "image": "serie10_q4.webp",
+          "enonce": "Ce signal annonce un passage à niveau automatique",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 5,
+          "image": "serie10_q5.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "La longueur du passage est de 3,70 mètres – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "La longueur du passage est de 3,70 mètres – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "La hauteur du passage est de 3,70 mètres – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "La hauteur du passage est de 3,70 mètres – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "C"
+          ]
+        },
+        {
+          "q": 6,
+          "image": "serie10_q6.webp",
+          "enonce": "Ces signaux indiquent :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "une chaussée à sens unique – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "une chaussée à sens unique – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "une intersection – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "une intersection – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "C"
+          ]
+        },
+        {
+          "q": 7,
+          "image": "serie10_q7.webp",
+          "enonce": "Ces balises indiquent :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "la position de l'intersection – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "la position de l'intersection – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "la priorité à droite – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "la priorité à droite – NON"
+            }
+          ],
+          "answer": [
+            "A",
+            "D"
+          ]
+        },
+        {
+          "q": 8,
+          "image": "serie10_q8.webp",
+          "enonce": "En marche normale, je suis bien placé",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 9,
+          "image": "serie10_q9.webp",
+          "enonce": "Je roule à 50 km/h, je dépasse",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 10,
+          "image": "serie10_q10.webp",
+          "enonce": "Je suis bien placé pour stationner ici",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 11,
+          "image": "serie10_q11.webp",
+          "enonce": "Je peux rouler :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "sans feux – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "sans feux – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "en feux de croisement – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "en feux de croisement – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "C"
+          ]
+        },
+        {
+          "q": 12,
+          "image": "serie10_q12.webp",
+          "enonce": "Je passe",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 13,
+          "image": "serie10_q13.webp",
+          "enonce": "Je dois rouler :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "en feux de position – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "en feux de position – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "en feux de croisement – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "en feux de croisement – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "C"
+          ]
+        },
+        {
+          "q": 14,
+          "image": "serie10_q14.webp",
+          "enonce": "Derrière la camionnette,",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "je peux m'arrêter – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "je peux m'arrêter – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "je peux stationner – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "je peux stationner – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "D"
+          ]
+        },
+        {
+          "q": 15,
+          "image": "serie10_q15.webp",
+          "enonce": "La signalisation indique :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "une rue barrée à 40 m – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "une rue barrée à 40 m – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "une interdiction de s'arrêter – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "une interdiction de s'arrêter – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "C"
+          ]
+        },
+        {
+          "q": 16,
+          "image": "serie10_q16.webp",
+          "enonce": "Pour tourner à gauche, je passe avant les voitures qui arrivent en face",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 17,
+          "image": "serie10_q17.webp",
+          "enonce": "A la prochaine intersection,",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "je passerai avant les voitures venant de droite – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "je passerai avant les voitures venant de droite – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "je passerai avant les voitures venant de gauche – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "je passerai avant les voitures venant de gauche – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "D"
+          ]
+        },
+        {
+          "q": 18,
+          "image": "serie10_q18.webp",
+          "enonce": "Je dépasse",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 19,
+          "image": "serie10_q19.webp",
+          "enonce": "Ce signal indique :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "des travaux – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "des travaux – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "un obstacle – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "un obstacle – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "C"
+          ]
+        },
+        {
+          "q": 20,
+          "image": "serie10_q20.webp",
+          "enonce": "Je dépasse",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 21,
+          "image": "serie10_q21.webp",
+          "enonce": "Je dépasse le camion",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 22,
+          "image": "serie10_q22.webp",
+          "enonce": "Je suis bien placé pour tourner à gauche",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 23,
+          "image": "serie10_q23.webp",
+          "enonce": "Pour aller tout droit,",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "je passe avant la voiture orange – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "je passe avant la voiture orange – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "je passe avant la voiture jaune – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "je passe avant la voiture jaune – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "C"
+          ]
+        },
+        {
+          "q": 24,
+          "image": "serie10_q24.webp",
+          "enonce": "Dans cette rue, je peux faire demi-tour",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 25,
+          "image": null,
+          "enonce": "J'arrive le premier sur les lieux d'un accident et il y a des blessés :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "je peux leur donner à boire de l'eau – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "je peux leur donner à boire de l'eau – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "je passe sans m'arrêter – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "je passe sans m'arrêter – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "D"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "title": "Série 11 — Série de Test B11 — Permis de conduire Sénégal",
+      "questions": [
+        {
+          "q": 1,
+          "image": "serie11_q1.webp",
+          "enonce": "Ce signal indique :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "une route prioritaire – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "une route prioritaire – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "une interdiction de stationner – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "une interdiction de stationner – NON"
+            }
+          ],
+          "answer": [
+            "A",
+            "D"
+          ]
+        },
+        {
+          "q": 2,
+          "image": "serie11_q2.webp",
+          "enonce": "Pour aller tout droit,",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "je m'arrête au niveau du signal"
+            },
+            {
+              "lettre": "B",
+              "texte": "je m'arrête au niveau de la bande blanche"
+            },
+            {
+              "lettre": "C",
+              "texte": "je passerai avant les voitures venant de gauche – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "je passerai avant les voitures venant de gauche – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "D"
+          ]
+        },
+        {
+          "q": 3,
+          "image": "serie11_q3.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je passerai avant les voitures venant de droite – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je passerai avant les voitures venant de droite – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "Je passerai avant les voitures venant de gauche – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "Je passerai avant les voitures venant de gauche – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "D"
+          ]
+        },
+        {
+          "q": 4,
+          "image": "serie11_q4.webp",
+          "enonce": "Je peux rouler à :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "30 km/h – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "30 km/h – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "50 km/h – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "50 km/h – NON"
+            }
+          ],
+          "answer": [
+            "A",
+            "D"
+          ]
+        },
+        {
+          "q": 5,
+          "image": "serie11_q5.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je tourne à droite"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je vais tout droit"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 6,
+          "image": "serie11_q6.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je dépasse – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je dépasse – NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 7,
+          "image": "serie11_q7.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je dépasse – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je dépasse – NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 8,
+          "image": "serie11_q8.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je dépasse le camion – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je dépasse le camion – NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 9,
+          "image": "serie11_q9.webp",
+          "enonce": "Ce signal indique :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "un tonnage limité – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "un tonnage limité – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "une hauteur limitée – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "une hauteur limitée – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "C"
+          ]
+        },
+        {
+          "q": 10,
+          "image": "serie11_q10.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je peux tourner à gauche avant le rond-point – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je peux tourner à gauche avant le rond-point – NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 11,
+          "image": "serie11_q11.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "J'ai le droit de stationner derrière la camionnette – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "J'ai le droit de stationner derrière la camionnette – NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 12,
+          "image": "serie11_q12.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je reste sur cette voie"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je roule à droite dès que possible"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 13,
+          "image": "serie11_q13.webp",
+          "enonce": "Pour tourner à gauche,",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "je passe avant la voiture jaune – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "je passe avant la voiture jaune – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "je passe avant la voiture orange – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "je passe avant la voiture orange – NON"
+            }
+          ],
+          "answer": [
+            "A",
+            "C"
+          ]
+        },
+        {
+          "q": 14,
+          "image": "serie11_q14.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je dépasse – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je dépasse – NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 15,
+          "image": "serie11_q15.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "En marche normale, je suis bien placé – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "En marche normale, je suis bien placé – NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 16,
+          "image": "serie11_q16.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je ralentis – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je ralentis – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "Je passerai avant les voitures venant de gauche – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "Je passerai avant les voitures venant de gauche – NON"
+            }
+          ],
+          "answer": [
+            "A",
+            "C"
+          ]
+        },
+        {
+          "q": 17,
+          "image": "serie11_q17.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je passe avant la camionnette – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je passe avant la camionnette – NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 18,
+          "image": "serie11_q18.webp",
+          "enonce": "Ce signal indique :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "un virage dangereux – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "un virage dangereux – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "une chaussée glissante – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "une chaussée glissante – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "C"
+          ]
+        },
+        {
+          "q": 19,
+          "image": "serie11_q19.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je passe avant la voiture blanche – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je passe avant la voiture blanche – NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 20,
+          "image": "serie11_q20.webp",
+          "enonce": "Ce signal indique :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "une déviation de la circulation – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "une déviation de la circulation – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "un virage dangereux – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "un virage dangereux – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "C"
+          ]
+        },
+        {
+          "q": 21,
+          "image": "serie11_q21.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je dépasse – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je dépasse – NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 22,
+          "image": "serie11_q22.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Pour tourner à gauche, je suis bien placé – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Pour tourner à gauche, je suis bien placé – NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 23,
+          "image": "serie11_q23.webp",
+          "enonce": "A ce feu jaune clignotant,",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "je ralentis – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "je ralentis – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "je m'arrête – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "je m'arrête – NON"
+            }
+          ],
+          "answer": [
+            "A",
+            "D"
+          ]
+        },
+        {
+          "q": 24,
+          "image": null,
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Si j'ai bu de l'alcool, je conduis mieux – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Si j'ai bu de l'alcool, je conduis mieux – NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 25,
+          "image": null,
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Si ma voiture est très chargée, je dois gonfler davantage mes pneus – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Si ma voiture est très chargée, je dois gonfler davantage mes pneus – NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "title": "Série 12 — Série de Test B12 — Permis de conduire Sénégal",
+      "questions": [
+        {
+          "q": 1,
+          "image": "serie12_q1.webp",
+          "enonce": "Ce signal indique :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "une route prioritaire – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "une route prioritaire – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "une interdiction de stationner – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "une interdiction de stationner – NON"
+            }
+          ],
+          "answer": [
+            "A",
+            "D"
+          ]
+        },
+        {
+          "q": 2,
+          "image": "serie12_q2.webp",
+          "enonce": "Pour aller tout droit,",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "je m'arrête : au niveau du signal"
+            },
+            {
+              "lettre": "B",
+              "texte": "je m'arrête : ou bien au niveau de la bande blanche"
+            },
+            {
+              "lettre": "C",
+              "texte": "je passerai avant les voitures venant de gauche – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "je passerai avant les voitures venant de gauche – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "D"
+          ]
+        },
+        {
+          "q": 3,
+          "image": "serie12_q3.webp",
+          "enonce": "Je dépasse",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je dépasse – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je dépasse – NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 4,
+          "image": "serie12_q4.webp",
+          "enonce": "",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je ralentis – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je ralentis – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "Je passerai avant les voitures venant de droite – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "Je passerai avant les voitures venant de droite – NON"
+            }
+          ],
+          "answer": [
+            "A",
+            "C"
+          ]
+        },
+        {
+          "q": 5,
+          "image": "serie12_q5.webp",
+          "enonce": "Pour tourner à gauche, je passe avant le camion",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Pour tourner à gauche, je passe avant le camion – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Pour tourner à gauche, je passe avant le camion – NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 6,
+          "image": "serie12_q6.webp",
+          "enonce": "Je dépasse",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je dépasse – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je dépasse – NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 7,
+          "image": null,
+          "enonce": "En ville, la nuit,",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "je dois mettre ma ceinture de sécurité – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "je dois mettre ma ceinture de sécurité – NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 8,
+          "image": "serie12_q8.webp",
+          "enonce": "Pour tourner à droite, je dois m'arrêter",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Pour tourner à droite, je dois m'arrêter – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Pour tourner à droite, je dois m'arrêter – NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 9,
+          "image": "serie12_q9.webp",
+          "enonce": "Ce véhicule a annoncé son approche,",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "je passe avant lui – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "je passe avant lui – NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 10,
+          "image": "serie12_q10.webp",
+          "enonce": "Je passe avant les piétons",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je passe avant les piétons – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je passe avant les piétons – NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 11,
+          "image": "serie12_q11.webp",
+          "enonce": "Je peux rouler à droite de la ligne blanche",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je peux rouler à droite de la ligne blanche – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je peux rouler à droite de la ligne blanche – NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 12,
+          "image": "serie12_q12.webp",
+          "enonce": "A 400 mètres, ce sera :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "l'entrée de l'autoroute"
+            },
+            {
+              "lettre": "B",
+              "texte": "ou bien la sortie de l'autoroute"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 13,
+          "image": "serie12_q13.webp",
+          "enonce": "Je peux rouler :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "en feux de route – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "en feux de route – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "en feux de croisement – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "en feux de croisement – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "C"
+          ]
+        },
+        {
+          "q": 14,
+          "image": "serie12_q14.webp",
+          "enonce": "Je suis bien placé pour :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "tourner à gauche – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "tourner à gauche – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "reprendre la voie de droite – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "reprendre la voie de droite – NON"
+            }
+          ],
+          "answer": [
+            "A",
+            "D"
+          ]
+        },
+        {
+          "q": 15,
+          "image": "serie12_q15.webp",
+          "enonce": "Je peux stationner sur cette chaussée",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je peux stationner sur cette chaussée – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je peux stationner sur cette chaussée – NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 16,
+          "image": "serie12_q16.webp",
+          "enonce": "Ces balises indiquent :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "une intersection – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "une intersection – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "un virage – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "un virage – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "C"
+          ]
+        },
+        {
+          "q": 17,
+          "image": "serie12_q17.webp",
+          "enonce": "Je dois rouler :",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "en feux de position – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "en feux de position – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "en feux de croisement – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "en feux de croisement – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "C"
+          ]
+        },
+        {
+          "q": 18,
+          "image": "serie12_q18.webp",
+          "enonce": "Je dépasse",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je dépasse – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je dépasse – NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 19,
+          "image": "serie12_q19.webp",
+          "enonce": "Dans cette rue,",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "la hauteur du véhicule avec son chargement est limitée à 2,60 m – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "la hauteur du véhicule avec son chargement est limitée à 2,60 m – NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 20,
+          "image": "serie12_q20.webp",
+          "enonce": "Je dépasse",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je dépasse – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je dépasse – NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 21,
+          "image": "serie12_q21.webp",
+          "enonce": "Je dépasse",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je dépasse – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je dépasse – NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 22,
+          "image": "serie12_q22.webp",
+          "enonce": "L'accotement est stabilisé,",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "je peux stationner – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "je peux stationner – NON"
+            }
+          ],
+          "answer": [
+            "A"
+          ]
+        },
+        {
+          "q": 23,
+          "image": "serie12_q23.webp",
+          "enonce": "Derrière le véhicule vert,",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "je peux m'arrêter – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "je peux m'arrêter – NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        },
+        {
+          "q": 24,
+          "image": "serie12_q24.webp",
+          "enonce": "Pour tourner à gauche,",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "je passe avant la voiture orange – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "je passe avant la voiture orange – NON"
+            },
+            {
+              "lettre": "C",
+              "texte": "je passe avant la voiture jaune – OUI"
+            },
+            {
+              "lettre": "D",
+              "texte": "je passe avant la voiture jaune – NON"
+            }
+          ],
+          "answer": [
+            "B",
+            "C"
+          ]
+        },
+        {
+          "q": 25,
+          "image": "serie12_q25.webp",
+          "enonce": "La circulation est en files ininterrompues et la file de droite avance plus vite.",
+          "propositions": [
+            {
+              "lettre": "A",
+              "texte": "Je peux la prendre – OUI"
+            },
+            {
+              "lettre": "B",
+              "texte": "Je peux la prendre – NON"
+            }
+          ],
+          "answer": [
+            "B"
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -46,7 +46,7 @@ jobs:
           TAG: ${{ github.sha }}
         run: |
           docker build -f Dockerfile.web \
-            --build-arg NEXT_PUBLIC_API_URL="${{ vars.PUBLIC_APP_URL }}:3001" \
+            --build-arg NEXT_PUBLIC_API_URL="${{ vars.API_PUBLIC_URL }}" \
             --build-arg NEXT_PUBLIC_PAYMENT_MODE="manual" \
             --build-arg NEXT_PUBLIC_PAYMENT_LIVE="false" \
             -t "$IMAGE_NAMESPACE/$PROJECT_NAME-web:$TAG" \
@@ -64,6 +64,7 @@ jobs:
       - name: Upload deploy artifacts to S3
         run: |
           aws s3 cp docker-compose.aws.yml "s3://${{ vars.AWS_BACKUPS_BUCKET }}/deploy/docker-compose.aws.yml"
+          aws s3 cp Caddyfile "s3://${{ vars.AWS_BACKUPS_BUCKET }}/deploy/Caddyfile"
           aws s3 cp scripts/aws/deploy-remote.sh "s3://${{ vars.AWS_BACKUPS_BUCKET }}/deploy/deploy-remote.sh"
 
       - name: Deploy via SSM

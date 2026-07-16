@@ -1,13 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Param,
-  Query,
-  UseGuards,
-  Request,
-  HttpCode,
-} from '@nestjs/common';
+import { Controller, Get, Post, Param, Query, UseGuards, Request, HttpCode } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiTags, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { LessonService } from './lesson.service';
@@ -19,21 +10,14 @@ export class LessonController {
 
   @Get()
   @ApiResponse({ status: 200, description: 'List of lessons' })
-  async findAll(
-    @Query('skip') skip = 0,
-    @Query('take') take = 10,
-  ) {
-    return this.lessonService.findAll(skip, take);
+  async findAll(@Query('skip') skip = '0', @Query('take') take = '10') {
+    return this.lessonService.findAll(parseInt(String(skip), 10), parseInt(String(take), 10));
   }
 
   @Get('search')
   @ApiResponse({ status: 200, description: 'Search results' })
-  async search(
-    @Query('q') query: string,
-    @Query('skip') skip = 0,
-    @Query('take') take = 10,
-  ) {
-    return this.lessonService.search(query, skip, take);
+  async search(@Query('q') query: string, @Query('skip') skip = '0', @Query('take') take = '10') {
+    return this.lessonService.search(query, parseInt(String(skip), 10), parseInt(String(take), 10));
   }
 
   @Get('favorites')
@@ -41,12 +25,12 @@ export class LessonController {
   @ApiBearerAuth()
   @ApiResponse({ status: 200, description: 'User favorite lessons' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async getFavorites(
-    @Request() req,
-    @Query('skip') skip = 0,
-    @Query('take') take = 10,
-  ) {
-    return this.lessonService.getFavorites(req.user.userId, skip, take);
+  async getFavorites(@Request() req, @Query('skip') skip = '0', @Query('take') take = '10') {
+    return this.lessonService.getFavorites(
+      req.user.userId,
+      parseInt(String(skip), 10),
+      parseInt(String(take), 10)
+    );
   }
 
   @Get('category/:categoryId')
@@ -54,10 +38,14 @@ export class LessonController {
   @ApiResponse({ status: 404, description: 'Category not found' })
   async findByCategory(
     @Param('categoryId') categoryId: string,
-    @Query('skip') skip = 0,
-    @Query('take') take = 10,
+    @Query('skip') skip = '0',
+    @Query('take') take = '10'
   ) {
-    return this.lessonService.findByCategory(categoryId, skip, take);
+    return this.lessonService.findByCategory(
+      categoryId,
+      parseInt(String(skip), 10),
+      parseInt(String(take), 10)
+    );
   }
 
   @Post(':id/favorite')
@@ -67,10 +55,7 @@ export class LessonController {
   @ApiResponse({ status: 200, description: 'Favorite toggled' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 404, description: 'Lesson not found' })
-  async toggleFavorite(
-    @Param('id') id: string,
-    @Request() req,
-  ) {
+  async toggleFavorite(@Param('id') id: string, @Request() req) {
     return this.lessonService.toggleFavorite(id, req.user.userId);
   }
 

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 110 140">
+  <path d="M15 45 a40 40 0 0 1 80 0 v85 h-80 z" fill="#fff" stroke="#1a1a1a" stroke-width="4"/>
+  <path d="M15 45 a40 40 0 0 1 80 0 v14 h-80 z" fill="#E30613"/>
+  <text x="55" y="52" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="#fff">N 7</text>
+  <text x="55" y="100" font-family="Arial, sans-serif" font-size="34" font-weight="bold" text-anchor="middle" fill="#1a1a1a">125</text>
+</svg>

@@ -17,26 +17,32 @@ enum Role {
 
 model User {
   id            String     @id @default(cuid())
-  email         String     @unique
+  email         String?    @unique
+  phone         String?    @unique
   name          String
   avatar        String?
   passwordHash  String?
-  googleId      String?    @unique
+  pinHash       String?
   xp            Int        @default(0)
   level         String     @default("Débutant")
   role          Role       @default(USER)
+  blocked       Boolean    @default(false)
   createdAt     DateTime   @default(now())
   updatedAt     DateTime   @updatedAt
 
   // Relations
-  exams         Exam[]
-  progress      Progress[]
-  statistics    Statistic[]
-  favorites     Favorite[]
-  badges        Badge[]
-  streak        DailyStreak?
-  subscriptions Subscription[]
-  notifications Notification[]
+  exams               Exam[]
+  progress            Progress[]
+  statistics          Statistic[]
+  favorites           Favorite[]
+  badges              Badge[]
+  streak              DailyStreak?
+  subscriptions       Subscription[]
+  notifications       Notification[]
+  pushSubscriptions   PushSubscription[]
+  passwordResetTokens PasswordResetToken[]
+  entitlements        Entitlement[]
+  purchases           Purchase[]
 
   @@map("users")
 }
@@ -84,6 +90,7 @@ model Series {
   name        String
   description String
   code        String     @unique // B1, B2, B3
+  isFree      Boolean    @default(true)
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
 
@@ -190,6 +197,8 @@ model ExamResult {
   exam        Exam       @relation(fields: [examId], references: [id], onDelete: Cascade)
 
   @@index([examId])
+  @@index([userId])
+  @@index([userId, completedAt])
   @@map("exam_results")
 }
 
@@ -230,6 +239,7 @@ model Statistic {
 
   @@index([userId])
   @@index([categoryId])
+  @@unique([userId, categoryId])
   @@map("statistics")
 }
 
@@ -300,7 +310,23 @@ model Notification {
   user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
+  @@index([userId, read, createdAt])
   @@map("notifications")
+}
+
+model PushSubscription {
+  id        String   @id @default(cuid())
+  userId    String
+  endpoint  String   @unique
+  p256dh    String
+  auth      String
+  createdAt DateTime @default(now())
+
+  // Relations
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("push_subscriptions")
 }
 
 model Subscription {
@@ -317,6 +343,7 @@ model Subscription {
   user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
+  @@index([status])
   @@map("subscriptions")
 }
 
@@ -329,10 +356,167 @@ model TrafficSign {
   description     String
   contexte_usage  String?
   regle_associee  String?
+  advice          String[]   @default([])
+  ordre           Int        @default(0)
   icone           String?
   image           String?
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
 
+  @@index([category])
+  @@index([name])
   @@map("traffic_signs")
+}
+
+model PasswordResetToken {
+  id        String    @id @default(cuid())
+  userId    String
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("password_reset_tokens")
+}
+
+model Entitlement {
+  id         String    @id @default(cuid())
+  userId     String
+  key        String
+  source     String    @default("purchase")
+  purchaseId String?
+  expiresAt  DateTime?
+  createdAt  DateTime  @default(now())
+
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, key])
+  @@index([userId])
+  @@map("entitlements")
+}
+
+model Product {
+  id           String     @id @default(cuid())
+  sku          String     @unique
+  title        String
+  description  String?
+  kind         String
+  priceXof     Int
+  active       Boolean    @default(true)
+  ordre        Int        @default(0)
+  grants       String[]
+  validityDays Int?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  purchases    Purchase[]
+
+  @@map("products")
+}
+
+model Purchase {
+  id          String    @id @default(cuid())
+  userId      String
+  productId   String
+  provider    String
+  method      String?
+  phone       String?
+  amountXof   Int
+  status      String    @default("PENDING")
+  providerRef String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product     Product   @relation(fields: [productId], references: [id])
+
+  @@index([userId])
+  @@unique([providerRef])
+  @@map("purchases")
+}
+
+model DrivingCourse {
+  id          String            @id @default(cuid())
+  slug        String            @unique
+  title       String
+  description String?
+  ordre       Int               @default(0)
+  isDraft     Boolean           @default(false)
+  isFree      Boolean           @default(true)
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  questions   DrivingQuestion[]
+
+  @@map("driving_courses")
+}
+
+model DrivingQuestion {
+  id                 String          @id @default(cuid())
+  courseId           String
+  numero             Int
+  enonce             String
+  image              String?
+  reponses_correctes String[]
+  explication        String?
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
+
+  course             DrivingCourse   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  choices            DrivingChoice[]
+
+  @@index([courseId])
+  @@map("driving_questions")
+}
+
+model DrivingChoice {
+  id         String          @id @default(cuid())
+  questionId String
+  text       String
+  order      Int
+  createdAt  DateTime        @default(now())
+  updatedAt  DateTime        @updatedAt
+
+  question   DrivingQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@index([questionId])
+  @@map("driving_choices")
+}
+
+model OtpToken {
+  id        String    @id @default(cuid())
+  phone     String
+  codeHash  String
+  channel   String    @default("sms")
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([phone])
+  @@index([phone, expiresAt])
+  @@map("otp_tokens")
+}
+
+model SmsLog {
+  id        String   @id @default(cuid())
+  phone     String
+  channel   String   @default("sms")
+  simulated Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+  @@map("sms_logs")
+}
+
+/// Image-based mock-exam series (diapos) — content served to the web app.
+model DiapoExam {
+  id        Int      @id
+  title     String
+  questions Json
+  updatedAt DateTime @updatedAt
+
+  @@map("diapo_exams")
 }

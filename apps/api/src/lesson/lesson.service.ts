@@ -168,13 +168,13 @@ export class LessonService {
 
     if (existing) {
       await this.prisma.favorite.delete({
-      where: {
-        userId_lessonId_questionId: {
-          userId,
-          lessonId,
-          questionId: null as any as any,
+        where: {
+          userId_lessonId_questionId: {
+            userId,
+            lessonId,
+            questionId: null as any as any,
+          },
         },
-      },
       });
       return { isFavorite: false };
     } else {
