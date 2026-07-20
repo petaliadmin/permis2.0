@@ -1,6 +1,7 @@
 'use client';
 
 import { createContext, useContext, useEffect, useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -352,12 +353,18 @@ export function PageHeader({
 }: PageHeaderProps) {
   const a = ACCENT[accent];
   return (
-    <header
-      className={cn(
-        'relative overflow-hidden rounded-b-[28px] bg-gradient-to-br text-white shadow-lg',
-        a.grad
-      )}
-    >
+    <header className="relative overflow-hidden rounded-b-[28px] text-white shadow-lg">
+      {/* blurred background photo */}
+      <Image
+        src="/images/home/header.png"
+        alt=""
+        fill
+        priority
+        className="scale-125 object-cover blur-xl"
+      />
+      {/* accent tint over the photo so text stays legible */}
+      <div className={cn('absolute inset-0 bg-gradient-to-br opacity-85', a.grad)} />
+
       {/* soft decorative blobs */}
       <div className="pointer-events-none absolute -right-10 -top-12 h-40 w-40 rounded-full bg-white/10" />
       <div className="pointer-events-none absolute -left-8 top-10 h-24 w-24 rounded-full bg-white/5" />

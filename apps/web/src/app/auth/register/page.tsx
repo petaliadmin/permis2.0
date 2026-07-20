@@ -1,31 +1,24 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useAuthStore, isValidSnPhone, formatPhone, type OtpChannel } from '@/store/authStore';
+import { useAuthStore, isValidSnPhone } from '@/store/authStore';
 import { CodeInput } from '@/components/CodeInput';
-import { useWebOtpAutofill } from '@/hooks/useWebOtpAutofill';
-import { useCountdown } from '@/hooks/useCountdown';
 
 const SPLASH_DURATION_MS = 1800;
-const RESEND_COOLDOWN_S = 30;
 
 export default function RegisterPage() {
   const router = useRouter();
-  const requestOtp = useAuthStore((s) => s.requestOtp);
-  const verifyOtp = useAuthStore((s) => s.verifyOtp);
   const registerWithPin = useAuthStore((s) => s.registerWithPin);
   const isLoading = useAuthStore((s) => s.isLoading);
   const storeError = useAuthStore((s) => s.error);
 
-  // 0 = splash · 1 = name · 2 = phone + channel · 3 = OTP · 4 = choose PIN
+  // 0 = splash · 1 = name · 2 = phone · 3 = choose PIN
   const [step, setStep] = useState(0);
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
-  const [channel, setChannel] = useState<OtpChannel>('whatsapp');
-  const [otp, setOtp] = useState('');
   const [pin, setPin] = useState('');
   const [pinConfirm, setPinConfirm] = useState('');
   const [err, setErr] = useState('');
@@ -45,42 +38,11 @@ export default function RegisterPage() {
     setStep(2);
   };
 
-  const resend = useCountdown(RESEND_COOLDOWN_S);
-
-  const sendCode = async () => {
+  const confirmPhone = () => {
     setErr('');
     if (!phoneOk) return setErr('Numéro sénégalais invalide (77, 78, 76, 70 ou 75…).');
-    await requestOtp(phone, channel);
-    resend.restart();
     setStep(3);
   };
-
-  const resendCode = async () => {
-    if (resend.seconds > 0) return;
-    setErr('');
-    await requestOtp(phone, channel);
-    resend.restart();
-  };
-
-  const checkCode = async (code: string = otp) => {
-    setErr('');
-    if (code.length !== 6) return setErr('Entrez les 6 chiffres du code.');
-    const ok = await verifyOtp(phone, code);
-    if (!ok) return setErr('Code incorrect. Réessayez.');
-    setStep(4);
-  };
-
-  // Auto-read the code straight off the SMS (Chrome/Android) so there's
-  // nothing to copy-paste — falls back silently on unsupported browsers.
-  const handleAutoCode = useCallback(
-    (code: string) => {
-      setOtp(code);
-      checkCode(code);
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [phone]
-  );
-  useWebOtpAutofill(step === 3, handleAutoCode);
 
   const finish = async () => {
     setErr('');
@@ -150,7 +112,7 @@ export default function RegisterPage() {
 
       {/* Progress */}
       <div className="mx-auto mb-5 flex gap-2">
-        {[1, 2, 3, 4].map((i) => (
+        {[1, 2, 3].map((i) => (
           <div
             key={i}
             className={`h-1.5 rounded-full transition-all duration-500 ${i === step ? 'w-8 bg-white' : i < step ? 'w-4 bg-white/60' : 'w-4 bg-white/25'}`}
@@ -198,7 +160,7 @@ export default function RegisterPage() {
             </motion.div>
           )}
 
-          {/* Step 2 — phone + channel */}
+          {/* Step 2 — phone */}
           {step === 2 && (
             <motion.div
               key="s2"
@@ -215,7 +177,9 @@ export default function RegisterPage() {
               <h2 className="font-display text-xl font-extrabold text-foreground">
                 Quel est ton numéro ?
               </h2>
-              <p className="mt-1 text-sm text-secondary">On t'envoie un code pour le vérifier.</p>
+              <p className="mt-1 text-sm text-secondary">
+                Pour te retrouver et te contacter si besoin.
+              </p>
 
               <label className="mt-5 block text-sm font-medium text-foreground">Téléphone</label>
               <div className="mt-1.5 flex items-center gap-2 rounded-2xl border border-token bg-surface-2 px-4">
@@ -230,99 +194,22 @@ export default function RegisterPage() {
                 />
               </div>
 
-              <p className="mt-4 text-sm font-medium text-foreground">Recevoir le code par</p>
-              <div className="mt-1.5 grid grid-cols-2 gap-3">
-                <button
-                  type="button"
-                  onClick={() => setChannel('whatsapp')}
-                  className={`flex items-center justify-center gap-2 rounded-2xl border-2 py-3 text-sm font-bold transition-colors ${channel === 'whatsapp' ? 'border-success-500 bg-success-50 text-success-700' : 'border-token text-secondary'}`}
-                >
-                  <i className="ti ti-brand-whatsapp text-lg" aria-hidden="true" /> WhatsApp
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setChannel('sms')}
-                  className={`flex items-center justify-center gap-2 rounded-2xl border-2 py-3 text-sm font-bold transition-colors ${channel === 'sms' ? 'border-primary-500 bg-primary-50 text-primary-700' : 'border-token text-secondary'}`}
-                >
-                  <i className="ti ti-message text-lg" aria-hidden="true" /> SMS
-                </button>
-              </div>
-
               {err && (
                 <p className="mt-4 rounded-xl bg-red-50 px-3 py-2 text-sm font-medium text-danger">
                   {err}
                 </p>
               )}
 
-              <button
-                onClick={sendCode}
-                disabled={isLoading}
-                className="btn-primary mt-5 w-full disabled:opacity-40"
-              >
-                {isLoading ? 'Envoi du code…' : 'Envoyer le code'}
+              <button onClick={confirmPhone} className="btn-primary mt-5 w-full">
+                Continuer
               </button>
             </motion.div>
           )}
 
-          {/* Step 3 — OTP */}
+          {/* Step 3 — choose PIN */}
           {step === 3 && (
             <motion.div
               key="s3"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-            >
-              <button
-                onClick={() => setStep(2)}
-                className="mb-3 flex items-center gap-1 text-sm font-semibold text-primary-600"
-              >
-                <i className="ti ti-chevron-left" aria-hidden="true" /> Modifier le numéro
-              </button>
-              <h2 className="font-display text-xl font-extrabold text-foreground">
-                Vérifie ton numéro
-              </h2>
-              <p className="mt-1 text-sm text-secondary">
-                Code envoyé par {channel === 'whatsapp' ? 'WhatsApp' : 'SMS'} au{' '}
-                <span className="font-semibold text-foreground">+221 {formatPhone(phone)}</span>
-              </p>
-
-              <div className="mt-6">
-                <CodeInput
-                  length={6}
-                  value={otp}
-                  onChange={setOtp}
-                  autoFocus
-                  onComplete={(code) => checkCode(code)}
-                />
-              </div>
-
-              {err && (
-                <p className="mt-4 rounded-xl bg-red-50 px-3 py-2 text-sm font-medium text-danger">
-                  {err}
-                </p>
-              )}
-
-              <button
-                onClick={() => checkCode()}
-                disabled={isLoading}
-                className="btn-primary mt-6 w-full disabled:opacity-40"
-              >
-                {isLoading ? 'Vérification…' : 'Valider'}
-              </button>
-              <button
-                onClick={resendCode}
-                disabled={resend.seconds > 0}
-                className="mt-3 w-full py-2 text-center text-sm font-medium text-secondary disabled:opacity-50"
-              >
-                {resend.seconds > 0 ? `Renvoyer le code (${resend.seconds}s)` : 'Renvoyer le code'}
-              </button>
-            </motion.div>
-          )}
-
-          {/* Step 4 — choose PIN */}
-          {step === 4 && (
-            <motion.div
-              key="s4"
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
