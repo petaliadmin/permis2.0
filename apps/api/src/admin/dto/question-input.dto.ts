@@ -50,7 +50,9 @@ export class QuestionInputDto {
   @MaxLength(2000)
   explication: string;
 
-  @ApiPropertyOptional({ example: '/images/quiz/diappo1_q1.png' })
+  // Quiz questions: '/icons/panneaux/{code}.svg' (see apps/web/public/icons/panneaux)
+  // Diapo exam questions: '/data/diapos/{serie}_q{n}.webp' (see apps/web/public/data/diapos)
+  @ApiPropertyOptional({ example: '/icons/panneaux/A3a.svg' })
   @IsOptional()
   @IsString()
   image?: string;

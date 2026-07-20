@@ -50,22 +50,30 @@ export class AuthService {
       },
     });
 
-    const message = `PERMIS2.0 — Ton code de vérification : ${rawCode}. Valide 10 minutes.`;
+    // Last line binds the message to our origin so browsers supporting the
+    // WebOTP API (Chrome/Android) can read the code straight off the SMS and
+    // auto-fill it — no manual copy-paste needed. See CodeInput's autofill hook.
+    const otpDomain = this.getOtpDomain();
+    const message = `PERMIS2.0 — Ton code de vérification : ${rawCode}. Valide 10 minutes.\n@${otpDomain} #${rawCode}`;
     await this.smsService.send(phone, message, channel);
 
-    // Return code in non-production so the frontend can show it in dev mode
-    const devCode = process.env.NODE_ENV !== 'production' ? rawCode : undefined;
-    return { sent: true, ...(devCode ? { devCode } : {}) };
+    return { sent: true };
   }
 
   async verifyOtp(rawPhone: string, code: string): Promise<boolean> {
     const phone = this.normalizePhone(rawPhone);
+
+    // TEMPORARY: SMS/WhatsApp delivery is blocked pending Brevo Sender ID
+    // approval for Senegal, so outside production any code is accepted as
+    // long as a (still-valid, unused) OTP was actually requested for this
+    // phone. Remove this bypass once Brevo delivery is confirmed working.
+    const bypass = process.env.NODE_ENV !== 'production';
     const codeHash = crypto.createHash('sha256').update(code.trim()).digest('hex');
 
     const token = await this.prisma.otpToken.findFirst({
       where: {
         phone,
-        codeHash,
+        ...(bypass ? {} : { codeHash }),
         usedAt: null,
         expiresAt: { gt: new Date() },
       },
@@ -323,6 +331,15 @@ export class AuthService {
   /** Strip all non-digits and remove leading 221 country prefix. */
   private normalizePhone(raw: string): string {
     return raw.replace(/\D/g, '').replace(/^221/, '');
+  }
+
+  /** Hostname (no scheme/port) the WebOTP-binding line in OTP SMS should reference. */
+  private getOtpDomain(): string {
+    try {
+      return new URL(process.env.FRONTEND_URL ?? 'https://permis2.com').hostname;
+    } catch {
+      return 'permis2.com';
+    }
   }
 
   private generateAccessToken(user: any) {

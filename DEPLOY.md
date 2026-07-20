@@ -145,9 +145,11 @@ cp scripts/aws/.env.aws.prod.example .env.aws.prod
 - `FRONTEND_URL`, `WEB_URL`, `NEXT_PUBLIC_API_URL` → remplace `CHANGEME` par
   l'IP élastique de l'étape 2 (`terraform output public_ip`), par exemple
   `http://51.44.12.9:3000` / `:3001`.
-- `TERMII_API_KEY`, `BICTORYS_API_KEY`, `BICTORYS_SECRET_KEY`, `VAPID_*` →
+- `BREVO_API_KEY`, `BICTORYS_API_KEY`, `BICTORYS_SECRET_KEY`, `VAPID_*` →
   tes clés réelles si tu utilises ces services en prod ; laisse vide sinon
-  (OTP renvoyé en clair / paiement en mode sandbox).
+  (OTP seulement loggé côté serveur / paiement en mode sandbox). WhatsApp
+  nécessite en plus `BREVO_WHATSAPP_TEMPLATE_ID` (template pré-approuvé sur
+  Brevo) — sans ça, "whatsapp" part en SMS classique.
 
 Puis pousse tout vers SSM Parameter Store :
 ```bash

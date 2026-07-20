@@ -145,15 +145,21 @@ export default function ErrorReviewPage() {
               {/* Question */}
               <div className="rounded-2xl border border-token bg-surface-1 p-4 shadow-soft">
                 {q.image && (
-                  <div className="mb-3 flex justify-center">
+                  <div className="mb-3 flex h-48 items-center justify-center overflow-hidden rounded-2xl border border-token bg-surface-1 p-4">
                     <Image
                       src={q.image}
                       alt=""
-                      width={120}
-                      height={120}
+                      width={192}
+                      height={192}
                       unoptimized
-                      className="h-28 w-28 object-contain"
+                      className="h-full w-full object-contain"
                     />
+                  </div>
+                )}
+                {!q.image && q.signalisation_visible && (
+                  <div className="mb-3 flex items-center gap-3 rounded-2xl border border-token bg-surface-2 p-3">
+                    <i className="ti ti-photo-question text-2xl text-violet-500" aria-hidden="true" />
+                    <p className="text-sm font-medium text-secondary">{q.signalisation_visible}</p>
                   </div>
                 )}
                 <p className="text-sm font-semibold leading-relaxed text-foreground">{q.enonce}</p>

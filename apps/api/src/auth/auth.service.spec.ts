@@ -57,12 +57,13 @@ describe('AuthService', () => {
       const [phone, message] = smsService.send.mock.calls[0];
       expect(phone).toBe('771234567');
       expect(message).toMatch(/\d{6}/);
+      // WebOTP binding line, so supporting browsers can auto-read the SMS.
+      expect(message).toMatch(/\n@[^\s]+ #\d{6}$/);
     });
 
-    it('returns the dev code outside production only', async () => {
+    it('never returns the raw code in the response', async () => {
       const result = await service.requestOtp('771234567', 'sms');
-      expect(result.sent).toBe(true);
-      expect(result.devCode).toMatch(/^\d{6}$/);
+      expect(result).toEqual({ sent: true });
     });
   });
 

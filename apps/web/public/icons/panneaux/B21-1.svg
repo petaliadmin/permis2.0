@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Generator: Adobe Illustrator 15.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!-- Generator: Adobe Illustrator 13.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 14948)  -->
 
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
@@ -10,13 +10,13 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    version="1.1"
-   id="Ebene_1"
+   id="Layer_1"
    x="0px"
    y="0px"
    width="577.13751"
    height="577.13751"
-   viewBox="0 0 577.13751 577.13751"
-   enable-background="new 0 0 576 576"
+   viewBox="-0.943 -0.943 577.13751 577.13751"
+   enable-background="new -0.943 -0.943 576 576"
    xml:space="preserve"
    inkscape:version="0.48.2 r9819"
    sodipodi:docname="AJAX1.svg"><metadata
@@ -40,38 +40,38 @@
    fit-margin-left="0.1"
    fit-margin-right="0.1"
    fit-margin-bottom="0.1"
-   inkscape:zoom="0.81944444"
-   inkscape:cx="296.8436"
-   inkscape:cy="300.87421"
+   inkscape:zoom="0.40972222"
+   inkscape:cx="-92.182513"
+   inkscape:cy="288.57413"
    inkscape:window-x="-8"
    inkscape:window-y="-8"
    inkscape:window-maximized="1"
-   inkscape:current-layer="Ebene_1" />
+   inkscape:current-layer="Layer_1" />
 <circle
-   cx="287.06699"
-   cy="287.06699"
-   r="286.979"
+   cx="287.05701"
+   cy="287.05701"
+   r="286.96899"
    id="circle3"
    style="fill:#ffffff;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-   sodipodi:cx="287.06699"
-   sodipodi:cy="287.06699"
-   sodipodi:rx="286.979"
-   sodipodi:ry="286.979"
-   transform="translate(1.50625,1.50625)" />
+   sodipodi:cx="287.05701"
+   sodipodi:cy="287.05701"
+   sodipodi:rx="286.96899"
+   sodipodi:ry="286.96899"
+   transform="translate(0.56325,0.56325)" />
 <circle
-   cx="287.06699"
-   cy="287.06699"
-   r="261.67499"
+   cx="287.05701"
+   cy="287.05701"
+   r="261.66599"
    id="circle5"
-   style="fill:#003399;fill-opacity:1;stroke:none"
-   sodipodi:cx="287.06699"
-   sodipodi:cy="287.06699"
-   sodipodi:rx="261.67499"
-   sodipodi:ry="261.67499"
-   transform="translate(1.50625,1.50625)" />
+   style="fill:#0055A4;fill-opacity:1;stroke:none"
+   sodipodi:cx="287.05701"
+   sodipodi:cy="287.05701"
+   sodipodi:rx="261.66599"
+   sodipodi:ry="261.66599"
+   transform="translate(0.56325,0.56325)" />
 <polygon
-   points="388.44,342.545 387.876,204.309 432.963,249.396 434.768,434.768 249.396,432.963 204.309,387.876 342.545,388.439 129.242,175.136 145.126,159.251 159.251,145.126 175.136,129.242 "
+   points="96.317,277.069 96.317,254.606 397.965,254.606 299.821,157.26 363.582,157.26 495.93,287.057 363.582,416.855 299.821,416.855 397.965,319.508 96.317,319.508 96.317,297.045 "
    id="polygon7"
    style="fill:#ffffff;stroke:none"
-   transform="translate(1.50625,1.50625)" />
+   transform="translate(0.56325,0.56325)" />
 </svg>

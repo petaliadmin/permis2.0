@@ -1,4 +1,5 @@
 import { NestFactory } from '@nestjs/core';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import { ValidationPipe } from '@nestjs/common';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
@@ -9,7 +10,15 @@ import { LoggingInterceptor } from './interceptors/logging.interceptor';
 
 async function bootstrap() {
   // rawBody is required to verify payment-webhook HMAC signatures (Bictorys).
-  const app = await NestFactory.create(AppModule, { rawBody: true });
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, { rawBody: true });
+
+  // Trust exactly one hop (Caddy, on the same Docker network — see
+  // Caddyfile, which overwrites X-Forwarded-For with the verified remote
+  // address so this can't be spoofed by a client-supplied header). Without
+  // this, Express's req.ip is always Caddy's container IP for every request,
+  // which collapses ThrottlerGuard's per-IP rate limit into one global bucket
+  // shared by every real user.
+  app.set('trust proxy', 1);
 
   // Security headers
   app.use(helmet());

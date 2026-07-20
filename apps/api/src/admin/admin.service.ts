@@ -1,15 +1,19 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { ShopService } from '../shop/shop.service';
 import { QuestionInputDto } from './dto/question-input.dto';
 import { SeriesInputDto } from './dto/series-input.dto';
 import { LessonInputDto } from './dto/lesson-input.dto';
 
-/** Estimated Termii cost per SMS/WhatsApp message, in XOF (override via env). */
+/** Estimated Brevo cost per SMS/WhatsApp message, in XOF (override via env). */
 const SMS_COST_XOF = Number(process.env.SMS_COST_XOF || 15);
 
 @Injectable()
 export class AdminService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private shopService: ShopService
+  ) {}
 
   // ─── Users ───────────────────────────────────────────────────────────────────
 
@@ -81,6 +85,36 @@ export class AdminService {
       where: { userId, key: { in: product.grants } },
     });
     return { revoked: removed.count };
+  }
+
+  // ─── Purchase requests ───────────────────────────────────────────────────────
+
+  /**
+   * All purchases, most recent first, optionally filtered by status. Used by
+   * the admin "Demandes" view to surface manual (WhatsApp) requests awaiting
+   * confirmation without having to open each user one by one.
+   */
+  async listPurchases(status?: string) {
+    return this.prisma.purchase.findMany({
+      where: status ? { status } : {},
+      orderBy: { createdAt: 'desc' },
+      include: {
+        user: { select: { id: true, name: true, phone: true, email: true } },
+        product: { select: { title: true, sku: true } },
+      },
+    });
+  }
+
+  /**
+   * Confirms a specific PENDING purchase (as opposed to grantSubscription,
+   * which creates a brand new PAID one). Delegates to ShopService.markPaid so
+   * the entitlement-granting logic — including subscription-extension on
+   * renewal — stays in one place and matches the webhook/dev-confirm paths.
+   */
+  async confirmPurchase(id: string) {
+    const purchase = await this.prisma.purchase.findUnique({ where: { id } });
+    if (!purchase) throw new NotFoundException('Purchase not found');
+    return this.shopService.markPaid(id);
   }
 
   /** Full profile for the admin drawer: subscription, purchases, activity. */

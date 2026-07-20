@@ -7,9 +7,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { AppShell } from '@/components/AppShell';
 import { useAuthStore } from '@/store/authStore';
 import { usePurchasesStore } from '@/store/purchasesStore';
+import { useSettingsStore } from '@/store/settingsStore';
 import { loadData } from '@/lib/dataSource';
+import { playSuccessSound, playFailureSound } from '@/lib/feedbackSound';
 
-const FREE_UP_TO = 5;
+const FREE_UP_TO = 2;
 
 interface DiapoProposition {
   lettre: string;
@@ -45,6 +47,7 @@ export default function DiapoExamPage({ params }: { params: Promise<{ id: string
   const hasKey = usePurchasesStore((s) => s.hasKey);
   const entitlementsReady = usePurchasesStore((s) => s.entitlementsReady);
   const fetchEntitlements = usePurchasesStore((s) => s.fetchEntitlements);
+  const soundEnabled = useSettingsStore((s) => s.soundEnabled);
 
   const [exam, setExam] = useState<DiapoExam | null>(null);
   const [loading, setLoading] = useState(true);
@@ -119,7 +122,13 @@ export default function DiapoExamPage({ params }: { params: Promise<{ id: string
       return { ...prev, [q.q]: next };
     });
   };
-  const confirm = () => setConfirmed((prev) => ({ ...prev, [q.q]: true }));
+  const confirm = () => {
+    setConfirmed((prev) => ({ ...prev, [q.q]: true }));
+    if (soundEnabled) {
+      if (answersMatch(selected, q.answer)) playSuccessSound();
+      else playFailureSound();
+    }
+  };
   const goNext = () => {
     if (currentQ < total - 1) setCurrentQ((n) => n + 1);
     else setFinished(true);
@@ -366,11 +375,28 @@ export default function DiapoExamPage({ params }: { params: Promise<{ id: string
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            className={`rounded-2xl px-4 py-3 text-sm font-semibold ${answersMatch(selected, q.answer) ? 'bg-success-50 text-success-700' : 'bg-red-50 text-danger-600'}`}
+            className={`flex items-center gap-3 rounded-2xl px-4 py-3 ${answersMatch(selected, q.answer) ? 'bg-success-50' : 'bg-red-50'}`}
           >
-            {answersMatch(selected, q.answer)
-              ? `✓ Correct — réponse : ${q.answer.join(', ')}`
-              : `✗ Bonne réponse : ${q.answer.join(', ')}`}
+            <div
+              className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${answersMatch(selected, q.answer) ? 'bg-success-500' : 'bg-danger-500'}`}
+            >
+              <i
+                className={`ti ${answersMatch(selected, q.answer) ? 'ti-check' : 'ti-x'} text-base text-white`}
+                aria-hidden="true"
+              />
+            </div>
+            <div className="flex-1">
+              <p
+                className={`text-sm font-extrabold ${answersMatch(selected, q.answer) ? 'text-success-700' : 'text-danger-700'}`}
+              >
+                {answersMatch(selected, q.answer) ? 'Bonne réponse !' : 'Pas tout à fait…'}
+              </p>
+              {!answersMatch(selected, q.answer) && (
+                <p className="mt-0.5 text-xs font-medium text-danger-600">
+                  Bonne réponse : {q.answer.join(', ')}
+                </p>
+              )}
+            </div>
           </motion.div>
         )}
       </div>
@@ -386,9 +412,6 @@ export default function DiapoExamPage({ params }: { params: Promise<{ id: string
               <i className="ti ti-chevron-left text-lg" aria-hidden="true" />
             </button>
           )}
-          <button className="btn-ghost shrink-0">
-            <i className="ti ti-flag" aria-hidden="true" /> Signaler
-          </button>
           {!isConfirmed ? (
             <button
               onClick={confirm}

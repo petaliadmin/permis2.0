@@ -1,16 +1,14 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { AppShell, PageHeader } from '@/components/AppShell';
 import { Sheet, Skeleton } from '@permis2.0/ui';
 import {
   adminFetch,
-  useAdminGuard,
-  AccessDenied,
   Toast,
   useToast,
   linesToArray,
   arrayToLines,
+  AdminPageHeader,
 } from '../adminShared';
 
 const PAGE_SIZE = 8;
@@ -57,7 +55,6 @@ interface FormState {
 }
 
 export default function AdminQuestionsPage() {
-  const allowed = useAdminGuard();
   const [toast, flash] = useToast();
 
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -95,19 +92,18 @@ export default function AdminQuestionsPage() {
   );
 
   useEffect(() => {
-    if (!allowed) return;
     adminFetch<SerieOpt[]>('/admin/series')
       .then((s) => setSeries(s))
       .catch(() => {});
     adminFetch<{ data: CategoryOpt[] }>('/categories?take=100')
       .then((d) => setCategories(d.data ?? []))
       .catch(() => {});
-  }, [allowed]);
+  }, []);
 
   useEffect(() => {
-    if (allowed) load(page, query, serieFilter);
+    load(page, query, serieFilter);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [allowed, page, serieFilter]);
+  }, [page, serieFilter]);
 
   const searchNow = () => {
     setPage(0);
@@ -186,31 +182,25 @@ export default function AdminQuestionsPage() {
   const formChoices = form ? linesToArray(form.choicesText) : [];
 
   return (
-    <AppShell>
-      <PageHeader
+    <>
+      <AdminPageHeader
         title="Questions"
         subtitle={`${total} questions de quiz`}
-        accent="violet"
-        back="/admin"
-        compact
         actions={
-          <button
-            onClick={() => setForm(blank())}
-            className="flex h-9 items-center gap-1 rounded-full bg-white/15 px-3 text-xs font-bold"
-          >
-            <i className="ti ti-plus" aria-hidden="true" /> Nouvelle
+          <button onClick={() => setForm(blank())} className="btn-violet px-5 py-2.5 text-sm">
+            <i className="ti ti-plus" aria-hidden="true" /> Nouvelle question
           </button>
         }
       >
-        <div className="flex gap-2">
-          <div className="flex flex-1 items-center gap-2 rounded-2xl bg-white/15 px-3 py-2">
-            <i className="ti ti-search text-sm text-white/80" aria-hidden="true" />
+        <div className="flex gap-2.5">
+          <div className="flex flex-1 max-w-md items-center gap-2 rounded-xl border border-token bg-surface-1 px-3.5 py-2.5 shadow-soft">
+            <i className="ti ti-search text-sm text-muted" aria-hidden="true" />
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && searchNow()}
-              placeholder="Rechercher…"
-              className="w-full bg-transparent text-sm text-white placeholder-white/60 focus:outline-none"
+              placeholder="Rechercher une question…"
+              className="w-full bg-transparent text-sm text-foreground placeholder-muted focus:outline-none"
             />
           </div>
           <select
@@ -219,7 +209,7 @@ export default function AdminQuestionsPage() {
               setSerieFilter(e.target.value);
               setPage(0);
             }}
-            className="rounded-2xl bg-white/15 px-3 py-2 text-xs font-bold text-white focus:outline-none [&>option]:text-slate-800"
+            className="rounded-xl border border-token bg-surface-1 px-3.5 py-2.5 text-sm font-semibold text-foreground shadow-soft focus:outline-none"
           >
             <option value="">Toutes séries</option>
             {series.map((s) => (
@@ -229,80 +219,84 @@ export default function AdminQuestionsPage() {
             ))}
           </select>
         </div>
-      </PageHeader>
+      </AdminPageHeader>
 
-      <div className="px-4 pb-8 pt-5">
-        {allowed === false && <AccessDenied />}
-        {allowed && loading && <Skeleton className="h-60 w-full rounded-2xl" />}
-        {allowed && !loading && (
-          <>
-            <div className="space-y-2.5">
-              {questions.map((q) => (
-                <div
-                  key={q.id}
-                  className="rounded-2xl border border-token bg-surface-1 p-3.5 shadow-soft"
-                >
-                  <div className="flex items-start gap-2">
-                    <span className="mt-0.5 shrink-0 rounded-lg bg-violet-50 px-2 py-1 font-mono text-[10px] font-black text-violet-700">
-                      {q.series.code}·{q.numero}
-                    </span>
-                    <p className="min-w-0 flex-1 text-sm font-semibold leading-snug text-foreground">
-                      {q.enonce}
-                    </p>
-                  </div>
-                  <p className="mt-1.5 truncate text-xs text-secondary">
-                    ✓ {q.reponses_correctes.join(', ')} · {q.category.label}
+      {loading && <Skeleton className="h-60 w-full rounded-2xl" />}
+      {!loading && (
+        <>
+          <div className="grid grid-cols-1 gap-3.5 lg:grid-cols-2 xl:grid-cols-3">
+            {questions.map((q) => (
+              <div
+                key={q.id}
+                className="flex flex-col rounded-2xl border border-token bg-surface-1 p-4 shadow-soft transition-shadow hover:shadow-card"
+              >
+                <div className="flex items-start gap-2">
+                  <span className="mt-0.5 shrink-0 rounded-lg bg-violet-50 px-2 py-1 font-mono text-[10px] font-black text-violet-700 dark:bg-violet-900/30 dark:text-violet-300">
+                    {q.series.code}·{q.numero}
+                  </span>
+                  <p className="min-w-0 flex-1 text-sm font-semibold leading-snug text-foreground">
+                    {q.enonce}
                   </p>
-                  <div className="mt-2.5 flex gap-2">
-                    <button
-                      onClick={() => setForm(toForm(q))}
-                      className="flex-1 rounded-xl bg-surface-2 py-2 text-xs font-bold text-secondary hover:bg-violet-50 hover:text-violet-700"
-                    >
-                      Modifier
-                    </button>
-                    <button
-                      onClick={() => setConfirmDelete(q)}
-                      className="flex-1 rounded-xl bg-red-50 py-2 text-xs font-bold text-red-600 hover:bg-red-100"
-                    >
-                      Supprimer
-                    </button>
-                  </div>
                 </div>
-              ))}
-              {questions.length === 0 && (
-                <p className="mt-8 text-center text-sm text-muted">Aucune question trouvée.</p>
-              )}
-            </div>
-
-            {pages > 1 && (
-              <div className="mt-4 flex items-center justify-center gap-4">
-                <button
-                  onClick={() => setPage((p) => Math.max(0, p - 1))}
-                  disabled={page === 0}
-                  className="flex h-9 w-9 items-center justify-center rounded-xl border border-token bg-surface-1 text-secondary disabled:opacity-30"
-                  aria-label="Page précédente"
-                >
-                  <i className="ti ti-chevron-left" aria-hidden="true" />
-                </button>
-                <span className="text-xs font-bold text-secondary">
-                  {page + 1} / {pages}
-                </span>
-                <button
-                  onClick={() => setPage((p) => Math.min(pages - 1, p + 1))}
-                  disabled={page >= pages - 1}
-                  className="flex h-9 w-9 items-center justify-center rounded-xl border border-token bg-surface-1 text-secondary disabled:opacity-30"
-                  aria-label="Page suivante"
-                >
-                  <i className="ti ti-chevron-right" aria-hidden="true" />
-                </button>
+                <p className="mt-1.5 truncate text-xs text-secondary">
+                  ✓ {q.reponses_correctes.join(', ')} · {q.category.label}
+                </p>
+                <div className="mt-3 flex gap-2 pt-1">
+                  <button
+                    onClick={() => setForm(toForm(q))}
+                    className="flex-1 rounded-xl bg-surface-2 py-2 text-xs font-bold text-secondary hover:bg-violet-50 hover:text-violet-700"
+                  >
+                    Modifier
+                  </button>
+                  <button
+                    onClick={() => setConfirmDelete(q)}
+                    className="flex-1 rounded-xl bg-red-50 py-2 text-xs font-bold text-red-600 hover:bg-red-100"
+                  >
+                    Supprimer
+                  </button>
+                </div>
               </div>
+            ))}
+            {questions.length === 0 && (
+              <p className="col-span-full mt-8 text-center text-sm text-muted">
+                Aucune question trouvée.
+              </p>
             )}
-          </>
-        )}
-      </div>
+          </div>
+
+          {pages > 1 && (
+            <div className="mt-5 flex items-center justify-center gap-4">
+              <button
+                onClick={() => setPage((p) => Math.max(0, p - 1))}
+                disabled={page === 0}
+                className="flex h-9 w-9 items-center justify-center rounded-xl border border-token bg-surface-1 text-secondary disabled:opacity-30"
+                aria-label="Page précédente"
+              >
+                <i className="ti ti-chevron-left" aria-hidden="true" />
+              </button>
+              <span className="text-xs font-bold text-secondary">
+                {page + 1} / {pages}
+              </span>
+              <button
+                onClick={() => setPage((p) => Math.min(pages - 1, p + 1))}
+                disabled={page >= pages - 1}
+                className="flex h-9 w-9 items-center justify-center rounded-xl border border-token bg-surface-1 text-secondary disabled:opacity-30"
+                aria-label="Page suivante"
+              >
+                <i className="ti ti-chevron-right" aria-hidden="true" />
+              </button>
+            </div>
+          )}
+        </>
+      )}
 
       {/* ── Create / edit sheet ── */}
-      <Sheet open={!!form} onClose={() => setForm(null)} ariaLabel="Éditer la question">
+      <Sheet
+        open={!!form}
+        onClose={() => setForm(null)}
+        ariaLabel="Éditer la question"
+        className="mx-auto max-w-2xl"
+      >
         {form && (
           <div className="max-h-[75vh] overflow-y-auto pb-4">
             <h3 className="font-display text-lg font-bold text-foreground">
@@ -433,11 +427,11 @@ export default function AdminQuestionsPage() {
       {/* ── Delete confirmation ── */}
       {confirmDelete && (
         <div
-          className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 px-4 pb-8"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4"
           onClick={() => setConfirmDelete(null)}
         >
           <div
-            className="w-full max-w-sm rounded-3xl bg-surface-1 p-6 shadow-xl"
+            className="w-full max-w-sm rounded-3xl bg-surface-1 p-6 shadow-card-lg"
             onClick={(e) => e.stopPropagation()}
           >
             <h3 className="font-display text-lg font-bold text-foreground">
@@ -460,6 +454,6 @@ export default function AdminQuestionsPage() {
       )}
 
       <Toast message={toast} />
-    </AppShell>
+    </>
   );
 }

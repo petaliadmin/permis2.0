@@ -36,10 +36,23 @@ export function CodeInput({
     if (joined.length === length && !joined.includes('')) onComplete?.(joined);
   };
 
+  /** Fill every box at once — used for paste and for autofill (iOS QuickType
+   * inserts the whole code into whichever single box is focused). */
+  const fillAll = (digits: string) => {
+    onChange(digits);
+    const focusIdx = Math.min(digits.length, length - 1);
+    refs.current[focusIdx]?.focus();
+    if (digits.length === length) onComplete?.(digits);
+  };
+
   const handleChange = (i: number, raw: string) => {
-    const digit = raw.replace(/\D/g, '').slice(-1);
-    if (!digit) return;
-    setChar(i, digit);
+    const digits = raw.replace(/\D/g, '');
+    if (!digits) return;
+    if (digits.length > 1) {
+      fillAll(digits.slice(0, length));
+      return;
+    }
+    setChar(i, digits);
     if (i < length - 1) refs.current[i + 1]?.focus();
   };
 
@@ -58,11 +71,7 @@ export function CodeInput({
   const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
     e.preventDefault();
     const pasted = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, length);
-    if (!pasted) return;
-    onChange(pasted);
-    const focusIdx = Math.min(pasted.length, length - 1);
-    refs.current[focusIdx]?.focus();
-    if (pasted.length === length) onComplete?.(pasted);
+    if (pasted) fillAll(pasted);
   };
 
   return (

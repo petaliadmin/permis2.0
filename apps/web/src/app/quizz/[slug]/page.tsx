@@ -29,7 +29,12 @@ function readProgress(): Record<string, SeriesProgress> {
     return Object.fromEntries(
       Object.entries(raw).map(([k, v]) => {
         if (v === true) return [k, { done: true, pct: 100, stars: 3 }];
-        if (v && typeof v === 'object' && 'done' in v) return [k, v as SeriesProgress];
+        if (v && typeof v === 'object' && 'pct' in v) {
+          const pct = (v as { pct: number }).pct;
+          // "Complété" only ever reflects a perfect run — derive it from pct rather
+          // than trusting a stored `done` flag, so stale entries self-heal on read.
+          return [k, { ...(v as SeriesProgress), done: pct >= 100 }];
+        }
         return [k, { done: false, pct: 0, stars: 0 }];
       })
     );
@@ -130,6 +135,11 @@ export default function CategoryPage() {
             const prog = progress[key] ?? { done: false, pct: 0, stars: 0 };
             const isMaitrise = quiz.questionsPerSession === 0;
             const scoreColor = prog.pct >= 80 ? '#16A34A' : prog.pct >= 60 ? '#F59E0B' : '#EF4444';
+            const status: 'done' | 'in-progress' | 'new' = prog.done
+              ? 'done'
+              : prog.pct > 0
+                ? 'in-progress'
+                : 'new';
             const isFree = Number(quiz.id) <= FREE_SERIES_UP_TO;
             const unlocked = isFree || isPremium;
 
@@ -165,9 +175,16 @@ export default function CategoryPage() {
                           Maîtrise
                         </span>
                       )}
-                      {prog.done && (
-                        <span className="rounded-full bg-success-50 px-2 py-0.5 text-[10px] font-bold text-success-600">
-                          ✓ Complété
+                      {status === 'done' && (
+                        <span className="inline-flex items-center gap-1 rounded-full bg-success-50 px-2 py-0.5 text-[10px] font-bold text-success-600">
+                          <i className="ti ti-circle-check-filled text-xs" aria-hidden="true" />
+                          Complété
+                        </span>
+                      )}
+                      {status === 'in-progress' && (
+                        <span className="inline-flex items-center gap-1 rounded-full bg-violet-50 px-2 py-0.5 text-[10px] font-bold text-violet-600 dark:bg-violet-900/30 dark:text-violet-300">
+                          <i className="ti ti-progress text-xs" aria-hidden="true" />
+                          En cours
                         </span>
                       )}
                       {!unlocked && <span className="chip chip-orange">Premium</span>}
@@ -176,7 +193,7 @@ export default function CategoryPage() {
                     <div className="mt-1.5 flex items-center gap-3">
                       <Stars count={prog.stars} />
                       <span className="text-[11px] text-muted">
-                        {prog.done
+                        {status !== 'new'
                           ? `${prog.pct}%`
                           : quiz.questionsPerSession === 0
                             ? 'Toutes les questions'
@@ -184,8 +201,8 @@ export default function CategoryPage() {
                       </span>
                     </div>
 
-                    {/* Score progress bar (only when done) */}
-                    {prog.done && (
+                    {/* Score progress bar — shown as soon as a series has been attempted */}
+                    {status !== 'new' && (
                       <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-surface-3">
                         <motion.div
                           className="h-full rounded-full"

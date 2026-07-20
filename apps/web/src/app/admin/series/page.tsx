@@ -1,9 +1,8 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { AppShell, PageHeader } from '@/components/AppShell';
 import { Sheet, Skeleton } from '@permis2.0/ui';
-import { adminFetch, useAdminGuard, AccessDenied, Toast, useToast } from '../adminShared';
+import { adminFetch, Toast, useToast, AdminPageHeader } from '../adminShared';
 
 interface Serie {
   id: string;
@@ -18,7 +17,6 @@ type FormState = { id?: string; name: string; description: string; code: string;
 const EMPTY: FormState = { name: '', description: '', code: '', isFree: false };
 
 export default function AdminSeriesPage() {
-  const allowed = useAdminGuard();
   const [toast, flash] = useToast();
   const [series, setSeries] = useState<Serie[]>([]);
   const [loading, setLoading] = useState(true);
@@ -35,8 +33,8 @@ export default function AdminSeriesPage() {
   }, []);
 
   useEffect(() => {
-    if (allowed) load();
-  }, [allowed, load]);
+    load();
+  }, [load]);
 
   const save = async () => {
     if (!form) return;
@@ -76,66 +74,62 @@ export default function AdminSeriesPage() {
   };
 
   return (
-    <AppShell>
-      <PageHeader
+    <>
+      <AdminPageHeader
         title="Séries (examens)"
         subtitle={`${series.length} séries d'entraînement`}
-        accent="orange"
-        back="/admin"
-        compact
         actions={
-          <button
-            onClick={() => setForm(EMPTY)}
-            className="flex h-9 items-center gap-1 rounded-full bg-white/15 px-3 text-xs font-bold"
-          >
-            <i className="ti ti-plus" aria-hidden="true" /> Nouvelle
+          <button onClick={() => setForm(EMPTY)} className="btn-orange px-5 py-2.5 text-sm">
+            <i className="ti ti-plus" aria-hidden="true" /> Nouvelle série
           </button>
         }
       />
 
-      <div className="px-4 pb-8 pt-5">
-        {allowed === false && <AccessDenied />}
-        {allowed && loading && <Skeleton className="h-40 w-full rounded-2xl" />}
-        {allowed && !loading && (
-          <div className="space-y-2.5">
-            {series.map((s) => (
-              <div
-                key={s.id}
-                className="rounded-2xl border border-token bg-surface-1 p-3.5 shadow-soft"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-orange-50 font-display text-sm font-black text-orange-600">
-                    {s.code}
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-bold text-foreground">{s.name}</p>
-                    <p className="truncate text-xs text-secondary">
-                      {s._count.questions} questions · {s.isFree ? 'Gratuite' : 'Premium'}
-                    </p>
-                  </div>
+      {loading && <Skeleton className="h-40 w-full rounded-2xl" />}
+      {!loading && (
+        <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2 xl:grid-cols-3">
+          {series.map((s) => (
+            <div
+              key={s.id}
+              className="rounded-2xl border border-token bg-surface-1 p-4 shadow-soft transition-shadow hover:shadow-card"
+            >
+              <div className="flex items-center gap-3">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-orange-50 font-display text-sm font-black text-orange-600 dark:bg-orange-900/30 dark:text-orange-300">
+                  {s.code}
                 </div>
-                <div className="mt-2.5 flex gap-2">
-                  <button
-                    onClick={() => setForm({ ...s })}
-                    className="flex-1 rounded-xl bg-surface-2 py-2 text-xs font-bold text-secondary hover:bg-orange-50 hover:text-orange-600"
-                  >
-                    Modifier
-                  </button>
-                  <button
-                    onClick={() => setConfirmDelete(s)}
-                    className="flex-1 rounded-xl bg-red-50 py-2 text-xs font-bold text-red-600 hover:bg-red-100"
-                  >
-                    Supprimer
-                  </button>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-bold text-foreground">{s.name}</p>
+                  <p className="truncate text-xs text-secondary">
+                    {s._count.questions} questions · {s.isFree ? 'Gratuite' : 'Premium'}
+                  </p>
                 </div>
               </div>
-            ))}
-          </div>
-        )}
-      </div>
+              <div className="mt-3 flex gap-2">
+                <button
+                  onClick={() => setForm({ ...s })}
+                  className="flex-1 rounded-xl bg-surface-2 py-2 text-xs font-bold text-secondary hover:bg-orange-50 hover:text-orange-600"
+                >
+                  Modifier
+                </button>
+                <button
+                  onClick={() => setConfirmDelete(s)}
+                  className="flex-1 rounded-xl bg-red-50 py-2 text-xs font-bold text-red-600 hover:bg-red-100"
+                >
+                  Supprimer
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* ── Create / edit sheet ── */}
-      <Sheet open={!!form} onClose={() => setForm(null)} ariaLabel="Éditer la série">
+      <Sheet
+        open={!!form}
+        onClose={() => setForm(null)}
+        ariaLabel="Éditer la série"
+        className="mx-auto max-w-lg"
+      >
         {form && (
           <div className="pb-4">
             <h3 className="font-display text-lg font-bold text-foreground">
@@ -193,11 +187,11 @@ export default function AdminSeriesPage() {
       {/* ── Delete confirmation ── */}
       {confirmDelete && (
         <div
-          className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 px-4 pb-8"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4"
           onClick={() => setConfirmDelete(null)}
         >
           <div
-            className="w-full max-w-sm rounded-3xl bg-surface-1 p-6 shadow-xl"
+            className="w-full max-w-sm rounded-3xl bg-surface-1 p-6 shadow-card-lg"
             onClick={(e) => e.stopPropagation()}
           >
             <h3 className="font-display text-lg font-bold text-foreground">
@@ -225,6 +219,6 @@ export default function AdminSeriesPage() {
       )}
 
       <Toast message={toast} />
-    </AppShell>
+    </>
   );
 }

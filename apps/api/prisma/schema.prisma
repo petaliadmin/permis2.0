@@ -107,7 +107,7 @@ model Question {
   categoryId            String
   numero                Int
   enonce                String
-  image                 String?    // scene image path, e.g. /images/quiz/diappo1_q1.png
+  image                 String?    // e.g. /icons/panneaux/{code}.svg (quiz) or /data/diapos/{serie}_q{n}.webp (diapo exam)
   signalisation_visible String?
   reponses_correctes    String[]
   explication           String
