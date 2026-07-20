@@ -36,8 +36,8 @@ function applyClass(isDark: boolean) {
 export const useThemeStore = create<ThemeState>()(
   persist(
     (set, get) => ({
-      theme: 'light',
-      isDark: false,
+      theme: 'dark',
+      isDark: true,
 
       setTheme: (theme) => {
         const isDark = resolveDark(theme);

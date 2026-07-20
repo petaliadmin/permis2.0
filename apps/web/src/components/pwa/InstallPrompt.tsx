@@ -8,9 +8,19 @@ interface BeforeInstallPromptEvent extends Event {
   userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
 }
 
-// No "remind me later" cooldown by design: the prompt should resurface on
-// every visit until the app is actually installed — isStandalone() below is
-// the only thing that stops it for good.
+// "Plus tard" snoozes the prompt for this long before it can resurface.
+// isStandalone() below is what stops it for good, once actually installed.
+const DISMISS_COOLDOWN_MS = 24 * 60 * 60 * 1000;
+const DISMISS_STORAGE_KEY = 'permis2-install-prompt-dismissed-at';
+
+function recentlyDismissed(): boolean {
+  if (typeof window === 'undefined') return false;
+  const raw = window.localStorage.getItem(DISMISS_STORAGE_KEY);
+  if (!raw) return false;
+  const dismissedAt = Number(raw);
+  return Number.isFinite(dismissedAt) && Date.now() - dismissedAt < DISMISS_COOLDOWN_MS;
+}
+
 function isStandalone(): boolean {
   if (typeof window === 'undefined') return false;
   return (
@@ -69,7 +79,7 @@ export function InstallPrompt() {
   const [platform, setPlatform] = useState<Platform>('desktop');
 
   useEffect(() => {
-    if (isStandalone()) return;
+    if (isStandalone() || recentlyDismissed()) return;
     setPlatform(detectPlatform());
 
     // Captured opportunistically — used for a real one-tap install when the
@@ -96,6 +106,7 @@ export function InstallPrompt() {
   }, []);
 
   const dismiss = () => {
+    window.localStorage.setItem(DISMISS_STORAGE_KEY, String(Date.now()));
     setVisible(false);
     setShowManual(false);
   };

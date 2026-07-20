@@ -59,10 +59,12 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    // Light edtech theme is the default across the app.
+    // Dark theme is the default across the app — the `dark` class is applied
+    // server-side too so first paint is dark, not a light-then-dark flash.
+    // ThemeInit reconciles with a persisted 'light'/'system' choice on mount.
     <html
       lang="fr"
-      className={`${inter.variable} ${jakarta.variable} ${baloo.variable}`}
+      className={`dark ${inter.variable} ${jakarta.variable} ${baloo.variable}`}
       suppressHydrationWarning
     >
       <head>
