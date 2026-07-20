@@ -48,6 +48,7 @@ export const metadata: Metadata = {
   applicationName: APP_NAME,
   manifest: '/manifest.json',
   alternates: { canonical: '/' },
+  verification: { google: 'dmRztJ-JkfX2AjwBovRsv6s56g7GlanGMCi69guMWSs' },
   robots: {
     index: true,
     follow: true,
