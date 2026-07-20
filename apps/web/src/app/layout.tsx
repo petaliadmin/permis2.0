@@ -28,11 +28,46 @@ const baloo = Baloo_2({
   display: 'swap',
 });
 
+const SITE_URL = 'https://www.permis2.com';
+const SEO_DESCRIPTION =
+  'Préparez le code de la route et l’examen du permis de conduire au Sénégal : leçons, panneaux de signalisation, séries de quiz et examens blancs, en français et en wolof.';
+
 export const metadata: Metadata = {
-  title: { default: APP_NAME, template: `%s · ${APP_NAME}` },
-  description: APP_SLOGAN,
+  metadataBase: new URL(SITE_URL),
+  title: { default: `${APP_NAME} — Code de la route Sénégal`, template: `%s · ${APP_NAME}` },
+  description: SEO_DESCRIPTION,
+  keywords: [
+    'code de la route Sénégal',
+    'permis de conduire Sénégal',
+    'examen du permis',
+    'quiz code de la route',
+    'panneaux de signalisation',
+    'examen blanc permis',
+    'auto-école Sénégal',
+  ],
   applicationName: APP_NAME,
   manifest: '/manifest.json',
+  alternates: { canonical: '/' },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, 'max-image-preview': 'large' },
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'fr_SN',
+    url: SITE_URL,
+    siteName: APP_NAME,
+    title: `${APP_NAME} — Code de la route Sénégal`,
+    description: SEO_DESCRIPTION,
+    images: [{ url: '/images/home/header.png', width: 1448, height: 754, alt: APP_NAME }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: `${APP_NAME} — Code de la route Sénégal`,
+    description: SEO_DESCRIPTION,
+    images: ['/images/home/header.png'],
+  },
   icons: {
     icon: [
       { url: '/favicon.svg', type: 'image/svg+xml' },
@@ -46,6 +81,15 @@ export const metadata: Metadata = {
     title: APP_NAME,
   },
   formatDetection: { telephone: false },
+};
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: APP_NAME,
+  url: SITE_URL,
+  description: SEO_DESCRIPTION,
+  inLanguage: 'fr-SN',
 };
 
 export const viewport: Viewport = {
@@ -71,6 +115,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link
           rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css"
+        />
+        {/* Basic WebSite structured data — sitelinks searchbox eligibility */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
       <body className="bg-surface text-foreground font-sans antialiased">

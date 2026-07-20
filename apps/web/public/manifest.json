@@ -43,7 +43,7 @@
     {
       "name": "Entraînement",
       "short_name": "Entraînement",
-      "url": "/training",
+      "url": "/quizz",
       "icons": [
         {
           "src": "/icon-192.png",
