@@ -15,6 +15,25 @@ import { LoginPinDto } from './dto/login-pin.dto';
 import { RegisterPinDto } from './dto/register-pin.dto';
 import { ResetPinDto } from './dto/reset-pin.dto';
 
+// The web app (www.permis2.com) and the API (api.permis2.com) are different
+// hosts, so a cookie set without an explicit `domain` defaults to api.permis2.com
+// only — invisible to the Next.js middleware running on www.permis2.com, which
+// always saw it as "logged out" and bounced protected routes (/admin,
+// /notifications) back to the login page even for a valid session. Scoping to
+// the shared parent domain fixes that; `undefined` in dev keeps plain
+// localhost cookies working (a leading dot there would be rejected).
+function authCookieOptions() {
+  const isProd = process.env.NODE_ENV === 'production';
+  return {
+    httpOnly: true,
+    secure: isProd,
+    sameSite: 'strict' as const,
+    domain: isProd ? '.permis2.com' : undefined,
+    maxAge: 24 * 60 * 60 * 1000,
+    path: '/',
+  };
+}
+
 @ApiTags('Authentication')
 @Controller('auth')
 export class AuthController {
@@ -46,13 +65,7 @@ export class AuthController {
   @ApiResponse({ status: 401, description: 'Invalid credentials' })
   async loginWithPin(@Body() dto: LoginPinDto, @Res({ passthrough: true }) res: Response) {
     const result = await this.authService.loginWithPin(dto.phone, dto.pin);
-    res.cookie('access_token', result.accessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 24 * 60 * 60 * 1000,
-      path: '/',
-    });
+    res.cookie('access_token', result.accessToken, authCookieOptions());
     return result;
   }
 
@@ -63,13 +76,7 @@ export class AuthController {
   @ApiResponse({ status: 409, description: 'Phone number already in use' })
   async registerWithPin(@Body() dto: RegisterPinDto, @Res({ passthrough: true }) res: Response) {
     const result = await this.authService.registerWithPin(dto.name, dto.phone, dto.pin);
-    res.cookie('access_token', result.accessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 24 * 60 * 60 * 1000,
-      path: '/',
-    });
+    res.cookie('access_token', result.accessToken, authCookieOptions());
     return result;
   }
 
@@ -80,13 +87,7 @@ export class AuthController {
   @ApiResponse({ status: 400, description: 'Invalid or expired OTP' })
   async resetPin(@Body() dto: ResetPinDto, @Res({ passthrough: true }) res: Response) {
     const result = await this.authService.resetPinWithOtp(dto.phone, dto.otp, dto.pin);
-    res.cookie('access_token', result.accessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 24 * 60 * 60 * 1000,
-      path: '/',
-    });
+    res.cookie('access_token', result.accessToken, authCookieOptions());
     return result;
   }
 
@@ -99,13 +100,7 @@ export class AuthController {
   @ApiResponse({ status: 409, description: 'User already exists' })
   async register(@Body() registerDto: RegisterDto, @Res({ passthrough: true }) res: Response) {
     const result = await this.authService.register(registerDto);
-    res.cookie('access_token', result.accessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 24 * 60 * 60 * 1000,
-      path: '/',
-    });
+    res.cookie('access_token', result.accessToken, authCookieOptions());
     return result;
   }
 
@@ -116,13 +111,7 @@ export class AuthController {
   @ApiResponse({ status: 401, description: 'Invalid credentials' })
   async login(@Body() loginDto: LoginDto, @Res({ passthrough: true }) res: Response) {
     const result = await this.authService.login(loginDto.email, loginDto.password);
-    res.cookie('access_token', result.accessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 24 * 60 * 60 * 1000,
-      path: '/',
-    });
+    res.cookie('access_token', result.accessToken, authCookieOptions());
     return result;
   }
 
@@ -156,7 +145,10 @@ export class AuthController {
   @HttpCode(200)
   @ApiResponse({ status: 200, description: 'Logged out' })
   async logout(@Res({ passthrough: true }) res: Response) {
-    res.clearCookie('access_token', { path: '/' });
+    res.clearCookie('access_token', {
+      path: '/',
+      domain: process.env.NODE_ENV === 'production' ? '.permis2.com' : undefined,
+    });
     return { message: 'Logged out' };
   }
 
