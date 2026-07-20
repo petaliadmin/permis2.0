@@ -124,6 +124,7 @@ function BoutiqueInner() {
   const fetchProducts = usePurchasesStore((s) => s.fetchProducts);
   const fetchEntitlements = usePurchasesStore((s) => s.fetchEntitlements);
   const checkout = usePurchasesStore((s) => s.checkout);
+  const requestManual = usePurchasesStore((s) => s.requestManual);
   const pollPurchase = usePurchasesStore((s) => s.pollPurchase);
   const simulateConfirm = usePurchasesStore((s) => s.simulateConfirm);
   const resetCheckout = usePurchasesStore((s) => s.resetCheckout);
@@ -362,6 +363,7 @@ function BoutiqueInner() {
                         href={waLink}
                         target="_blank"
                         rel="noopener noreferrer"
+                        onClick={() => subscription && requestManual(subscription.id)}
                         className="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl bg-[#25D366] py-3.5 text-sm font-bold text-white shadow-md transition-transform active:scale-[0.98]"
                       >
                         <i className="ti ti-brand-whatsapp text-xl" aria-hidden="true" />

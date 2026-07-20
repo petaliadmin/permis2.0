@@ -206,12 +206,18 @@ export class QuestionService {
   }
 
   /**
-   * Question bank for the thematic Quiz mode. Returns every question whose
-   * category label is in `labels`, shaped exactly like the web player expects.
+   * Question bank for the thematic Quiz mode. Returns every QUIZ-series question
+   * whose category label is in `labels`, shaped exactly like the web player expects.
+   * Scoped to the "QUIZ" series so exam-series questions (which share the same
+   * global Category records) don't leak into the quiz.
    */
   async getQuizBank(labels: string[]) {
+    const quizSeries = await this.prisma.series.findUnique({ where: { code: 'QUIZ' } });
     const questions = await this.prisma.question.findMany({
-      where: labels.length > 0 ? { category: { label: { in: labels } } } : {},
+      where: {
+        serieId: quizSeries?.id,
+        ...(labels.length > 0 ? { category: { label: { in: labels } } } : {}),
+      },
       include: {
         choices: { orderBy: { order: 'asc' } },
         category: { select: { label: true } },
@@ -227,6 +233,7 @@ export class QuestionService {
       bonneReponse: q.reponses_correctes[0] ?? '',
       explication: q.explication,
       ...(q.image ? { image: q.image } : {}),
+      ...(q.signalisation_visible ? { signalisation_visible: q.signalisation_visible } : {}),
     }));
   }
 }

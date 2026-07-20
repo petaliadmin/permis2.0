@@ -77,7 +77,6 @@ export function useSideMenu() {
 }
 
 const MENU_LINKS: { href: string; label: string; icon: string }[] = [
-  { href: '/cours', label: 'Cours', icon: 'ti-book' },
   { href: '/traffic-signs', label: 'Panneaux', icon: 'ti-road-sign' },
   { href: '/quizz', label: 'Quiz', icon: 'ti-cards' },
   { href: '/exam', label: 'Examens', icon: 'ti-clipboard-check' },

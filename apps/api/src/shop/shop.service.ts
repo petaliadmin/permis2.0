@@ -92,6 +92,38 @@ export class ShopService {
   }
 
   /**
+   * Manual (WhatsApp) payment mode: records a PENDING purchase when the user
+   * opens the WhatsApp link, so the admin has a trackable request to confirm
+   * instead of relying entirely on the WhatsApp conversation. No provider is
+   * involved — confirmation happens via AdminService.confirmPurchase (which
+   * calls markPaid), not a webhook.
+   */
+  async requestManual(userId: string, productId: string) {
+    const product = await this.prisma.product.findUnique({ where: { id: productId } });
+    if (!product || !product.active) {
+      throw new NotFoundException('Product not found');
+    }
+
+    // Re-clicking the WhatsApp link shouldn't pile up duplicate requests.
+    const existing = await this.prisma.purchase.findFirst({
+      where: { userId, productId, provider: 'manual', status: 'PENDING' },
+    });
+    if (existing) return { purchaseId: existing.id };
+
+    const purchase = await this.prisma.purchase.create({
+      data: {
+        userId,
+        productId,
+        provider: 'manual',
+        method: 'whatsapp',
+        amountXof: product.priceXof,
+        status: 'PENDING',
+      },
+    });
+    return { purchaseId: purchase.id };
+  }
+
+  /**
    * Creates a PENDING purchase and asks the provider to initiate payment. No
    * entitlement is granted here — that happens on the PAID webhook/confirm.
    */

@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100">
-  <rect x="4" y="4" width="192" height="92" rx="8" fill="#00843D" stroke="#fff" stroke-width="5"/>
-  <path d="M20 50 H120 M120 50 l-16 -11 M120 50 l-16 11" stroke="#fff" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-  <rect x="136" y="32" width="48" height="36" rx="5" fill="#E30613"/>
-  <text x="160" y="58" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#fff">N1</text>
-</svg>

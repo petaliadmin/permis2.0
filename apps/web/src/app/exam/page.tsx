@@ -15,8 +15,8 @@ interface DiapoMeta {
   questions: { q: number }[];
 }
 
-/** Diapos 1–5 are free; the rest require pack_exams or premium_all. */
-const FREE_UP_TO = 5;
+/** Diapos 1–2 are free; the rest require pack_exams or premium_all. */
+const FREE_UP_TO = 2;
 
 const TABS = [
   { id: 'tous', label: 'Tous' },

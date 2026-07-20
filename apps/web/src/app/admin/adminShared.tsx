@@ -1,9 +1,48 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 export const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+
+/** Shared nav config — used by the sidebar (layout.tsx) and the dashboard's section grid. */
+export const ADMIN_SECTIONS = [
+  {
+    href: '/admin/demandes',
+    label: 'Demandes',
+    desc: 'Abonnements à activer',
+    icon: 'ti-receipt',
+    color: '#16A34A',
+  },
+  {
+    href: '/admin/users',
+    label: 'Utilisateurs',
+    desc: 'Bloquer, rôles, abonnements',
+    icon: 'ti-users',
+    color: '#2563EB',
+  },
+  {
+    href: '/admin/questions',
+    label: 'Questions (quiz)',
+    desc: 'Créer, modifier, supprimer',
+    icon: 'ti-help-circle',
+    color: '#7C3AED',
+  },
+  {
+    href: '/admin/series',
+    label: 'Séries (examens)',
+    desc: 'Gérer les séries d’entraînement',
+    icon: 'ti-clipboard-check',
+    color: '#F97316',
+  },
+  {
+    href: '/admin/cours',
+    label: 'Cours (leçons)',
+    desc: 'Rédiger et organiser les leçons',
+    icon: 'ti-book',
+    color: '#0EA5E9',
+  },
+] as const;
 
 /** fetch wrapper: always sends the session cookie and parses JSON errors. */
 export async function adminFetch<T = unknown>(
@@ -58,6 +97,37 @@ export function AccessDenied() {
   );
 }
 
+/**
+ * Desktop-appropriate page header for admin screens — a plain title/subtitle
+ * row with optional right-side actions, no mobile gradient hero. The sidebar
+ * already carries navigation, so this never needs a back link.
+ */
+export function AdminPageHeader({
+  title,
+  subtitle,
+  actions,
+  children,
+}: {
+  title: string;
+  subtitle?: string;
+  actions?: React.ReactNode;
+  /** Extra content rendered below the title row (e.g. search/filter controls). */
+  children?: React.ReactNode;
+}) {
+  return (
+    <div className="mb-7 flex flex-wrap items-start justify-between gap-4">
+      <div>
+        <h1 className="font-display text-2xl font-black tracking-tight text-foreground">
+          {title}
+        </h1>
+        {subtitle && <p className="mt-1 text-sm text-secondary">{subtitle}</p>}
+        {children && <div className="mt-4">{children}</div>}
+      </div>
+      {actions && <div className="flex shrink-0 items-center gap-2.5">{actions}</div>}
+    </div>
+  );
+}
+
 export function Toast({ message }: { message: string }) {
   if (!message) return null;
   return (
@@ -69,10 +139,13 @@ export function Toast({ message }: { message: string }) {
 
 export function useToast(): [string, (m: string) => void] {
   const [toast, setToast] = useState('');
-  const flash = (m: string) => {
+  // Stable identity — callers memoize effects/callbacks on this (e.g. a
+  // load() wrapped in useCallback([flash])); a fresh function every render
+  // would retrigger those effects on every render, an infinite fetch loop.
+  const flash = useCallback((m: string) => {
     setToast(m);
     setTimeout(() => setToast(''), 2800);
-  };
+  }, []);
   return [toast, flash];
 }
 

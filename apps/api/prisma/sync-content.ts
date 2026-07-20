@@ -149,7 +149,14 @@ async function syncQuizQuestions() {
       created += 1;
     }
   }
-  console.log(`✅ Questions quiz: ${created} créées, ${updated} mises à jour (série QUIZ)`);
+  // Remove DB rows whose id no longer exists in the source of truth
+  const ids = questions.map((q) => q.id);
+  const removed = await prisma.question.deleteMany({
+    where: { serieId: serie.id, id: { notIn: ids } },
+  });
+  console.log(
+    `✅ Questions quiz: ${created} créées, ${updated} mises à jour, ${removed.count} obsolètes retirées (série QUIZ)`
+  );
 }
 
 // ─── Diapos d'examen ───────────────────────────────────────────────────────────

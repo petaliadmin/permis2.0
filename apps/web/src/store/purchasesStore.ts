@@ -34,6 +34,7 @@ interface PurchasesState {
     phone?: string,
     method?: PaymentMethod
   ) => Promise<{ purchaseId: string; redirectUrl?: string; ussdMessage?: string } | null>;
+  requestManual: (productId: string) => Promise<void>;
   pollPurchase: (purchaseId: string) => Promise<void>;
   simulateConfirm: (purchaseId: string) => Promise<void>;
   resetCheckout: () => void;
@@ -174,6 +175,25 @@ export const usePurchasesStore = create<PurchasesState>((set, get) => ({
       const message = error instanceof Error ? error.message : 'Le paiement a échoué.';
       set({ checkoutStatus: 'failed', error: message });
       return null;
+    }
+  },
+
+  /**
+   * Manual (WhatsApp) mode: records a PENDING purchase so the request shows
+   * up in the admin's "Demandes" list. Best-effort — never blocks or fails
+   * the WhatsApp redirect the user is about to make.
+   */
+  requestManual: async (productId) => {
+    if (!useAuthStore.getState().isAuthenticated) return;
+    try {
+      await fetch(`${API_URL}/shop/request-manual`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ productId }),
+      });
+    } catch {
+      /* the WhatsApp conversation is still the source of truth — ignore */
     }
   },
 

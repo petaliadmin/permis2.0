@@ -1,16 +1,14 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { AppShell, PageHeader } from '@/components/AppShell';
 import { Sheet, Skeleton } from '@permis2.0/ui';
 import {
   adminFetch,
-  useAdminGuard,
-  AccessDenied,
   Toast,
   useToast,
   linesToArray,
   arrayToLines,
+  AdminPageHeader,
 } from '../adminShared';
 
 interface Lesson {
@@ -43,7 +41,6 @@ interface FormState {
 }
 
 export default function AdminCoursPage() {
-  const allowed = useAdminGuard();
   const [toast, flash] = useToast();
 
   const [lessons, setLessons] = useState<Lesson[]>([]);
@@ -62,12 +59,11 @@ export default function AdminCoursPage() {
   }, []);
 
   useEffect(() => {
-    if (!allowed) return;
     load();
     adminFetch<{ data: CategoryOpt[] }>('/categories?take=100')
       .then((d) => setCategories(d.data ?? []))
       .catch(() => {});
-  }, [allowed, load]);
+  }, [load]);
 
   const blank = (): FormState => ({
     categoryId: categories[0]?.id ?? '',
@@ -137,59 +133,55 @@ export default function AdminCoursPage() {
     'mt-1 w-full rounded-xl border border-token bg-surface-2 px-3 py-2.5 text-sm text-foreground focus:outline-none';
 
   return (
-    <AppShell>
-      <PageHeader
+    <>
+      <AdminPageHeader
         title="Cours (leçons)"
         subtitle={`${lessons.length} leçons publiées`}
-        accent="blue"
-        back="/admin"
-        compact
         actions={
-          <button
-            onClick={() => setForm(blank())}
-            className="flex h-9 items-center gap-1 rounded-full bg-white/15 px-3 text-xs font-bold"
-          >
-            <i className="ti ti-plus" aria-hidden="true" /> Nouvelle
+          <button onClick={() => setForm(blank())} className="btn-primary px-5 py-2.5 text-sm">
+            <i className="ti ti-plus" aria-hidden="true" /> Nouvelle leçon
           </button>
         }
       />
 
-      <div className="px-4 pb-8 pt-5">
-        {allowed === false && <AccessDenied />}
-        {allowed && loading && <Skeleton className="h-60 w-full rounded-2xl" />}
-        {allowed && !loading && (
-          <div className="space-y-2.5">
-            {lessons.map((l) => (
-              <div
-                key={l.id}
-                className="rounded-2xl border border-token bg-surface-1 p-3.5 shadow-soft"
-              >
-                <p className="text-sm font-bold leading-snug text-foreground">{l.titre}</p>
-                <p className="mt-0.5 truncate text-xs text-secondary">
-                  {l.category?.label ?? '—'} · {l.points_cles.length} points clés
-                </p>
-                <div className="mt-2.5 flex gap-2">
-                  <button
-                    onClick={() => setForm(toForm(l))}
-                    className="flex-1 rounded-xl bg-surface-2 py-2 text-xs font-bold text-secondary hover:bg-primary-50 hover:text-primary-700"
-                  >
-                    Modifier
-                  </button>
-                  <button
-                    onClick={() => setConfirmDelete(l)}
-                    className="flex-1 rounded-xl bg-red-50 py-2 text-xs font-bold text-red-600 hover:bg-red-100"
-                  >
-                    Supprimer
-                  </button>
-                </div>
+      {loading && <Skeleton className="h-60 w-full rounded-2xl" />}
+      {!loading && (
+        <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2 xl:grid-cols-3">
+          {lessons.map((l) => (
+            <div
+              key={l.id}
+              className="flex flex-col rounded-2xl border border-token bg-surface-1 p-4 shadow-soft transition-shadow hover:shadow-card"
+            >
+              <p className="text-sm font-bold leading-snug text-foreground">{l.titre}</p>
+              <p className="mt-0.5 truncate text-xs text-secondary">
+                {l.category?.label ?? '—'} · {l.points_cles.length} points clés
+              </p>
+              <div className="mt-3 flex gap-2 pt-1">
+                <button
+                  onClick={() => setForm(toForm(l))}
+                  className="flex-1 rounded-xl bg-surface-2 py-2 text-xs font-bold text-secondary hover:bg-primary-50 hover:text-primary-700"
+                >
+                  Modifier
+                </button>
+                <button
+                  onClick={() => setConfirmDelete(l)}
+                  className="flex-1 rounded-xl bg-red-50 py-2 text-xs font-bold text-red-600 hover:bg-red-100"
+                >
+                  Supprimer
+                </button>
               </div>
-            ))}
-          </div>
-        )}
-      </div>
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* ── Create / edit sheet ── */}
-      <Sheet open={!!form} onClose={() => setForm(null)} ariaLabel="Éditer la leçon">
+      <Sheet
+        open={!!form}
+        onClose={() => setForm(null)}
+        ariaLabel="Éditer la leçon"
+        className="mx-auto max-w-2xl"
+      >
         {form && (
           <div className="max-h-[75vh] overflow-y-auto pb-4">
             <h3 className="font-display text-lg font-bold text-foreground">
@@ -291,11 +283,11 @@ export default function AdminCoursPage() {
       {/* ── Delete confirmation ── */}
       {confirmDelete && (
         <div
-          className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 px-4 pb-8"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4"
           onClick={() => setConfirmDelete(null)}
         >
           <div
-            className="w-full max-w-sm rounded-3xl bg-surface-1 p-6 shadow-xl"
+            className="w-full max-w-sm rounded-3xl bg-surface-1 p-6 shadow-card-lg"
             onClick={(e) => e.stopPropagation()}
           >
             <h3 className="font-display text-lg font-bold text-foreground">
@@ -318,6 +310,6 @@ export default function AdminCoursPage() {
       )}
 
       <Toast message={toast} />
-    </AppShell>
+    </>
   );
 }

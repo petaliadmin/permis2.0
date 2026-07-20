@@ -15,6 +15,7 @@ import { RawBodyRequest } from '@nestjs/common';
 import { Request as ExpressRequest } from 'express';
 import { ShopService } from './shop.service';
 import { CheckoutDto } from './dto/checkout.dto';
+import { RequestManualDto } from './dto/request-manual.dto';
 import { OptionalJwtAuthGuard } from '../auth/guards/optional-jwt-auth.guard';
 
 @ApiTags('Shop')
@@ -70,6 +71,16 @@ export class ShopController {
   @ApiResponse({ status: 201, description: 'Checkout created (PENDING)' })
   async checkout(@Request() req, @Body() dto: CheckoutDto) {
     return this.shopService.checkout(req.user.userId, dto);
+  }
+
+  // Manual (WhatsApp) payment mode: records a PENDING purchase when the user
+  // opens the WhatsApp link, so it shows up in the admin's pending-requests list.
+  @Post('request-manual')
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
+  @ApiResponse({ status: 201, description: 'Manual purchase request recorded (PENDING)' })
+  async requestManual(@Request() req, @Body() dto: RequestManualDto) {
+    return this.shopService.requestManual(req.user.userId, dto.productId);
   }
 
   @Post('webhook/:provider')

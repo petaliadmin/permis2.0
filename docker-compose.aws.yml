@@ -12,6 +12,23 @@ services:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
+    # Conservative tuning for the current t3.small (2GB RAM) host shared with
+    # api/web/caddy — infra/aws/variables.tf instance_type is pinned back to
+    # t3.small because the AWS account is still on the restricted "Free Plan"
+    # (billing upgrade needed before t3.medium/etc. are allowed; see chat).
+    # Once resized to t3.medium, bump shared_buffers→256MB and
+    # effective_cache_size→1GB to actually use the extra RAM.
+    command:
+      - "postgres"
+      - "-c"
+      - "shared_buffers=128MB"
+      - "-c"
+      - "effective_cache_size=512MB"
+      - "-c"
+      - "work_mem=4MB"
+      - "-c"
+      - "max_connections=100"
+    shm_size: "128mb"
     volumes:
       - postgres_data_prod:/var/lib/postgresql/data
     healthcheck:
@@ -32,13 +49,20 @@ services:
     environment:
       NODE_ENV: production
       PORT: 3001
-      DATABASE_URL: postgresql://${DB_USER}:${DB_PASSWORD}@postgres:5432/${DB_NAME}
+      # connection_limit: Prisma's default (num_cpus*2+1 ≈ 5 on this host) is
+      # too small for concurrent users — requests would queue waiting for a
+      # pooled connection even though Postgres (max_connections=100 above)
+      # has headroom. Kept modest (10) while still on t3.small's 2GB RAM;
+      # raise toward 20+ once resized to t3.medium.
+      DATABASE_URL: postgresql://${DB_USER}:${DB_PASSWORD}@postgres:5432/${DB_NAME}?connection_limit=10&pool_timeout=20
       JWT_SECRET: ${JWT_SECRET}
       JWT_EXPIRATION: ${JWT_EXPIRATION:-24h}
       FRONTEND_URL: ${FRONTEND_URL}
       WEB_URL: ${WEB_URL:-${FRONTEND_URL}}
-      TERMII_API_KEY: ${TERMII_API_KEY}
-      TERMII_SENDER_ID: ${TERMII_SENDER_ID:-PERMIS}
+      BREVO_API_KEY: ${BREVO_API_KEY}
+      BREVO_SMS_SENDER: ${BREVO_SMS_SENDER:-PERMIS}
+      BREVO_WHATSAPP_TEMPLATE_ID: ${BREVO_WHATSAPP_TEMPLATE_ID:-}
+      BREVO_WHATSAPP_SENDER_NUMBER: ${BREVO_WHATSAPP_SENDER_NUMBER:-}
       VAPID_PUBLIC_KEY: ${VAPID_PUBLIC_KEY:-}
       VAPID_PRIVATE_KEY: ${VAPID_PRIVATE_KEY:-}
       VAPID_EMAIL: ${VAPID_EMAIL:-mailto:admin@permis2.com}

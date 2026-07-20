@@ -20,6 +20,7 @@ import { usePurchasesStore } from '@/store/purchasesStore';
 import { useSettingsStore } from '@/store/settingsStore';
 import { addError, removeError } from '@/lib/errorBank';
 import { loadData } from '@/lib/dataSource';
+import { playSuccessSound, playFailureSound } from '@/lib/feedbackSound';
 
 interface Question {
   id: string;
@@ -29,58 +30,11 @@ interface Question {
   bonneReponse: string;
   explication?: string;
   image?: string;
+  signalisation_visible?: string;
 }
 
 const HEARTS_MAX = 3;
 const LETTERS = ['A', 'B', 'C', 'D', 'E', 'F'];
-
-/* ─── Sounds (Web Audio API, no external file) ───────────────────────────────── */
-function playSuccessSound() {
-  try {
-    const Ctx =
-      window.AudioContext ??
-      (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-    const ctx = new Ctx();
-    [523.25, 783.99, 1046.5].forEach((freq, i) => {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.type = 'sine';
-      osc.frequency.value = freq;
-      const t = ctx.currentTime + i * 0.13;
-      gain.gain.setValueAtTime(0, t);
-      gain.gain.linearRampToValueAtTime(0.18, t + 0.015);
-      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.5);
-      osc.start(t);
-      osc.stop(t + 0.5);
-    });
-  } catch {}
-}
-
-function playFailureSound() {
-  try {
-    const Ctx =
-      window.AudioContext ??
-      (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-    const ctx = new Ctx();
-    // Two descending notes — low, harsh buzz
-    [330, 220].forEach((freq, i) => {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.type = 'sawtooth';
-      osc.frequency.value = freq;
-      const t = ctx.currentTime + i * 0.18;
-      gain.gain.setValueAtTime(0, t);
-      gain.gain.linearRampToValueAtTime(0.14, t + 0.01);
-      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
-      osc.start(t);
-      osc.stop(t + 0.35);
-    });
-  } catch {}
-}
 
 /* ─── Confetti / petal burst ─────────────────────────────────────────────────── */
 const BURST_COLORS = [
@@ -273,48 +227,6 @@ function ResultScreen({
   );
 }
 
-function GameOverScreen({
-  score,
-  xp,
-  onRetry,
-}: {
-  score: number;
-  xp: number;
-  onRetry: () => void;
-}) {
-  return (
-    <div className="on-ink flex min-h-screen flex-col items-center justify-center bg-ink p-6 text-center">
-      <motion.div
-        initial={{ scale: 0.85, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ type: 'spring', stiffness: 220, damping: 20 }}
-      >
-        <div className="text-7xl">💔</div>
-        <h2 className="mt-5 font-display text-2xl font-black text-white">Partie terminée</h2>
-        <p className="mt-1 text-sm text-slate-400">Tu n&apos;as plus de vies.</p>
-        <div className="mt-6 flex justify-center gap-10">
-          <div>
-            <p className="font-display text-2xl font-black text-violet-400">+{xp}</p>
-            <p className="text-xs text-slate-500">XP</p>
-          </div>
-          <div>
-            <p className="font-display text-2xl font-black text-white">{score}</p>
-            <p className="text-xs text-slate-500">bonnes</p>
-          </div>
-        </div>
-        <div className="mt-8 space-y-3">
-          <button onClick={onRetry} className="btn-violet w-full">
-            Réessayer
-          </button>
-          <Link href="/quizz" className="block py-2 text-sm text-slate-400">
-            ← Retour aux quiz
-          </Link>
-        </div>
-      </motion.div>
-    </div>
-  );
-}
-
 function PaywallScreen({ quizTitle, ctaHref }: { quizTitle: string; ctaHref: string }) {
   return (
     <div className="flex min-h-screen flex-col bg-surface">
@@ -438,7 +350,7 @@ export default function QuizPlayerPage() {
   }, [isAuthenticated, fetchEntitlements]);
 
   const [questions, setQuestions] = useState<Question[]>([]);
-  const [phase, setPhase] = useState<'loading' | 'quiz' | 'done' | 'gameover'>('loading');
+  const [phase, setPhase] = useState<'loading' | 'quiz' | 'done'>('loading');
   const [index, setIndex] = useState(0);
   const [selected, setSelected] = useState<string | null>(null);
   const [confirmed, setConfirmed] = useState(false);
@@ -451,8 +363,6 @@ export default function QuizPlayerPage() {
   const [imgError, setImgError] = useState(false);
   const [elapsed, setElapsed] = useState(0);
 
-  const heartsRef = useRef(hearts);
-  heartsRef.current = hearts;
   const startRef = useRef(Date.now());
   const allQuestionsRef = useRef<Question[]>([]);
 
@@ -508,10 +418,6 @@ export default function QuizPlayerPage() {
 
   const handleNext = () => {
     setElapsed(Math.round((Date.now() - startRef.current) / 1000));
-    if (heartsRef.current <= 0) {
-      setPhase('gameover');
-      return;
-    }
     const next = index + 1;
     if (next >= questions.length) {
       const pct = questions.length > 0 ? Math.round((score / questions.length) * 100) : 0;
@@ -521,10 +427,12 @@ export default function QuizPlayerPage() {
         // Keep best score
         const prevPct =
           prev && typeof prev === 'object' && 'pct' in prev ? (prev as { pct: number }).pct : 0;
+        const bestPct = Math.max(pct, prevPct);
         stored[`${slug}_${quizId}`] = {
-          done: true,
-          pct: Math.max(pct, prevPct),
-          stars: calcStars(Math.max(pct, prevPct)),
+          // A series is only "complete" once a perfect run (100%) has been achieved
+          done: bestPct >= 100,
+          pct: bestPct,
+          stars: calcStars(bestPct),
         };
         localStorage.setItem('quizz_progress', JSON.stringify(stored));
       } catch {}
@@ -602,7 +510,6 @@ export default function QuizPlayerPage() {
       </div>
     );
   }
-  if (phase === 'gameover') return <GameOverScreen score={score} xp={xp} onRetry={resetGame} />;
   if (phase === 'done')
     return (
       <ResultScreen
@@ -661,20 +568,27 @@ export default function QuizPlayerPage() {
             className="mx-auto max-w-lg px-5 pb-4 pt-4"
           >
             {q.image && !imgError && (
-              <div className="mb-6 overflow-hidden rounded-2xl border border-token bg-surface-1">
+              <div className="relative mb-6 flex h-48 items-center justify-center overflow-hidden rounded-2xl border border-token bg-surface-1 p-4">
                 {!imgLoaded && (
-                  <div className="flex h-44 items-center justify-center">
-                    <div className="h-7 w-7 animate-spin rounded-full border-4 border-violet-500 border-t-transparent" />
-                  </div>
+                  <div className="absolute h-7 w-7 animate-spin rounded-full border-4 border-violet-500 border-t-transparent" />
                 )}
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={q.image.replace('/images/quiz/', '/data/diapos/')}
+                  src={q.image}
                   alt="Illustration"
                   onLoad={() => setImgLoaded(true)}
                   onError={() => setImgError(true)}
-                  className={`mx-auto block max-h-56 w-full object-cover transition-opacity duration-300 ${imgLoaded ? 'opacity-100' : 'h-0 opacity-0'}`}
+                  className={`h-full w-full object-contain transition-opacity duration-300 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
                 />
+              </div>
+            )}
+
+            {/* No illustration file — fall back to the textual description so the
+                signage isn't just implied by the question text with nothing to look at */}
+            {(!q.image || imgError) && q.signalisation_visible && (
+              <div className="mb-6 flex items-center gap-3 rounded-2xl border border-token bg-surface-1 p-4">
+                <i className="ti ti-photo-question text-2xl text-violet-500" aria-hidden="true" />
+                <p className="text-sm font-medium text-secondary">{q.signalisation_visible}</p>
               </div>
             )}
 

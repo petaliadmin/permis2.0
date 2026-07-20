@@ -13,9 +13,9 @@
 	c10.872,0,21.3-4.318,28.988-12.007c7.688-7.688,12.007-18.115,12.007-28.988V41.996c0-10.873-4.319-21.3-12.007-28.988
 	C555.242,5.319,544.814,1,533.942,1H41.996c-10.873,0-21.3,4.319-28.988,12.007C5.319,20.695,1,31.123,1,41.996v491.947
 	c0,10.873,4.319,21.3,12.007,28.988C20.695,570.619,31.123,574.938,41.996,574.938z"/>
-<polygon fill="#0000FF" stroke="#0000FF" stroke-width="0.1764" stroke-linecap="round" stroke-linejoin="round" points="
+<polygon fill="#0000FD" stroke="#0000FD" stroke-width="0.1764" stroke-linecap="round" stroke-linejoin="round" points="
 	37.076,538.862 538.862,538.862 538.862,538.862 538.862,37.076 538.862,37.076 37.076,37.076 37.076,37.076 "/>
-<rect x="89.262" y="89.262" fill="#FFFFFF" stroke="#0000FF" stroke-width="0.1764" stroke-linecap="round" stroke-linejoin="round" width="397.414" height="397.414"/>
+<rect x="89.262" y="89.262" fill="#FFFFFF" stroke="#0000FD" stroke-width="0.1764" stroke-linecap="round" stroke-linejoin="round" width="397.414" height="397.414"/>
 <rect x="233.469" y="157.469" fill="#FFFFFF" width="117.5" height="79.5"/>
 <rect x="233.469" y="157.469" fill="none" width="117.5" height="79.5"/>
 <path fill="none" d="M189.302,396.381c1.537,3.206,4.675,5.404,8.302,5.404c3.656,0,6.816-2.234,8.338-5.482h-0.307V269.469h15.333

@@ -115,6 +115,20 @@ export class AdminController {
     return this.adminService.revokeSubscription(id, sku || 'abo_annuel');
   }
 
+  // ─── Purchase requests ───────────────────────────────────────────────────────
+
+  @Get('purchases')
+  @ApiResponse({ status: 200, description: 'Purchases, optionally filtered by status' })
+  async listPurchases(@Query('status') status?: string) {
+    return this.adminService.listPurchases(status);
+  }
+
+  @Post('purchases/:id/confirm')
+  @ApiResponse({ status: 201, description: 'Purchase confirmed and entitlement granted' })
+  async confirmPurchase(@Param('id') id: string) {
+    return this.adminService.confirmPurchase(id);
+  }
+
   // ─── Questions (quiz) ────────────────────────────────────────────────────────
 
   @Get('questions')

@@ -26,9 +26,19 @@ export class UserService {
     return this.prisma.user.findUnique({ where: { phone } });
   }
 
-  async findAll(skip = 0, take = 10) {
+  async findAll(skip = 0, take = 10, q?: string) {
+    const where = q
+      ? {
+          OR: [
+            { name: { contains: q, mode: 'insensitive' as const } },
+            { phone: { contains: q, mode: 'insensitive' as const } },
+            { email: { contains: q, mode: 'insensitive' as const } },
+          ],
+        }
+      : {};
     const [users, total] = await Promise.all([
       this.prisma.user.findMany({
+        where,
         skip,
         take,
         select: {
@@ -43,7 +53,7 @@ export class UserService {
           createdAt: true,
         },
       }),
-      this.prisma.user.count(),
+      this.prisma.user.count({ where }),
     ]);
 
     return {

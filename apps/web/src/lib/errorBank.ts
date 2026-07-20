@@ -14,6 +14,7 @@ export interface ErrorItem {
   bonneReponse: string;
   explication?: string;
   image?: string;
+  signalisation_visible?: string;
   /** Timestamp of the last failed attempt. */
   failedAt: number;
 }

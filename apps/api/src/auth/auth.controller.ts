@@ -25,7 +25,7 @@ export class AuthController {
   @Throttle({ default: { limit: 5, ttl: 60_000 } })
   @Post('otp/request')
   @HttpCode(200)
-  @ApiResponse({ status: 200, description: 'OTP sent (devCode present in non-production)' })
+  @ApiResponse({ status: 200, description: 'OTP sent via SMS/WhatsApp' })
   async requestOtp(@Body() dto: RequestOtpDto) {
     return this.authService.requestOtp(dto.phone, dto.channel);
   }

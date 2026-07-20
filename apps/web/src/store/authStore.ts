@@ -21,7 +21,6 @@ interface AuthState {
   isAuthenticated: boolean;
   isLoading: boolean;
   error: string | null;
-  devCode: string | null;
   setUser: (user: User | null) => void;
   setToken: (token: string | null) => void;
   setLoading: (loading: boolean) => void;
@@ -72,7 +71,6 @@ export const useAuthStore = create<AuthState>()(
       isAuthenticated: false,
       isLoading: false,
       error: null,
-      devCode: null,
 
       setUser: (user) => set({ user, isAuthenticated: user !== null }),
       setToken: (token) => set({ token }),
@@ -157,7 +155,7 @@ export const useAuthStore = create<AuthState>()(
       },
 
       requestOtp: async (phone: string, channel: OtpChannel) => {
-        set({ isLoading: true, error: null, devCode: null });
+        set({ isLoading: true, error: null });
         try {
           const response = await fetch(`${API_URL}/auth/otp/request`, {
             method: 'POST',
@@ -165,8 +163,6 @@ export const useAuthStore = create<AuthState>()(
             body: JSON.stringify({ phone, channel }),
           });
           if (!response.ok) throw new Error('Envoi du code échoué');
-          const data = await response.json();
-          if (data.devCode) set({ devCode: data.devCode });
         } catch (error: any) {
           set({ error: error.message });
           throw error;

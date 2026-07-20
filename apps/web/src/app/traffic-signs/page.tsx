@@ -36,15 +36,13 @@ interface CategoryMeta {
 /* ─── Category metadata (icon + road-code color) ─────────── */
 const CAT_META: Record<string, CategoryMeta> = {
   danger: { label: 'Danger', icon: 'ti-alert-triangle', color: '#EF4444' },
-  interdiction: { label: 'Interdiction', icon: 'ti-ban', color: '#EF4444' },
-  obligation: { label: 'Obligation', icon: 'ti-arrow-right', color: '#2563EB' },
+  interdiction: { label: 'Interdiction', icon: 'ti-ban', color: '#DC2626' },
   priorité: { label: 'Priorité', icon: 'ti-square-rotated', color: '#F59E0B' },
-  indication: { label: 'Indication', icon: 'ti-arrow-up', color: '#2563EB' },
-  information: { label: 'Information', icon: 'ti-info-circle', color: '#2563EB' },
-  direction: { label: 'Direction', icon: 'ti-arrows-right', color: '#16A34A' },
+  obligation: { label: 'Obligation', icon: 'ti-arrow-right', color: '#2563EB' },
+  indication: { label: 'Indication', icon: 'ti-arrow-up', color: '#0000FD' },
   temporaires: { label: 'Temporaires', icon: 'ti-traffic-cone', color: '#F97316' },
   balises: { label: 'Balises', icon: 'ti-map-pin', color: '#64748B' },
-  marquage: { label: 'Marquage sol', icon: 'ti-road', color: '#0EA5E9' },
+  marquage: { label: 'Marquage sol', icon: 'ti-road', color: '#71717A' },
   feux: { label: 'Feux tricolores', icon: 'ti-traffic-lights', color: '#16A34A' },
   agents: { label: 'Agents', icon: 'ti-user-shield', color: '#7C3AED' },
 };
@@ -112,7 +110,7 @@ export default function TrafficSignsPage() {
 
   // Ordre pédagogique : dangers → règles de priorité → interdictions → obligations,
   // puis panneaux d'information et signalisation complémentaire.
-  const catOrder = ['danger', 'priorité', 'interdiction', 'obligation', 'indication', 'information', 'direction'];
+  const catOrder = ['danger', 'priorité', 'interdiction', 'obligation', 'indication'];
   // Catégories retirées de la liste (trop peu de panneaux pour justifier leur propre carte).
   const HIDDEN_CATS = ['temporaires', 'balises', 'marquage', 'feux', 'agents'];
 

@@ -1,18 +1,21 @@
 'use client';
 
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuthStore, isValidSnPhone, formatPhone, type OtpChannel } from '@/store/authStore';
 import { CodeInput } from '@/components/CodeInput';
+import { useWebOtpAutofill } from '@/hooks/useWebOtpAutofill';
+import { useCountdown } from '@/hooks/useCountdown';
+
+const RESEND_COOLDOWN_S = 30;
 
 export default function ResetPinPage() {
   const router = useRouter();
   const requestOtp = useAuthStore((s) => s.requestOtp);
   const resetPin = useAuthStore((s) => s.resetPin);
   const isLoading = useAuthStore((s) => s.isLoading);
-  const devCode = useAuthStore((s) => s.devCode);
 
   const [step, setStep] = useState(0);
   const [phone, setPhone] = useState('');
@@ -22,23 +25,43 @@ export default function ResetPinPage() {
   const [pinConfirm, setPinConfirm] = useState('');
   const [err, setErr] = useState('');
 
+  const resend = useCountdown(RESEND_COOLDOWN_S);
+
   const sendCode = async () => {
     setErr('');
     if (!isValidSnPhone(phone))
       return setErr('Numéro sénégalais invalide (77, 78, 76, 70 ou 75…).');
     try {
       await requestOtp(phone, channel);
+      resend.restart();
       setStep(1);
     } catch {
       setErr("Impossible d'envoyer le code. Vérifie ta connexion.");
     }
   };
 
-  const toPinStep = () => {
+  const resendCode = async () => {
+    if (resend.seconds > 0) return;
     setErr('');
-    if (otp.length !== 6) return setErr('Entrez les 6 chiffres du code reçu.');
+    try {
+      await requestOtp(phone, channel);
+      resend.restart();
+    } catch {
+      setErr("Impossible d'envoyer le code. Vérifie ta connexion.");
+    }
+  };
+
+  const toPinStep = (code: string = otp) => {
+    setErr('');
+    if (code.length !== 6) return setErr('Entrez les 6 chiffres du code reçu.');
+    setOtp(code);
     setStep(2);
   };
+
+  // Auto-read the code straight off the SMS (Chrome/Android) instead of
+  // requiring a manual copy-paste from Messages.
+  const handleAutoCode = useCallback((code: string) => toPinStep(code), []);
+  useWebOtpAutofill(step === 1, handleAutoCode);
 
   const finish = async () => {
     setErr('');
@@ -163,15 +186,15 @@ export default function ResetPinPage() {
               </p>
 
               <div className="mt-6">
-                <CodeInput length={6} value={otp} onChange={setOtp} autoFocus />
+                <CodeInput
+                  length={6}
+                  value={otp}
+                  onChange={setOtp}
+                  autoFocus
+                  onComplete={(code) => toPinStep(code)}
+                />
               </div>
 
-              {devCode && (
-                <p className="mt-4 rounded-xl bg-amber-50 px-3 py-2 text-center text-xs font-medium text-amber-700">
-                  Mode démo (hors ligne) — ton code est{' '}
-                  <span className="font-black tracking-widest">{devCode}</span>
-                </p>
-              )}
               {err && (
                 <p className="mt-4 rounded-xl bg-red-50 px-3 py-2 text-sm font-medium text-danger">
                   {err}
@@ -179,17 +202,18 @@ export default function ResetPinPage() {
               )}
 
               <button
-                onClick={toPinStep}
+                onClick={() => toPinStep()}
                 disabled={isLoading}
                 className="btn-primary mt-6 w-full disabled:opacity-40"
               >
                 Continuer
               </button>
               <button
-                onClick={() => requestOtp(phone, channel)}
-                className="mt-3 w-full py-2 text-center text-sm font-medium text-secondary"
+                onClick={resendCode}
+                disabled={resend.seconds > 0}
+                className="mt-3 w-full py-2 text-center text-sm font-medium text-secondary disabled:opacity-50"
               >
-                Renvoyer le code
+                {resend.seconds > 0 ? `Renvoyer le code (${resend.seconds}s)` : 'Renvoyer le code'}
               </button>
             </motion.div>
           )}

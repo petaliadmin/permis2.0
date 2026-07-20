@@ -221,6 +221,9 @@ export default function ProfilPage() {
   const formatExpiry = (iso: string) =>
     new Date(iso).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
 
+  const ONE_MONTH_MS = 30 * 24 * 60 * 60 * 1000;
+  const expiresSoon = !!premiumExpiresAt && new Date(premiumExpiresAt).getTime() - Date.now() < ONE_MONTH_MS;
+
   return (
     <AppShell>
       <PageHeader
@@ -331,9 +334,11 @@ export default function ProfilPage() {
                 <p className="text-xs text-amber-700">Expire le {formatExpiry(premiumExpiresAt)}</p>
               )}
             </div>
-            <Link href="/boutique" className="text-xs font-bold text-amber-700">
-              Renouveler
-            </Link>
+            {expiresSoon && (
+              <Link href="/boutique" className="text-xs font-bold text-amber-700">
+                Renouveler
+              </Link>
+            )}
           </div>
         ) : (
           <Link href="/boutique">

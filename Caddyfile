@@ -9,7 +9,10 @@
 }
 
 www.permis2.com {
-	reverse_proxy web:3000
+	encode zstd gzip
+	reverse_proxy web:3000 {
+		header_up X-Forwarded-For {http.request.remote.host}
+	}
 }
 
 permis2.com {
@@ -17,5 +20,12 @@ permis2.com {
 }
 
 api.permis2.com {
-	reverse_proxy api:3001
+	encode zstd gzip
+	reverse_proxy api:3001 {
+		# Overwrite rather than append — a client sending its own
+		# X-Forwarded-For header must not be able to spoof the IP that
+		# NestJS's ThrottlerGuard (see apps/api/src/main.ts trust proxy) uses
+		# for per-user rate limiting.
+		header_up X-Forwarded-For {http.request.remote.host}
+	}
 }

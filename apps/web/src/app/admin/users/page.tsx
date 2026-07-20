@@ -2,10 +2,9 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { AppShell, PageHeader } from '@/components/AppShell';
 import { Sheet, Skeleton } from '@permis2.0/ui';
 import { useAuthStore } from '@/store/authStore';
-import { adminFetch, useAdminGuard, AccessDenied, Toast, useToast, fmtXof } from '../adminShared';
+import { adminFetch, Toast, useToast, fmtXof, AdminPageHeader } from '../adminShared';
 
 const PAGE_SIZE = 10;
 
@@ -42,23 +41,23 @@ interface UserDetails {
 const fmtDate = (d: string) => new Date(d).toLocaleDateString('fr-FR');
 
 export default function AdminUsersPage() {
-  const allowed = useAdminGuard();
   const me = useAuthStore((s) => s.user);
   const [toast, flash] = useToast();
 
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(0);
+  const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState<string | null>(null);
   const [details, setDetails] = useState<UserDetails | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<AdminUser | null>(null);
 
-  const load = useCallback((p: number) => {
+  const load = useCallback((p: number, q: string) => {
     setLoading(true);
-    adminFetch<{ data: AdminUser[]; total: number }>(
-      `/users?skip=${p * PAGE_SIZE}&take=${PAGE_SIZE}`
-    )
+    const params = new URLSearchParams({ skip: String(p * PAGE_SIZE), take: String(PAGE_SIZE) });
+    if (q.trim()) params.set('q', q.trim());
+    adminFetch<{ data: AdminUser[]; total: number }>(`/users?${params}`)
       .then((d) => {
         setUsers(d.data ?? []);
         setTotal(d.total ?? 0);
@@ -68,8 +67,14 @@ export default function AdminUsersPage() {
   }, []);
 
   useEffect(() => {
-    if (allowed) load(page);
-  }, [allowed, page, load]);
+    load(page, query);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page]);
+
+  const searchNow = () => {
+    setPage(0);
+    load(0, query);
+  };
 
   const openDetails = async (u: AdminUser) => {
     try {
@@ -84,7 +89,7 @@ export default function AdminUsersPage() {
     try {
       await fn();
       flash(okMsg);
-      load(page);
+      load(page, query);
       // refresh open sheet
       if (details?.user.id === id) {
         setDetails(await adminFetch<UserDetails>(`/admin/users/${id}/details`));
@@ -127,53 +132,82 @@ export default function AdminUsersPage() {
   const pages = Math.max(1, Math.ceil(total / PAGE_SIZE));
 
   return (
-    <AppShell>
-      <PageHeader
-        title="Utilisateurs"
-        subtitle={`${total} comptes`}
-        accent="violet"
-        back="/admin"
-        compact
-      />
+    <>
+      <AdminPageHeader title="Utilisateurs" subtitle={`${total} comptes`}>
+        <div className="flex max-w-md items-center gap-2 rounded-xl border border-token bg-surface-1 px-3.5 py-2.5 shadow-soft">
+          <i className="ti ti-search text-sm text-muted" aria-hidden="true" />
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && searchNow()}
+            onBlur={searchNow}
+            placeholder="Rechercher par nom, téléphone, e-mail…"
+            className="w-full bg-transparent text-sm text-foreground placeholder-muted focus:outline-none"
+          />
+        </div>
+      </AdminPageHeader>
 
-      <div className="px-4 pb-8 pt-5">
-        {allowed === false && <AccessDenied />}
-        {allowed && loading && (
-          <div className="space-y-3">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <Skeleton key={i} className="h-20 w-full rounded-2xl" />
-            ))}
-          </div>
-        )}
+      {loading && (
+        <div className="space-y-3">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <Skeleton key={i} className="h-14 w-full rounded-2xl" />
+          ))}
+        </div>
+      )}
 
-        {allowed && !loading && (
-          <>
-            <div className="space-y-2.5">
-              {users.map((u) => {
-                const isSelf = me?.id === u.id;
-                return (
-                  <div
-                    key={u.id}
-                    className={`rounded-2xl border bg-surface-1 p-3.5 shadow-soft ${u.blocked ? 'border-red-200 opacity-75' : 'border-token'}`}
-                  >
-                    <button
-                      className="flex w-full items-center gap-3"
-                      onClick={() => openDetails(u)}
+      {!loading && (
+        <>
+          <div className="overflow-hidden rounded-2xl border border-token bg-surface-1 shadow-soft">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-token bg-surface-2/60 text-left text-[11px] font-bold uppercase tracking-wide text-muted">
+                  <th className="px-4 py-3 font-bold">Utilisateur</th>
+                  <th className="px-4 py-3 font-bold">Contact</th>
+                  <th className="px-4 py-3 font-bold">Activité</th>
+                  <th className="px-4 py-3 font-bold">Statut</th>
+                  <th className="px-4 py-3 text-right font-bold">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-token">
+                {users.map((u) => {
+                  const isSelf = me?.id === u.id;
+                  return (
+                    <tr
+                      key={u.id}
+                      className={u.blocked ? 'bg-red-50/50 dark:bg-red-950/10' : 'hover:bg-surface-2/50'}
                     >
-                      <div
-                        className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-sm font-black ${u.blocked ? 'bg-red-100 text-red-600' : 'bg-violet-100 text-violet-700'}`}
-                      >
-                        {u.blocked ? (
-                          <i className="ti ti-ban" aria-hidden="true" />
-                        ) : (
-                          u.name?.charAt(0).toUpperCase() || '?'
-                        )}
-                      </div>
-                      <div className="min-w-0 flex-1 text-left">
-                        <p className="flex items-center gap-1.5 truncate text-sm font-bold text-foreground">
-                          {u.name}
+                      <td className="px-4 py-3">
+                        <button
+                          className="flex items-center gap-3 text-left"
+                          onClick={() => openDetails(u)}
+                        >
+                          <div
+                            className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-black ${u.blocked ? 'bg-red-100 text-red-600' : 'bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-300'}`}
+                          >
+                            {u.blocked ? (
+                              <i className="ti ti-ban" aria-hidden="true" />
+                            ) : (
+                              u.name?.charAt(0).toUpperCase() || '?'
+                            )}
+                          </div>
+                          <span className="flex items-center gap-1.5 font-bold text-foreground">
+                            {u.name}
+                            {isSelf && (
+                              <span className="text-[10px] font-medium text-muted">(toi)</span>
+                            )}
+                          </span>
+                        </button>
+                      </td>
+                      <td className="px-4 py-3 text-secondary">
+                        {u.phone ? `+221 ${u.phone}` : (u.email ?? '—')}
+                      </td>
+                      <td className="px-4 py-3 text-secondary">
+                        {u.xp} XP · {u.level}
+                      </td>
+                      <td className="px-4 py-3">
+                        <div className="flex gap-1.5">
                           {u.role === 'ADMIN' && (
-                            <span className="rounded-full bg-violet-100 px-2 py-0.5 text-[9px] font-black uppercase text-violet-700">
+                            <span className="rounded-full bg-violet-100 px-2 py-0.5 text-[9px] font-black uppercase text-violet-700 dark:bg-violet-900/30 dark:text-violet-300">
                               Admin
                             </span>
                           )}
@@ -182,49 +216,47 @@ export default function AdminUsersPage() {
                               Bloqué
                             </span>
                           )}
-                          {isSelf && (
-                            <span className="text-[10px] font-medium text-muted">(toi)</span>
-                          )}
-                        </p>
-                        <p className="truncate text-xs text-secondary">
-                          {u.phone ? `+221 ${u.phone}` : (u.email ?? '—')} · {u.xp} XP · {u.level}
-                        </p>
-                      </div>
-                      <i
-                        className="ti ti-chevron-right text-lg text-slate-300"
-                        aria-hidden="true"
-                      />
-                    </button>
-
-                    {!isSelf && (
-                      <div className="mt-2.5 flex gap-2">
-                        <button
-                          onClick={() => toggleBlock(u, !u.blocked)}
-                          disabled={busy === u.id}
-                          className={`flex-1 rounded-xl py-2 text-xs font-bold transition-colors disabled:opacity-40 ${u.blocked ? 'bg-success-50 text-success-700 hover:bg-success-100' : 'bg-surface-2 text-secondary hover:bg-amber-50 hover:text-amber-700'}`}
-                        >
-                          {u.blocked ? 'Débloquer' : 'Bloquer'}
-                        </button>
-                        <button
-                          onClick={() => toggleRole(u)}
-                          disabled={busy === u.id}
-                          className="flex-1 rounded-xl bg-surface-2 py-2 text-xs font-bold text-secondary transition-colors hover:bg-violet-50 hover:text-violet-700 disabled:opacity-40"
-                        >
-                          {u.role === 'ADMIN' ? 'Retirer admin' : 'Promouvoir'}
-                        </button>
-                        <button
-                          onClick={() => setConfirmDelete(u)}
-                          disabled={busy === u.id}
-                          className="flex-1 rounded-xl bg-red-50 py-2 text-xs font-bold text-red-600 transition-colors hover:bg-red-100 disabled:opacity-40"
-                        >
-                          Supprimer
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
+                        </div>
+                      </td>
+                      <td className="px-4 py-3">
+                        {!isSelf && (
+                          <div className="flex justify-end gap-1.5">
+                            <button
+                              onClick={() => toggleBlock(u, !u.blocked)}
+                              disabled={busy === u.id}
+                              title={u.blocked ? 'Débloquer' : 'Bloquer'}
+                              className={`flex h-8 w-8 items-center justify-center rounded-lg transition-colors disabled:opacity-40 ${u.blocked ? 'bg-success-50 text-success-700 hover:bg-success-100' : 'bg-surface-2 text-secondary hover:bg-amber-50 hover:text-amber-700'}`}
+                            >
+                              <i
+                                className={`ti ${u.blocked ? 'ti-lock-open' : 'ti-ban'} text-sm`}
+                                aria-hidden="true"
+                              />
+                            </button>
+                            <button
+                              onClick={() => toggleRole(u)}
+                              disabled={busy === u.id}
+                              title={u.role === 'ADMIN' ? 'Retirer admin' : 'Promouvoir admin'}
+                              className="flex h-8 w-8 items-center justify-center rounded-lg bg-surface-2 text-secondary transition-colors hover:bg-violet-50 hover:text-violet-700 disabled:opacity-40"
+                            >
+                              <i className="ti ti-shield-lock text-sm" aria-hidden="true" />
+                            </button>
+                            <button
+                              onClick={() => setConfirmDelete(u)}
+                              disabled={busy === u.id}
+                              title="Supprimer"
+                              className="flex h-8 w-8 items-center justify-center rounded-lg bg-red-50 text-red-600 transition-colors hover:bg-red-100 disabled:opacity-40"
+                            >
+                              <i className="ti ti-trash text-sm" aria-hidden="true" />
+                            </button>
+                          </div>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
 
             {pages > 1 && (
               <div className="mt-4 flex items-center justify-center gap-4">
@@ -249,12 +281,16 @@ export default function AdminUsersPage() {
                 </button>
               </div>
             )}
-          </>
-        )}
-      </div>
+        </>
+      )}
 
       {/* ── Details sheet ── */}
-      <Sheet open={!!details} onClose={() => setDetails(null)} ariaLabel="Détails utilisateur">
+      <Sheet
+        open={!!details}
+        onClose={() => setDetails(null)}
+        ariaLabel="Détails utilisateur"
+        className="mx-auto max-w-xl"
+      >
         {details && (
           <div className="pb-4">
             <div className="flex items-center gap-3">
@@ -398,13 +434,13 @@ export default function AdminUsersPage() {
       {/* ── Delete confirmation ── */}
       {confirmDelete && (
         <div
-          className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 px-4 pb-8"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4"
           onClick={() => setConfirmDelete(null)}
         >
           <motion.div
-            initial={{ y: 60, opacity: 0 }}
+            initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            className="w-full max-w-sm rounded-3xl bg-surface-1 p-6 shadow-xl"
+            className="w-full max-w-sm rounded-3xl bg-surface-1 p-6 shadow-card-lg"
             onClick={(e) => e.stopPropagation()}
           >
             <h3 className="font-display text-lg font-bold text-foreground">
@@ -430,6 +466,6 @@ export default function AdminUsersPage() {
       )}
 
       <Toast message={toast} />
-    </AppShell>
+    </>
   );
 }
