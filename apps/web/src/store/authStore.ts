@@ -253,6 +253,15 @@ export const useAuthStore = create<AuthState>()(
       },
 
       logout: async () => {
+        // Drop this user's cached server data first — it's keyed by their id,
+        // which is about to disappear from the store below.
+        const userId = get().user?.id;
+        try {
+          const { clearCache } = await import('@/lib/offlineCache');
+          clearCache(userId);
+        } catch {
+          // best-effort
+        }
         try {
           await fetch(`${API_URL}/auth/logout`, {
             method: 'POST',

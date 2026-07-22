@@ -3,6 +3,7 @@
 import { create } from 'zustand';
 import type { Product, Purchase, PaymentMethod } from '@permis2.0/types';
 import { useAuthStore } from './authStore';
+import { fetchWithCache, peekCache, userScopedKey } from '@/lib/offlineCache';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -45,11 +46,22 @@ interface PurchasesState {
  * httpOnly cookie (credentials: 'include'). After checkout we poll until
  * PAID/FAILED, then refetch entitlements so premium content unlocks immediately.
  */
+/** Cache is scoped to the signed-in user; if there's nobody it hydrates as a guest. */
+const cachedProducts = peekCache<Product[]>(userScopedKey('products'));
+const cachedEntitlements = peekCache<{
+  keys: string[];
+  rows: { key: string; expiresAt: string | null }[];
+}>(userScopedKey('entitlements'));
+const cachedPurchases = peekCache<Purchase[]>(userScopedKey('purchases'));
+const cachedPremium = cachedEntitlements?.data.rows?.find((r) => r.key === 'premium_all');
+
 export const usePurchasesStore = create<PurchasesState>((set, get) => ({
-  products: [],
-  entitlementKeys: [],
-  premiumExpiresAt: null,
-  purchases: [],
+  // Seeded from the last successful fetch so premium access and the catalog
+  // are available instantly — including offline — before revalidation lands.
+  products: cachedProducts?.data ?? [],
+  entitlementKeys: cachedEntitlements?.data.keys ?? [],
+  premiumExpiresAt: cachedPremium?.expiresAt ?? null,
+  purchases: cachedPurchases?.data ?? [],
   loading: false,
   entitlementsReady: false,
   checkoutStatus: 'idle',
@@ -70,11 +82,12 @@ export const usePurchasesStore = create<PurchasesState>((set, get) => ({
   fetchProducts: async () => {
     set({ loading: true });
     try {
-      const res = await fetch(`${API_URL}/shop/products`, {
-        credentials: 'include',
-      });
-      if (!res.ok) throw new Error('Failed to fetch products');
-      set({ products: await res.json() });
+      const { data } = await fetchWithCache<Product[]>(
+        userScopedKey('products'),
+        `${API_URL}/shop/products`,
+        { credentials: 'include' }
+      );
+      set({ products: data });
     } catch (error) {
       console.error('Error fetching products:', error);
     } finally {
@@ -88,14 +101,13 @@ export const usePurchasesStore = create<PurchasesState>((set, get) => ({
       return;
     }
     try {
-      const res = await fetch(`${API_URL}/shop/entitlements`, {
+      const { data } = await fetchWithCache<{
+        keys: string[];
+        rows: { key: string; expiresAt: string | null }[];
+      }>(userScopedKey('entitlements'), `${API_URL}/shop/entitlements`, {
         credentials: 'include',
       });
-      if (!res.ok) throw new Error('Failed to fetch entitlements');
-      const data = await res.json();
-      const premium = (data.rows ?? []).find(
-        (r: { key: string; expiresAt: string | null }) => r.key === 'premium_all'
-      );
+      const premium = (data.rows ?? []).find((r) => r.key === 'premium_all');
       set({
         entitlementKeys: data.keys ?? [],
         premiumExpiresAt: premium?.expiresAt ?? null,
@@ -110,11 +122,12 @@ export const usePurchasesStore = create<PurchasesState>((set, get) => ({
   fetchPurchases: async () => {
     if (!useAuthStore.getState().isAuthenticated) return;
     try {
-      const res = await fetch(`${API_URL}/shop/purchases`, {
-        credentials: 'include',
-      });
-      if (!res.ok) throw new Error('Failed to fetch purchases');
-      set({ purchases: await res.json() });
+      const { data } = await fetchWithCache<Purchase[]>(
+        userScopedKey('purchases'),
+        `${API_URL}/shop/purchases`,
+        { credentials: 'include' }
+      );
+      set({ purchases: data });
     } catch (error) {
       console.error('Error fetching purchases:', error);
     }

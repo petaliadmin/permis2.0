@@ -21,6 +21,7 @@ import { useSettingsStore } from '@/store/settingsStore';
 import { addError, removeError } from '@/lib/errorBank';
 import { loadData } from '@/lib/dataSource';
 import { playSuccessSound, playFailureSound } from '@/lib/feedbackSound';
+import { postWithSync } from '@/lib/syncQueue';
 
 interface Question {
   id: string;
@@ -436,13 +437,14 @@ export default function QuizPlayerPage() {
         };
         localStorage.setItem('quizz_progress', JSON.stringify(stored));
       } catch {}
-      // Fire-and-forget — don't block UX on this
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/gamification/record-quiz`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ correct: score, total: questions.length, mode: 'series' }),
-      }).catch(() => {}); // silent fail — local progress already saved
+      // Local progress is already saved above; the XP/gamification record is
+      // sent now if possible, or queued for automatic retry once back online
+      // (see lib/syncQueue) so it isn't silently lost offline.
+      postWithSync(`${process.env.NEXT_PUBLIC_API_URL}/gamification/record-quiz`, {
+        correct: score,
+        total: questions.length,
+        mode: 'series',
+      });
       setPhase('done');
       return;
     }

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AppShell, PageHeader } from '@/components/AppShell';
 import { Skeleton } from '@permis2.0/ui';
+import { fetchWithCache } from '@/lib/offlineCache';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -161,12 +162,8 @@ export default function CoursClient() {
   const [selectedTheme, setSelectedTheme] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch(`${API_URL}/lessons?take=100`)
-      .then((r) => {
-        if (!r.ok) throw new Error();
-        return r.json();
-      })
-      .then((d) => setLessons(d.data ?? []))
+    fetchWithCache<{ data: LessonMeta[] }>('lessons:list', `${API_URL}/lessons?take=100`)
+      .then(({ data }) => setLessons(data.data ?? []))
       .catch(() => setError(true))
       .finally(() => setLoading(false));
   }, []);

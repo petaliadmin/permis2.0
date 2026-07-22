@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { AppShell, PageHeader } from '@/components/AppShell';
 import { Skeleton } from '@permis2.0/ui';
 import { useWolofAudio } from '@/hooks/useWolofAudio';
+import { fetchWithCache } from '@/lib/offlineCache';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -76,12 +77,8 @@ export default function CoursDetailPage() {
 
   useEffect(() => {
     if (!id) return;
-    fetch(`${API_URL}/lessons/${id}`)
-      .then((r) => {
-        if (!r.ok) throw new Error();
-        return r.json();
-      })
-      .then(setLesson)
+    fetchWithCache<LessonDetail>(`lessons:${id}`, `${API_URL}/lessons/${id}`)
+      .then(({ data }) => setLesson(data))
       .catch(() => setError(true))
       .finally(() => setLoading(false));
     return () => {
