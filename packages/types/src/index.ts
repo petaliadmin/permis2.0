@@ -3,6 +3,11 @@ export enum Role {
   ADMIN = 'ADMIN',
 }
 
+export enum ProfileType {
+  PARTICULIER = 'PARTICULIER',
+  AUTO_ECOLE = 'AUTO_ECOLE',
+}
+
 export interface User {
   id: string;
   email?: string | null;
@@ -12,6 +17,7 @@ export interface User {
   xp: number;
   level: string;
   role: Role;
+  profileType: ProfileType;
   currentStreak?: number;
   createdAt: Date;
   updatedAt: Date;
@@ -322,7 +328,7 @@ export interface Subscription {
 
 // ─── Boutique / Premium (Sprint 6) ────────────────────────────────────────────
 
-export type ProductKind = 'PACK' | 'EXAM' | 'subscription';
+export type ProductKind = 'PACK' | 'EXAM' | 'subscription' | 'school_pack';
 export type PurchaseStatus = 'PENDING' | 'PAID' | 'FAILED';
 
 /**
@@ -380,6 +386,32 @@ export interface Product {
   updatedAt: Date;
   /** Computed by the API: the current user already owns all of this product's grants. */
   owned?: boolean;
+  /** Number of seats in the pack, for kind = "school_pack" only. */
+  seats?: number | null;
+}
+
+/** A claimable seat within a school_pack Purchase (Horizon 0: white-label licenses for auto-écoles). */
+export interface PackSeat {
+  id: string;
+  purchaseId: string;
+  code: string;
+  claimedByUserId?: string | null;
+  claimedAt?: Date | null;
+  createdAt: Date;
+}
+
+/**
+ * A PAID school_pack purchase with its seat pool — returned by
+ * GET /admin/school-packs (all, superadmin) and GET /shop/school-pack/mine
+ * (the buyer's own, for the /auto-ecole dashboard).
+ */
+export interface SchoolPackSummary {
+  id: string;
+  createdAt: Date;
+  buyer: { id: string; name: string; phone: string | null; email: string | null };
+  product: { title: string; sku: string; seats: number | null };
+  seats: { id: string; code: string; claimedAt: Date | null; claimedBy: { name: string } | null }[];
+  claimedCount: number;
 }
 
 export interface Purchase {

@@ -1,4 +1,4 @@
-import { IsEmail, IsString, MinLength, MaxLength, IsOptional } from 'class-validator';
+import { IsEmail, IsString, MinLength, MaxLength, IsOptional, IsIn } from 'class-validator';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreateUserDto {
@@ -32,4 +32,9 @@ export class CreateUserDto {
   @IsOptional()
   @IsString()
   pinHash?: string;
+
+  @ApiPropertyOptional({ enum: ['PARTICULIER', 'AUTO_ECOLE'] })
+  @IsOptional()
+  @IsIn(['PARTICULIER', 'AUTO_ECOLE'])
+  profileType?: 'PARTICULIER' | 'AUTO_ECOLE';
 }

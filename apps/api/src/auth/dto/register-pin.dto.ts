@@ -1,5 +1,5 @@
-import { IsString, MinLength, MaxLength, Matches } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import { IsString, MinLength, MaxLength, Matches, IsOptional, IsIn } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class RegisterPinDto {
   @ApiProperty({ example: 'Moussa Diop' })
@@ -19,4 +19,9 @@ export class RegisterPinDto {
   @IsString()
   @Matches(/^\d{4}$/, { message: 'Le code PIN doit contenir exactement 4 chiffres' })
   pin: string;
+
+  @ApiPropertyOptional({ enum: ['PARTICULIER', 'AUTO_ECOLE'] })
+  @IsOptional()
+  @IsIn(['PARTICULIER', 'AUTO_ECOLE'])
+  profileType?: 'PARTICULIER' | 'AUTO_ECOLE';
 }

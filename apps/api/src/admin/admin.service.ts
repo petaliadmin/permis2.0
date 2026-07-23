@@ -117,6 +117,17 @@ export class AdminService {
     return this.shopService.markPaid(id);
   }
 
+  /**
+   * PAID school_pack purchases with their seat pool, for the "Écoles" admin
+   * view — how many of the seats sold to an auto-école referent have been
+   * claimed by students so far. Delegates to ShopService so the same
+   * query/shape backs both this platform-wide view and each buyer's own
+   * /auto-ecole dashboard (ShopService.listSchoolPacks(userId)).
+   */
+  async listSchoolPacks() {
+    return this.shopService.listSchoolPacks();
+  }
+
   /** Full profile for the admin drawer: subscription, purchases, activity. */
   async getUserDetails(id: string) {
     const user = await this.prisma.user.findUnique({

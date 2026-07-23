@@ -4,11 +4,22 @@ import {
   ForbiddenException,
   BadRequestException,
 } from '@nestjs/common';
+import * as crypto from 'crypto';
+import type { Prisma } from '@prisma/client';
 
 import { PrismaService } from '../prisma/prisma.service';
 import { EntitlementService } from '../entitlement/entitlement.service';
 import { PaymentService } from './payment/payment.service';
 import { CheckoutDto } from './dto/checkout.dto';
+
+/** Short, unambiguous claim code for a school-pack seat (excludes 0/O/1/I). */
+function generateSeatCode(): string {
+  const alphabet = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  const bytes = crypto.randomBytes(8);
+  let code = '';
+  for (let i = 0; i < 8; i++) code += alphabet[bytes[i] % alphabet.length];
+  return code;
+}
 
 /**
  * Boutique back-end (Sprint 6): products, checkout, payment webhook handling, and
@@ -217,13 +228,45 @@ export class ShopService {
   }
 
   /**
+   * Upserts one entitlement grant for a user within a transaction. Subscription
+   * (validityDays set): extends from a still-active expiry (renewal) or from now,
+   * so paying/claiming early never loses remaining time. Permanent grant
+   * (validityDays null) stays non-expiring. Shared by markPaid (direct purchase)
+   * and claimSeat (school-pack seat claim) so both follow the same expiry rule.
+   */
+  private async grantEntitlementToUser(
+    tx: Prisma.TransactionClient,
+    userId: string,
+    key: string,
+    validityDays: number | null,
+    purchaseId: string
+  ) {
+    const now = new Date();
+    const existing = await tx.entitlement.findUnique({
+      where: { userId_key: { userId, key } },
+    });
+
+    let expiresAt: Date | null = null;
+    if (validityDays != null) {
+      const base = existing?.expiresAt && existing.expiresAt > now ? existing.expiresAt : now;
+      expiresAt = new Date(base.getTime() + validityDays * 24 * 60 * 60 * 1000);
+    }
+
+    await tx.entitlement.upsert({
+      where: { userId_key: { userId, key } },
+      update: { expiresAt, source: 'purchase', purchaseId },
+      create: { userId, key, source: 'purchase', purchaseId, expiresAt },
+    });
+  }
+
+  /**
    * Flips a purchase to PAID and grants its product's entitlements. Idempotent:
    * a no-op if already PAID, and entitlement upserts dedupe on (userId, key).
    *
-   * When the product has `validityDays`, the grant expires (a subscription). A
-   * renewal made while the entitlement is still active *extends* from the current
-   * expiry rather than overwriting it, so paying early never loses remaining time.
-   * `validityDays === null` keeps the grant permanent.
+   * A `school_pack` product is a white-label bulk license (Horizon 0, sold to
+   * an auto-école): the buyer is the school's referent account, not a student,
+   * so it does NOT receive the grants directly. Instead we generate `seats`
+   * claimable `PackSeat` codes; each student redeems one via claimSeat().
    */
   async markPaid(purchaseId: string) {
     const purchase = await this.prisma.purchase.findUnique({
@@ -237,43 +280,115 @@ export class ShopService {
       return purchase; // already processed — webhook retry
     }
 
-    const now = new Date();
-    const validityDays = purchase.product.validityDays;
-
     await this.prisma.$transaction(async (tx) => {
       await tx.purchase.update({
         where: { id: purchase.id },
         data: { status: 'PAID' },
       });
 
-      for (const key of purchase.product.grants) {
-        const existing = await tx.entitlement.findUnique({
-          where: { userId_key: { userId: purchase.userId, key } },
-        });
-
-        // Subscription: extend from a still-active expiry (renewal) or from now;
-        // permanent grant (validityDays null) stays non-expiring.
-        let expiresAt: Date | null = null;
-        if (validityDays != null) {
-          const base = existing?.expiresAt && existing.expiresAt > now ? existing.expiresAt : now;
-          expiresAt = new Date(base.getTime() + validityDays * 24 * 60 * 60 * 1000);
+      if (purchase.product.kind === 'school_pack') {
+        const seats = purchase.product.seats ?? 0;
+        for (let i = 0; i < seats; i++) {
+          // Retry on the rare code collision (unique constraint) instead of
+          // pre-checking existence — cheaper for a handful of seats per pack.
+          for (let attempt = 0; attempt < 5; attempt++) {
+            try {
+              await tx.packSeat.create({
+                data: { purchaseId: purchase.id, code: generateSeatCode() },
+              });
+              break;
+            } catch (err: any) {
+              if (err?.code !== 'P2002' || attempt === 4) throw err;
+            }
+          }
         }
+        return;
+      }
 
-        await tx.entitlement.upsert({
-          where: { userId_key: { userId: purchase.userId, key } },
-          update: { expiresAt, source: 'purchase', purchaseId: purchase.id },
-          create: {
-            userId: purchase.userId,
-            key,
-            source: 'purchase',
-            purchaseId: purchase.id,
-            expiresAt,
-          },
-        });
+      for (const key of purchase.product.grants) {
+        await this.grantEntitlementToUser(
+          tx,
+          purchase.userId,
+          key,
+          purchase.product.validityDays,
+          purchase.id
+        );
       }
     });
 
     return this.prisma.purchase.findUnique({ where: { id: purchase.id } });
+  }
+
+  /**
+   * PAID school_pack purchases with their seat pool. With no userId, this is
+   * platform-wide (the superadmin "Auto-écoles" view); scoped to a userId, it's
+   * "my packs" for the buyer's own /auto-ecole dashboard.
+   */
+  async listSchoolPacks(userId?: string) {
+    const purchases = await this.prisma.purchase.findMany({
+      where: {
+        status: 'PAID',
+        product: { kind: 'school_pack' },
+        ...(userId ? { userId } : {}),
+      },
+      orderBy: { createdAt: 'desc' },
+      include: {
+        user: { select: { id: true, name: true, phone: true, email: true } },
+        product: { select: { title: true, sku: true, seats: true } },
+        packSeats: {
+          select: { id: true, code: true, claimedAt: true, claimedBy: { select: { name: true } } },
+          orderBy: { createdAt: 'asc' },
+        },
+      },
+    });
+    return purchases.map((p) => ({
+      id: p.id,
+      createdAt: p.createdAt,
+      buyer: p.user,
+      product: p.product,
+      seats: p.packSeats,
+      claimedCount: p.packSeats.filter((s) => s.claimedAt).length,
+    }));
+  }
+
+  /**
+   * A student redeems a school-pack seat code, granting them the pack
+   * product's entitlements directly (bypassing the buyer/referent account).
+   */
+  async claimSeat(userId: string, code: string) {
+    const seat = await this.prisma.packSeat.findUnique({
+      where: { code: code.trim().toUpperCase() },
+      include: { purchase: { include: { product: true } } },
+    });
+    if (!seat) {
+      throw new NotFoundException('Code invalide');
+    }
+    if (seat.purchase.status !== 'PAID') {
+      throw new BadRequestException('Ce pack n’est pas encore actif');
+    }
+
+    await this.prisma.$transaction(async (tx) => {
+      // Atomic claim: only succeeds if still unclaimed, closing the race
+      // between two students submitting the same code concurrently.
+      const { count } = await tx.packSeat.updateMany({
+        where: { id: seat.id, claimedAt: null },
+        data: { claimedByUserId: userId, claimedAt: new Date() },
+      });
+      if (count === 0) {
+        throw new BadRequestException('Ce code a déjà été utilisé');
+      }
+      for (const key of seat.purchase.product.grants) {
+        await this.grantEntitlementToUser(
+          tx,
+          userId,
+          key,
+          seat.purchase.product.validityDays,
+          seat.purchase.id
+        );
+      }
+    });
+
+    return { ok: true, grants: seat.purchase.product.grants };
   }
 
   /**

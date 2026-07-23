@@ -16,6 +16,7 @@ import { Request as ExpressRequest } from 'express';
 import { ShopService } from './shop.service';
 import { CheckoutDto } from './dto/checkout.dto';
 import { RequestManualDto } from './dto/request-manual.dto';
+import { ClaimSeatDto } from './dto/claim-seat.dto';
 import { OptionalJwtAuthGuard } from '../auth/guards/optional-jwt-auth.guard';
 
 @ApiTags('Shop')
@@ -81,6 +82,25 @@ export class ShopController {
   @ApiResponse({ status: 201, description: 'Manual purchase request recorded (PENDING)' })
   async requestManual(@Request() req, @Body() dto: RequestManualDto) {
     return this.shopService.requestManual(req.user.userId, dto.productId);
+  }
+
+  // Horizon 0: a student redeems a school-pack seat code sold to their auto-école.
+  @Post('school-pack/claim')
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
+  @ApiResponse({ status: 201, description: 'Seat claimed, entitlements granted' })
+  async claimSeat(@Request() req, @Body() dto: ClaimSeatDto) {
+    return this.shopService.claimSeat(req.user.userId, dto.code);
+  }
+
+  // Espace auto-école: the pack buyer's own packs/seats (scoped to their userId,
+  // unlike AdminService.listSchoolPacks() which is platform-wide/superadmin-only).
+  @Get('school-pack/mine')
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
+  @ApiResponse({ status: 200, description: "Current user's own PAID school_pack purchases" })
+  async mySchoolPacks(@Request() req) {
+    return this.shopService.listSchoolPacks(req.user.userId);
   }
 
   @Post('webhook/:provider')

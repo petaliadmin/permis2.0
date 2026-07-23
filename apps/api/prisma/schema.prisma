@@ -15,6 +15,11 @@ enum Role {
   ADMIN
 }
 
+enum ProfileType {
+  PARTICULIER
+  AUTO_ECOLE
+}
+
 model User {
   id            String     @id @default(cuid())
   email         String?    @unique
@@ -26,6 +31,7 @@ model User {
   xp            Int        @default(0)
   level         String     @default("Débutant")
   role          Role       @default(USER)
+  profileType   ProfileType @default(PARTICULIER)
   blocked       Boolean    @default(false)
   createdAt     DateTime   @default(now())
   updatedAt     DateTime   @updatedAt
@@ -43,6 +49,7 @@ model User {
   passwordResetTokens PasswordResetToken[]
   entitlements        Entitlement[]
   purchases           Purchase[]
+  claimedPackSeats    PackSeat[]
 
   @@map("users")
 }
@@ -409,6 +416,8 @@ model Product {
   ordre        Int        @default(0)
   grants       String[]
   validityDays Int?
+  /// Number of seats in the pack, for kind = "school_pack" only; null for individual products.
+  seats        Int?
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
 
@@ -432,10 +441,28 @@ model Purchase {
 
   user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   product     Product   @relation(fields: [productId], references: [id])
+  packSeats   PackSeat[]
 
   @@index([userId])
   @@unique([providerRef])
   @@map("purchases")
+}
+
+/// One claimable seat within a school_pack Purchase. Generated on markPaid,
+/// claimed by a student via a code instead of the buyer receiving the grant.
+model PackSeat {
+  id              String    @id @default(cuid())
+  purchaseId      String
+  code            String    @unique
+  claimedByUserId String?
+  claimedAt       DateTime?
+  createdAt       DateTime  @default(now())
+
+  purchase        Purchase  @relation(fields: [purchaseId], references: [id], onDelete: Cascade)
+  claimedBy       User?     @relation(fields: [claimedByUserId], references: [id])
+
+  @@index([purchaseId])
+  @@map("pack_seats")
 }
 
 model DrivingCourse {

@@ -75,7 +75,12 @@ export class AuthController {
   @ApiResponse({ status: 201, description: 'Account created with phone + PIN' })
   @ApiResponse({ status: 409, description: 'Phone number already in use' })
   async registerWithPin(@Body() dto: RegisterPinDto, @Res({ passthrough: true }) res: Response) {
-    const result = await this.authService.registerWithPin(dto.name, dto.phone, dto.pin);
+    const result = await this.authService.registerWithPin(
+      dto.name,
+      dto.phone,
+      dto.pin,
+      dto.profileType
+    );
     res.cookie('access_token', result.accessToken, authCookieOptions());
     return result;
   }

@@ -15,6 +15,13 @@ export const ADMIN_SECTIONS = [
     color: '#16A34A',
   },
   {
+    href: '/admin/ecoles',
+    label: 'Auto-écoles',
+    desc: 'Packs vendus, codes à distribuer',
+    icon: 'ti-school',
+    color: '#DB2777',
+  },
+  {
     href: '/admin/users',
     label: 'Utilisateurs',
     desc: 'Bloquer, rôles, abonnements',

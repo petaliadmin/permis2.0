@@ -5,6 +5,7 @@ import './globals.css';
 import { ServiceWorkerRegister } from '@/components/pwa/ServiceWorkerRegister';
 import { InstallPrompt } from '@/components/pwa/InstallPrompt';
 import { ThemeInit } from '@/components/ThemeInit';
+import { OnboardingGate } from '@/components/OnboardingGate';
 import { PushPermissionBanner } from '@/components/PushPermissionBanner';
 import { EntitlementProvider } from '@/components/EntitlementProvider';
 
@@ -126,6 +127,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="bg-surface text-foreground font-sans antialiased">
         {/* ThemeInit applies the persisted choice after hydration */}
         <ThemeInit />
+        <OnboardingGate />
         {/* Skip link — keyboard navigation */}
         <a
           href="#main-content"

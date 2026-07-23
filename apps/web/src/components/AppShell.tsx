@@ -82,6 +82,7 @@ const MENU_LINKS: { href: string; label: string; icon: string }[] = [
   { href: '/quizz', label: 'Quiz', icon: 'ti-cards' },
   { href: '/exam', label: 'Examens', icon: 'ti-clipboard-check' },
   { href: '/boutique', label: 'Abonnement', icon: 'ti-crown' },
+  { href: '/auto-ecole', label: 'Espace auto-école', icon: 'ti-school' },
   { href: '/notifications', label: 'Notifications', icon: 'ti-bell' },
   { href: '/assistance', label: 'Assistance', icon: 'ti-headset' },
   { href: '/profil', label: 'Profil & réglages', icon: 'ti-user' },

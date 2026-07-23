@@ -48,8 +48,12 @@ export default function RegisterPage() {
     setErr('');
     if (pin.length !== 4) return setErr('Choisissez un code à 4 chiffres.');
     if (pin !== pinConfirm) return setErr('Les deux codes ne correspondent pas.');
-    await registerWithPin(name.trim(), phone, pin);
-    router.push('/');
+    const intended = localStorage.getItem('intended_profile_type') as
+      | 'PARTICULIER'
+      | 'AUTO_ECOLE'
+      | null;
+    await registerWithPin(name.trim(), phone, pin, intended ?? undefined);
+    router.push(intended === 'AUTO_ECOLE' ? '/auto-ecole' : '/');
   };
 
   /* ── Splash — brand-only, auto-advances ── */

@@ -30,7 +30,12 @@ interface AuthState {
   loginWithPin: (phone: string, pin: string) => Promise<void>;
   requestOtp: (phone: string, channel: OtpChannel) => Promise<void>;
   verifyOtp: (phone: string, otp: string) => Promise<boolean>;
-  registerWithPin: (name: string, phone: string, pin: string) => Promise<void>;
+  registerWithPin: (
+    name: string,
+    phone: string,
+    pin: string,
+    profileType?: 'PARTICULIER' | 'AUTO_ECOLE'
+  ) => Promise<void>;
   resetPin: (phone: string, otp: string, pin: string) => Promise<void>;
   logout: () => Promise<void>;
   clearError: () => void;
@@ -187,14 +192,14 @@ export const useAuthStore = create<AuthState>()(
         }
       },
 
-      registerWithPin: async (name: string, phone: string, pin: string) => {
+      registerWithPin: async (name: string, phone: string, pin: string, profileType?) => {
         set({ isLoading: true, error: null });
         try {
           const response = await fetch(`${API_URL}/auth/register-pin`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'include',
-            body: JSON.stringify({ name, phone, pin }),
+            body: JSON.stringify({ name, phone, pin, profileType }),
           });
           if (!response.ok) {
             const err = await response.json();

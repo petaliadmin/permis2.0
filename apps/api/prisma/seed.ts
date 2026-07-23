@@ -271,6 +271,35 @@ async function main() {
     });
     console.log('✅ Seeded product: abo_annuel');
 
+    // Seed boutique products — school_pack (Horizon 0: white-label bulk licenses
+    // sold to an auto-école). Price per seat decreases with pack size to
+    // incentivize volume. Each seat grants the same premium_all access as
+    // abo_annuel, for the same validity period.
+    const schoolPacks = [
+      { sku: 'pack_ecole_10', title: 'Pack École — 10 places', seats: 10, priceXof: 25000, ordre: 10 },
+      { sku: 'pack_ecole_20', title: 'Pack École — 20 places', seats: 20, priceXof: 46000, ordre: 11 },
+      { sku: 'pack_ecole_50', title: 'Pack École — 50 places', seats: 50, priceXof: 100000, ordre: 12 },
+    ];
+    for (const pack of schoolPacks) {
+      const data = {
+        title: pack.title,
+        description: `Accès premium (${pack.seats} élèves) pour votre auto-école, distribué par code individuel.`,
+        kind: 'school_pack',
+        priceXof: pack.priceXof,
+        active: true,
+        ordre: pack.ordre,
+        grants: ['premium_all'],
+        validityDays: 365,
+        seats: pack.seats,
+      };
+      await prisma.product.upsert({
+        where: { sku: pack.sku },
+        update: data,
+        create: { sku: pack.sku, ...data },
+      });
+    }
+    console.log(`✅ Seeded ${schoolPacks.length} school_pack products`);
+
     console.log('✨ Database seeding completed successfully!');
   } catch (error) {
     console.error('❌ Seeding failed:', error);

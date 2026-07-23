@@ -109,7 +109,12 @@ export class AuthService {
     return { accessToken: this.generateAccessToken(user), user: this.sanitizeUser(user) };
   }
 
-  async registerWithPin(name: string, rawPhone: string, pin: string) {
+  async registerWithPin(
+    name: string,
+    rawPhone: string,
+    pin: string,
+    profileType?: 'PARTICULIER' | 'AUTO_ECOLE'
+  ) {
     const phone = this.normalizePhone(rawPhone);
     const existing = await this.userService.findByPhone(phone);
     if (existing) {
@@ -117,7 +122,7 @@ export class AuthService {
     }
 
     const pinHash = await bcrypt.hash(pin, 12);
-    const user = await this.userService.create({ name, phone, pinHash });
+    const user = await this.userService.create({ name, phone, pinHash, profileType });
 
     return { accessToken: this.generateAccessToken(user), user: this.sanitizeUser(user) };
   }

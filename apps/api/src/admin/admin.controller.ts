@@ -129,6 +129,14 @@ export class AdminController {
     return this.adminService.confirmPurchase(id);
   }
 
+  // ─── School packs (Horizon 0: white-label licenses for auto-écoles) ─────────
+
+  @Get('school-packs')
+  @ApiResponse({ status: 200, description: 'Paid school_pack purchases with seat claim status' })
+  async listSchoolPacks() {
+    return this.adminService.listSchoolPacks();
+  }
+
   // ─── Questions (quiz) ────────────────────────────────────────────────────────
 
   @Get('questions')
