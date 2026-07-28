@@ -1,6 +1,8 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { ShopService } from '../shop/shop.service';
+import { SchoolService } from '../school/school.service';
+import { SchoolStatus } from '@permis2.0/types';
 import { QuestionInputDto } from './dto/question-input.dto';
 import { SeriesInputDto } from './dto/series-input.dto';
 import { LessonInputDto } from './dto/lesson-input.dto';
@@ -12,7 +14,8 @@ const SMS_COST_XOF = Number(process.env.SMS_COST_XOF || 15);
 export class AdminService {
   constructor(
     private prisma: PrismaService,
-    private shopService: ShopService
+    private shopService: ShopService,
+    private schoolService: SchoolService
   ) {}
 
   // ─── Users ───────────────────────────────────────────────────────────────────
@@ -126,6 +129,16 @@ export class AdminService {
    */
   async listSchoolPacks() {
     return this.shopService.listSchoolPacks();
+  }
+
+  // ─── Schools (multi-tenant, Phase 0) ─────────────────────────────────────────
+
+  async listSchools() {
+    return this.schoolService.listAll();
+  }
+
+  async updateSchoolStatus(id: string, status: SchoolStatus) {
+    return this.schoolService.updateStatus(id, status);
   }
 
   /** Full profile for the admin drawer: subscription, purchases, activity. */

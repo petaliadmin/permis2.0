@@ -20,21 +20,53 @@ enum ProfileType {
   AUTO_ECOLE
 }
 
+// ─── Multi-tenant : auto-écoles — Phase 0 fondations ─────────────────────────
+
+enum SchoolStatus {
+  PENDING
+  ACTIVE
+  SUSPENDED
+}
+
+enum SchoolMemberRole {
+  OWNER
+  MANAGER
+  SECRETARY
+  INSTRUCTOR
+  COACH
+  ACCOUNTANT
+}
+
+enum SchoolEnrollmentStatus {
+  SENT
+  IN_PROGRESS
+  ACCEPTED
+  REFUSED
+  CONFIRMED
+}
+
+enum SchoolStudentStatus {
+  ACTIVE
+  SUSPENDED
+  GRADUATED
+  WITHDRAWN
+}
+
 model User {
-  id            String     @id @default(cuid())
-  email         String?    @unique
-  phone         String?    @unique
-  name          String
-  avatar        String?
-  passwordHash  String?
-  pinHash       String?
-  xp            Int        @default(0)
-  level         String     @default("Débutant")
-  role          Role       @default(USER)
-  profileType   ProfileType @default(PARTICULIER)
-  blocked       Boolean    @default(false)
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
+  id           String      @id @default(cuid())
+  email        String?     @unique
+  phone        String?     @unique
+  name         String
+  avatar       String?
+  passwordHash String?
+  pinHash      String?
+  xp           Int         @default(0)
+  level        String      @default("Débutant")
+  role         Role        @default(USER)
+  profileType  ProfileType @default(PARTICULIER)
+  blocked      Boolean     @default(false)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
 
   // Relations
   exams               Exam[]
@@ -51,82 +83,88 @@ model User {
   purchases           Purchase[]
   claimedPackSeats    PackSeat[]
 
+  // Multi-tenant — Phase 0 fondations (relations virtuelles, aucune colonne ajoutée sur users)
+  schoolMemberships           SchoolMembership[]
+  schoolStudentLinks          SchoolStudent[]
+  schoolEnrollmentRequests    SchoolEnrollmentRequest[] @relation("SchoolEnrollmentRequestStudent")
+  respondedEnrollmentRequests SchoolEnrollmentRequest[] @relation("SchoolEnrollmentRequestResponder")
+
   @@map("users")
 }
 
 model Category {
-  id          String     @id @default(cuid())
+  id          String   @id @default(cuid())
   label       String
   description String
   couleur     String
   icone       String
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   // Relations
-  lessons     Lesson[]
-  questions   Question[]
-  statistics  Statistic[]
+  lessons    Lesson[]
+  questions  Question[]
+  statistics Statistic[]
 
   @@map("categories")
 }
 
 model Lesson {
-  id                  String     @id @default(cuid())
-  categoryId          String
-  titre               String
-  contenu             String
-  points_cles         String[]
-  exceptions          String[]
-  erreurs_frequentes  String[]
-  regles              String[]
-  illustrations       String[]
-  createdAt           DateTime   @default(now())
-  updatedAt           DateTime   @updatedAt
+  id                 String   @id @default(cuid())
+  categoryId         String
+  titre              String
+  contenu            String
+  points_cles        String[]
+  exceptions         String[]
+  erreurs_frequentes String[]
+  regles             String[]
+  illustrations      String[]
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 
   // Relations
-  category            Category   @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  favorites           Favorite[]
+  category  Category   @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  favorites Favorite[]
 
   @@index([categoryId])
   @@map("lessons")
 }
 
 model Series {
-  id          String     @id @default(cuid())
+  id          String   @id @default(cuid())
   name        String
   description String
-  code        String     @unique // B1, B2, B3
-  isFree      Boolean    @default(true)
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  code        String   @unique // B1, B2, B3
+  isFree      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   // Relations
-  questions   Question[]
-  progress    Progress[]
+  questions Question[]
+  progress  Progress[]
 
   @@map("series")
 }
 
 model Question {
-  id                    String     @id @default(cuid())
+  id                    String   @id @default(cuid())
   serieId               String
   categoryId            String
   numero                Int
   enonce                String
-  image                 String?    // e.g. /icons/panneaux/{code}.svg (quiz) or /data/diapos/{serie}_q{n}.webp (diapo exam)
+  image                 String? // e.g. /icons/panneaux/{code}.svg (quiz) or /data/diapos/{serie}_q{n}.webp (diapo exam)
   signalisation_visible String?
   reponses_correctes    String[]
   explication           String
-  createdAt             DateTime   @default(now())
-  updatedAt             DateTime   @updatedAt
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
 
   // Relations
-  series                Series     @relation(fields: [serieId], references: [id], onDelete: Cascade)
-  category              Category   @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  choices               Choice[]
-  examQuestions         ExamQuestion[]
-  favorites             Favorite[]
+  series        Series         @relation(fields: [serieId], references: [id], onDelete: Cascade)
+  category      Category       @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  choices       Choice[]
+  examQuestions ExamQuestion[]
+  favorites     Favorite[]
 
   @@index([serieId])
   @@index([categoryId])
@@ -134,52 +172,52 @@ model Question {
 }
 
 model Choice {
-  id          String     @id @default(cuid())
-  questionId  String
-  text        String
-  order       Int
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  id         String   @id @default(cuid())
+  questionId String
+  text       String
+  order      Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
   // Relations
-  question    Question   @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
 
   @@index([questionId])
   @@map("choices")
 }
 
 model Exam {
-  id          String     @id @default(cuid())
+  id          String    @id @default(cuid())
   userId      String
-  status      String     @default("pending") // pending, in_progress, completed
-  duration    Int        @default(1800000) // 30 minutes in milliseconds
+  status      String    @default("pending") // pending, in_progress, completed
+  duration    Int       @default(1800000) // 30 minutes in milliseconds
   startedAt   DateTime?
   completedAt DateTime?
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
   // Relations
-  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  questions   ExamQuestion[]
-  result      ExamResult?
+  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  questions ExamQuestion[]
+  result    ExamResult?
 
   @@index([userId])
   @@map("exams")
 }
 
 model ExamQuestion {
-  id          String     @id @default(cuid())
-  examId      String
-  questionId  String
-  userAnswer  String?
-  isCorrect   Boolean?
-  timeSpent   Int        @default(0) // in seconds
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  id         String   @id @default(cuid())
+  examId     String
+  questionId String
+  userAnswer String?
+  isCorrect  Boolean?
+  timeSpent  Int      @default(0) // in seconds
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
   // Relations
-  exam        Exam       @relation(fields: [examId], references: [id], onDelete: Cascade)
-  question    Question   @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  exam     Exam     @relation(fields: [examId], references: [id], onDelete: Cascade)
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
 
   @@index([examId])
   @@index([questionId])
@@ -187,21 +225,21 @@ model ExamQuestion {
 }
 
 model ExamResult {
-  id          String     @id @default(cuid())
-  examId      String     @unique
+  id          String   @id @default(cuid())
+  examId      String   @unique
   userId      String
   score       Int
   percentage  Int
   passed      Boolean
-  timeUsed    Int        // in seconds
-  totalTime   Int        // in seconds
+  timeUsed    Int // in seconds
+  totalTime   Int // in seconds
   startedAt   DateTime
   completedAt DateTime
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   // Relations
-  exam        Exam       @relation(fields: [examId], references: [id], onDelete: Cascade)
+  exam Exam @relation(fields: [examId], references: [id], onDelete: Cascade)
 
   @@index([examId])
   @@index([userId])
@@ -210,18 +248,18 @@ model ExamResult {
 }
 
 model Progress {
-  id              String     @id @default(cuid())
-  userId          String
-  serieId         String
-  correctAnswers  Int        @default(0)
-  totalQuestions  Int        @default(0)
-  accuracy        Float      @default(0)
-  createdAt       DateTime   @default(now())
-  updatedAt       DateTime   @updatedAt
+  id             String   @id @default(cuid())
+  userId         String
+  serieId        String
+  correctAnswers Int      @default(0)
+  totalQuestions Int      @default(0)
+  accuracy       Float    @default(0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
   // Relations
-  user            User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  series          Series     @relation(fields: [serieId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  series Series @relation(fields: [serieId], references: [id], onDelete: Cascade)
 
   @@unique([userId, serieId])
   @@index([userId])
@@ -230,38 +268,38 @@ model Progress {
 }
 
 model Statistic {
-  id              String     @id @default(cuid())
-  userId          String
-  categoryId      String?
-  correctAnswers  Int        @default(0)
-  totalAnswers    Int        @default(0)
-  successRate     Float      @default(0)
-  averageTime     Float      @default(0)
-  createdAt       DateTime   @default(now())
-  updatedAt       DateTime   @updatedAt
+  id             String   @id @default(cuid())
+  userId         String
+  categoryId     String?
+  correctAnswers Int      @default(0)
+  totalAnswers   Int      @default(0)
+  successRate    Float    @default(0)
+  averageTime    Float    @default(0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
   // Relations
-  user            User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  category        Category?  @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
 
+  @@unique([userId, categoryId])
   @@index([userId])
   @@index([categoryId])
-  @@unique([userId, categoryId])
   @@map("statistics")
 }
 
 model Favorite {
-  id          String     @id @default(cuid())
-  userId      String
-  lessonId    String?
-  questionId  String?
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  id         String   @id @default(cuid())
+  userId     String
+  lessonId   String?
+  questionId String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
   // Relations
-  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  lesson      Lesson?    @relation(fields: [lessonId], references: [id], onDelete: Cascade)
-  question    Question?  @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lesson   Lesson?   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  question Question? @relation(fields: [questionId], references: [id], onDelete: Cascade)
 
   @@unique([userId, lessonId, questionId])
   @@index([userId])
@@ -271,17 +309,17 @@ model Favorite {
 }
 
 model Badge {
-  id          String     @id @default(cuid())
+  id          String   @id @default(cuid())
   userId      String
   name        String
   description String
   icon        String
-  unlockedAt  DateTime   @default(now())
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  unlockedAt  DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   // Relations
-  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, name])
   @@index([userId])
@@ -289,32 +327,32 @@ model Badge {
 }
 
 model DailyStreak {
-  id              String     @id @default(cuid())
-  userId          String     @unique
-  currentStreak   Int        @default(0)
-  longestStreak   Int        @default(0)
+  id               String    @id @default(cuid())
+  userId           String    @unique
+  currentStreak    Int       @default(0)
+  longestStreak    Int       @default(0)
   lastActivityDate DateTime?
-  createdAt       DateTime   @default(now())
-  updatedAt       DateTime   @updatedAt
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
 
   // Relations
-  user            User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("daily_streaks")
 }
 
 model Notification {
-  id        String     @id @default(cuid())
+  id        String   @id @default(cuid())
   userId    String
   title     String
   message   String
-  type      String     @default("info") // success, info, warning, error
-  read      Boolean    @default(false)
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  type      String   @default("info") // success, info, warning, error
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   // Relations
-  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([userId, read, createdAt])
@@ -330,24 +368,24 @@ model PushSubscription {
   createdAt DateTime @default(now())
 
   // Relations
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@map("push_subscriptions")
 }
 
 model Subscription {
-  id        String     @id @default(cuid())
+  id        String    @id @default(cuid())
   userId    String
-  plan      String     @default("free") // free, premium, pro
-  status    String     @default("active") // active, cancelled, expired
-  startDate DateTime   @default(now())
+  plan      String    @default("free") // free, premium, pro
+  status    String    @default("active") // active, cancelled, expired
+  startDate DateTime  @default(now())
   endDate   DateTime?
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 
   // Relations
-  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([status])
@@ -355,20 +393,20 @@ model Subscription {
 }
 
 model TrafficSign {
-  id              String     @id @default(cuid())
-  name            String
-  code            String?
-  meaning         String
-  category        String // Danger, Interdiction, Obligation, Priorité, Indication, Direction, Temporaire, Restriction, Stationnement
-  description     String
-  contexte_usage  String?
-  regle_associee  String?
-  advice          String[]   @default([])
-  ordre           Int        @default(0)
-  icone           String?
-  image           String?
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  id             String   @id @default(cuid())
+  name           String
+  code           String?
+  meaning        String
+  category       String // Danger, Interdiction, Obligation, Priorité, Indication, Direction, Temporaire, Restriction, Stationnement
+  description    String
+  contexte_usage String?
+  regle_associee String?
+  advice         String[] @default([])
+  ordre          Int      @default(0)
+  icone          String?
+  image          String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
   @@index([category])
   @@index([name])
@@ -383,7 +421,7 @@ model PasswordResetToken {
   usedAt    DateTime?
   createdAt DateTime  @default(now())
 
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@map("password_reset_tokens")
@@ -398,7 +436,7 @@ model Entitlement {
   expiresAt  DateTime?
   createdAt  DateTime  @default(now())
 
-  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, key])
   @@index([userId])
@@ -406,45 +444,45 @@ model Entitlement {
 }
 
 model Product {
-  id           String     @id @default(cuid())
-  sku          String     @unique
+  id           String   @id @default(cuid())
+  sku          String   @unique
   title        String
   description  String?
   kind         String
   priceXof     Int
-  active       Boolean    @default(true)
-  ordre        Int        @default(0)
+  active       Boolean  @default(true)
+  ordre        Int      @default(0)
   grants       String[]
   validityDays Int?
   /// Number of seats in the pack, for kind = "school_pack" only; null for individual products.
   seats        Int?
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
-  purchases    Purchase[]
+  purchases Purchase[]
 
   @@map("products")
 }
 
 model Purchase {
-  id          String    @id @default(cuid())
+  id          String   @id @default(cuid())
   userId      String
   productId   String
   provider    String
   method      String?
   phone       String?
   amountXof   Int
-  status      String    @default("PENDING")
+  status      String   @default("PENDING")
   providerRef String?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  product     Product   @relation(fields: [productId], references: [id])
-  packSeats   PackSeat[]
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product   Product    @relation(fields: [productId], references: [id])
+  packSeats PackSeat[]
 
-  @@index([userId])
   @@unique([providerRef])
+  @@index([userId])
   @@map("purchases")
 }
 
@@ -458,56 +496,56 @@ model PackSeat {
   claimedAt       DateTime?
   createdAt       DateTime  @default(now())
 
-  purchase        Purchase  @relation(fields: [purchaseId], references: [id], onDelete: Cascade)
-  claimedBy       User?     @relation(fields: [claimedByUserId], references: [id])
+  purchase  Purchase @relation(fields: [purchaseId], references: [id], onDelete: Cascade)
+  claimedBy User?    @relation(fields: [claimedByUserId], references: [id])
 
   @@index([purchaseId])
   @@map("pack_seats")
 }
 
 model DrivingCourse {
-  id          String            @id @default(cuid())
-  slug        String            @unique
+  id          String   @id @default(cuid())
+  slug        String   @unique
   title       String
   description String?
-  ordre       Int               @default(0)
-  isDraft     Boolean           @default(false)
-  isFree      Boolean           @default(true)
-  createdAt   DateTime          @default(now())
-  updatedAt   DateTime          @updatedAt
+  ordre       Int      @default(0)
+  isDraft     Boolean  @default(false)
+  isFree      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  questions   DrivingQuestion[]
+  questions DrivingQuestion[]
 
   @@map("driving_courses")
 }
 
 model DrivingQuestion {
-  id                 String          @id @default(cuid())
+  id                 String   @id @default(cuid())
   courseId           String
   numero             Int
   enonce             String
   image              String?
   reponses_correctes String[]
   explication        String?
-  createdAt          DateTime        @default(now())
-  updatedAt          DateTime        @updatedAt
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 
-  course             DrivingCourse   @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  choices            DrivingChoice[]
+  course  DrivingCourse   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  choices DrivingChoice[]
 
   @@index([courseId])
   @@map("driving_questions")
 }
 
 model DrivingChoice {
-  id         String          @id @default(cuid())
+  id         String   @id @default(cuid())
   questionId String
   text       String
   order      Int
-  createdAt  DateTime        @default(now())
-  updatedAt  DateTime        @updatedAt
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
-  question   DrivingQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  question DrivingQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
 
   @@index([questionId])
   @@map("driving_choices")
@@ -546,4 +584,116 @@ model DiapoExam {
   updatedAt DateTime @updatedAt
 
   @@map("diapo_exams")
+}
+
+// ─── Multi-tenant : auto-écoles — Phase 0 fondations ─────────────────────────
+
+/// A driving school (tenant). Data belonging to a school must always be
+/// scoped by schoolId — see SchoolRolesGuard for the enforcement mechanism.
+model School {
+  id     String       @id @default(cuid())
+  slug   String       @unique
+  name   String
+  status SchoolStatus @default(PENDING)
+
+  city              String?
+  district          String?
+  address           String?
+  phone             String?
+  whatsapp          String?
+  email             String?
+  logoUrl           String?
+  openingHours      Json?
+  services          String[] @default([])
+  licenseCategories String[] @default([])
+  priceXof          Int?
+
+  latitude  Float?
+  longitude Float?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  memberships        SchoolMembership[]
+  enrollmentRequests SchoolEnrollmentRequest[]
+  students           SchoolStudent[]
+
+  @@index([status])
+  @@index([city])
+  @@map("schools")
+}
+
+/// Staff rattachement to a school with a scoped role (RBAC tenant axis).
+/// The school owner is modeled ONLY via a membership row (role = OWNER),
+/// never via a denormalized column on School, to avoid two sources of truth.
+model SchoolMembership {
+  id        String           @id @default(cuid())
+  schoolId  String
+  userId    String
+  role      SchoolMemberRole
+  active    Boolean          @default(true)
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+
+  school School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([schoolId, userId, role])
+  @@index([schoolId])
+  @@index([userId])
+  @@map("school_memberships")
+}
+
+/// A pre-registration lead submitted for a school. Separate from SchoolStudent
+/// on purpose: this is a CRM/workflow object (statuses SENT..REFUSED stop
+/// mattering once confirmed) while SchoolStudent is the durable operational
+/// rattachement — mirrors the existing Purchase -> Entitlement split.
+model SchoolEnrollmentRequest {
+  id                String                 @id @default(cuid())
+  schoolId          String
+  studentUserId     String?
+  fullName          String
+  phone             String
+  email             String?
+  licenseCategory   String?
+  message           String?
+  status            SchoolEnrollmentStatus @default(SENT)
+  statusNote        String?
+  respondedByUserId String?
+  respondedAt       DateTime?
+  createdAt         DateTime               @default(now())
+  updatedAt         DateTime               @updatedAt
+
+  school      School         @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  studentUser User?          @relation("SchoolEnrollmentRequestStudent", fields: [studentUserId], references: [id])
+  respondedBy User?          @relation("SchoolEnrollmentRequestResponder", fields: [respondedByUserId], references: [id])
+  studentLink SchoolStudent?
+
+  @@index([schoolId, status])
+  @@index([studentUserId])
+  @@map("school_enrollment_requests")
+}
+
+/// Confirmed student <-> school rattachement. Kept separate from
+/// SchoolEnrollmentRequest so every future ERP module (planning, finances,
+/// exams) can query "students of this school" without re-filtering by status.
+model SchoolStudent {
+  id                  String              @id @default(cuid())
+  schoolId            String
+  userId              String
+  enrollmentRequestId String?             @unique
+  licenseCategory     String?
+  status              SchoolStudentStatus @default(ACTIVE)
+  enrolledAt          DateTime            @default(now())
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+
+  school            School                   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  user              User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  enrollmentRequest SchoolEnrollmentRequest? @relation(fields: [enrollmentRequestId], references: [id])
+
+  @@unique([schoolId, userId])
+  @@index([schoolId, status])
+  @@index([userId])
+  @@map("school_students")
 }

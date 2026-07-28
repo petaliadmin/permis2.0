@@ -21,6 +21,7 @@ import { AdminModule } from './admin/admin.module';
 import { NotificationModule } from './notification/notification.module';
 import { ShopModule } from './shop/shop.module';
 import { EntitlementModule } from './entitlement/entitlement.module';
+import { SchoolModule } from './school/school.module';
 
 @Module({
   imports: [
@@ -59,6 +60,7 @@ import { EntitlementModule } from './entitlement/entitlement.module';
     NotificationModule,
     ShopModule,
     EntitlementModule,
+    SchoolModule,
   ],
   controllers: [AppController],
   providers: [

@@ -24,6 +24,7 @@ import { SetBlockedDto } from './dto/set-blocked.dto';
 import { QuestionInputDto } from './dto/question-input.dto';
 import { SeriesInputDto } from './dto/series-input.dto';
 import { LessonInputDto } from './dto/lesson-input.dto';
+import { UpdateSchoolStatusDto } from './dto/update-school-status.dto';
 
 @ApiTags('Admin')
 @ApiBearerAuth()
@@ -135,6 +136,20 @@ export class AdminController {
   @ApiResponse({ status: 200, description: 'Paid school_pack purchases with seat claim status' })
   async listSchoolPacks() {
     return this.adminService.listSchoolPacks();
+  }
+
+  // ─── Schools (multi-tenant, Phase 0) ─────────────────────────────────────────
+
+  @Get('schools')
+  @ApiResponse({ status: 200, description: 'All schools, any status (moderation view)' })
+  async listSchools() {
+    return this.adminService.listSchools();
+  }
+
+  @Patch('schools/:id/status')
+  @ApiResponse({ status: 200, description: 'School status updated (PENDING/ACTIVE/SUSPENDED)' })
+  async updateSchoolStatus(@Param('id') id: string, @Body() dto: UpdateSchoolStatusDto) {
+    return this.adminService.updateSchoolStatus(id, dto.status);
   }
 
   // ─── Questions (quiz) ────────────────────────────────────────────────────────

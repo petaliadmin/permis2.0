@@ -441,3 +441,103 @@ export interface Entitlement {
   createdAt: Date;
   updatedAt: Date;
 }
+
+// ─── Multi-tenant : auto-écoles — Phase 0 fondations ─────────────────────────
+// `Role`, `ProfileType` and `User` above are the platform-level axis and stay
+// untouched. Everything below is a separate, tenant-scoped RBAC axis.
+
+export enum SchoolStatus {
+  PENDING = 'PENDING',
+  ACTIVE = 'ACTIVE',
+  SUSPENDED = 'SUSPENDED',
+}
+
+export enum SchoolMemberRole {
+  OWNER = 'OWNER',
+  MANAGER = 'MANAGER',
+  SECRETARY = 'SECRETARY',
+  INSTRUCTOR = 'INSTRUCTOR',
+  COACH = 'COACH',
+  ACCOUNTANT = 'ACCOUNTANT',
+}
+
+export enum SchoolEnrollmentStatus {
+  SENT = 'SENT',
+  IN_PROGRESS = 'IN_PROGRESS',
+  ACCEPTED = 'ACCEPTED',
+  REFUSED = 'REFUSED',
+  CONFIRMED = 'CONFIRMED',
+}
+
+export enum SchoolStudentStatus {
+  ACTIVE = 'ACTIVE',
+  SUSPENDED = 'SUSPENDED',
+  GRADUATED = 'GRADUATED',
+  WITHDRAWN = 'WITHDRAWN',
+}
+
+export interface School {
+  id: string;
+  slug: string;
+  name: string;
+  status: SchoolStatus;
+  city?: string | null;
+  district?: string | null;
+  address?: string | null;
+  phone?: string | null;
+  whatsapp?: string | null;
+  email?: string | null;
+  logoUrl?: string | null;
+  openingHours?: Record<string, string> | null;
+  services: string[];
+  licenseCategories: string[];
+  priceXof?: number | null;
+  latitude?: number | null;
+  longitude?: number | null;
+  createdAt: Date;
+  updatedAt: Date;
+  /** Computed by the API for the current viewer. */
+  myRole?: SchoolMemberRole | null;
+}
+
+export interface SchoolMembership {
+  id: string;
+  schoolId: string;
+  userId: string;
+  role: SchoolMemberRole;
+  active: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  user?: Pick<User, 'id' | 'name' | 'phone' | 'email'>;
+}
+
+/** A student pre-registration lead for a school. Not yet consumed by any endpoint (Phase 1). */
+export interface SchoolEnrollmentRequest {
+  id: string;
+  schoolId: string;
+  studentUserId?: string | null;
+  fullName: string;
+  phone: string;
+  email?: string | null;
+  licenseCategory?: string | null;
+  message?: string | null;
+  status: SchoolEnrollmentStatus;
+  statusNote?: string | null;
+  respondedByUserId?: string | null;
+  respondedAt?: Date | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+/** A confirmed student <-> school rattachement. Not yet consumed by any endpoint (Phase 1). */
+export interface SchoolStudent {
+  id: string;
+  schoolId: string;
+  userId: string;
+  enrollmentRequestId?: string | null;
+  licenseCategory?: string | null;
+  status: SchoolStudentStatus;
+  enrolledAt: Date;
+  createdAt: Date;
+  updatedAt: Date;
+}
