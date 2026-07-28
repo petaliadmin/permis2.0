@@ -54,13 +54,13 @@
   --color-text-secondary: #475569;
   --color-text-muted: #94a3b8;
 
-  --color-primary: #2563eb;
-  --color-primary-light: #3b82f6;
-  --color-primary-dim: rgba(37, 99, 235, 0.1);
+  --color-primary: #003ea8;
+  --color-primary-light: #004fd6;
+  --color-primary-dim: rgba(0, 62, 168, 0.1);
   --color-violet: #7c3aed;
   --color-violet-dim: rgba(124, 58, 237, 0.1);
-  --color-orange: #f97316;
-  --color-orange-dim: rgba(249, 115, 22, 0.12);
+  --color-orange: #ff620e;
+  --color-orange-dim: rgba(255, 98, 14, 0.12);
   --color-success: #16a34a;
   --color-success-dim: rgba(22, 163, 74, 0.1);
   --color-xp: #d97706;
@@ -85,13 +85,13 @@
   --color-text-secondary: #94a3b8;
   --color-text-muted: #64748b;
 
-  --color-primary: #3b82f6;
-  --color-primary-light: #60a5fa;
-  --color-primary-dim: rgba(59, 130, 246, 0.15);
+  --color-primary: #146aff;
+  --color-primary-light: #5c98ff;
+  --color-primary-dim: rgba(20, 106, 255, 0.16);
   --color-violet: #a78bfa;
   --color-violet-dim: rgba(167, 139, 250, 0.15);
-  --color-orange: #fb923c;
-  --color-orange-dim: rgba(251, 146, 60, 0.15);
+  --color-orange: #ff752b;
+  --color-orange-dim: rgba(255, 117, 43, 0.16);
   --color-success: #4ade80;
   --color-success-dim: rgba(74, 222, 128, 0.12);
   --color-xp: #fbbf24;
@@ -273,7 +273,7 @@ label {
   }
   .chip-orange {
     background: var(--color-orange-dim);
-    color: #c2410c;
+    color: #b84000;
   }
   .chip-success {
     background: var(--color-success-dim);

@@ -33,7 +33,7 @@ export const ADMIN_SECTIONS = [
     label: 'Utilisateurs',
     desc: 'Bloquer, rôles, abonnements',
     icon: 'ti-users',
-    color: '#2563EB',
+    color: '#003EA8',
   },
   {
     href: '/admin/questions',
@@ -47,7 +47,7 @@ export const ADMIN_SECTIONS = [
     label: 'Séries (examens)',
     desc: 'Gérer les séries d’entraînement',
     icon: 'ti-clipboard-check',
-    color: '#F97316',
+    color: '#FF620E',
   },
   {
     href: '/admin/cours',

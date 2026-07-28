@@ -31,20 +31,25 @@ const baloo = Baloo_2({
 
 const SITE_URL = 'https://www.permis2.com';
 const SEO_DESCRIPTION =
-  'Préparez le code de la route et l’examen du permis de conduire au Sénégal : leçons, panneaux de signalisation, séries de quiz et examens blancs, en français et en wolof.';
+  'PERMIS 2.0 : préparez votre permis et le code de la route au Sénégal — leçons, panneaux de signalisation, séries de quiz et examens blancs, en français et en wolof. Élèves et auto-écoles du Sénégal.';
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: { default: `${APP_NAME} — Code de la route Sénégal`, template: `%s · ${APP_NAME}` },
   description: SEO_DESCRIPTION,
   keywords: [
+    'permis',
+    'permis Sénégal',
+    'code de la route',
     'code de la route Sénégal',
     'permis de conduire Sénégal',
     'examen du permis',
     'quiz code de la route',
     'panneaux de signalisation',
     'examen blanc permis',
+    'auto-école',
     'auto-école Sénégal',
+    'auto-écoles Sénégal',
   ],
   applicationName: APP_NAME,
   manifest: '/manifest.json',
@@ -99,7 +104,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 5,
   userScalable: true,
-  themeColor: [{ color: '#2563eb' }],
+  themeColor: [{ color: '#003ea8' }],
   viewportFit: 'cover',
 };
 

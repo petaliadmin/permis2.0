@@ -16,20 +16,20 @@ const config: Config = {
         baloo: ['var(--font-baloo)', 'Plus Jakarta Sans', 'sans-serif'],
       },
       colors: {
-        // Brand blue — primary identity (Accueil). Legacy primary-* usages
-        // keep working, remapped to the new blue hue.
+        // Brand navy — sampled directly from the PERMIS 2.0 logo (#00173D), hue ~218°.
         primary: {
-          DEFAULT: '#2563EB',
-          50: '#eff6ff',
-          100: '#dbeafe',
-          200: '#bfdbfe',
-          300: '#93c5fd',
-          400: '#60a5fa',
-          500: '#3b82f6',
-          600: '#2563eb',
-          700: '#1d4ed8',
-          800: '#1e40af',
-          900: '#1e3a8a',
+          DEFAULT: '#003EA8',
+          50: '#F0F5FF',
+          100: '#D6E5FF',
+          200: '#A3C5FF',
+          300: '#5C98FF',
+          400: '#146AFF',
+          500: '#004FD6',
+          600: '#003EA8',
+          700: '#002F80',
+          800: '#00235E',
+          900: '#001842',
+          950: '#00102B',
         },
         // Quiz — violet.
         violet: {
@@ -45,17 +45,19 @@ const config: Config = {
           800: '#5b21b6',
           900: '#4c1d95',
         },
-        // Examens — orange.
+        // Examens — orange, sampled directly from the PERMIS 2.0 logo (#FF630E), hue ~21°.
         orange: {
-          DEFAULT: '#F97316',
-          50: '#fff7ed',
-          100: '#ffedd5',
-          200: '#fed7aa',
-          300: '#fdba74',
-          400: '#fb923c',
-          500: '#f97316',
-          600: '#ea580c',
-          700: '#c2410c',
+          DEFAULT: '#FF620E',
+          50: '#FFF2EB',
+          100: '#FFDECC',
+          200: '#FFBD99',
+          300: '#FF975E',
+          400: '#FF752B',
+          500: '#FF620E',
+          600: '#E65000',
+          700: '#B84000',
+          800: '#8F3200',
+          900: '#662400',
         },
         // Success / bonnes réponses — green.
         success: {
@@ -77,7 +79,7 @@ const config: Config = {
         },
         // Road-code semantics.
         caution: { DEFAULT: '#F59E0B', 400: '#fbbf24', 500: '#f59e0b', 600: '#d97706' },
-        info: { DEFAULT: '#2563EB', 400: '#60a5fa', 500: '#3b82f6', 600: '#2563eb' },
+        info: { DEFAULT: '#003EA8', 400: '#146AFF', 500: '#004FD6', 600: '#003EA8' },
         // Light surfaces.
         surface: {
           DEFAULT: '#F5F7FA',
@@ -134,17 +136,17 @@ const config: Config = {
         clay: '0 1px 3px rgba(15,23,42,0.05), 0 10px 28px -14px rgba(15,23,42,0.16)',
         'clay-lg': '0 6px 14px rgba(15,23,42,0.07), 0 24px 48px -20px rgba(15,23,42,0.22)',
         nav: '0 -1px 3px rgba(15,23,42,0.04), 0 -8px 24px -12px rgba(15,23,42,0.10)',
-        glow: '0 8px 24px -8px rgba(37,99,235,0.45)',
+        glow: '0 8px 24px -8px rgba(0,62,168,0.45)',
         'glow-violet': '0 8px 24px -8px rgba(124,58,237,0.45)',
-        'glow-orange': '0 8px 24px -8px rgba(249,115,22,0.45)',
+        'glow-orange': '0 8px 24px -8px rgba(255,98,14,0.45)',
       },
       backgroundImage: {
-        'gradient-primary': 'linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%)',
+        'gradient-primary': 'linear-gradient(135deg, #003EA8 0%, #002F80 100%)',
         'gradient-violet': 'linear-gradient(135deg, #7C3AED 0%, #6D28D9 100%)',
-        'gradient-orange': 'linear-gradient(135deg, #F97316 0%, #EA580C 100%)',
+        'gradient-orange': 'linear-gradient(135deg, #FF620E 0%, #E65000 100%)',
         'gradient-success': 'linear-gradient(135deg, #22C55E 0%, #16A34A 100%)',
         'gradient-ink': 'linear-gradient(160deg, #1E293B 0%, #0F172A 60%, #0B1120 100%)',
-        'gradient-hero': 'linear-gradient(160deg, #2563EB 0%, #1D4ED8 55%, #1E3A8A 100%)',
+        'gradient-hero': 'linear-gradient(160deg, #003EA8 0%, #002F80 55%, #001842 100%)',
       },
       keyframes: {
         'fade-in': {

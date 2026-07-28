@@ -65,7 +65,7 @@ const THEMES: Theme[] = [
     label: 'Règles de circulation',
     desc: 'Vitesses, dépassement, stationnement, rail',
     icon: 'ti-car',
-    color: '#2563EB',
+    color: '#003EA8',
     categories: [
       'Limitation de vitesse',
       'Dépassement',

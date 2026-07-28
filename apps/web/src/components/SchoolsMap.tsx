@@ -65,7 +65,7 @@ export function SchoolsMap({ schools, selectedId, onSelect }: SchoolsMapProps) {
             onMouseLeave={() => setHoveredId(null)}
           >
             <Pin
-              background={selectedId === school.id ? '#2563eb' : '#7c3aed'}
+              background={selectedId === school.id ? '#003EA8' : '#7c3aed'}
               borderColor="#ffffff"
               glyphColor="#ffffff"
             />

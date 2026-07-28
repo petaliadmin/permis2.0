@@ -13,9 +13,9 @@ const CAT_STYLE: Record<
   string,
   { accent: 'blue' | 'violet' | 'orange'; color: string; icon: string }
 > = {
-  panneaux: { accent: 'orange', color: '#F97316', icon: 'ti-road-sign' },
+  panneaux: { accent: 'orange', color: '#FF620E', icon: 'ti-road-sign' },
   priorites: { accent: 'orange', color: '#F59E0B', icon: 'ti-arrows-cross' },
-  circulation: { accent: 'blue', color: '#2563EB', icon: 'ti-car' },
+  circulation: { accent: 'blue', color: '#003EA8', icon: 'ti-car' },
   signaux: { accent: 'blue', color: '#16A34A', icon: 'ti-traffic-lights' },
   situations: { accent: 'orange', color: '#EF4444', icon: 'ti-alert-triangle' },
 };

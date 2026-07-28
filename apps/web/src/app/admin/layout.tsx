@@ -149,7 +149,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         className="pointer-events-none fixed inset-0 z-0 opacity-[0.06]"
         style={{
           background:
-            'radial-gradient(600px circle at 0% 0%, #7C3AED, transparent), radial-gradient(500px circle at 100% 0%, #2563EB, transparent)',
+            'radial-gradient(600px circle at 0% 0%, #7C3AED, transparent), radial-gradient(500px circle at 100% 0%, #003EA8, transparent)',
         }}
         aria-hidden="true"
       />
