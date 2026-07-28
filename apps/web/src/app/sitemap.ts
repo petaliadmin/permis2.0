@@ -6,12 +6,16 @@ const SITE_URL = 'https://www.permis2.com';
 // (a single quiz attempt, a course lesson id) aren't meaningful standalone
 // search results, so they're left out rather than enumerated.
 const ROUTES: { path: string; priority: number }[] = [
+  { path: '/', priority: 1 },
+  { path: '/ecoles', priority: 0.9 },
   { path: '/traffic-signs', priority: 1 },
   { path: '/cours', priority: 0.9 },
   { path: '/quizz', priority: 0.9 },
   { path: '/tests', priority: 0.8 },
   { path: '/exam', priority: 0.7 },
   { path: '/boutique', priority: 0.5 },
+  { path: '/auto-ecole', priority: 0.6 },
+  { path: '/pack-ecole', priority: 0.4 },
   { path: '/assistance', priority: 0.4 },
 ];
 

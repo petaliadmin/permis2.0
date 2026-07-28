@@ -1,9 +1,20 @@
 import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Role, SchoolMemberRole, SchoolStatus } from '@permis2.0/types';
+import { NotificationService } from '../notification/notification.service';
+import { Role, SchoolEnrollmentStatus, SchoolMemberRole, SchoolStatus } from '@permis2.0/types';
 import { CreateSchoolDto } from './dto/create-school.dto';
 import { UpdateSchoolDto } from './dto/update-school.dto';
 import { AddSchoolMemberDto } from './dto/add-school-member.dto';
+import { CreateEnrollmentRequestDto } from './dto/create-enrollment-request.dto';
+import { UpdateEnrollmentStatusDto } from './dto/update-enrollment-status.dto';
+
+const STAFF_NOTIFIABLE_ROLES = [
+  SchoolMemberRole.OWNER,
+  SchoolMemberRole.MANAGER,
+  SchoolMemberRole.SECRETARY,
+];
+
+const ACTIVE_STUDENTS_COUNT = { students: { where: { status: 'ACTIVE' as const } } };
 
 const COMBINING_DIACRITICS = new RegExp('[\\u0300-\\u036f]', 'g');
 
@@ -17,6 +28,14 @@ function slugify(name: string): string {
     .slice(0, 80);
 }
 
+/** Flattens Prisma's `_count.students` into the flat `studentsCount` field exposed by the API. */
+function withStudentsCount<T extends { _count: { students: number } }>(
+  school: T
+): Omit<T, '_count'> & { studentsCount: number } {
+  const { _count, ...rest } = school;
+  return { ...rest, studentsCount: _count.students };
+}
+
 /**
  * Phase 0 fondations: CRUD minimal pour les écoles (tenants) + gestion du
  * staff (SchoolMembership). Isolation multi-tenant : toute sous-ressource
@@ -25,37 +44,67 @@ function slugify(name: string): string {
  */
 @Injectable()
 export class SchoolService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private notificationService: NotificationService
+  ) {}
 
-  async listActive(filters: { city?: string; q?: string }) {
+  async listActive(filters: {
+    city?: string;
+    category?: string;
+    maxPriceXof?: number;
+    q?: string;
+    take?: number;
+  }) {
+    const take = Math.min(filters.take ?? 20, 50);
     return this.prisma.school.findMany({
       where: {
         status: SchoolStatus.ACTIVE,
         ...(filters.city ? { city: { equals: filters.city, mode: 'insensitive' } } : {}),
-        ...(filters.q
-          ? { name: { contains: filters.q, mode: 'insensitive' } }
-          : {}),
+        ...(filters.category ? { licenseCategories: { has: filters.category } } : {}),
+        ...(filters.maxPriceXof != null ? { priceXof: { lte: filters.maxPriceXof } } : {}),
+        ...(filters.q ? { name: { contains: filters.q, mode: 'insensitive' } } : {}),
       },
+      include: { _count: { select: ACTIVE_STUDENTS_COUNT } },
       orderBy: { createdAt: 'desc' },
-    });
+      take,
+    }).then((schools) => schools.map(withStudentsCount));
   }
 
   async getOne(schoolId: string, viewer?: { userId: string; role: Role }) {
-    const school = await this.prisma.school.findUnique({ where: { id: schoolId } });
+    const school = await this.prisma.school.findUnique({
+      where: { id: schoolId },
+      include: { _count: { select: ACTIVE_STUDENTS_COUNT } },
+    });
     if (!school) throw new NotFoundException('École introuvable');
+    await this.assertVisible(school, viewer);
+    return withStudentsCount(school);
+  }
 
-    if (school.status === SchoolStatus.ACTIVE) return school;
+  async getBySlug(slug: string, viewer?: { userId: string; role: Role }) {
+    const school = await this.prisma.school.findUnique({
+      where: { slug },
+      include: { _count: { select: ACTIVE_STUDENTS_COUNT } },
+    });
+    if (!school) throw new NotFoundException('École introuvable');
+    await this.assertVisible(school, viewer);
+    return withStudentsCount(school);
+  }
 
-    // Non-active schools are only visible to the platform admin or a staff member.
-    if (viewer?.role === Role.ADMIN) return school;
+  /** Non-active schools are only visible to the platform admin or one of their own staff. */
+  private async assertVisible(
+    school: { id: string; status: string },
+    viewer?: { userId: string; role: Role }
+  ) {
+    if (school.status === SchoolStatus.ACTIVE) return;
+    if (viewer?.role === Role.ADMIN) return;
     const membership = viewer
       ? await this.prisma.schoolMembership.findFirst({
-          where: { schoolId, userId: viewer.userId, active: true },
+          where: { schoolId: school.id, userId: viewer.userId, active: true },
           select: { id: true },
         })
       : null;
     if (!membership) throw new NotFoundException('École introuvable');
-    return school;
   }
 
   async listMine(userId: string) {
@@ -134,6 +183,114 @@ export class SchoolService {
       where: { id: membershipId },
       data: { active: false },
     });
+  }
+
+  // ─── Pré-inscription (SchoolEnrollmentRequest) ──────────────────────────────
+
+  async submitEnrollmentRequest(
+    schoolId: string,
+    dto: CreateEnrollmentRequestDto,
+    studentUserId?: string
+  ) {
+    // Same non-disclosure logic as getOne: a non-ACTIVE school 404s for the public.
+    const school = await this.prisma.school.findUnique({ where: { id: schoolId } });
+    if (!school || school.status !== SchoolStatus.ACTIVE) {
+      throw new NotFoundException('École introuvable');
+    }
+
+    const request = await this.prisma.schoolEnrollmentRequest.create({
+      data: { ...dto, schoolId, studentUserId: studentUserId ?? null },
+    });
+
+    const staff = await this.prisma.schoolMembership.findMany({
+      where: { schoolId, active: true, role: { in: STAFF_NOTIFIABLE_ROLES } },
+      select: { userId: true },
+    });
+    await Promise.all(
+      staff.map((m) =>
+        this.notificationService.create(
+          m.userId,
+          'Nouvelle pré-inscription',
+          `${dto.firstName} ${dto.lastName} a demandé à s'inscrire à ${school.name}.`,
+          'info'
+        )
+      )
+    );
+
+    return request;
+  }
+
+  async listEnrollmentRequests(schoolId: string, status?: SchoolEnrollmentStatus) {
+    return this.prisma.schoolEnrollmentRequest.findMany({
+      where: { schoolId, ...(status ? { status } : {}) },
+      orderBy: { createdAt: 'desc' },
+    });
+  }
+
+  async updateEnrollmentStatus(
+    schoolId: string,
+    requestId: string,
+    staffUserId: string,
+    dto: UpdateEnrollmentStatusDto
+  ) {
+    // Composite where — the "règle d'or": never trust requestId alone.
+    const request = await this.prisma.schoolEnrollmentRequest.findFirst({
+      where: { id: requestId, schoolId },
+    });
+    if (!request) throw new NotFoundException('Demande introuvable');
+
+    const updated = await this.prisma.$transaction(async (tx) => {
+      const updated = await tx.schoolEnrollmentRequest.update({
+        where: { id: requestId },
+        data: {
+          status: dto.status,
+          statusNote: dto.statusNote,
+          respondedByUserId: staffUserId,
+          respondedAt: new Date(),
+        },
+      });
+
+      if (dto.status === SchoolEnrollmentStatus.CONFIRMED && request.studentUserId) {
+        await tx.schoolStudent.upsert({
+          where: { schoolId_userId: { schoolId, userId: request.studentUserId } },
+          create: {
+            schoolId,
+            userId: request.studentUserId,
+            enrollmentRequestId: requestId,
+            licenseCategory: request.licenseCategory,
+          },
+          update: {},
+        });
+      }
+
+      return updated;
+    });
+
+    if (request.studentUserId) {
+      await this.notificationService.create(
+        request.studentUserId,
+        "Mise à jour de votre pré-inscription",
+        this.statusMessage(dto.status),
+        dto.status === SchoolEnrollmentStatus.REFUSED ? 'warning' : 'success'
+      );
+    }
+
+    return updated;
+  }
+
+  private statusMessage(status: SchoolEnrollmentStatus): string {
+    switch (status) {
+      case SchoolEnrollmentStatus.IN_PROGRESS:
+        return 'Votre demande de pré-inscription est en cours de traitement.';
+      case SchoolEnrollmentStatus.ACCEPTED:
+        return 'Votre demande de pré-inscription a été acceptée.';
+      case SchoolEnrollmentStatus.REFUSED:
+        return "Votre demande de pré-inscription n'a pas été retenue.";
+      case SchoolEnrollmentStatus.CONFIRMED:
+        return 'Votre inscription est confirmée. Bienvenue !';
+      default:
+        return 'Le statut de votre demande de pré-inscription a changé.';
+    }
   }
 
   // ─── Superadmin (délégué depuis AdminController) ────────────────────────────

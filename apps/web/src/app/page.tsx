@@ -1,9 +1,13 @@
-import { redirect } from 'next/navigation';
+import type { Metadata } from 'next';
+import HomeClient from './HomeClient';
 
-/**
- * L'accueil a été supprimé : l'app s'ouvre directement sur les Panneaux.
- * Tous les liens historiques vers « / » (post-login, PWA, retours) atterrissent ici.
- */
-export default function Home() {
-  redirect('/traffic-signs');
+export const metadata: Metadata = {
+  title: 'PERMIS 2.0 — Réviser le code et trouver son auto-école au Sénégal',
+  description:
+    "Préparez le code de la route, passez des examens blancs, et trouvez l'auto-école idéale près de chez vous. Gratuit pour commencer.",
+  alternates: { canonical: '/' },
+};
+
+export default function Page() {
+  return <HomeClient />;
 }

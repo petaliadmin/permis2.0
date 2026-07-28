@@ -15,7 +15,10 @@ export function OnboardingGate() {
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const done = localStorage.getItem('permis_onboarding_done');
-    const exempt = pathname.startsWith('/onboarding') || pathname.startsWith('/auth');
+    // '/' is exempt too: it now renders the marketing landing for fresh
+    // visitors instead of being force-redirected straight to /onboarding.
+    // HomeClient itself still sends already-onboarded visitors onward.
+    const exempt = pathname.startsWith('/onboarding') || pathname.startsWith('/auth') || pathname === '/';
     if (!done && !exempt) {
       router.replace('/onboarding');
     }

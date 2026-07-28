@@ -1,22 +1,32 @@
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
-import { SchoolMemberRole } from '@permis2.0/types';
+import { SchoolEnrollmentStatus, SchoolMemberRole, SchoolStatus } from '@permis2.0/types';
 import { SchoolService } from './school.service';
 
 describe('SchoolService — tenant isolation', () => {
-  let prisma: {
-    schoolMembership: { findFirst: jest.Mock; count: jest.Mock; update: jest.Mock };
-  };
+  let prisma: any;
+  let notificationService: { create: jest.Mock };
   let service: SchoolService;
 
   beforeEach(() => {
     prisma = {
+      school: { findUnique: jest.fn() },
       schoolMembership: {
         findFirst: jest.fn(),
+        findMany: jest.fn(),
         count: jest.fn(),
         update: jest.fn(),
       },
+      schoolEnrollmentRequest: {
+        create: jest.fn(),
+        findFirst: jest.fn(),
+        findMany: jest.fn(),
+        update: jest.fn(),
+      },
+      $transaction: jest.fn((cb: any) => cb(prisma)),
+      schoolStudent: { upsert: jest.fn() },
     };
-    service = new SchoolService(prisma as any);
+    notificationService = { create: jest.fn().mockResolvedValue(undefined) };
+    service = new SchoolService(prisma, notificationService as any);
   });
 
   describe('removeMember', () => {
@@ -62,6 +72,98 @@ describe('SchoolService — tenant isolation', () => {
       prisma.schoolMembership.update.mockResolvedValue({ id: 'm1', active: false });
 
       await expect(service.removeMember('schoolA', 'm1')).resolves.toEqual({ id: 'm1', active: false });
+    });
+  });
+
+  describe('submitEnrollmentRequest', () => {
+    const dto = { firstName: 'Fatou', lastName: 'Diop', phone: '771234567' };
+
+    it('rejects a non-ACTIVE school (404, no disclosure)', async () => {
+      prisma.school.findUnique.mockResolvedValue({ id: 's1', status: SchoolStatus.PENDING });
+
+      await expect(service.submitEnrollmentRequest('s1', dto as any)).rejects.toBeInstanceOf(
+        NotFoundException
+      );
+      expect(prisma.schoolEnrollmentRequest.create).not.toHaveBeenCalled();
+    });
+
+    it('creates the request and notifies active OWNER/MANAGER/SECRETARY staff only', async () => {
+      prisma.school.findUnique.mockResolvedValue({ id: 's1', status: SchoolStatus.ACTIVE, name: 'École X' });
+      prisma.schoolEnrollmentRequest.create.mockResolvedValue({ id: 'req1', ...dto });
+      prisma.schoolMembership.findMany.mockResolvedValue([{ userId: 'owner1' }, { userId: 'sec1' }]);
+
+      await service.submitEnrollmentRequest('s1', dto as any, 'student1');
+
+      expect(prisma.schoolEnrollmentRequest.create).toHaveBeenCalledWith({
+        data: { ...dto, schoolId: 's1', studentUserId: 'student1' },
+      });
+      expect(prisma.schoolMembership.findMany).toHaveBeenCalledWith({
+        where: {
+          schoolId: 's1',
+          active: true,
+          role: { in: [SchoolMemberRole.OWNER, SchoolMemberRole.MANAGER, SchoolMemberRole.SECRETARY] },
+        },
+        select: { userId: true },
+      });
+      expect(notificationService.create).toHaveBeenCalledTimes(2);
+    });
+  });
+
+  describe('updateEnrollmentStatus', () => {
+    it('rejects a request id that belongs to a different school (cross-tenant guess)', async () => {
+      prisma.schoolEnrollmentRequest.findFirst.mockResolvedValue(null);
+
+      await expect(
+        service.updateEnrollmentStatus('schoolA', 'reqOfSchoolB', 'staff1', {
+          status: SchoolEnrollmentStatus.ACCEPTED,
+        } as any)
+      ).rejects.toBeInstanceOf(NotFoundException);
+      expect(prisma.schoolEnrollmentRequest.findFirst).toHaveBeenCalledWith({
+        where: { id: 'reqOfSchoolB', schoolId: 'schoolA' },
+      });
+      expect(prisma.$transaction).not.toHaveBeenCalled();
+    });
+
+    it('creates a SchoolStudent when confirming a request tied to a known user', async () => {
+      prisma.schoolEnrollmentRequest.findFirst.mockResolvedValue({
+        id: 'req1',
+        schoolId: 's1',
+        studentUserId: 'student1',
+        licenseCategory: 'B',
+      });
+      prisma.schoolEnrollmentRequest.update.mockResolvedValue({ id: 'req1', status: 'CONFIRMED' });
+
+      await service.updateEnrollmentStatus('s1', 'req1', 'staff1', {
+        status: SchoolEnrollmentStatus.CONFIRMED,
+      } as any);
+
+      expect(prisma.schoolStudent.upsert).toHaveBeenCalledWith({
+        where: { schoolId_userId: { schoolId: 's1', userId: 'student1' } },
+        create: { schoolId: 's1', userId: 'student1', enrollmentRequestId: 'req1', licenseCategory: 'B' },
+        update: {},
+      });
+      expect(notificationService.create).toHaveBeenCalledWith(
+        'student1',
+        expect.any(String),
+        expect.any(String),
+        'success'
+      );
+    });
+
+    it('does not create a SchoolStudent for a guest lead without an account', async () => {
+      prisma.schoolEnrollmentRequest.findFirst.mockResolvedValue({
+        id: 'req1',
+        schoolId: 's1',
+        studentUserId: null,
+      });
+      prisma.schoolEnrollmentRequest.update.mockResolvedValue({ id: 'req1', status: 'CONFIRMED' });
+
+      await service.updateEnrollmentStatus('s1', 'req1', 'staff1', {
+        status: SchoolEnrollmentStatus.CONFIRMED,
+      } as any);
+
+      expect(prisma.schoolStudent.upsert).not.toHaveBeenCalled();
+      expect(notificationService.create).not.toHaveBeenCalled();
     });
   });
 });

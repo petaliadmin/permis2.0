@@ -20,6 +20,7 @@
     "zustand": "^4.4.6",
     "framer-motion": "^10.16.19",
     "@tabler/icons-webfont": "^3.0.0",
+    "@vis.gl/react-google-maps": "^1.1.0",
     "@permis2.0/types": "workspace:*",
     "@permis2.0/utils": "workspace:*",
     "@permis2.0/hooks": "workspace:*",

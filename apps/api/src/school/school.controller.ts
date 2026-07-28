@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Request, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { SchoolMemberRole } from '@permis2.0/types';
+import { SchoolEnrollmentStatus, SchoolMemberRole } from '@permis2.0/types';
 import { OptionalJwtAuthGuard } from '../auth/guards/optional-jwt-auth.guard';
 import { SchoolRolesGuard } from './guards/school-roles.guard';
 import { SchoolRoles } from './decorators/school-roles.decorator';
@@ -9,6 +9,10 @@ import { SchoolService } from './school.service';
 import { CreateSchoolDto } from './dto/create-school.dto';
 import { UpdateSchoolDto } from './dto/update-school.dto';
 import { AddSchoolMemberDto } from './dto/add-school-member.dto';
+import { CreateEnrollmentRequestDto } from './dto/create-enrollment-request.dto';
+import { UpdateEnrollmentStatusDto } from './dto/update-enrollment-status.dto';
+
+const STAFF_ROLES = [SchoolMemberRole.OWNER, SchoolMemberRole.MANAGER, SchoolMemberRole.SECRETARY];
 
 @ApiTags('Schools')
 @Controller('schools')
@@ -17,8 +21,20 @@ export class SchoolController {
 
   @Get()
   @ApiResponse({ status: 200, description: 'Active schools directory' })
-  async list(@Query('city') city?: string, @Query('q') q?: string) {
-    return this.schoolService.listActive({ city, q });
+  async list(
+    @Query('city') city?: string,
+    @Query('category') category?: string,
+    @Query('maxPriceXof') maxPriceXof?: string,
+    @Query('q') q?: string,
+    @Query('take') take?: string
+  ) {
+    return this.schoolService.listActive({
+      city,
+      category,
+      q,
+      maxPriceXof: maxPriceXof ? parseInt(maxPriceXof, 10) : undefined,
+      take: take ? parseInt(take, 10) : undefined,
+    });
   }
 
   @Get('mine')
@@ -27,6 +43,13 @@ export class SchoolController {
   @ApiResponse({ status: 200, description: 'Schools the current user is a staff member of' })
   async mine(@Request() req) {
     return this.schoolService.listMine(req.user.userId);
+  }
+
+  @Get('by-slug/:slug')
+  @UseGuards(OptionalJwtAuthGuard)
+  @ApiResponse({ status: 200, description: 'School details by public slug' })
+  async getBySlug(@Request() req, @Param('slug') slug: string) {
+    return this.schoolService.getBySlug(slug, req.user);
   }
 
   @Get(':schoolId')
@@ -81,5 +104,44 @@ export class SchoolController {
     @Param('membershipId') membershipId: string
   ) {
     return this.schoolService.removeMember(schoolId, membershipId);
+  }
+
+  // ─── Pré-inscription (marketplace, Phase 1) ─────────────────────────────────
+
+  @Post(':schoolId/enrollment-requests')
+  @UseGuards(OptionalJwtAuthGuard)
+  @ApiResponse({ status: 201, description: 'Pre-registration request submitted (status SENT)' })
+  async submitEnrollmentRequest(
+    @Request() req,
+    @Param('schoolId') schoolId: string,
+    @Body() dto: CreateEnrollmentRequestDto
+  ) {
+    return this.schoolService.submitEnrollmentRequest(schoolId, dto, req.user?.userId);
+  }
+
+  @Get(':schoolId/enrollment-requests')
+  @UseGuards(AuthGuard('jwt'), SchoolRolesGuard)
+  @SchoolRoles(...STAFF_ROLES)
+  @ApiBearerAuth()
+  @ApiResponse({ status: 200, description: 'Pre-registration requests for this school' })
+  async listEnrollmentRequests(
+    @Param('schoolId') schoolId: string,
+    @Query('status') status?: SchoolEnrollmentStatus
+  ) {
+    return this.schoolService.listEnrollmentRequests(schoolId, status);
+  }
+
+  @Patch(':schoolId/enrollment-requests/:id/status')
+  @UseGuards(AuthGuard('jwt'), SchoolRolesGuard)
+  @SchoolRoles(...STAFF_ROLES)
+  @ApiBearerAuth()
+  @ApiResponse({ status: 200, description: 'Pre-registration request status updated' })
+  async updateEnrollmentStatus(
+    @Request() req,
+    @Param('schoolId') schoolId: string,
+    @Param('id') id: string,
+    @Body() dto: UpdateEnrollmentStatusDto
+  ) {
+    return this.schoolService.updateEnrollmentStatus(schoolId, id, req.user.userId, dto);
   }
 }

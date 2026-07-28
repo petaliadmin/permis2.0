@@ -498,6 +498,8 @@ export interface School {
   updatedAt: Date;
   /** Computed by the API for the current viewer. */
   myRole?: SchoolMemberRole | null;
+  /** Computed by the API: count of ACTIVE SchoolStudent rattachements. */
+  studentsCount?: number;
 }
 
 export interface SchoolMembership {
@@ -511,14 +513,17 @@ export interface SchoolMembership {
   user?: Pick<User, 'id' | 'name' | 'phone' | 'email'>;
 }
 
-/** A student pre-registration lead for a school. Not yet consumed by any endpoint (Phase 1). */
+/** A student pre-registration lead for a school. */
 export interface SchoolEnrollmentRequest {
   id: string;
   schoolId: string;
   studentUserId?: string | null;
-  fullName: string;
+  firstName: string;
+  lastName: string;
   phone: string;
+  whatsapp?: string | null;
   email?: string | null;
+  city?: string | null;
   licenseCategory?: string | null;
   message?: string | null;
   status: SchoolEnrollmentStatus;
@@ -529,7 +534,7 @@ export interface SchoolEnrollmentRequest {
   updatedAt: Date;
 }
 
-/** A confirmed student <-> school rattachement. Not yet consumed by any endpoint (Phase 1). */
+/** A confirmed student <-> school rattachement. Not yet consumed by any endpoint outside SchoolService. */
 export interface SchoolStudent {
   id: string;
   schoolId: string;
