@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Request, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { SchoolEnrollmentStatus, SchoolMemberRole } from '@permis2.0/types';
+import { SchoolEnrollmentStatus, SchoolMemberRole, SchoolStudentStatus } from '@permis2.0/types';
 import { OptionalJwtAuthGuard } from '../auth/guards/optional-jwt-auth.guard';
 import { SchoolRolesGuard } from './guards/school-roles.guard';
 import { SchoolRoles } from './decorators/school-roles.decorator';
@@ -11,8 +11,11 @@ import { UpdateSchoolDto } from './dto/update-school.dto';
 import { AddSchoolMemberDto } from './dto/add-school-member.dto';
 import { CreateEnrollmentRequestDto } from './dto/create-enrollment-request.dto';
 import { UpdateEnrollmentStatusDto } from './dto/update-enrollment-status.dto';
+import { AddStudentDto } from './dto/add-student.dto';
+import { UpdateStudentDto } from './dto/update-student.dto';
 
 const STAFF_ROLES = [SchoolMemberRole.OWNER, SchoolMemberRole.MANAGER, SchoolMemberRole.SECRETARY];
+const STUDENTS_VIEW_ROLES = [...STAFF_ROLES, SchoolMemberRole.INSTRUCTOR, SchoolMemberRole.COACH];
 
 @ApiTags('Schools')
 @Controller('schools')
@@ -152,5 +155,50 @@ export class SchoolController {
     @Body() dto: UpdateEnrollmentStatusDto
   ) {
     return this.schoolService.updateEnrollmentStatus(schoolId, id, req.user.userId, dto);
+  }
+
+  // ─── Élèves (SchoolStudent) ──────────────────────────────────────────────────
+
+  @Get(':schoolId/students')
+  @UseGuards(AuthGuard('jwt'), SchoolRolesGuard)
+  @SchoolRoles(...STUDENTS_VIEW_ROLES)
+  @ApiBearerAuth()
+  @ApiResponse({ status: 200, description: 'Students attached to this school' })
+  async listStudents(
+    @Param('schoolId') schoolId: string,
+    @Query('status') status?: SchoolStudentStatus
+  ) {
+    return this.schoolService.listStudents(schoolId, status);
+  }
+
+  @Get(':schoolId/students/:id')
+  @UseGuards(AuthGuard('jwt'), SchoolRolesGuard)
+  @SchoolRoles(...STUDENTS_VIEW_ROLES)
+  @ApiBearerAuth()
+  @ApiResponse({ status: 200, description: 'Student detail' })
+  async getStudent(@Param('schoolId') schoolId: string, @Param('id') id: string) {
+    return this.schoolService.getStudent(schoolId, id);
+  }
+
+  @Post(':schoolId/students')
+  @UseGuards(AuthGuard('jwt'), SchoolRolesGuard)
+  @SchoolRoles(...STAFF_ROLES)
+  @ApiBearerAuth()
+  @ApiResponse({ status: 201, description: 'Student attached directly (no enrollment request)' })
+  async addStudent(@Param('schoolId') schoolId: string, @Body() dto: AddStudentDto) {
+    return this.schoolService.addStudent(schoolId, dto);
+  }
+
+  @Patch(':schoolId/students/:id')
+  @UseGuards(AuthGuard('jwt'), SchoolRolesGuard)
+  @SchoolRoles(...STAFF_ROLES)
+  @ApiBearerAuth()
+  @ApiResponse({ status: 200, description: 'Student status/category updated' })
+  async updateStudent(
+    @Param('schoolId') schoolId: string,
+    @Param('id') id: string,
+    @Body() dto: UpdateStudentDto
+  ) {
+    return this.schoolService.updateStudent(schoolId, id, dto);
   }
 }

@@ -1,12 +1,20 @@
 import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { NotificationService } from '../notification/notification.service';
-import { Role, SchoolEnrollmentStatus, SchoolMemberRole, SchoolStatus } from '@permis2.0/types';
+import {
+  Role,
+  SchoolEnrollmentStatus,
+  SchoolMemberRole,
+  SchoolStatus,
+  SchoolStudentStatus,
+} from '@permis2.0/types';
 import { CreateSchoolDto } from './dto/create-school.dto';
 import { UpdateSchoolDto } from './dto/update-school.dto';
 import { AddSchoolMemberDto } from './dto/add-school-member.dto';
 import { CreateEnrollmentRequestDto } from './dto/create-enrollment-request.dto';
 import { UpdateEnrollmentStatusDto } from './dto/update-enrollment-status.dto';
+import { AddStudentDto } from './dto/add-student.dto';
+import { UpdateStudentDto } from './dto/update-student.dto';
 
 const STAFF_NOTIFIABLE_ROLES = [
   SchoolMemberRole.OWNER,
@@ -302,6 +310,44 @@ export class SchoolService {
       default:
         return 'Le statut de votre demande de pré-inscription a changé.';
     }
+  }
+
+  // ─── Élèves (SchoolStudent) ──────────────────────────────────────────────────
+
+  async listStudents(schoolId: string, status?: SchoolStudentStatus) {
+    return this.prisma.schoolStudent.findMany({
+      where: { schoolId, ...(status ? { status } : {}) },
+      include: { user: { select: { id: true, name: true, phone: true, email: true } } },
+      orderBy: { enrolledAt: 'desc' },
+    });
+  }
+
+  async getStudent(schoolId: string, id: string) {
+    // Composite where — the "règle d'or": never trust id alone.
+    const student = await this.prisma.schoolStudent.findFirst({
+      where: { id, schoolId },
+      include: { user: { select: { id: true, name: true, phone: true, email: true } } },
+    });
+    if (!student) throw new NotFoundException('Élève introuvable');
+    return student;
+  }
+
+  async updateStudent(schoolId: string, id: string, dto: UpdateStudentDto) {
+    const student = await this.prisma.schoolStudent.findFirst({ where: { id, schoolId } });
+    if (!student) throw new NotFoundException('Élève introuvable');
+    return this.prisma.schoolStudent.update({ where: { id }, data: dto });
+  }
+
+  async addStudent(schoolId: string, dto: AddStudentDto) {
+    const user = await this.prisma.user.findUnique({ where: { id: dto.userId } });
+    if (!user) throw new NotFoundException('Utilisateur introuvable');
+
+    // Idempotent: adding an already-attached student just updates their category.
+    return this.prisma.schoolStudent.upsert({
+      where: { schoolId_userId: { schoolId, userId: dto.userId } },
+      create: { schoolId, userId: dto.userId, licenseCategory: dto.licenseCategory },
+      update: { licenseCategory: dto.licenseCategory },
+    });
   }
 
   // ─── Superadmin (délégué depuis AdminController) ────────────────────────────

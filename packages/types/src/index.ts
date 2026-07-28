@@ -534,7 +534,7 @@ export interface SchoolEnrollmentRequest {
   updatedAt: Date;
 }
 
-/** A confirmed student <-> school rattachement. Not yet consumed by any endpoint outside SchoolService. */
+/** A confirmed student <-> school rattachement. */
 export interface SchoolStudent {
   id: string;
   schoolId: string;
@@ -545,4 +545,5 @@ export interface SchoolStudent {
   enrolledAt: Date;
   createdAt: Date;
   updatedAt: Date;
+  user?: Pick<User, 'id' | 'name' | 'phone' | 'email'>;
 }

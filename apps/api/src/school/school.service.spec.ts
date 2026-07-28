@@ -24,7 +24,12 @@ describe('SchoolService — tenant isolation', () => {
         update: jest.fn(),
       },
       $transaction: jest.fn((cb: any) => cb(prisma)),
-      schoolStudent: { upsert: jest.fn() },
+      schoolStudent: {
+        upsert: jest.fn(),
+        findFirst: jest.fn(),
+        findMany: jest.fn(),
+        update: jest.fn(),
+      },
     };
     notificationService = { create: jest.fn().mockResolvedValue(undefined) };
     service = new SchoolService(prisma, notificationService as any);
@@ -183,6 +188,53 @@ describe('SchoolService — tenant isolation', () => {
 
       expect(prisma.schoolStudent.upsert).not.toHaveBeenCalled();
       expect(notificationService.create).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('getStudent / updateStudent', () => {
+    it('rejects a student id that belongs to a different school (cross-tenant guess)', async () => {
+      prisma.schoolStudent.findFirst.mockResolvedValue(null);
+
+      await expect(service.getStudent('schoolA', 'studentOfSchoolB')).rejects.toBeInstanceOf(
+        NotFoundException
+      );
+      expect(prisma.schoolStudent.findFirst).toHaveBeenCalledWith({
+        where: { id: 'studentOfSchoolB', schoolId: 'schoolA' },
+        include: { user: { select: { id: true, name: true, phone: true, email: true } } },
+      });
+    });
+
+    it('rejects an update for a student id that belongs to a different school', async () => {
+      prisma.schoolStudent.findFirst.mockResolvedValue(null);
+
+      await expect(
+        service.updateStudent('schoolA', 'studentOfSchoolB', { status: 'SUSPENDED' } as any)
+      ).rejects.toBeInstanceOf(NotFoundException);
+      expect(prisma.schoolStudent.update).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('addStudent', () => {
+    it('throws NotFoundException when the userId does not exist', async () => {
+      prisma.user.findUnique.mockResolvedValue(null);
+
+      await expect(
+        service.addStudent('s1', { userId: 'ghost', licenseCategory: 'B' })
+      ).rejects.toBeInstanceOf(NotFoundException);
+      expect(prisma.schoolStudent.upsert).not.toHaveBeenCalled();
+    });
+
+    it('upserts idempotently on [schoolId, userId]', async () => {
+      prisma.user.findUnique.mockResolvedValue({ id: 'u1' });
+      prisma.schoolStudent.upsert.mockResolvedValue({ id: 'st1' });
+
+      await service.addStudent('s1', { userId: 'u1', licenseCategory: 'B' });
+
+      expect(prisma.schoolStudent.upsert).toHaveBeenCalledWith({
+        where: { schoolId_userId: { schoolId: 's1', userId: 'u1' } },
+        create: { schoolId: 's1', userId: 'u1', licenseCategory: 'B' },
+        update: { licenseCategory: 'B' },
+      });
     });
   });
 });
