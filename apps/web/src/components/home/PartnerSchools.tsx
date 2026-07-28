@@ -23,7 +23,7 @@ export function PartnerSchools() {
   if (!loading && schools.length === 0) return null;
 
   return (
-    <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:px-8">
+    <section className="mx-auto max-w-6xl px-4 py-24 sm:px-6 lg:px-8">
       <motion.div
         initial={{ opacity: 0, y: 16 }}
         whileInView={{ opacity: 1, y: 0 }}

@@ -22,7 +22,7 @@ const FEATURES: Feature[] = [
 
 export function ForStudents() {
   return (
-    <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:px-8">
+    <section className="mx-auto max-w-6xl px-4 py-24 sm:px-6 lg:px-8">
       <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
         <motion.div
           initial={{ opacity: 0, x: -24 }}

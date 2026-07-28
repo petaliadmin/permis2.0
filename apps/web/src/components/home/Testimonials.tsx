@@ -68,7 +68,7 @@ export function Testimonials() {
   const current = TESTIMONIALS[index];
 
   return (
-    <section className="bg-surface-1 py-20">
+    <section className="bg-surface-1 py-24">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 16 }}

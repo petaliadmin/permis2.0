@@ -115,6 +115,35 @@
   --color-text-muted: #94a3b8;
 }
 
+/* Light surface for the marketing landing page — always bright/airy, regardless
+   of the app-wide dark-mode default (mirrors .on-ink, in reverse). */
+.on-light {
+  --color-surface: #f5f7fa;
+  --color-surface-1: #ffffff;
+  --color-surface-2: #f8fafc;
+  --color-surface-3: #eef2f7;
+  --color-border: #e8edf3;
+  --color-border-strong: #d7dfe8;
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #475569;
+  --color-text-muted: #94a3b8;
+  --color-primary: #003ea8;
+  --color-primary-light: #004fd6;
+  --color-primary-dim: rgba(0, 62, 168, 0.08);
+  --color-violet: #7c3aed;
+  --color-violet-dim: rgba(124, 58, 237, 0.1);
+  --color-orange: #ff620e;
+  --color-orange-dim: rgba(255, 98, 14, 0.1);
+  --color-success: #16a34a;
+  --color-success-dim: rgba(22, 163, 74, 0.1);
+  --color-xp: #d97706;
+  --color-xp-dim: rgba(245, 158, 11, 0.14);
+  --color-danger: #ef4444;
+  --color-danger-dim: rgba(239, 68, 68, 0.1);
+  --shadow-soft: 0 1px 2px rgba(15, 23, 42, 0.04), 0 4px 12px -4px rgba(15, 23, 42, 0.06);
+  --shadow-card: 0 1px 3px rgba(15, 23, 42, 0.04), 0 8px 24px -12px rgba(15, 23, 42, 0.08);
+}
+
 /* ─── Base ───────────────────────────────────────────────────────────────────── */
 * {
   margin: 0;

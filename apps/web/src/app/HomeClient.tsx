@@ -18,7 +18,7 @@ import { FinalCta } from '@/components/home/FinalCta';
 
 export default function HomeClient() {
   return (
-    <div className="min-h-screen bg-surface">
+    <div className="on-light min-h-screen bg-surface">
       <SiteHeader />
       <Hero />
       <ProblemSolution />

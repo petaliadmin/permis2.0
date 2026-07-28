@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 
 export function FinalCta() {
   return (
-    <section className="relative overflow-hidden bg-gradient-primary px-4 py-20 text-center text-white">
+    <section className="relative overflow-hidden bg-gradient-primary px-4 py-24 text-center text-white">
       <div className="pointer-events-none absolute -left-20 -top-20 h-72 w-72 rounded-full bg-white/10 blur-3xl" />
       <div className="pointer-events-none absolute -bottom-24 -right-20 h-72 w-72 rounded-full bg-violet-400/20 blur-3xl" />
 

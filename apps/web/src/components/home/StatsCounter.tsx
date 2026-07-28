@@ -49,7 +49,7 @@ function Counter({ value, suffix }: { value: number; suffix: string }) {
 
 export function StatsCounter() {
   return (
-    <section className="bg-gradient-ink py-16 text-white">
+    <section className="bg-gradient-to-b from-primary-50 to-white py-20">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 gap-6 sm:grid-cols-4">
           {STATS.map((s, i) => (
@@ -61,11 +61,13 @@ export function StatsCounter() {
               transition={{ duration: 0.45, delay: i * 0.1 }}
               className="text-center"
             >
-              <s.icon className="mx-auto h-6 w-6 text-primary-300" strokeWidth={1.75} />
-              <p className="mt-2 font-display text-3xl font-extrabold sm:text-4xl">
+              <span className="mx-auto flex h-11 w-11 items-center justify-center rounded-2xl bg-white text-primary-600 shadow-soft">
+                <s.icon className="h-5 w-5" strokeWidth={1.75} />
+              </span>
+              <p className="mt-3 font-display text-3xl font-extrabold text-foreground sm:text-4xl">
                 <Counter value={s.value} suffix={s.suffix} />
               </p>
-              <p className="mt-1 text-sm text-white/70">{s.label}</p>
+              <p className="mt-1 text-sm text-secondary">{s.label}</p>
             </motion.div>
           ))}
         </div>
