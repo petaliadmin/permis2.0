@@ -1,4 +1,4 @@
-import { ForbiddenException, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, NotFoundException } from '@nestjs/common';
 import { SchoolEnrollmentStatus, SchoolMemberRole, SchoolStatus } from '@permis2.0/types';
 import { SchoolService } from './school.service';
 
@@ -29,6 +29,13 @@ describe('SchoolService — tenant isolation', () => {
         findFirst: jest.fn(),
         findMany: jest.fn(),
         update: jest.fn(),
+      },
+      vehicle: {
+        create: jest.fn(),
+        findFirst: jest.fn(),
+        findMany: jest.fn(),
+        update: jest.fn(),
+        delete: jest.fn(),
       },
     };
     notificationService = { create: jest.fn().mockResolvedValue(undefined) };
@@ -235,6 +242,44 @@ describe('SchoolService — tenant isolation', () => {
         create: { schoolId: 's1', userId: 'u1', licenseCategory: 'B' },
         update: { licenseCategory: 'B' },
       });
+    });
+  });
+
+  describe('createVehicle', () => {
+    it('rejects a duplicate plate for the same school (unique constraint)', async () => {
+      prisma.vehicle.create.mockRejectedValue({ code: 'P2002' });
+
+      await expect(
+        service.createVehicle('s1', { plate: 'DK-1234-AB' } as any)
+      ).rejects.toBeInstanceOf(BadRequestException);
+    });
+  });
+
+  describe('updateVehicle / deleteVehicle', () => {
+    it('rejects a vehicle id that belongs to a different school (cross-tenant guess)', async () => {
+      prisma.vehicle.findFirst.mockResolvedValue(null);
+
+      await expect(
+        service.updateVehicle('schoolA', 'vehicleOfSchoolB', { status: 'MAINTENANCE' } as any)
+      ).rejects.toBeInstanceOf(NotFoundException);
+      expect(prisma.vehicle.update).not.toHaveBeenCalled();
+    });
+
+    it('rejects deleting a vehicle id that belongs to a different school', async () => {
+      prisma.vehicle.findFirst.mockResolvedValue(null);
+
+      await expect(service.deleteVehicle('schoolA', 'vehicleOfSchoolB')).rejects.toBeInstanceOf(
+        NotFoundException
+      );
+      expect(prisma.vehicle.delete).not.toHaveBeenCalled();
+    });
+
+    it('deletes a vehicle that does belong to the school', async () => {
+      prisma.vehicle.findFirst.mockResolvedValue({ id: 'v1', schoolId: 's1' });
+      prisma.vehicle.delete.mockResolvedValue({});
+
+      await expect(service.deleteVehicle('s1', 'v1')).resolves.toEqual({ deleted: true });
+      expect(prisma.vehicle.delete).toHaveBeenCalledWith({ where: { id: 'v1' } });
     });
   });
 });

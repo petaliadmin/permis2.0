@@ -52,6 +52,12 @@ enum SchoolStudentStatus {
   WITHDRAWN
 }
 
+enum VehicleStatus {
+  ACTIVE
+  MAINTENANCE
+  OUT_OF_SERVICE
+}
+
 model User {
   id           String      @id @default(cuid())
   email        String?     @unique
@@ -617,6 +623,7 @@ model School {
   memberships        SchoolMembership[]
   enrollmentRequests SchoolEnrollmentRequest[]
   students           SchoolStudent[]
+  vehicles           Vehicle[]
 
   @@index([status])
   @@index([city])
@@ -699,4 +706,27 @@ model SchoolStudent {
   @@index([schoolId, status])
   @@index([userId])
   @@map("school_students")
+}
+
+/// A vehicle in a school's fleet. Hard-deletable (unlike staff/students) —
+/// removing it from inventory needs no historical trace elsewhere.
+model Vehicle {
+  id                           String        @id @default(cuid())
+  schoolId                     String
+  plate                        String
+  brand                        String?
+  model                        String?
+  category                     String?
+  status                       VehicleStatus @default(ACTIVE)
+  insuranceExpiresAt           DateTime?
+  technicalInspectionExpiresAt DateTime?
+  notes                        String?
+  createdAt                    DateTime      @default(now())
+  updatedAt                    DateTime      @updatedAt
+
+  school School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  @@unique([schoolId, plate])
+  @@index([schoolId, status])
+  @@map("vehicles")
 }

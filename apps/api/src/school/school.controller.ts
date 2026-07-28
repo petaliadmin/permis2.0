@@ -13,9 +13,12 @@ import { CreateEnrollmentRequestDto } from './dto/create-enrollment-request.dto'
 import { UpdateEnrollmentStatusDto } from './dto/update-enrollment-status.dto';
 import { AddStudentDto } from './dto/add-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
+import { CreateVehicleDto } from './dto/create-vehicle.dto';
+import { UpdateVehicleDto } from './dto/update-vehicle.dto';
 
 const STAFF_ROLES = [SchoolMemberRole.OWNER, SchoolMemberRole.MANAGER, SchoolMemberRole.SECRETARY];
 const STUDENTS_VIEW_ROLES = [...STAFF_ROLES, SchoolMemberRole.INSTRUCTOR, SchoolMemberRole.COACH];
+const VEHICLE_WRITE_ROLES = [SchoolMemberRole.OWNER, SchoolMemberRole.MANAGER];
 
 @ApiTags('Schools')
 @Controller('schools')
@@ -200,5 +203,47 @@ export class SchoolController {
     @Body() dto: UpdateStudentDto
   ) {
     return this.schoolService.updateStudent(schoolId, id, dto);
+  }
+
+  // ─── Véhicules ────────────────────────────────────────────────────────────────
+
+  @Get(':schoolId/vehicles')
+  @UseGuards(AuthGuard('jwt'), SchoolRolesGuard)
+  @SchoolRoles(...STUDENTS_VIEW_ROLES)
+  @ApiBearerAuth()
+  @ApiResponse({ status: 200, description: "This school's fleet" })
+  async listVehicles(@Param('schoolId') schoolId: string) {
+    return this.schoolService.listVehicles(schoolId);
+  }
+
+  @Post(':schoolId/vehicles')
+  @UseGuards(AuthGuard('jwt'), SchoolRolesGuard)
+  @SchoolRoles(...VEHICLE_WRITE_ROLES)
+  @ApiBearerAuth()
+  @ApiResponse({ status: 201, description: 'Vehicle added to the fleet' })
+  async createVehicle(@Param('schoolId') schoolId: string, @Body() dto: CreateVehicleDto) {
+    return this.schoolService.createVehicle(schoolId, dto);
+  }
+
+  @Patch(':schoolId/vehicles/:id')
+  @UseGuards(AuthGuard('jwt'), SchoolRolesGuard)
+  @SchoolRoles(...VEHICLE_WRITE_ROLES)
+  @ApiBearerAuth()
+  @ApiResponse({ status: 200, description: 'Vehicle updated' })
+  async updateVehicle(
+    @Param('schoolId') schoolId: string,
+    @Param('id') id: string,
+    @Body() dto: UpdateVehicleDto
+  ) {
+    return this.schoolService.updateVehicle(schoolId, id, dto);
+  }
+
+  @Delete(':schoolId/vehicles/:id')
+  @UseGuards(AuthGuard('jwt'), SchoolRolesGuard)
+  @SchoolRoles(...VEHICLE_WRITE_ROLES)
+  @ApiBearerAuth()
+  @ApiResponse({ status: 200, description: 'Vehicle removed from the fleet' })
+  async deleteVehicle(@Param('schoolId') schoolId: string, @Param('id') id: string) {
+    return this.schoolService.deleteVehicle(schoolId, id);
   }
 }

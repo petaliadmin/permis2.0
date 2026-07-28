@@ -2,13 +2,20 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
-import type { School, SchoolEnrollmentRequest, SchoolMembership, SchoolStudent } from '@permis2.0/types';
+import type {
+  School,
+  SchoolEnrollmentRequest,
+  SchoolMembership,
+  SchoolStudent,
+  Vehicle,
+} from '@permis2.0/types';
 import { SchoolEnrollmentStatus, SchoolStatus } from '@permis2.0/types';
 import { Stat } from '@permis2.0/ui';
 import { cn } from '@/lib/cn';
 import { EnrollmentRequestsPanel } from './EnrollmentRequestsPanel';
 import { TeamPanel } from './TeamPanel';
 import { StudentsPanel } from './StudentsPanel';
+import { VehiclesPanel } from './VehiclesPanel';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -17,6 +24,7 @@ const TABS = [
   { key: 'demandes', label: 'Demandes' },
   { key: 'eleves', label: 'Élèves' },
   { key: 'equipe', label: 'Équipe' },
+  { key: 'vehicules', label: 'Véhicules' },
 ] as const;
 type TabKey = (typeof TABS)[number]['key'];
 
@@ -34,6 +42,7 @@ export function SchoolDashboard({ school, onBackToPicker, onSchoolUpdated }: Sch
   const [requests, setRequests] = useState<SchoolEnrollmentRequest[] | null>(null);
   const [members, setMembers] = useState<SchoolMembership[] | null>(null);
   const [students, setStudents] = useState<SchoolStudent[] | null>(null);
+  const [vehicles, setVehicles] = useState<Vehicle[] | null>(null);
 
   const fetchRequests = useCallback(async () => {
     const res = await fetch(`${API_URL}/schools/${school.id}/enrollment-requests`, {
@@ -52,11 +61,17 @@ export function SchoolDashboard({ school, onBackToPicker, onSchoolUpdated }: Sch
     setStudents(res.ok ? await res.json() : []);
   }, [school.id]);
 
+  const fetchVehicles = useCallback(async () => {
+    const res = await fetch(`${API_URL}/schools/${school.id}/vehicles`, { credentials: 'include' });
+    setVehicles(res.ok ? await res.json() : []);
+  }, [school.id]);
+
   useEffect(() => {
     fetchRequests();
     fetchMembers();
     fetchStudents();
-  }, [fetchRequests, fetchMembers, fetchStudents]);
+    fetchVehicles();
+  }, [fetchRequests, fetchMembers, fetchStudents, fetchVehicles]);
 
   const pendingCount = requests?.filter((r) => PENDING_STATUSES.includes(r.status)).length ?? 0;
 
@@ -128,7 +143,7 @@ export function SchoolDashboard({ school, onBackToPicker, onSchoolUpdated }: Sch
 
       <main className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
         {tab === 'overview' && (
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
             <Stat
               icon={<i className="ti ti-users" aria-hidden="true" />}
               label="Élèves"
@@ -146,6 +161,12 @@ export function SchoolDashboard({ school, onBackToPicker, onSchoolUpdated }: Sch
               label="Équipe"
               value={members?.length ?? 0}
               accent="bg-violet-100 text-violet-700"
+            />
+            <Stat
+              icon={<i className="ti ti-car" aria-hidden="true" />}
+              label="Véhicules"
+              value={vehicles?.length ?? 0}
+              accent="bg-teal-100 text-teal-700"
             />
           </div>
         )}
@@ -174,6 +195,10 @@ export function SchoolDashboard({ school, onBackToPicker, onSchoolUpdated }: Sch
 
         {tab === 'equipe' && (
           <TeamPanel schoolId={school.id} members={members} onChanged={fetchMembers} />
+        )}
+
+        {tab === 'vehicules' && (
+          <VehiclesPanel schoolId={school.id} vehicles={vehicles} onChanged={fetchVehicles} />
         )}
       </main>
     </div>

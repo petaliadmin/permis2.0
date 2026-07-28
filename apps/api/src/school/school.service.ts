@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { NotificationService } from '../notification/notification.service';
 import {
@@ -15,6 +15,10 @@ import { CreateEnrollmentRequestDto } from './dto/create-enrollment-request.dto'
 import { UpdateEnrollmentStatusDto } from './dto/update-enrollment-status.dto';
 import { AddStudentDto } from './dto/add-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
+import { CreateVehicleDto } from './dto/create-vehicle.dto';
+import { UpdateVehicleDto } from './dto/update-vehicle.dto';
+
+const EXPIRY_ALERT_WINDOW_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
 
 const STAFF_NOTIFIABLE_ROLES = [
   SchoolMemberRole.OWNER,
@@ -348,6 +352,62 @@ export class SchoolService {
       create: { schoolId, userId: dto.userId, licenseCategory: dto.licenseCategory },
       update: { licenseCategory: dto.licenseCategory },
     });
+  }
+
+  // ─── Véhicules ────────────────────────────────────────────────────────────────
+
+  private withVehicleAlerts<
+    T extends { insuranceExpiresAt: Date | null; technicalInspectionExpiresAt: Date | null },
+  >(vehicle: T) {
+    const soon = (d: Date | null) => !!d && d.getTime() - Date.now() < EXPIRY_ALERT_WINDOW_MS;
+    return {
+      ...vehicle,
+      insuranceExpiringSoon: soon(vehicle.insuranceExpiresAt),
+      inspectionExpiringSoon: soon(vehicle.technicalInspectionExpiresAt),
+    };
+  }
+
+  async listVehicles(schoolId: string) {
+    const vehicles = await this.prisma.vehicle.findMany({
+      where: { schoolId },
+      orderBy: { createdAt: 'desc' },
+    });
+    return vehicles.map((v) => this.withVehicleAlerts(v));
+  }
+
+  async createVehicle(schoolId: string, dto: CreateVehicleDto) {
+    try {
+      const vehicle = await this.prisma.vehicle.create({ data: { ...dto, schoolId } });
+      return this.withVehicleAlerts(vehicle);
+    } catch (err: any) {
+      if (err?.code === 'P2002') {
+        throw new BadRequestException('Cette immatriculation est déjà enregistrée');
+      }
+      throw err;
+    }
+  }
+
+  async updateVehicle(schoolId: string, id: string, dto: UpdateVehicleDto) {
+    // Composite where — the "règle d'or": never trust id alone.
+    const vehicle = await this.prisma.vehicle.findFirst({ where: { id, schoolId } });
+    if (!vehicle) throw new NotFoundException('Véhicule introuvable');
+
+    try {
+      const updated = await this.prisma.vehicle.update({ where: { id }, data: dto });
+      return this.withVehicleAlerts(updated);
+    } catch (err: any) {
+      if (err?.code === 'P2002') {
+        throw new BadRequestException('Cette immatriculation est déjà enregistrée');
+      }
+      throw err;
+    }
+  }
+
+  async deleteVehicle(schoolId: string, id: string) {
+    const vehicle = await this.prisma.vehicle.findFirst({ where: { id, schoolId } });
+    if (!vehicle) throw new NotFoundException('Véhicule introuvable');
+    await this.prisma.vehicle.delete({ where: { id } });
+    return { deleted: true };
   }
 
   // ─── Superadmin (délégué depuis AdminController) ────────────────────────────

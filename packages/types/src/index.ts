@@ -547,3 +547,27 @@ export interface SchoolStudent {
   updatedAt: Date;
   user?: Pick<User, 'id' | 'name' | 'phone' | 'email'>;
 }
+
+export enum VehicleStatus {
+  ACTIVE = 'ACTIVE',
+  MAINTENANCE = 'MAINTENANCE',
+  OUT_OF_SERVICE = 'OUT_OF_SERVICE',
+}
+
+export interface Vehicle {
+  id: string;
+  schoolId: string;
+  plate: string;
+  brand?: string | null;
+  model?: string | null;
+  category?: string | null;
+  status: VehicleStatus;
+  insuranceExpiresAt?: Date | null;
+  technicalInspectionExpiresAt?: Date | null;
+  notes?: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+  /** Computed by the API: expiry within 30 days (or already past). */
+  insuranceExpiringSoon?: boolean;
+  inspectionExpiringSoon?: boolean;
+}
