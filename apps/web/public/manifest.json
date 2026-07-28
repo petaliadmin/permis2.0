@@ -3,7 +3,7 @@
   "short_name": "PERMIS2.0",
   "description": "Préparez votre examen du permis de conduire sénégalais : leçons, séries d'entraînement et examens blancs.",
   "id": "/cours",
-  "start_url": "/cours",
+  "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "display_override": ["standalone", "minimal-ui"],

@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import type { School } from '@permis2.0/types';
 import { API_URL } from '@/lib/dataSource';
 import { SiteHeader } from '@/components/SiteHeader';
@@ -166,31 +165,16 @@ function FinalCta() {
 }
 
 export default function HomeClient() {
-  const router = useRouter();
-  const [checkingOnboarding, setCheckingOnboarding] = useState(true);
   const [schools, setSchools] = useState<School[]>([]);
   const [loadingSchools, setLoadingSchools] = useState(true);
 
   useEffect(() => {
-    // Already-onboarded/returning visitors keep the exact behavior '/' has
-    // always had — straight into the app, zero added friction.
-    if (localStorage.getItem('permis_onboarding_done')) {
-      router.replace('/traffic-signs');
-      return;
-    }
-    setCheckingOnboarding(false);
-  }, [router]);
-
-  useEffect(() => {
-    if (checkingOnboarding) return;
     fetch(`${API_URL}/schools?take=6`)
       .then((res) => (res.ok ? res.json() : []))
       .then((data) => setSchools(Array.isArray(data) ? data : []))
       .catch(() => setSchools([]))
       .finally(() => setLoadingSchools(false));
-  }, [checkingOnboarding]);
-
-  if (checkingOnboarding) return null;
+  }, []);
 
   return (
     <div className="min-h-screen bg-surface">
