@@ -10,6 +10,7 @@ describe('SchoolService — tenant isolation', () => {
   beforeEach(() => {
     prisma = {
       school: { findUnique: jest.fn() },
+      user: { findUnique: jest.fn() },
       schoolMembership: {
         findFirst: jest.fn(),
         findMany: jest.fn(),
@@ -72,6 +73,24 @@ describe('SchoolService — tenant isolation', () => {
       prisma.schoolMembership.update.mockResolvedValue({ id: 'm1', active: false });
 
       await expect(service.removeMember('schoolA', 'm1')).resolves.toEqual({ id: 'm1', active: false });
+    });
+  });
+
+  describe('lookupUserByPhone', () => {
+    it('normalizes the phone (strips spaces/+221) before matching', async () => {
+      prisma.user.findUnique.mockResolvedValue({ id: 'u1', name: 'Fatou Diop', phone: '771234567' });
+
+      await service.lookupUserByPhone('+221 77 123 45 67');
+
+      expect(prisma.user.findUnique).toHaveBeenCalledWith({
+        where: { phone: '771234567' },
+        select: { id: true, name: true, phone: true },
+      });
+    });
+
+    it('throws NotFoundException when no user matches', async () => {
+      prisma.user.findUnique.mockResolvedValue(null);
+      await expect(service.lookupUserByPhone('771234567')).rejects.toBeInstanceOf(NotFoundException);
     });
   });
 

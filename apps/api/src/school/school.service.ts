@@ -152,6 +152,17 @@ export class SchoolService {
     });
   }
 
+  /** Exact phone match only — no fuzzy search, and only {id,name,phone} are exposed. */
+  async lookupUserByPhone(phone: string) {
+    const normalized = phone.replace(/\D/g, '').replace(/^221/, '');
+    const user = await this.prisma.user.findUnique({
+      where: { phone: normalized },
+      select: { id: true, name: true, phone: true },
+    });
+    if (!user) throw new NotFoundException('Aucun utilisateur avec ce numéro');
+    return user;
+  }
+
   async addMember(schoolId: string, dto: AddSchoolMemberDto) {
     const user = await this.prisma.user.findUnique({ where: { id: dto.userId } });
     if (!user) throw new NotFoundException('Utilisateur introuvable');

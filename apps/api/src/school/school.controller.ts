@@ -85,6 +85,15 @@ export class SchoolController {
     return this.schoolService.listMembers(schoolId);
   }
 
+  @Get(':schoolId/members/lookup')
+  @UseGuards(AuthGuard('jwt'), SchoolRolesGuard)
+  @SchoolRoles(SchoolMemberRole.OWNER)
+  @ApiBearerAuth()
+  @ApiResponse({ status: 200, description: 'Find an existing user by exact phone match, to add as staff' })
+  async lookupMember(@Param('schoolId') _schoolId: string, @Query('phone') phone: string) {
+    return this.schoolService.lookupUserByPhone(phone);
+  }
+
   @Post(':schoolId/members')
   @UseGuards(AuthGuard('jwt'), SchoolRolesGuard)
   @SchoolRoles(SchoolMemberRole.OWNER)
