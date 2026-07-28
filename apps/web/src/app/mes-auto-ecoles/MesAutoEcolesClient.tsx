@@ -3,8 +3,13 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import type { SchoolEnrollmentRequest, SchoolStudent, Session } from '@permis2.0/types';
-import { SchoolEnrollmentStatus, SchoolStudentStatus, SessionStatus } from '@permis2.0/types';
+import type { SchoolEnrollmentRequest, SchoolPayment, SchoolStudent, Session } from '@permis2.0/types';
+import {
+  SchoolEnrollmentStatus,
+  SchoolPaymentStatus,
+  SchoolStudentStatus,
+  SessionStatus,
+} from '@permis2.0/types';
 import { EmptyState, Skeleton } from '@permis2.0/ui';
 import { AppShell, PageHeader } from '@/components/AppShell';
 import { useAuthStore } from '@/store/authStore';
@@ -43,6 +48,22 @@ const STUDENT_STATUS_CHIP: Record<string, string> = {
 
 const SESSION_TYPE_LABEL: Record<string, string> = { THEORY: 'Théorie', PRACTICE: 'Pratique' };
 
+const PAYMENT_STATUS_LABEL: Record<string, string> = {
+  PENDING: 'En attente',
+  PAID: 'Payée',
+  OVERDUE: 'En retard',
+  CANCELLED: 'Annulée',
+};
+
+const PAYMENT_STATUS_CHIP: Record<string, string> = {
+  PENDING: 'chip-orange',
+  PAID: 'chip-success',
+  OVERDUE: 'chip-danger',
+  CANCELLED: 'bg-surface-2 text-secondary',
+};
+
+const fmtXof = (n: number) => `${n.toLocaleString('fr-FR')} FCFA`;
+
 const fmtDate = (d: string | Date) =>
   new Date(d).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' });
 
@@ -55,6 +76,7 @@ export default function MesAutoEcolesClient() {
   const [enrollments, setEnrollments] = useState<SchoolStudent[] | null>(null);
   const [requests, setRequests] = useState<SchoolEnrollmentRequest[] | null>(null);
   const [sessions, setSessions] = useState<Session[] | null>(null);
+  const [payments, setPayments] = useState<SchoolPayment[] | null>(null);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -73,6 +95,10 @@ export default function MesAutoEcolesClient() {
       .then((res) => (res.ok ? res.json() : []))
       .then(setSessions)
       .catch(() => setSessions([]));
+    fetch(`${API_URL}/schools/my-payments`, { credentials: 'include' })
+      .then((res) => (res.ok ? res.json() : []))
+      .then(setPayments)
+      .catch(() => setPayments([]));
   }, [isAuthenticated, router]);
 
   const pendingRequests = (requests ?? []).filter(
@@ -81,7 +107,10 @@ export default function MesAutoEcolesClient() {
   const upcomingSessions = (sessions ?? [])
     .filter((s) => s.status === SessionStatus.SCHEDULED && new Date(s.startsAt).getTime() >= Date.now())
     .sort((a, b) => new Date(a.startsAt).getTime() - new Date(b.startsAt).getTime());
-  const loading = enrollments === null || requests === null || sessions === null;
+  const outstandingPayments = (payments ?? []).filter(
+    (p) => p.status === SchoolPaymentStatus.PENDING || p.status === SchoolPaymentStatus.OVERDUE
+  );
+  const loading = enrollments === null || requests === null || sessions === null || payments === null;
   const isEmpty = !loading && (enrollments?.length ?? 0) === 0 && pendingRequests.length === 0;
 
   return (
@@ -180,6 +209,39 @@ export default function MesAutoEcolesClient() {
                       {s.vehicle && `Véhicule : ${s.vehicle.plate}`}
                     </p>
                   )}
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {!loading && outstandingPayments.length > 0 && (
+          <section>
+            <p className="mb-2 text-xs font-bold uppercase tracking-wide text-muted">
+              Mes paiements
+            </p>
+            <div className="space-y-2.5">
+              {outstandingPayments.map((p) => (
+                <div
+                  key={p.id}
+                  className="flex items-center justify-between rounded-2xl border border-token bg-surface-1 p-4 shadow-soft"
+                >
+                  <div className="min-w-0">
+                    <p className="truncate font-display text-sm font-bold text-foreground">
+                      {p.description}
+                    </p>
+                    <p className="text-xs text-secondary">
+                      {p.school?.name ?? 'Auto-école'} · {fmtXof(p.amountXof)}
+                    </p>
+                    {p.dueDate && (
+                      <p className="mt-0.5 text-xs text-muted">Échéance : {fmtDate(p.dueDate)}</p>
+                    )}
+                  </div>
+                  <span
+                    className={`chip shrink-0 ${PAYMENT_STATUS_CHIP[p.status] ?? 'bg-surface-2 text-secondary'}`}
+                  >
+                    {PAYMENT_STATUS_LABEL[p.status] ?? p.status}
+                  </span>
                 </div>
               ))}
             </div>

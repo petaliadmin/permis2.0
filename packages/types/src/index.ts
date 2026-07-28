@@ -610,3 +610,26 @@ export interface Session {
   instructor?: { id: string; user?: Pick<User, 'id' | 'name' | 'phone'> } | null;
   vehicle?: Pick<Vehicle, 'id' | 'plate' | 'brand' | 'model'> | null;
 }
+
+export enum SchoolPaymentStatus {
+  PENDING = 'PENDING',
+  PAID = 'PAID',
+  OVERDUE = 'OVERDUE',
+  CANCELLED = 'CANCELLED',
+}
+
+export interface SchoolPayment {
+  id: string;
+  schoolId: string;
+  studentId: string;
+  amountXof: number;
+  description: string;
+  status: SchoolPaymentStatus;
+  method?: string | null;
+  dueDate?: Date | null;
+  paidAt?: Date | null;
+  createdAt: Date;
+  updatedAt: Date;
+  school?: Pick<School, 'id' | 'slug' | 'name' | 'city' | 'district' | 'logoUrl'>;
+  student?: { id: string; user?: Pick<User, 'id' | 'name' | 'phone'> };
+}

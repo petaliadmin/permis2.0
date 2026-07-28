@@ -1,7 +1,12 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Request, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { SchoolEnrollmentStatus, SchoolMemberRole, SchoolStudentStatus } from '@permis2.0/types';
+import {
+  SchoolEnrollmentStatus,
+  SchoolMemberRole,
+  SchoolPaymentStatus,
+  SchoolStudentStatus,
+} from '@permis2.0/types';
 import { OptionalJwtAuthGuard } from '../auth/guards/optional-jwt-auth.guard';
 import { SchoolRolesGuard } from './guards/school-roles.guard';
 import { SchoolRoles } from './decorators/school-roles.decorator';
@@ -17,10 +22,13 @@ import { CreateVehicleDto } from './dto/create-vehicle.dto';
 import { UpdateVehicleDto } from './dto/update-vehicle.dto';
 import { CreateSessionDto } from './dto/create-session.dto';
 import { UpdateSessionDto } from './dto/update-session.dto';
+import { CreatePaymentDto } from './dto/create-payment.dto';
+import { UpdatePaymentDto } from './dto/update-payment.dto';
 
 const STAFF_ROLES = [SchoolMemberRole.OWNER, SchoolMemberRole.MANAGER, SchoolMemberRole.SECRETARY];
 const STUDENTS_VIEW_ROLES = [...STAFF_ROLES, SchoolMemberRole.INSTRUCTOR, SchoolMemberRole.COACH];
 const VEHICLE_WRITE_ROLES = [SchoolMemberRole.OWNER, SchoolMemberRole.MANAGER];
+const FINANCE_ROLES = [...STAFF_ROLES, SchoolMemberRole.ACCOUNTANT];
 
 @ApiTags('Schools')
 @Controller('schools')
@@ -75,6 +83,14 @@ export class SchoolController {
   @ApiResponse({ status: 200, description: "The current user's own sessions (as a student)" })
   async mySessions(@Request() req) {
     return this.schoolService.listMySessions(req.user.userId);
+  }
+
+  @Get('my-payments')
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
+  @ApiResponse({ status: 200, description: "The current user's own invoices/payments" })
+  async myPayments(@Request() req) {
+    return this.schoolService.listMyPayments(req.user.userId);
   }
 
   @Get('by-slug/:slug')
@@ -309,5 +325,42 @@ export class SchoolController {
     @Body() dto: UpdateSessionDto
   ) {
     return this.schoolService.updateSession(schoolId, id, dto);
+  }
+
+  // ─── Paiements (factures manuelles) ──────────────────────────────────────────
+
+  @Get(':schoolId/payments')
+  @UseGuards(AuthGuard('jwt'), SchoolRolesGuard)
+  @SchoolRoles(...FINANCE_ROLES)
+  @ApiBearerAuth()
+  @ApiResponse({ status: 200, description: 'Invoices/payments for this school' })
+  async listPayments(
+    @Param('schoolId') schoolId: string,
+    @Query('studentId') studentId?: string,
+    @Query('status') status?: SchoolPaymentStatus
+  ) {
+    return this.schoolService.listPayments(schoolId, studentId, status);
+  }
+
+  @Post(':schoolId/payments')
+  @UseGuards(AuthGuard('jwt'), SchoolRolesGuard)
+  @SchoolRoles(...FINANCE_ROLES)
+  @ApiBearerAuth()
+  @ApiResponse({ status: 201, description: 'Invoice created' })
+  async createPayment(@Param('schoolId') schoolId: string, @Body() dto: CreatePaymentDto) {
+    return this.schoolService.createPayment(schoolId, dto);
+  }
+
+  @Patch(':schoolId/payments/:id')
+  @UseGuards(AuthGuard('jwt'), SchoolRolesGuard)
+  @SchoolRoles(...FINANCE_ROLES)
+  @ApiBearerAuth()
+  @ApiResponse({ status: 200, description: 'Invoice updated (e.g. marked PAID)' })
+  async updatePayment(
+    @Param('schoolId') schoolId: string,
+    @Param('id') id: string,
+    @Body() dto: UpdatePaymentDto
+  ) {
+    return this.schoolService.updatePayment(schoolId, id, dto);
   }
 }

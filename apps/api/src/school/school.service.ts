@@ -5,6 +5,7 @@ import {
   Role,
   SchoolEnrollmentStatus,
   SchoolMemberRole,
+  SchoolPaymentStatus,
   SchoolStatus,
   SchoolStudentStatus,
 } from '@permis2.0/types';
@@ -19,6 +20,8 @@ import { CreateVehicleDto } from './dto/create-vehicle.dto';
 import { UpdateVehicleDto } from './dto/update-vehicle.dto';
 import { CreateSessionDto } from './dto/create-session.dto';
 import { UpdateSessionDto } from './dto/update-session.dto';
+import { CreatePaymentDto } from './dto/create-payment.dto';
+import { UpdatePaymentDto } from './dto/update-payment.dto';
 
 const EXPIRY_ALERT_WINDOW_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
 
@@ -175,6 +178,15 @@ export class SchoolService {
         vehicle: { select: { id: true, plate: true, brand: true, model: true } },
       },
       orderBy: { startsAt: 'desc' },
+    });
+  }
+
+  /** The current user's own invoices/payments (as a student), across all schools. */
+  async listMyPayments(userId: string) {
+    return this.prisma.schoolPayment.findMany({
+      where: { student: { userId } },
+      include: { school: { select: SchoolService.SCHOOL_SUMMARY_SELECT } },
+      orderBy: { createdAt: 'desc' },
     });
   }
 
@@ -562,6 +574,48 @@ export class SchoolService {
         endsAt: dto.endsAt ? new Date(dto.endsAt) : undefined,
       },
       include: SchoolService.SESSION_INCLUDE,
+    });
+  }
+
+  // ─── Paiements (factures manuelles) ──────────────────────────────────────────
+
+  async listPayments(schoolId: string, studentId?: string, status?: SchoolPaymentStatus) {
+    return this.prisma.schoolPayment.findMany({
+      where: {
+        schoolId,
+        ...(studentId ? { studentId } : {}),
+        ...(status ? { status } : {}),
+      },
+      include: { student: { include: { user: { select: { id: true, name: true, phone: true } } } } },
+      orderBy: { createdAt: 'desc' },
+    });
+  }
+
+  async createPayment(schoolId: string, dto: CreatePaymentDto) {
+    const student = await this.prisma.schoolStudent.findFirst({
+      where: { id: dto.studentId, schoolId },
+    });
+    if (!student) throw new BadRequestException('Élève introuvable pour cette école');
+
+    return this.prisma.schoolPayment.create({
+      data: { ...dto, schoolId, dueDate: dto.dueDate ? new Date(dto.dueDate) : undefined },
+      include: { student: { include: { user: { select: { id: true, name: true, phone: true } } } } },
+    });
+  }
+
+  async updatePayment(schoolId: string, id: string, dto: UpdatePaymentDto) {
+    // Composite where — the "règle d'or": never trust id alone.
+    const payment = await this.prisma.schoolPayment.findFirst({ where: { id, schoolId } });
+    if (!payment) throw new NotFoundException('Facture introuvable');
+
+    return this.prisma.schoolPayment.update({
+      where: { id },
+      data: {
+        ...dto,
+        dueDate: dto.dueDate ? new Date(dto.dueDate) : undefined,
+        paidAt: dto.status === SchoolPaymentStatus.PAID ? new Date() : undefined,
+      },
+      include: { student: { include: { user: { select: { id: true, name: true, phone: true } } } } },
     });
   }
 

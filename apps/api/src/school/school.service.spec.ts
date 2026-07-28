@@ -43,6 +43,12 @@ describe('SchoolService — tenant isolation', () => {
         findMany: jest.fn(),
         update: jest.fn(),
       },
+      schoolPayment: {
+        create: jest.fn(),
+        findFirst: jest.fn(),
+        findMany: jest.fn(),
+        update: jest.fn(),
+      },
     };
     notificationService = { create: jest.fn().mockResolvedValue(undefined) };
     service = new SchoolService(prisma, notificationService as any);
@@ -400,6 +406,44 @@ describe('SchoolService — tenant isolation', () => {
         } as any)
       ).rejects.toBeInstanceOf(BadRequestException);
       expect(prisma.session.update).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('createPayment', () => {
+    it('rejects a studentId that belongs to a different school', async () => {
+      prisma.schoolStudent.findFirst.mockResolvedValue(null);
+
+      await expect(
+        service.createPayment('schoolA', {
+          studentId: 'studentOfSchoolB',
+          amountXof: 100000,
+          description: 'Frais',
+        } as any)
+      ).rejects.toBeInstanceOf(BadRequestException);
+      expect(prisma.schoolPayment.create).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('updatePayment', () => {
+    it('rejects a payment id that belongs to a different school (cross-tenant guess)', async () => {
+      prisma.schoolPayment.findFirst.mockResolvedValue(null);
+
+      await expect(
+        service.updatePayment('schoolA', 'paymentOfSchoolB', { status: 'PAID' } as any)
+      ).rejects.toBeInstanceOf(NotFoundException);
+      expect(prisma.schoolPayment.update).not.toHaveBeenCalled();
+    });
+
+    it('stamps paidAt when marking a payment PAID', async () => {
+      prisma.schoolPayment.findFirst.mockResolvedValue({ id: 'p1', schoolId: 's1' });
+      prisma.schoolPayment.update.mockResolvedValue({ id: 'p1', status: 'PAID' });
+
+      await service.updatePayment('s1', 'p1', { status: 'PAID' } as any);
+
+      const call = prisma.schoolPayment.update.mock.calls[0][0];
+      expect(call.where).toEqual({ id: 'p1' });
+      expect(call.data.status).toBe('PAID');
+      expect(call.data.paidAt).toBeInstanceOf(Date);
     });
   });
 });

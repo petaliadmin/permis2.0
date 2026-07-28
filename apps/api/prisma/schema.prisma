@@ -70,6 +70,13 @@ enum SessionStatus {
   NO_SHOW
 }
 
+enum SchoolPaymentStatus {
+  PENDING
+  PAID
+  OVERDUE
+  CANCELLED
+}
+
 model User {
   id           String      @id @default(cuid())
   email        String?     @unique
@@ -637,6 +644,7 @@ model School {
   students           SchoolStudent[]
   vehicles           Vehicle[]
   sessions           Session[]
+  payments           SchoolPayment[]
 
   @@index([status])
   @@index([city])
@@ -722,6 +730,7 @@ model SchoolStudent {
   assignedInstructor SchoolMembership?        @relation(fields: [assignedInstructorMembershipId], references: [id], onDelete: SetNull)
   assignedVehicle    Vehicle?                 @relation(fields: [assignedVehicleId], references: [id], onDelete: SetNull)
   sessions           Session[]
+  payments           SchoolPayment[]
 
   @@unique([schoolId, userId])
   @@index([schoolId, status])
@@ -780,4 +789,28 @@ model Session {
   @@index([schoolId, startsAt])
   @@index([studentId, startsAt])
   @@map("sessions")
+}
+
+/// A manual invoice/payment record — tracked by staff, not a payment gateway
+/// integration (Mobile Money gateway integration is a later phase). Mirrors
+/// the existing "manual" purchase pattern already used by ShopService.
+model SchoolPayment {
+  id          String              @id @default(cuid())
+  schoolId    String
+  studentId   String
+  amountXof   Int
+  description String
+  status      SchoolPaymentStatus @default(PENDING)
+  method      String?
+  dueDate     DateTime?
+  paidAt      DateTime?
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+
+  school  School        @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  student SchoolStudent @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@index([schoolId, status])
+  @@index([studentId, status])
+  @@map("school_payments")
 }

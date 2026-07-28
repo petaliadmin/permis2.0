@@ -6,11 +6,12 @@ import type {
   School,
   SchoolEnrollmentRequest,
   SchoolMembership,
+  SchoolPayment,
   SchoolStudent,
   Session,
   Vehicle,
 } from '@permis2.0/types';
-import { SchoolEnrollmentStatus, SchoolStatus } from '@permis2.0/types';
+import { SchoolEnrollmentStatus, SchoolPaymentStatus, SchoolStatus } from '@permis2.0/types';
 import { Stat } from '@permis2.0/ui';
 import { cn } from '@/lib/cn';
 import { EnrollmentRequestsPanel } from './EnrollmentRequestsPanel';
@@ -18,6 +19,7 @@ import { TeamPanel } from './TeamPanel';
 import { StudentsPanel } from './StudentsPanel';
 import { VehiclesPanel } from './VehiclesPanel';
 import { SessionsPanel } from './SessionsPanel';
+import { PaymentsPanel } from './PaymentsPanel';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -28,6 +30,7 @@ const TABS = [
   { key: 'equipe', label: 'Équipe' },
   { key: 'vehicules', label: 'Véhicules' },
   { key: 'planning', label: 'Planning' },
+  { key: 'finances', label: 'Finances' },
 ] as const;
 type TabKey = (typeof TABS)[number]['key'];
 
@@ -47,6 +50,7 @@ export function SchoolDashboard({ school, onBackToPicker, onSchoolUpdated }: Sch
   const [students, setStudents] = useState<SchoolStudent[] | null>(null);
   const [vehicles, setVehicles] = useState<Vehicle[] | null>(null);
   const [sessions, setSessions] = useState<Session[] | null>(null);
+  const [payments, setPayments] = useState<SchoolPayment[] | null>(null);
 
   const fetchRequests = useCallback(async () => {
     const res = await fetch(`${API_URL}/schools/${school.id}/enrollment-requests`, {
@@ -75,15 +79,25 @@ export function SchoolDashboard({ school, onBackToPicker, onSchoolUpdated }: Sch
     setSessions(res.ok ? await res.json() : []);
   }, [school.id]);
 
+  const fetchPayments = useCallback(async () => {
+    const res = await fetch(`${API_URL}/schools/${school.id}/payments`, { credentials: 'include' });
+    setPayments(res.ok ? await res.json() : []);
+  }, [school.id]);
+
   useEffect(() => {
     fetchRequests();
     fetchMembers();
     fetchStudents();
     fetchVehicles();
     fetchSessions();
-  }, [fetchRequests, fetchMembers, fetchStudents, fetchVehicles, fetchSessions]);
+    fetchPayments();
+  }, [fetchRequests, fetchMembers, fetchStudents, fetchVehicles, fetchSessions, fetchPayments]);
 
   const pendingCount = requests?.filter((r) => PENDING_STATUSES.includes(r.status)).length ?? 0;
+  const pendingPaymentsCount =
+    payments?.filter(
+      (p) => p.status === SchoolPaymentStatus.PENDING || p.status === SchoolPaymentStatus.OVERDUE
+    ).length ?? 0;
 
   return (
     <div className="min-h-screen bg-surface">
@@ -178,6 +192,12 @@ export function SchoolDashboard({ school, onBackToPicker, onSchoolUpdated }: Sch
               value={vehicles?.length ?? 0}
               accent="bg-teal-100 text-teal-700"
             />
+            <Stat
+              icon={<i className="ti ti-receipt" aria-hidden="true" />}
+              label="Factures impayées"
+              value={pendingPaymentsCount}
+              accent="bg-red-100 text-danger"
+            />
           </div>
         )}
 
@@ -221,6 +241,15 @@ export function SchoolDashboard({ school, onBackToPicker, onSchoolUpdated }: Sch
             members={members}
             vehicles={vehicles}
             onChanged={fetchSessions}
+          />
+        )}
+
+        {tab === 'finances' && (
+          <PaymentsPanel
+            schoolId={school.id}
+            payments={payments}
+            students={students}
+            onChanged={fetchPayments}
           />
         )}
       </main>
