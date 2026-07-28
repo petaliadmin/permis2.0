@@ -579,3 +579,34 @@ export interface Vehicle {
   insuranceExpiringSoon?: boolean;
   inspectionExpiringSoon?: boolean;
 }
+
+export enum SessionType {
+  THEORY = 'THEORY',
+  PRACTICE = 'PRACTICE',
+}
+
+export enum SessionStatus {
+  SCHEDULED = 'SCHEDULED',
+  COMPLETED = 'COMPLETED',
+  CANCELLED = 'CANCELLED',
+  NO_SHOW = 'NO_SHOW',
+}
+
+export interface Session {
+  id: string;
+  schoolId: string;
+  studentId: string;
+  type: SessionType;
+  status: SessionStatus;
+  startsAt: Date;
+  endsAt: Date;
+  instructorMembershipId?: string | null;
+  vehicleId?: string | null;
+  notes?: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+  school?: Pick<School, 'id' | 'slug' | 'name' | 'city' | 'district' | 'logoUrl'>;
+  student?: { id: string; user?: Pick<User, 'id' | 'name' | 'phone'> };
+  instructor?: { id: string; user?: Pick<User, 'id' | 'name' | 'phone'> } | null;
+  vehicle?: Pick<Vehicle, 'id' | 'plate' | 'brand' | 'model'> | null;
+}

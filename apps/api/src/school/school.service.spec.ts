@@ -37,6 +37,12 @@ describe('SchoolService — tenant isolation', () => {
         update: jest.fn(),
         delete: jest.fn(),
       },
+      session: {
+        create: jest.fn(),
+        findFirst: jest.fn(),
+        findMany: jest.fn(),
+        update: jest.fn(),
+      },
     };
     notificationService = { create: jest.fn().mockResolvedValue(undefined) };
     service = new SchoolService(prisma, notificationService as any);
@@ -336,6 +342,64 @@ describe('SchoolService — tenant isolation', () => {
 
       await expect(service.deleteVehicle('s1', 'v1')).resolves.toEqual({ deleted: true });
       expect(prisma.vehicle.delete).toHaveBeenCalledWith({ where: { id: 'v1' } });
+    });
+  });
+
+  describe('createSession', () => {
+    const dto = {
+      studentId: 'studentOfSchoolB',
+      type: 'PRACTICE',
+      startsAt: '2026-08-01T09:00:00.000Z',
+      endsAt: '2026-08-01T10:00:00.000Z',
+    };
+
+    it('rejects a studentId that belongs to a different school', async () => {
+      prisma.schoolStudent.findFirst.mockResolvedValue(null);
+
+      await expect(service.createSession('schoolA', dto as any)).rejects.toBeInstanceOf(
+        BadRequestException
+      );
+      expect(prisma.session.create).not.toHaveBeenCalled();
+    });
+
+    it('creates the session when all refs belong to the school', async () => {
+      prisma.schoolStudent.findFirst.mockResolvedValue({ id: 'studentOfSchoolB' });
+      prisma.session.create.mockResolvedValue({ id: 'sess1' });
+
+      await service.createSession('schoolA', dto as any);
+
+      expect(prisma.session.create).toHaveBeenCalledWith({
+        data: {
+          ...dto,
+          schoolId: 'schoolA',
+          startsAt: new Date(dto.startsAt),
+          endsAt: new Date(dto.endsAt),
+        },
+        include: expect.any(Object),
+      });
+    });
+  });
+
+  describe('updateSession', () => {
+    it('rejects a session id that belongs to a different school (cross-tenant guess)', async () => {
+      prisma.session.findFirst.mockResolvedValue(null);
+
+      await expect(
+        service.updateSession('schoolA', 'sessionOfSchoolB', { notes: 'x' } as any)
+      ).rejects.toBeInstanceOf(NotFoundException);
+      expect(prisma.session.update).not.toHaveBeenCalled();
+    });
+
+    it('rejects assigning an instructor from a different school', async () => {
+      prisma.session.findFirst.mockResolvedValue({ id: 'sess1', schoolId: 'schoolA' });
+      prisma.schoolMembership.findFirst.mockResolvedValue(null);
+
+      await expect(
+        service.updateSession('schoolA', 'sess1', {
+          instructorMembershipId: 'instructorOfSchoolB',
+        } as any)
+      ).rejects.toBeInstanceOf(BadRequestException);
+      expect(prisma.session.update).not.toHaveBeenCalled();
     });
   });
 });

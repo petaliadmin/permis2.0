@@ -17,6 +17,8 @@ import { AddStudentDto } from './dto/add-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
 import { CreateVehicleDto } from './dto/create-vehicle.dto';
 import { UpdateVehicleDto } from './dto/update-vehicle.dto';
+import { CreateSessionDto } from './dto/create-session.dto';
+import { UpdateSessionDto } from './dto/update-session.dto';
 
 const EXPIRY_ALERT_WINDOW_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
 
@@ -160,6 +162,19 @@ export class SchoolService {
       where: { studentUserId: userId },
       include: { school: { select: SchoolService.SCHOOL_SUMMARY_SELECT } },
       orderBy: { createdAt: 'desc' },
+    });
+  }
+
+  /** The current user's own sessions (as a student), across all schools. */
+  async listMySessions(userId: string) {
+    return this.prisma.session.findMany({
+      where: { student: { userId } },
+      include: {
+        school: { select: SchoolService.SCHOOL_SUMMARY_SELECT },
+        instructor: { include: { user: { select: { id: true, name: true, phone: true } } } },
+        vehicle: { select: { id: true, plate: true, brand: true, model: true } },
+      },
+      orderBy: { startsAt: 'desc' },
     });
   }
 
@@ -472,6 +487,82 @@ export class SchoolService {
     if (!vehicle) throw new NotFoundException('Véhicule introuvable');
     await this.prisma.vehicle.delete({ where: { id } });
     return { deleted: true };
+  }
+
+  // ─── Séances (planning) ──────────────────────────────────────────────────────
+
+  private static readonly SESSION_INCLUDE = {
+    student: { include: { user: { select: { id: true, name: true, phone: true } } } },
+    instructor: { include: { user: { select: { id: true, name: true, phone: true } } } },
+    vehicle: { select: { id: true, plate: true, brand: true, model: true } },
+  } as const;
+
+  async listSessions(schoolId: string, studentId?: string, from?: string, to?: string) {
+    return this.prisma.session.findMany({
+      where: {
+        schoolId,
+        ...(studentId ? { studentId } : {}),
+        ...(from || to
+          ? { startsAt: { ...(from ? { gte: new Date(from) } : {}), ...(to ? { lte: new Date(to) } : {}) } }
+          : {}),
+      },
+      include: SchoolService.SESSION_INCLUDE,
+      orderBy: { startsAt: 'asc' },
+    });
+  }
+
+  /** Verifies studentId/instructorMembershipId/vehicleId all belong to `schoolId` — the same cross-tenant guard as updateStudent(). */
+  private async assertSessionRefsBelongToSchool(
+    schoolId: string,
+    refs: { studentId?: string; instructorMembershipId?: string | null; vehicleId?: string | null }
+  ) {
+    if (refs.studentId) {
+      const student = await this.prisma.schoolStudent.findFirst({
+        where: { id: refs.studentId, schoolId },
+      });
+      if (!student) throw new BadRequestException('Élève introuvable pour cette école');
+    }
+    if (refs.instructorMembershipId) {
+      const instructor = await this.prisma.schoolMembership.findFirst({
+        where: {
+          id: refs.instructorMembershipId,
+          schoolId,
+          active: true,
+          role: { in: [SchoolMemberRole.INSTRUCTOR, SchoolMemberRole.COACH] },
+        },
+      });
+      if (!instructor) throw new BadRequestException('Moniteur/coach introuvable pour cette école');
+    }
+    if (refs.vehicleId) {
+      const vehicle = await this.prisma.vehicle.findFirst({ where: { id: refs.vehicleId, schoolId } });
+      if (!vehicle) throw new BadRequestException('Véhicule introuvable pour cette école');
+    }
+  }
+
+  async createSession(schoolId: string, dto: CreateSessionDto) {
+    await this.assertSessionRefsBelongToSchool(schoolId, dto);
+    return this.prisma.session.create({
+      data: { ...dto, schoolId, startsAt: new Date(dto.startsAt), endsAt: new Date(dto.endsAt) },
+      include: SchoolService.SESSION_INCLUDE,
+    });
+  }
+
+  async updateSession(schoolId: string, id: string, dto: UpdateSessionDto) {
+    // Composite where — the "règle d'or": never trust id alone.
+    const session = await this.prisma.session.findFirst({ where: { id, schoolId } });
+    if (!session) throw new NotFoundException('Séance introuvable');
+
+    await this.assertSessionRefsBelongToSchool(schoolId, dto);
+
+    return this.prisma.session.update({
+      where: { id },
+      data: {
+        ...dto,
+        startsAt: dto.startsAt ? new Date(dto.startsAt) : undefined,
+        endsAt: dto.endsAt ? new Date(dto.endsAt) : undefined,
+      },
+      include: SchoolService.SESSION_INCLUDE,
+    });
   }
 
   // ─── Superadmin (délégué depuis AdminController) ────────────────────────────

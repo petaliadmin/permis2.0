@@ -7,6 +7,7 @@ import type {
   SchoolEnrollmentRequest,
   SchoolMembership,
   SchoolStudent,
+  Session,
   Vehicle,
 } from '@permis2.0/types';
 import { SchoolEnrollmentStatus, SchoolStatus } from '@permis2.0/types';
@@ -16,6 +17,7 @@ import { EnrollmentRequestsPanel } from './EnrollmentRequestsPanel';
 import { TeamPanel } from './TeamPanel';
 import { StudentsPanel } from './StudentsPanel';
 import { VehiclesPanel } from './VehiclesPanel';
+import { SessionsPanel } from './SessionsPanel';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -25,6 +27,7 @@ const TABS = [
   { key: 'eleves', label: 'Élèves' },
   { key: 'equipe', label: 'Équipe' },
   { key: 'vehicules', label: 'Véhicules' },
+  { key: 'planning', label: 'Planning' },
 ] as const;
 type TabKey = (typeof TABS)[number]['key'];
 
@@ -43,6 +46,7 @@ export function SchoolDashboard({ school, onBackToPicker, onSchoolUpdated }: Sch
   const [members, setMembers] = useState<SchoolMembership[] | null>(null);
   const [students, setStudents] = useState<SchoolStudent[] | null>(null);
   const [vehicles, setVehicles] = useState<Vehicle[] | null>(null);
+  const [sessions, setSessions] = useState<Session[] | null>(null);
 
   const fetchRequests = useCallback(async () => {
     const res = await fetch(`${API_URL}/schools/${school.id}/enrollment-requests`, {
@@ -66,12 +70,18 @@ export function SchoolDashboard({ school, onBackToPicker, onSchoolUpdated }: Sch
     setVehicles(res.ok ? await res.json() : []);
   }, [school.id]);
 
+  const fetchSessions = useCallback(async () => {
+    const res = await fetch(`${API_URL}/schools/${school.id}/sessions`, { credentials: 'include' });
+    setSessions(res.ok ? await res.json() : []);
+  }, [school.id]);
+
   useEffect(() => {
     fetchRequests();
     fetchMembers();
     fetchStudents();
     fetchVehicles();
-  }, [fetchRequests, fetchMembers, fetchStudents, fetchVehicles]);
+    fetchSessions();
+  }, [fetchRequests, fetchMembers, fetchStudents, fetchVehicles, fetchSessions]);
 
   const pendingCount = requests?.filter((r) => PENDING_STATUSES.includes(r.status)).length ?? 0;
 
@@ -201,6 +211,17 @@ export function SchoolDashboard({ school, onBackToPicker, onSchoolUpdated }: Sch
 
         {tab === 'vehicules' && (
           <VehiclesPanel schoolId={school.id} vehicles={vehicles} onChanged={fetchVehicles} />
+        )}
+
+        {tab === 'planning' && (
+          <SessionsPanel
+            schoolId={school.id}
+            sessions={sessions}
+            students={students}
+            members={members}
+            vehicles={vehicles}
+            onChanged={fetchSessions}
+          />
         )}
       </main>
     </div>

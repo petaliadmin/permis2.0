@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import type { SchoolEnrollmentRequest, SchoolStudent } from '@permis2.0/types';
-import { SchoolEnrollmentStatus, SchoolStudentStatus } from '@permis2.0/types';
+import type { SchoolEnrollmentRequest, SchoolStudent, Session } from '@permis2.0/types';
+import { SchoolEnrollmentStatus, SchoolStudentStatus, SessionStatus } from '@permis2.0/types';
 import { EmptyState, Skeleton } from '@permis2.0/ui';
 import { AppShell, PageHeader } from '@/components/AppShell';
 import { useAuthStore } from '@/store/authStore';
@@ -41,14 +41,20 @@ const STUDENT_STATUS_CHIP: Record<string, string> = {
   WITHDRAWN: 'chip-danger',
 };
 
+const SESSION_TYPE_LABEL: Record<string, string> = { THEORY: 'Théorie', PRACTICE: 'Pratique' };
+
 const fmtDate = (d: string | Date) =>
   new Date(d).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' });
+
+const fmtDateTime = (d: string | Date) =>
+  new Date(d).toLocaleString('fr-FR', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
 
 export default function MesAutoEcolesClient() {
   const router = useRouter();
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const [enrollments, setEnrollments] = useState<SchoolStudent[] | null>(null);
   const [requests, setRequests] = useState<SchoolEnrollmentRequest[] | null>(null);
+  const [sessions, setSessions] = useState<Session[] | null>(null);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -63,12 +69,19 @@ export default function MesAutoEcolesClient() {
       .then((res) => (res.ok ? res.json() : []))
       .then(setRequests)
       .catch(() => setRequests([]));
+    fetch(`${API_URL}/schools/my-sessions`, { credentials: 'include' })
+      .then((res) => (res.ok ? res.json() : []))
+      .then(setSessions)
+      .catch(() => setSessions([]));
   }, [isAuthenticated, router]);
 
   const pendingRequests = (requests ?? []).filter(
     (r) => r.status !== SchoolEnrollmentStatus.CONFIRMED
   );
-  const loading = enrollments === null || requests === null;
+  const upcomingSessions = (sessions ?? [])
+    .filter((s) => s.status === SessionStatus.SCHEDULED && new Date(s.startsAt).getTime() >= Date.now())
+    .sort((a, b) => new Date(a.startsAt).getTime() - new Date(b.startsAt).getTime());
+  const loading = enrollments === null || requests === null || sessions === null;
   const isEmpty = !loading && (enrollments?.length ?? 0) === 0 && pendingRequests.length === 0;
 
   return (
@@ -137,6 +150,37 @@ export default function MesAutoEcolesClient() {
                     {STUDENT_STATUS_LABEL[e.status] ?? e.status}
                   </span>
                 </Link>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {!loading && upcomingSessions.length > 0 && (
+          <section>
+            <p className="mb-2 text-xs font-bold uppercase tracking-wide text-muted">
+              Mes rendez-vous
+            </p>
+            <div className="space-y-2.5">
+              {upcomingSessions.map((s) => (
+                <div
+                  key={s.id}
+                  className="rounded-2xl border border-token bg-surface-1 p-4 shadow-soft"
+                >
+                  <div className="flex items-center justify-between">
+                    <p className="font-display text-sm font-bold text-foreground">
+                      {fmtDateTime(s.startsAt)}
+                    </p>
+                    <span className="chip chip-primary">{SESSION_TYPE_LABEL[s.type] ?? s.type}</span>
+                  </div>
+                  <p className="mt-1 text-xs text-secondary">{s.school?.name ?? 'Auto-école'}</p>
+                  {(s.instructor?.user || s.vehicle) && (
+                    <p className="mt-1 text-xs text-muted">
+                      {s.instructor?.user && `Moniteur : ${s.instructor.user.name}`}
+                      {s.instructor?.user && s.vehicle ? ' · ' : ''}
+                      {s.vehicle && `Véhicule : ${s.vehicle.plate}`}
+                    </p>
+                  )}
+                </div>
               ))}
             </div>
           </section>

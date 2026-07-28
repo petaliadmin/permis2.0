@@ -15,6 +15,8 @@ import { AddStudentDto } from './dto/add-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
 import { CreateVehicleDto } from './dto/create-vehicle.dto';
 import { UpdateVehicleDto } from './dto/update-vehicle.dto';
+import { CreateSessionDto } from './dto/create-session.dto';
+import { UpdateSessionDto } from './dto/update-session.dto';
 
 const STAFF_ROLES = [SchoolMemberRole.OWNER, SchoolMemberRole.MANAGER, SchoolMemberRole.SECRETARY];
 const STUDENTS_VIEW_ROLES = [...STAFF_ROLES, SchoolMemberRole.INSTRUCTOR, SchoolMemberRole.COACH];
@@ -65,6 +67,14 @@ export class SchoolController {
   @ApiResponse({ status: 200, description: "The current user's own pre-registration requests" })
   async myRequests(@Request() req) {
     return this.schoolService.listMyEnrollmentRequests(req.user.userId);
+  }
+
+  @Get('my-sessions')
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
+  @ApiResponse({ status: 200, description: "The current user's own sessions (as a student)" })
+  async mySessions(@Request() req) {
+    return this.schoolService.listMySessions(req.user.userId);
   }
 
   @Get('by-slug/:slug')
@@ -261,5 +271,43 @@ export class SchoolController {
   @ApiResponse({ status: 200, description: 'Vehicle removed from the fleet' })
   async deleteVehicle(@Param('schoolId') schoolId: string, @Param('id') id: string) {
     return this.schoolService.deleteVehicle(schoolId, id);
+  }
+
+  // ─── Séances (planning) ──────────────────────────────────────────────────────
+
+  @Get(':schoolId/sessions')
+  @UseGuards(AuthGuard('jwt'), SchoolRolesGuard)
+  @SchoolRoles(...STUDENTS_VIEW_ROLES)
+  @ApiBearerAuth()
+  @ApiResponse({ status: 200, description: 'Sessions for this school' })
+  async listSessions(
+    @Param('schoolId') schoolId: string,
+    @Query('studentId') studentId?: string,
+    @Query('from') from?: string,
+    @Query('to') to?: string
+  ) {
+    return this.schoolService.listSessions(schoolId, studentId, from, to);
+  }
+
+  @Post(':schoolId/sessions')
+  @UseGuards(AuthGuard('jwt'), SchoolRolesGuard)
+  @SchoolRoles(...STAFF_ROLES)
+  @ApiBearerAuth()
+  @ApiResponse({ status: 201, description: 'Session created' })
+  async createSession(@Param('schoolId') schoolId: string, @Body() dto: CreateSessionDto) {
+    return this.schoolService.createSession(schoolId, dto);
+  }
+
+  @Patch(':schoolId/sessions/:id')
+  @UseGuards(AuthGuard('jwt'), SchoolRolesGuard)
+  @SchoolRoles(...STAFF_ROLES)
+  @ApiBearerAuth()
+  @ApiResponse({ status: 200, description: 'Session updated' })
+  async updateSession(
+    @Param('schoolId') schoolId: string,
+    @Param('id') id: string,
+    @Body() dto: UpdateSessionDto
+  ) {
+    return this.schoolService.updateSession(schoolId, id, dto);
   }
 }
