@@ -83,6 +83,7 @@ const MENU_LINKS: { href: string; label: string; icon: string }[] = [
   { href: '/exam', label: 'Examens', icon: 'ti-clipboard-check' },
   { href: '/boutique', label: 'Abonnement', icon: 'ti-crown' },
   { href: '/ecoles', label: 'Trouver une auto-école', icon: 'ti-map-pin' },
+  { href: '/mes-auto-ecoles', label: 'Mes auto-écoles', icon: 'ti-user-check' },
   { href: '/mon-ecole', label: 'Gérer mon auto-école', icon: 'ti-building-store' },
   { href: '/auto-ecole', label: 'Espace auto-école', icon: 'ti-school' },
   { href: '/notifications', label: 'Notifications', icon: 'ti-bell' },

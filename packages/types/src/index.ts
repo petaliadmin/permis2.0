@@ -532,6 +532,8 @@ export interface SchoolEnrollmentRequest {
   respondedAt?: Date | null;
   createdAt: Date;
   updatedAt: Date;
+  /** Included by GET /schools/my-requests. */
+  school?: Pick<School, 'id' | 'slug' | 'name' | 'city' | 'district' | 'logoUrl'>;
 }
 
 /** A confirmed student <-> school rattachement. */
@@ -546,6 +548,8 @@ export interface SchoolStudent {
   createdAt: Date;
   updatedAt: Date;
   user?: Pick<User, 'id' | 'name' | 'phone' | 'email'>;
+  /** Included by GET /schools/my-enrollments. */
+  school?: Pick<School, 'id' | 'slug' | 'name' | 'city' | 'district' | 'logoUrl'>;
 }
 
 export enum VehicleStatus {

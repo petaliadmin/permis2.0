@@ -127,6 +127,33 @@ export class SchoolService {
     return memberships.map((m) => ({ ...m.school, myRole: m.role }));
   }
 
+  private static readonly SCHOOL_SUMMARY_SELECT = {
+    id: true,
+    slug: true,
+    name: true,
+    city: true,
+    district: true,
+    logoUrl: true,
+  } as const;
+
+  /** Schools the current user is a STUDENT at (SchoolStudent) — distinct from listMine() (staff). */
+  async listMyEnrollments(userId: string) {
+    return this.prisma.schoolStudent.findMany({
+      where: { userId },
+      include: { school: { select: SchoolService.SCHOOL_SUMMARY_SELECT } },
+      orderBy: { enrolledAt: 'desc' },
+    });
+  }
+
+  /** The current user's own pre-registration requests, across all schools. */
+  async listMyEnrollmentRequests(userId: string) {
+    return this.prisma.schoolEnrollmentRequest.findMany({
+      where: { studentUserId: userId },
+      include: { school: { select: SchoolService.SCHOOL_SUMMARY_SELECT } },
+      orderBy: { createdAt: 'desc' },
+    });
+  }
+
   async create(userId: string, dto: CreateSchoolDto) {
     const base = slugify(dto.name) || 'ecole';
     return this.prisma.$transaction(async (tx) => {

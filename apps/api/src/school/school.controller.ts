@@ -51,6 +51,22 @@ export class SchoolController {
     return this.schoolService.listMine(req.user.userId);
   }
 
+  @Get('my-enrollments')
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
+  @ApiResponse({ status: 200, description: 'Schools the current user is a STUDENT at' })
+  async myEnrollments(@Request() req) {
+    return this.schoolService.listMyEnrollments(req.user.userId);
+  }
+
+  @Get('my-requests')
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
+  @ApiResponse({ status: 200, description: "The current user's own pre-registration requests" })
+  async myRequests(@Request() req) {
+    return this.schoolService.listMyEnrollmentRequests(req.user.userId);
+  }
+
   @Get('by-slug/:slug')
   @UseGuards(OptionalJwtAuthGuard)
   @ApiResponse({ status: 200, description: 'School details by public slug' })
