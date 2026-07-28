@@ -22,6 +22,13 @@ export const ADMIN_SECTIONS = [
     color: '#DB2777',
   },
   {
+    href: '/admin/schools',
+    label: 'Modération écoles',
+    desc: 'Activer ou suspendre une fiche auto-école',
+    icon: 'ti-building-store',
+    color: '#0D9488',
+  },
+  {
     href: '/admin/users',
     label: 'Utilisateurs',
     desc: 'Bloquer, rôles, abonnements',
