@@ -645,6 +645,8 @@ model SchoolMembership {
   school School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  assignedStudents SchoolStudent[]
+
   @@unique([schoolId, userId, role])
   @@index([schoolId])
   @@index([userId])
@@ -688,19 +690,23 @@ model SchoolEnrollmentRequest {
 /// SchoolEnrollmentRequest so every future ERP module (planning, finances,
 /// exams) can query "students of this school" without re-filtering by status.
 model SchoolStudent {
-  id                  String              @id @default(cuid())
-  schoolId            String
-  userId              String
-  enrollmentRequestId String?             @unique
-  licenseCategory     String?
-  status              SchoolStudentStatus @default(ACTIVE)
-  enrolledAt          DateTime            @default(now())
-  createdAt           DateTime            @default(now())
-  updatedAt           DateTime            @updatedAt
+  id                             String              @id @default(cuid())
+  schoolId                       String
+  userId                         String
+  enrollmentRequestId            String?             @unique
+  licenseCategory                String?
+  status                         SchoolStudentStatus @default(ACTIVE)
+  enrolledAt                     DateTime            @default(now())
+  createdAt                      DateTime            @default(now())
+  updatedAt                      DateTime            @updatedAt
+  assignedInstructorMembershipId String?
+  assignedVehicleId              String?
 
-  school            School                   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
-  user              User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  enrollmentRequest SchoolEnrollmentRequest? @relation(fields: [enrollmentRequestId], references: [id])
+  school             School                   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  user               User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  enrollmentRequest  SchoolEnrollmentRequest? @relation(fields: [enrollmentRequestId], references: [id])
+  assignedInstructor SchoolMembership?        @relation(fields: [assignedInstructorMembershipId], references: [id], onDelete: SetNull)
+  assignedVehicle    Vehicle?                 @relation(fields: [assignedVehicleId], references: [id], onDelete: SetNull)
 
   @@unique([schoolId, userId])
   @@index([schoolId, status])
@@ -725,6 +731,8 @@ model Vehicle {
   updatedAt                    DateTime      @updatedAt
 
   school School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  assignedStudents SchoolStudent[]
 
   @@unique([schoolId, plate])
   @@index([schoolId, status])

@@ -186,6 +186,8 @@ export function SchoolDashboard({ school, onBackToPicker, onSchoolUpdated }: Sch
           <StudentsPanel
             schoolId={school.id}
             students={students}
+            members={members}
+            vehicles={vehicles}
             onChanged={() => {
               fetchStudents();
               onSchoolUpdated();

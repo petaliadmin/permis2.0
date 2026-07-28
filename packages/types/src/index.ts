@@ -550,6 +550,10 @@ export interface SchoolStudent {
   user?: Pick<User, 'id' | 'name' | 'phone' | 'email'>;
   /** Included by GET /schools/my-enrollments. */
   school?: Pick<School, 'id' | 'slug' | 'name' | 'city' | 'district' | 'logoUrl'>;
+  assignedInstructorMembershipId?: string | null;
+  assignedVehicleId?: string | null;
+  assignedInstructor?: { id: string; user?: Pick<User, 'id' | 'name' | 'phone'> } | null;
+  assignedVehicle?: Pick<Vehicle, 'id' | 'plate' | 'brand' | 'model'> | null;
 }
 
 export enum VehicleStatus {

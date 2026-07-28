@@ -1,8 +1,8 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import type { SchoolStudent } from '@permis2.0/types';
-import { SchoolStudentStatus } from '@permis2.0/types';
+import type { SchoolMembership, SchoolStudent, Vehicle } from '@permis2.0/types';
+import { SchoolMemberRole, SchoolStudentStatus } from '@permis2.0/types';
 import { EmptyState, Sheet, Skeleton } from '@permis2.0/ui';
 import { cn } from '@/lib/cn';
 
@@ -52,14 +52,28 @@ type FoundUser = { id: string; name: string; phone: string };
 interface StudentsPanelProps {
   schoolId: string;
   students: SchoolStudent[] | null;
+  members: SchoolMembership[] | null;
+  vehicles: Vehicle[] | null;
   onChanged: () => void;
 }
 
-export function StudentsPanel({ schoolId, students, onChanged }: StudentsPanelProps) {
+export function StudentsPanel({
+  schoolId,
+  students,
+  members,
+  vehicles,
+  onChanged,
+}: StudentsPanelProps) {
   const [filter, setFilter] = useState<(typeof FILTERS)[number]>('ALL');
   const [openId, setOpenId] = useState<string | null>(null);
   const [category, setCategory] = useState('');
+  const [instructorId, setInstructorId] = useState('');
+  const [vehicleId, setVehicleId] = useState('');
   const [submitting, setSubmitting] = useState(false);
+
+  const instructors = (members ?? []).filter(
+    (m) => m.active && (m.role === SchoolMemberRole.INSTRUCTOR || m.role === SchoolMemberRole.COACH)
+  );
 
   const [addOpen, setAddOpen] = useState(false);
   const [phone, setPhone] = useState('');
@@ -74,7 +88,7 @@ export function StudentsPanel({ schoolId, students, onChanged }: StudentsPanelPr
   );
   const open = students?.find((s) => s.id === openId) ?? null;
 
-  const setStatus = async (target: string) => {
+  const patchStudent = async (extra: Record<string, unknown> = {}) => {
     if (!open) return;
     setSubmitting(true);
     try {
@@ -82,7 +96,12 @@ export function StudentsPanel({ schoolId, students, onChanged }: StudentsPanelPr
         method: 'PATCH',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status: target, licenseCategory: category || undefined }),
+        body: JSON.stringify({
+          licenseCategory: category || undefined,
+          assignedInstructorMembershipId: instructorId || null,
+          assignedVehicleId: vehicleId || null,
+          ...extra,
+        }),
       });
       if (res.ok) {
         setOpenId(null);
@@ -92,6 +111,8 @@ export function StudentsPanel({ schoolId, students, onChanged }: StudentsPanelPr
       setSubmitting(false);
     }
   };
+
+  const setStatus = (target: string) => patchStudent({ status: target });
 
   const lookup = async () => {
     setAddError('');
@@ -181,6 +202,8 @@ export function StudentsPanel({ schoolId, students, onChanged }: StudentsPanelPr
               onClick={() => {
                 setOpenId(s.id);
                 setCategory(s.licenseCategory ?? '');
+                setInstructorId(s.assignedInstructorMembershipId ?? '');
+                setVehicleId(s.assignedVehicleId ?? '');
               }}
               className="flex w-full items-center justify-between rounded-2xl border border-token bg-surface-1 p-4 text-left shadow-soft transition-colors hover:border-primary-200"
             >
@@ -192,6 +215,13 @@ export function StudentsPanel({ schoolId, students, onChanged }: StudentsPanelPr
                   {s.user?.phone}
                   {s.licenseCategory ? ` · Permis ${s.licenseCategory}` : ''} · {fmtDate(s.enrolledAt)}
                 </p>
+                {(s.assignedInstructor?.user || s.assignedVehicle) && (
+                  <p className="mt-0.5 text-xs text-muted">
+                    {s.assignedInstructor?.user && `Moniteur : ${s.assignedInstructor.user.name}`}
+                    {s.assignedInstructor?.user && s.assignedVehicle ? ' · ' : ''}
+                    {s.assignedVehicle && `Véhicule : ${s.assignedVehicle.plate}`}
+                  </p>
+                )}
               </div>
               <span className={cn('chip shrink-0', STATUS_CHIP[s.status])}>
                 {STATUS_LABEL[s.status]}
@@ -224,15 +254,56 @@ export function StudentsPanel({ schoolId, students, onChanged }: StudentsPanelPr
               </p>
             </div>
 
-            <div className="mt-4">
-              <label className="mb-1 block text-xs font-bold text-secondary">Catégorie de permis</label>
-              <input
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                placeholder="B"
-                className="w-full rounded-xl border border-token bg-surface-2 px-3.5 py-2.5 text-sm focus:border-primary-400 focus:outline-none"
-              />
+            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              <div>
+                <label className="mb-1 block text-xs font-bold text-secondary">Catégorie de permis</label>
+                <input
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                  placeholder="B"
+                  className="w-full rounded-xl border border-token bg-surface-2 px-3.5 py-2.5 text-sm focus:border-primary-400 focus:outline-none"
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-xs font-bold text-secondary">Moniteur assigné</label>
+                <select
+                  value={instructorId}
+                  onChange={(e) => setInstructorId(e.target.value)}
+                  className="w-full rounded-xl border border-token bg-surface-2 px-3.5 py-2.5 text-sm focus:border-primary-400 focus:outline-none"
+                >
+                  <option value="">Aucun</option>
+                  {instructors.map((m) => (
+                    <option key={m.id} value={m.id}>
+                      {m.user?.name ?? m.id}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="sm:col-span-2">
+                <label className="mb-1 block text-xs font-bold text-secondary">Véhicule assigné</label>
+                <select
+                  value={vehicleId}
+                  onChange={(e) => setVehicleId(e.target.value)}
+                  className="w-full rounded-xl border border-token bg-surface-2 px-3.5 py-2.5 text-sm focus:border-primary-400 focus:outline-none"
+                >
+                  <option value="">Aucun</option>
+                  {(vehicles ?? []).map((v) => (
+                    <option key={v.id} value={v.id}>
+                      {v.plate}
+                      {v.brand || v.model ? ` — ${[v.brand, v.model].filter(Boolean).join(' ')}` : ''}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
+
+            <button
+              disabled={submitting}
+              onClick={() => patchStudent()}
+              className="btn-ghost mt-3 w-full"
+            >
+              Enregistrer
+            </button>
 
             {nextActions(open.status).length > 0 && (
               <div className="mt-3 flex flex-wrap gap-2">

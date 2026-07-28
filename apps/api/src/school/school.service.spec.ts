@@ -207,7 +207,13 @@ describe('SchoolService — tenant isolation', () => {
       );
       expect(prisma.schoolStudent.findFirst).toHaveBeenCalledWith({
         where: { id: 'studentOfSchoolB', schoolId: 'schoolA' },
-        include: { user: { select: { id: true, name: true, phone: true, email: true } } },
+        include: {
+          user: { select: { id: true, name: true, phone: true, email: true } },
+          assignedInstructor: {
+            include: { user: { select: { id: true, name: true, phone: true } } },
+          },
+          assignedVehicle: { select: { id: true, plate: true, brand: true, model: true } },
+        },
       });
     });
 
@@ -218,6 +224,56 @@ describe('SchoolService — tenant isolation', () => {
         service.updateStudent('schoolA', 'studentOfSchoolB', { status: 'SUSPENDED' } as any)
       ).rejects.toBeInstanceOf(NotFoundException);
       expect(prisma.schoolStudent.update).not.toHaveBeenCalled();
+    });
+
+    it('rejects assigning an instructor that belongs to a different school', async () => {
+      prisma.schoolStudent.findFirst.mockResolvedValue({ id: 's1', schoolId: 'schoolA' });
+      prisma.schoolMembership.findFirst.mockResolvedValue(null); // not found scoped to schoolA
+
+      await expect(
+        service.updateStudent('schoolA', 's1', {
+          assignedInstructorMembershipId: 'instructorOfSchoolB',
+        } as any)
+      ).rejects.toBeInstanceOf(BadRequestException);
+      expect(prisma.schoolMembership.findFirst).toHaveBeenCalledWith({
+        where: {
+          id: 'instructorOfSchoolB',
+          schoolId: 'schoolA',
+          active: true,
+          role: { in: [SchoolMemberRole.INSTRUCTOR, SchoolMemberRole.COACH] },
+        },
+      });
+      expect(prisma.schoolStudent.update).not.toHaveBeenCalled();
+    });
+
+    it('rejects assigning a vehicle that belongs to a different school', async () => {
+      prisma.schoolStudent.findFirst.mockResolvedValue({ id: 's1', schoolId: 'schoolA' });
+      prisma.vehicle.findFirst.mockResolvedValue(null); // not found scoped to schoolA
+
+      await expect(
+        service.updateStudent('schoolA', 's1', { assignedVehicleId: 'vehicleOfSchoolB' } as any)
+      ).rejects.toBeInstanceOf(BadRequestException);
+      expect(prisma.vehicle.findFirst).toHaveBeenCalledWith({
+        where: { id: 'vehicleOfSchoolB', schoolId: 'schoolA' },
+      });
+      expect(prisma.schoolStudent.update).not.toHaveBeenCalled();
+    });
+
+    it('allows assigning an instructor and vehicle that do belong to the school', async () => {
+      prisma.schoolStudent.findFirst.mockResolvedValue({ id: 's1', schoolId: 'schoolA' });
+      prisma.schoolMembership.findFirst.mockResolvedValue({ id: 'instructor1' });
+      prisma.vehicle.findFirst.mockResolvedValue({ id: 'vehicle1' });
+      prisma.schoolStudent.update.mockResolvedValue({ id: 's1' });
+
+      await service.updateStudent('schoolA', 's1', {
+        assignedInstructorMembershipId: 'instructor1',
+        assignedVehicleId: 'vehicle1',
+      } as any);
+
+      expect(prisma.schoolStudent.update).toHaveBeenCalledWith({
+        where: { id: 's1' },
+        data: { assignedInstructorMembershipId: 'instructor1', assignedVehicleId: 'vehicle1' },
+      });
     });
   });
 

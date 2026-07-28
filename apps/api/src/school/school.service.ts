@@ -136,11 +136,20 @@ export class SchoolService {
     logoUrl: true,
   } as const;
 
+  /** assignedInstructor/assignedVehicle — shared by listStudents/getStudent/listMyEnrollments. */
+  private static readonly STUDENT_ASSIGNMENTS_INCLUDE = {
+    assignedInstructor: { include: { user: { select: { id: true, name: true, phone: true } } } },
+    assignedVehicle: { select: { id: true, plate: true, brand: true, model: true } },
+  } as const;
+
   /** Schools the current user is a STUDENT at (SchoolStudent) — distinct from listMine() (staff). */
   async listMyEnrollments(userId: string) {
     return this.prisma.schoolStudent.findMany({
       where: { userId },
-      include: { school: { select: SchoolService.SCHOOL_SUMMARY_SELECT } },
+      include: {
+        school: { select: SchoolService.SCHOOL_SUMMARY_SELECT },
+        ...SchoolService.STUDENT_ASSIGNMENTS_INCLUDE,
+      },
       orderBy: { enrolledAt: 'desc' },
     });
   }
@@ -348,7 +357,10 @@ export class SchoolService {
   async listStudents(schoolId: string, status?: SchoolStudentStatus) {
     return this.prisma.schoolStudent.findMany({
       where: { schoolId, ...(status ? { status } : {}) },
-      include: { user: { select: { id: true, name: true, phone: true, email: true } } },
+      include: {
+        user: { select: { id: true, name: true, phone: true, email: true } },
+        ...SchoolService.STUDENT_ASSIGNMENTS_INCLUDE,
+      },
       orderBy: { enrolledAt: 'desc' },
     });
   }
@@ -357,7 +369,10 @@ export class SchoolService {
     // Composite where — the "règle d'or": never trust id alone.
     const student = await this.prisma.schoolStudent.findFirst({
       where: { id, schoolId },
-      include: { user: { select: { id: true, name: true, phone: true, email: true } } },
+      include: {
+        user: { select: { id: true, name: true, phone: true, email: true } },
+        ...SchoolService.STUDENT_ASSIGNMENTS_INCLUDE,
+      },
     });
     if (!student) throw new NotFoundException('Élève introuvable');
     return student;
@@ -366,6 +381,28 @@ export class SchoolService {
   async updateStudent(schoolId: string, id: string, dto: UpdateStudentDto) {
     const student = await this.prisma.schoolStudent.findFirst({ where: { id, schoolId } });
     if (!student) throw new NotFoundException('Élève introuvable');
+
+    // Cross-tenant guard: an instructor/vehicle assigned to a student must
+    // belong to the SAME school — otherwise a staff member could reach into
+    // another school's fleet/team by id.
+    if (dto.assignedInstructorMembershipId) {
+      const instructor = await this.prisma.schoolMembership.findFirst({
+        where: {
+          id: dto.assignedInstructorMembershipId,
+          schoolId,
+          active: true,
+          role: { in: [SchoolMemberRole.INSTRUCTOR, SchoolMemberRole.COACH] },
+        },
+      });
+      if (!instructor) throw new BadRequestException('Moniteur/coach introuvable pour cette école');
+    }
+    if (dto.assignedVehicleId) {
+      const vehicle = await this.prisma.vehicle.findFirst({
+        where: { id: dto.assignedVehicleId, schoolId },
+      });
+      if (!vehicle) throw new BadRequestException('Véhicule introuvable pour cette école');
+    }
+
     return this.prisma.schoolStudent.update({ where: { id }, data: dto });
   }
 

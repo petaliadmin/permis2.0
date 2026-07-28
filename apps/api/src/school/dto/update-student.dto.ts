@@ -12,4 +12,14 @@ export class UpdateStudentDto {
   @IsOptional()
   @IsString()
   licenseCategory?: string;
+
+  @ApiProperty({ required: false, nullable: true, description: 'null to unassign' })
+  @IsOptional()
+  @IsString()
+  assignedInstructorMembershipId?: string | null;
+
+  @ApiProperty({ required: false, nullable: true, description: 'null to unassign' })
+  @IsOptional()
+  @IsString()
+  assignedVehicleId?: string | null;
 }

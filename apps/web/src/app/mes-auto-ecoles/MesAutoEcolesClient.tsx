@@ -118,6 +118,18 @@ export default function MesAutoEcolesClient() {
                       {e.licenseCategory ? ` · Permis ${e.licenseCategory}` : ''}
                     </p>
                     <p className="mt-0.5 text-xs text-muted">Inscrit le {fmtDate(e.enrolledAt)}</p>
+                    {e.assignedInstructor?.user && (
+                      <p className="mt-1 flex items-center gap-1 text-xs text-secondary">
+                        <i className="ti ti-steering-wheel" aria-hidden="true" />
+                        Moniteur : {e.assignedInstructor.user.name}
+                      </p>
+                    )}
+                    {e.assignedVehicle && (
+                      <p className="mt-0.5 flex items-center gap-1 text-xs text-secondary">
+                        <i className="ti ti-car" aria-hidden="true" />
+                        Véhicule : {e.assignedVehicle.plate}
+                      </p>
+                    )}
                   </div>
                   <span
                     className={`chip shrink-0 ${STUDENT_STATUS_CHIP[e.status] ?? 'bg-surface-2 text-secondary'}`}
