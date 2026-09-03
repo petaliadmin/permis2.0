@@ -35,7 +35,7 @@ const FEATURES: Feature[] = [
 
 export function ForSchools() {
   return (
-    <section id="erp" className="scroll-mt-20 bg-surface-1 py-24">
+    <section id="erp" className="scroll-mt-20 bg-surface-1 py-20">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
           <motion.div
@@ -56,7 +56,7 @@ export function ForSchools() {
             <ul className="mt-6 grid gap-3 sm:grid-cols-2">
               {FEATURES.map((f) => (
                 <li key={f.label} className="flex items-center gap-2.5 text-sm font-semibold text-foreground">
-                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-violet-50 text-violet-600 dark:bg-violet-900/30 dark:text-violet-300">
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-violet-50 text-violet-600">
                     <f.icon className="h-4 w-4" strokeWidth={2} />
                   </span>
                   {f.label}
@@ -74,7 +74,7 @@ export function ForSchools() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: '-80px' }}
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            className="relative aspect-[4/5] w-full max-w-md overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-violet-100 to-violet-200 shadow-card-lg dark:from-violet-900/30 dark:to-violet-800/20 lg:ml-auto"
+            className="relative aspect-[4/5] w-full max-w-md overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-violet-100 to-violet-200 shadow-card-lg lg:ml-auto"
           >
             <Image
               src="/images/home/for-schools.jpg"

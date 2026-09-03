@@ -51,7 +51,10 @@ export function Hero() {
             en un, du premier clic jusqu&apos;au jour de l&apos;examen.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
-            <Link href="/onboarding" className="btn-primary bg-white !text-primary-700 shadow-xl">
+            <Link
+              href="/onboarding"
+              className="btn bg-white text-primary-700 shadow-xl hover:bg-primary-50"
+            >
               Créer un compte
             </Link>
             <Link

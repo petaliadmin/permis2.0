@@ -68,7 +68,7 @@ export function Testimonials() {
   const current = TESTIMONIALS[index];
 
   return (
-    <section className="bg-surface-1 py-24">
+    <section className="bg-surface-1 py-20">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
@@ -79,7 +79,7 @@ export function Testimonials() {
         >
           <span className="chip chip-orange">Témoignages</span>
           <h2 className="mt-4 font-display text-3xl font-extrabold text-foreground sm:text-4xl">
-            Ils ont utilisé Permis2
+            Ils ont utilisé PERMIS2.0
           </h2>
         </motion.div>
 
@@ -97,7 +97,7 @@ export function Testimonials() {
               transition={{ duration: 0.35 }}
               className="card-clay text-center"
             >
-              <Quote className="mx-auto h-8 w-8 text-primary-200 dark:text-primary-900" strokeWidth={1.5} />
+              <Quote className="mx-auto h-8 w-8 text-primary-200" strokeWidth={1.5} />
               <p className="mx-auto mt-4 max-w-xl text-base font-medium text-foreground sm:text-lg">
                 &laquo; {current.quote} &raquo;
               </p>
@@ -106,7 +106,7 @@ export function Testimonials() {
                 {Array.from({ length: 5 }).map((_, i) => (
                   <Star
                     key={i}
-                    className={`h-4 w-4 ${i < current.rating ? 'fill-xp text-xp' : 'text-slate-300 dark:text-slate-600'}`}
+                    className={`h-4 w-4 ${i < current.rating ? 'fill-xp text-xp' : 'text-slate-300'}`}
                     strokeWidth={1.5}
                   />
                 ))}

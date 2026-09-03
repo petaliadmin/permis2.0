@@ -106,7 +106,7 @@ const SERVICES: Service[] = [
 
 const ACCENT_STYLES: Record<Service['accent'], { badge: string; ring: string; cta: string }> = {
   primary: {
-    badge: 'bg-primary-50 text-primary-600 dark:bg-primary-900/30 dark:text-primary-300',
+    badge: 'bg-primary-50 text-primary-600',
     ring: 'hover:border-primary-200',
     cta: 'text-primary-600',
   },
@@ -116,7 +116,7 @@ const ACCENT_STYLES: Record<Service['accent'], { badge: string; ring: string; ct
     cta: 'text-violet-600',
   },
   violet: {
-    badge: 'bg-violet-50 text-violet-600 dark:bg-violet-900/30 dark:text-violet-300',
+    badge: 'bg-violet-50 text-violet-600',
     ring: 'hover:border-violet-200',
     cta: 'text-violet-600',
   },
@@ -124,7 +124,7 @@ const ACCENT_STYLES: Record<Service['accent'], { badge: string; ring: string; ct
 
 export function Services() {
   return (
-    <section id="services" className="scroll-mt-20 bg-surface-1 py-24">
+    <section id="services" className="scroll-mt-20 bg-surface-1 py-20">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 16 }}

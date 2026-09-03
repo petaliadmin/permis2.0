@@ -34,7 +34,7 @@ const PROBLEMS: Problem[] = [
 
 export function ProblemSolution() {
   return (
-    <section className="mx-auto max-w-6xl px-4 py-24 sm:px-6 lg:px-8">
+    <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:px-8">
       <motion.div
         initial={{ opacity: 0, y: 16 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -44,7 +44,7 @@ export function ProblemSolution() {
       >
         <span className="chip chip-danger">Le constat</span>
         <h2 className="mt-4 font-display text-3xl font-extrabold text-foreground sm:text-4xl">
-          Pourquoi Permis2 ?
+          Pourquoi PERMIS2.0 ?
         </h2>
         <p className="mt-3 text-base text-secondary">
           Obtenir son permis au Sénégal reste un parcours flou et administratif. On a décidé de le

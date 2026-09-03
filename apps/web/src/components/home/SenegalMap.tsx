@@ -27,7 +27,7 @@ export function SenegalMap() {
   }, []);
 
   return (
-    <section className="mx-auto max-w-6xl px-4 py-24 sm:px-6 lg:px-8">
+    <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:px-8">
       <motion.div
         initial={{ opacity: 0, y: 16 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -50,7 +50,7 @@ export function SenegalMap() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '-60px' }}
         transition={{ duration: 0.6, delay: 0.15 }}
-        className="mt-10 h-[420px] overflow-hidden rounded-3xl border border-token shadow-card-lg"
+        className="mt-10 h-[380px] overflow-hidden rounded-3xl border border-token shadow-card-lg"
       >
         <SchoolsMap schools={schools} />
       </motion.div>

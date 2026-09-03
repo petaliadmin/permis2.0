@@ -35,10 +35,24 @@ export function SchoolsMap({ schools, selectedId, onSelect }: SchoolsMapProps) {
 
   if (!GOOGLE_MAPS_API_KEY) {
     return (
-      <div className="flex h-full min-h-[320px] flex-col items-center justify-center gap-2 rounded-2xl border border-dashed border-token bg-surface-2 p-6 text-center">
-        <i className="ti ti-map-off text-3xl text-muted" aria-hidden="true" />
-        <p className="text-sm font-semibold text-secondary">Carte indisponible pour le moment</p>
-        <p className="text-xs text-muted">Consultez la liste des auto-écoles ci-contre.</p>
+      <div className="flex h-full min-h-[220px] flex-col items-center justify-center gap-3 rounded-2xl border border-token bg-gradient-to-br from-primary-50 to-surface-2 p-8 text-center">
+        <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-primary-600 shadow-soft">
+          <i className="ti ti-map-pin text-2xl" aria-hidden="true" />
+        </span>
+        <p className="text-sm font-semibold text-foreground">
+          {located.length > 0
+            ? `${located.length} auto-école${located.length > 1 ? 's' : ''} géolocalisée${located.length > 1 ? 's' : ''}`
+            : 'Carte interactive bientôt disponible'}
+        </p>
+        <p className="max-w-xs text-xs text-secondary">
+          Retrouvez la liste complète des auto-écoles et leur localisation dans l’annuaire.
+        </p>
+        <Link
+          href="/ecoles"
+          className="btn bg-white text-primary-700 shadow-soft hover:bg-primary-50 !px-4 !py-2 text-sm"
+        >
+          Ouvrir l’annuaire →
+        </Link>
       </div>
     );
   }

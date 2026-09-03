@@ -11,7 +11,7 @@ interface FaqItem {
 
 const FAQS: FaqItem[] = [
   {
-    question: 'Permis2 est-il gratuit pour les élèves ?',
+    question: 'PERMIS2.0 est-il gratuit pour les élèves ?',
     answer:
       "Oui, la création de compte, la recherche d'auto-écoles et la pré-inscription sont entièrement gratuites. Certains contenus premium (examens blancs, cours) sont proposés en option.",
   },
@@ -21,7 +21,7 @@ const FAQS: FaqItem[] = [
       "Vous choisissez une auto-école, remplissez un formulaire en quelques minutes et l'auto-école valide votre inscription. Vous êtes notifié dès que c'est confirmé.",
   },
   {
-    question: 'Comment mon auto-école peut-elle rejoindre Permis2 ?',
+    question: 'Comment mon auto-école peut-elle rejoindre PERMIS2.0 ?',
     answer:
       "Créez un compte auto-école, complétez votre profil (ville, services, moniteurs) et vous apparaissez immédiatement dans l'annuaire et sur la carte.",
   },
@@ -31,7 +31,7 @@ const FAQS: FaqItem[] = [
       "Oui. Vos informations personnelles et vos paiements sont protégés et ne sont jamais partagés avec des tiers sans votre consentement.",
   },
   {
-    question: 'Permis2 est-il disponible en dehors de Dakar ?',
+    question: 'PERMIS2.0 est-il disponible en dehors de Dakar ?',
     answer:
       'Oui, la plateforme couvre plus de 150 villes au Sénégal, dont Thiès, Saint-Louis, Kaolack et Ziguinchor.',
   },
@@ -41,7 +41,7 @@ export function Faq() {
   const [open, setOpen] = useState<number | null>(0);
 
   return (
-    <section id="faq" className="scroll-mt-20 mx-auto max-w-3xl px-4 py-24 sm:px-6 lg:px-8">
+    <section id="faq" className="scroll-mt-20 mx-auto max-w-3xl px-4 py-20 sm:px-6 lg:px-8">
       <motion.div
         initial={{ opacity: 0, y: 16 }}
         whileInView={{ opacity: 1, y: 0 }}

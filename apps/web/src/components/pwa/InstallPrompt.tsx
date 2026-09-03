@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface BeforeInstallPromptEvent extends Event {
@@ -77,9 +78,15 @@ export function InstallPrompt() {
   const [visible, setVisible] = useState(false);
   const [showManual, setShowManual] = useState(false);
   const [platform, setPlatform] = useState<Platform>('desktop');
+  const pathname = usePathname();
+
+  // The marketing landing page is a conversion surface — never interrupt a
+  // first-time visitor there with a modal. The invite still shows once the
+  // user is inside the app (quiz, cours, profil…).
+  const suppressed = pathname === '/';
 
   useEffect(() => {
-    if (isStandalone() || recentlyDismissed()) return;
+    if (suppressed || isStandalone() || recentlyDismissed()) return;
     setPlatform(detectPlatform());
 
     // Captured opportunistically — used for a real one-tap install when the
@@ -103,7 +110,9 @@ export function InstallPrompt() {
       window.removeEventListener('appinstalled', onInstalled);
       clearTimeout(timer);
     };
-  }, []);
+  }, [suppressed]);
+
+  if (suppressed) return null;
 
   const dismiss = () => {
     window.localStorage.setItem(DISMISS_STORAGE_KEY, String(Date.now()));
