@@ -4,7 +4,24 @@ import Link from 'next/link';
 import type { School } from '@permis2.0/types';
 import { cn } from '@/lib/cn';
 
-const fmtXof = (n: number) => `${n.toLocaleString('fr-FR')} FCFA`;
+const fmtXof = (n: number) => `${String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' ')} FCFA`;
+
+// Deterministic avatar treatment — every "Auto-École X" would otherwise share
+// the same "A" initial and colour, making the list a wall of identical badges.
+const AVATAR_ACCENTS = [
+  'from-primary-100 to-primary-200 text-primary-700',
+  'from-violet-100 to-violet-200 text-violet-700',
+  'from-orange-100 to-orange-200 text-orange-700',
+  'from-success-100 to-success-200 text-success-700',
+];
+
+function avatarFor(name: string) {
+  const significant = name.replace(/^(auto[-\s]?[ée]cole|centre|école)\s+(de\s+|du\s+|des\s+|la\s+|le\s+|les\s+)?/i, '');
+  const initial = (significant || name).trim().charAt(0).toUpperCase() || '?';
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) hash = (hash * 31 + name.charCodeAt(i)) | 0;
+  return { initial, accent: AVATAR_ACCENTS[Math.abs(hash) % AVATAR_ACCENTS.length] };
+}
 
 interface SchoolCardProps {
   school: School;
@@ -17,6 +34,7 @@ interface SchoolCardProps {
 
 export function SchoolCard({ school, distanceKm, selected, onSelect, compact }: SchoolCardProps) {
   const location = [school.district, school.city].filter(Boolean).join(', ');
+  const { initial, accent } = avatarFor(school.name);
 
   return (
     <div
@@ -29,14 +47,17 @@ export function SchoolCard({ school, distanceKm, selected, onSelect, compact }: 
     >
       <div className="flex items-start gap-3">
         <span
-          className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-primary-100 to-primary-200 text-lg font-black text-primary-700 dark:from-primary-900/40 dark:to-primary-800/40 dark:text-primary-300"
+          className={cn(
+            'flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br text-lg font-black',
+            accent
+          )}
           aria-hidden="true"
         >
           {school.logoUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={school.logoUrl} alt="" className="h-full w-full object-cover" />
           ) : (
-            school.name.charAt(0).toUpperCase()
+            initial
           )}
         </span>
 

@@ -35,7 +35,7 @@ export function SchoolsMap({ schools, selectedId, onSelect }: SchoolsMapProps) {
 
   if (!GOOGLE_MAPS_API_KEY) {
     return (
-      <div className="flex h-full min-h-[220px] flex-col items-center justify-center gap-3 rounded-2xl border border-token bg-gradient-to-br from-primary-50 to-surface-2 p-8 text-center">
+      <div className="flex h-full min-h-[220px] flex-col items-center justify-center gap-3 bg-gradient-to-br from-primary-50 to-surface-2 p-8 text-center">
         <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-primary-600 shadow-soft">
           <i className="ti ti-map-pin text-2xl" aria-hidden="true" />
         </span>

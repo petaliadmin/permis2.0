@@ -9,7 +9,12 @@ import { haversineKm, type LatLng } from '@/lib/geo';
 import { SiteHeader } from '@/components/SiteHeader';
 import { SiteFooter } from '@/components/SiteFooter';
 import { SchoolCard } from '@/components/SchoolCard';
-import { SchoolFiltersBar, type SchoolFilters } from '@/components/SchoolFiltersBar';
+import {
+  SchoolFiltersBar,
+  EMPTY_SCHOOL_FILTERS,
+  type SchoolFilters,
+  type SchoolSort,
+} from '@/components/SchoolFiltersBar';
 import { cn } from '@/lib/cn';
 
 // Google Maps needs `window` — never rendered during SSR.
@@ -18,10 +23,9 @@ const SchoolsMap = dynamic(
   { ssr: false, loading: () => <Skeleton className="h-full min-h-[320px] w-full" /> }
 );
 
-const EMPTY_FILTERS: SchoolFilters = { city: '', category: '', q: '' };
-
 export default function EcolesClient() {
-  const [filters, setFilters] = useState<SchoolFilters>(EMPTY_FILTERS);
+  const [filters, setFilters] = useState<SchoolFilters>(EMPTY_SCHOOL_FILTERS);
+  const [sort, setSort] = useState<SchoolSort>('recent');
   const [schools, setSchools] = useState<School[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -31,6 +35,9 @@ export default function EcolesClient() {
   const debounceRef = useRef<ReturnType<typeof setTimeout>>();
   const cardRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
+  const hasFilters =
+    filters.city !== '' || filters.category !== '' || filters.q !== '' || filters.maxPriceXof !== '';
+
   useEffect(() => {
     clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => {
@@ -39,6 +46,7 @@ export default function EcolesClient() {
       if (filters.city) params.set('city', filters.city);
       if (filters.category) params.set('category', filters.category);
       if (filters.q) params.set('q', filters.q);
+      if (filters.maxPriceXof) params.set('maxPriceXof', filters.maxPriceXof);
       params.set('take', '50');
 
       fetch(`${API_URL}/schools?${params}`)
@@ -51,13 +59,25 @@ export default function EcolesClient() {
   }, [filters]);
 
   const sorted = useMemo(() => {
-    if (!userPos) return schools;
-    return [...schools].sort((a, b) => {
-      const da = a.latitude != null && a.longitude != null ? haversineKm(userPos, { lat: a.latitude, lng: a.longitude }) : Infinity;
-      const db = b.latitude != null && b.longitude != null ? haversineKm(userPos, { lat: b.latitude, lng: b.longitude }) : Infinity;
-      return da - db;
-    });
-  }, [schools, userPos]);
+    const list = [...schools];
+    if (userPos) {
+      const d = (s: School) =>
+        s.latitude != null && s.longitude != null
+          ? haversineKm(userPos, { lat: s.latitude, lng: s.longitude })
+          : Infinity;
+      return list.sort((a, b) => d(a) - d(b));
+    }
+    switch (sort) {
+      case 'price-asc':
+        return list.sort((a, b) => (a.priceXof ?? Infinity) - (b.priceXof ?? Infinity));
+      case 'price-desc':
+        return list.sort((a, b) => (b.priceXof ?? -Infinity) - (a.priceXof ?? -Infinity));
+      case 'name':
+        return list.sort((a, b) => a.name.localeCompare(b.name, 'fr'));
+      default:
+        return list;
+    }
+  }, [schools, userPos, sort]);
 
   const distanceFor = (s: School): number | undefined =>
     userPos && s.latitude != null && s.longitude != null
@@ -81,25 +101,53 @@ export default function EcolesClient() {
     if (id) cardRefs.current[id]?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   };
 
+  const count = sorted.length;
+
   return (
-    <div className="flex min-h-screen flex-col bg-surface">
+    <div className="on-light flex min-h-screen flex-col bg-surface">
       <SiteHeader />
 
-      <div className="border-b border-token bg-surface-1 px-4 py-5 sm:px-6 lg:px-8">
+      <div className="border-b border-token bg-surface-1 px-4 py-6 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-6xl">
-          <h1 className="font-display text-2xl font-extrabold text-foreground">
-            Trouver une auto-école
+          <span className="chip chip-primary">Annuaire</span>
+          <h1 className="mt-3 font-display text-2xl font-extrabold text-foreground sm:text-3xl">
+            Trouver une auto-école au Sénégal
           </h1>
-          <p className="mt-1 text-sm text-secondary">
-            {loading ? 'Recherche…' : `${sorted.length} auto-école${sorted.length > 1 ? 's' : ''} trouvée${sorted.length > 1 ? 's' : ''}`}
+          <p className="mt-2 max-w-2xl text-sm text-secondary">
+            Comparez les auto-écoles partenaires par ville, catégorie de permis et budget,
+            localisez-les sur la carte et envoyez votre pré-inscription en ligne — gratuitement.
           </p>
-          <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+
+          <p className="mt-4 text-sm font-semibold text-foreground" aria-live="polite">
+            {loading
+              ? 'Recherche…'
+              : `${count} auto-école${count > 1 ? 's' : ''}${
+                  userPos ? ' · triées par distance' : ''
+                }`}
+          </p>
+
+          <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
             <div className="flex-1">
-              <SchoolFiltersBar filters={filters} onChange={setFilters} />
+              <SchoolFiltersBar
+                filters={filters}
+                onChange={setFilters}
+                sort={sort}
+                onSortChange={setSort}
+                geoActive={!!userPos}
+              />
             </div>
-            <button onClick={locate} className="btn-ghost shrink-0 !px-4 !py-2.5 text-sm">
-              <i className="ti ti-current-location" aria-hidden="true" />
-              Autour de moi
+            <button
+              onClick={userPos ? () => setUserPos(null) : locate}
+              className={cn(
+                'shrink-0 !px-4 !py-2.5 text-sm',
+                userPos ? 'btn-primary' : 'btn-ghost'
+              )}
+            >
+              <i
+                className={cn('ti', userPos ? 'ti-current-location-off' : 'ti-current-location')}
+                aria-hidden="true"
+              />
+              {userPos ? 'Désactiver' : 'Autour de moi'}
             </button>
           </div>
           {geoError && <p className="mt-2 text-xs font-medium text-danger">{geoError}</p>}
@@ -131,11 +179,25 @@ export default function EcolesClient() {
         >
           {loading ? (
             Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-32 w-full" />)
-          ) : sorted.length === 0 ? (
+          ) : count === 0 ? (
             <EmptyState
               icon={<i className="ti ti-map-pin-off" aria-hidden="true" />}
-              title="Aucune auto-école trouvée"
-              description="Essayez d'élargir vos filtres."
+              title={hasFilters ? 'Aucune auto-école ne correspond' : 'Aucune auto-école pour le moment'}
+              description={
+                hasFilters
+                  ? 'Élargissez votre recherche : changez de ville, de budget ou retirez la catégorie de permis.'
+                  : 'De nouvelles auto-écoles rejoignent la plateforme chaque semaine. Revenez bientôt.'
+              }
+              action={
+                hasFilters ? (
+                  <button
+                    onClick={() => setFilters(EMPTY_SCHOOL_FILTERS)}
+                    className="btn-ghost !px-4 !py-2 text-sm"
+                  >
+                    Effacer les filtres
+                  </button>
+                ) : undefined
+              }
             />
           ) : (
             sorted.map((s) => (
@@ -152,7 +214,7 @@ export default function EcolesClient() {
         </div>
 
         <div className={cn('min-h-[420px] w-full flex-1 lg:block', mobileTab === 'list' && 'hidden')}>
-          <div className="sticky top-24 h-[calc(100vh-220px)] min-h-[420px]">
+          <div className="sticky top-24 h-[calc(100vh-220px)] min-h-[420px] overflow-hidden rounded-3xl border border-token shadow-card-lg">
             <SchoolsMap schools={sorted} selectedId={selectedId} onSelect={selectFromMap} />
           </div>
         </div>

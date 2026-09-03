@@ -12,10 +12,18 @@ const fmtXof = (n: number) => `${n.toLocaleString('fr-FR')} FCFA`;
 
 export default function EcoleProfileClient({ school }: { school: School }) {
   const location = [school.district, school.city].filter(Boolean).join(', ');
-  const hours = school.openingHours ? Object.entries(school.openingHours) : [];
+  // JSONB doesn't preserve key order — restore a natural week order for display.
+  const DAY_ORDER = ['lun', 'mar', 'mer', 'jeu', 'ven', 'sam', 'dim'];
+  const dayRank = (label: string) => {
+    const i = DAY_ORDER.findIndex((d) => label.toLowerCase().startsWith(d));
+    return i === -1 ? 99 : i;
+  };
+  const hours = school.openingHours
+    ? Object.entries(school.openingHours).sort(([a], [b]) => dayRank(a) - dayRank(b))
+    : [];
 
   return (
-    <div className="min-h-screen bg-surface">
+    <div className="on-light min-h-screen bg-surface">
       <SiteHeader />
 
       <header className="relative overflow-hidden bg-gradient-to-br from-primary-600 to-primary-800 px-4 py-10 text-white sm:px-6 lg:px-8">
