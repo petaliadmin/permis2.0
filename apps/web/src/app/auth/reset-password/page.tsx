@@ -50,81 +50,74 @@ function ResetPasswordInner() {
   };
 
   return (
-    <div className="relative flex min-h-[100dvh] flex-col bg-gradient-hero px-4 pb-[calc(2rem+env(safe-area-inset-bottom))] pt-[calc(3rem+env(safe-area-inset-top))]">
-      <div className="mx-auto mb-6 w-full max-w-md text-center text-white">
-        <span className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-2xl bg-white/15 text-3xl font-black shadow-soft backdrop-blur">
-          P
-        </span>
-        <h1 className="text-3xl font-extrabold">
-          PERMIS<span className="text-secondary">2.0</span>
-        </h1>
-      </div>
+    <div>
+      <span className="chip chip-primary">Mot de passe</span>
+      <h1 className="mt-4 font-display text-2xl font-extrabold text-foreground sm:text-3xl">
+        Nouveau mot de passe
+      </h1>
 
-      <div className="mx-auto w-full max-w-md rounded-3xl bg-surface-2 border border-token p-6 shadow-2xl animate-fade-in sm:p-8">
-        <h2 className="mb-1 text-xl font-extrabold text-foreground">Nouveau mot de passe</h2>
-
-        {!token ? (
-          <div className="mt-4 space-y-5">
-            <div className="rounded-lg border border-danger/40 bg-danger/10 px-4 py-3 text-sm text-danger">
-              Lien de réinitialisation invalide.
-            </div>
-            <Link
-              href="/auth/forgot-password"
-              className="block text-center font-semibold text-primary hover:underline"
-            >
-              Demander un nouveau lien
-            </Link>
+      {!token ? (
+        <div className="mt-6 space-y-5">
+          <div className="rounded-xl border border-danger/30 bg-danger-50 px-4 py-3 text-sm text-danger">
+            Lien de réinitialisation invalide.
           </div>
-        ) : status === 'done' ? (
-          <div className="mt-4 rounded-lg border border-primary/40 bg-primary/10 px-4 py-3 text-sm text-primary-300">
-            Mot de passe réinitialisé avec succès. Redirection vers la connexion…
+          <Link
+            href="/auth/forgot-password"
+            className="block text-center font-semibold text-primary-600 hover:underline"
+          >
+            Demander un nouveau lien
+          </Link>
+        </div>
+      ) : status === 'done' ? (
+        <div className="mt-6 rounded-xl border border-primary-200 bg-primary-50 px-4 py-3 text-sm text-primary-700">
+          Mot de passe réinitialisé avec succès. Redirection vers la connexion…
+        </div>
+      ) : (
+        <form onSubmit={handleSubmit} className="mt-6 space-y-5">
+          <div>
+            <label htmlFor="password" className="mb-2 block text-sm font-medium text-foreground">
+              Nouveau mot de passe
+            </label>
+            <Input
+              id="password"
+              name="password"
+              type="password"
+              required
+              placeholder="••••••••"
+              autoFocus
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              disabled={status === 'loading'}
+            />
           </div>
-        ) : (
-          <form onSubmit={handleSubmit} className="mt-4 space-y-5">
-            <div>
-              <label htmlFor="password" className="mb-2 block text-sm font-medium text-secondary">
-                Nouveau mot de passe
-              </label>
-              <Input
-                id="password"
-                name="password"
-                type="password"
-                required
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                disabled={status === 'loading'}
-              />
+
+          <div>
+            <label htmlFor="confirm" className="mb-2 block text-sm font-medium text-foreground">
+              Confirmer le mot de passe
+            </label>
+            <Input
+              id="confirm"
+              name="confirm"
+              type="password"
+              required
+              placeholder="••••••••"
+              value={confirm}
+              onChange={(e) => setConfirm(e.target.value)}
+              disabled={status === 'loading'}
+            />
+          </div>
+
+          {error && (
+            <div className="rounded-xl border border-danger/30 bg-danger-50 px-4 py-3 text-sm text-danger">
+              {error}
             </div>
+          )}
 
-            <div>
-              <label htmlFor="confirm" className="mb-2 block text-sm font-medium text-secondary">
-                Confirmer le mot de passe
-              </label>
-              <Input
-                id="confirm"
-                name="confirm"
-                type="password"
-                required
-                placeholder="••••••••"
-                value={confirm}
-                onChange={(e) => setConfirm(e.target.value)}
-                disabled={status === 'loading'}
-              />
-            </div>
-
-            {error && (
-              <div className="rounded-lg border border-danger/40 bg-danger/10 px-4 py-3 text-sm text-danger">
-                {error}
-              </div>
-            )}
-
-            <Button type="submit" className="w-full" size="lg" disabled={status === 'loading'}>
-              {status === 'loading' ? 'Réinitialisation…' : 'Réinitialiser'}
-            </Button>
-          </form>
-        )}
-      </div>
+          <Button type="submit" className="w-full" size="lg" disabled={status === 'loading'}>
+            {status === 'loading' ? 'Réinitialisation…' : 'Réinitialiser'}
+          </Button>
+        </form>
+      )}
     </div>
   );
 }

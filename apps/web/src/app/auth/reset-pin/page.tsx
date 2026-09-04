@@ -79,30 +79,23 @@ export default function ResetPinPage() {
   };
 
   return (
-    <div className="flex min-h-[100dvh] flex-col bg-gradient-to-b from-primary-600 to-primary-800 px-5 pb-[calc(2rem+env(safe-area-inset-bottom))] pt-[calc(2.5rem+env(safe-area-inset-top))]">
-      {/* Brand */}
-      <div className="mx-auto mb-6 w-full max-w-md text-center text-white">
-        <span className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl bg-white/15 text-2xl font-black backdrop-blur">
-          P
-        </span>
-        <h1 className="font-display text-2xl font-extrabold">
-          PERMIS<span className="text-primary-200">2.0</span>
-        </h1>
-        <p className="mt-1 text-sm text-white/75">Réinitialise ton code de sécurité</p>
-      </div>
+    <div>
+      <span className="chip chip-primary">Code oublié</span>
+      <h1 className="mt-4 font-display text-2xl font-extrabold text-foreground sm:text-3xl">
+        Réinitialise ton code
+      </h1>
 
       {/* Progress */}
-      <div className="mx-auto mb-5 flex gap-2">
+      <div className="mt-5 flex gap-2">
         {[0, 1, 2].map((i) => (
           <div
             key={i}
-            className={`h-1.5 rounded-full transition-all duration-500 ${i === step ? 'w-8 bg-white' : i < step ? 'w-4 bg-white/60' : 'w-4 bg-white/25'}`}
+            className={`h-1.5 flex-1 rounded-full transition-all duration-500 ${i === step ? 'bg-primary-600' : i < step ? 'bg-primary-300' : 'bg-surface-3'}`}
           />
         ))}
       </div>
 
-      {/* Card */}
-      <div className="mx-auto w-full max-w-md rounded-3xl border border-token bg-surface-1 p-6 shadow-card">
+      <div className="mt-7">
         <AnimatePresence mode="wait">
           {/* Step 0 — phone + channel */}
           {step === 0 && (
@@ -112,7 +105,7 @@ export default function ResetPinPage() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
             >
-              <h2 className="font-display text-xl font-extrabold text-foreground">Code oublié ?</h2>
+              <h2 className="font-display text-lg font-extrabold text-foreground">Code oublié ?</h2>
               <p className="mt-1 text-sm text-secondary">
                 On t&apos;envoie un code de vérification pour en choisir un nouveau.
               </p>
@@ -177,7 +170,7 @@ export default function ResetPinPage() {
               >
                 <i className="ti ti-chevron-left" aria-hidden="true" /> Modifier le numéro
               </button>
-              <h2 className="font-display text-xl font-extrabold text-foreground">
+              <h2 className="font-display text-lg font-extrabold text-foreground">
                 Vérifie ton numéro
               </h2>
               <p className="mt-1 text-sm text-secondary">
@@ -226,7 +219,7 @@ export default function ResetPinPage() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
             >
-              <h2 className="font-display text-xl font-extrabold text-foreground">
+              <h2 className="font-display text-lg font-extrabold text-foreground">
                 Choisis ton nouveau code
               </h2>
               <p className="mt-1 text-sm text-secondary">4 chiffres pour te reconnecter.</p>
@@ -259,9 +252,9 @@ export default function ResetPinPage() {
         </AnimatePresence>
       </div>
 
-      <p className="mx-auto mt-5 text-center text-sm text-white/80">
+      <p className="mt-6 text-center text-sm text-secondary">
         Tu te souviens de ton code ?{' '}
-        <Link href="/auth/login" className="font-bold text-white underline">
+        <Link href="/auth/login" className="font-bold text-primary-600 hover:underline">
           Se connecter
         </Link>
       </p>

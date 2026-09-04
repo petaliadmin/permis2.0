@@ -1,13 +1,17 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuthStore, isValidSnPhone } from '@/store/authStore';
 import { CodeInput } from '@/components/CodeInput';
 
-const SPLASH_DURATION_MS = 1800;
+const STEPS = [
+  { key: 'name', label: 'Nom' },
+  { key: 'phone', label: 'Téléphone' },
+  { key: 'pin', label: 'Code' },
+] as const;
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -15,19 +19,13 @@ export default function RegisterPage() {
   const isLoading = useAuthStore((s) => s.isLoading);
   const storeError = useAuthStore((s) => s.error);
 
-  // 0 = splash · 1 = name · 2 = phone · 3 = choose PIN
-  const [step, setStep] = useState(0);
+  // 1 = name · 2 = phone · 3 = choose PIN
+  const [step, setStep] = useState(1);
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [pin, setPin] = useState('');
   const [pinConfirm, setPinConfirm] = useState('');
   const [err, setErr] = useState('');
-
-  useEffect(() => {
-    if (step !== 0) return;
-    const t = setTimeout(() => setStep(1), SPLASH_DURATION_MS);
-    return () => clearTimeout(t);
-  }, [step]);
 
   const phoneOk = isValidSnPhone(phone);
   const nameOk = name.trim().length >= 2;
@@ -56,76 +54,48 @@ export default function RegisterPage() {
     router.push(intended === 'AUTO_ECOLE' ? '/auto-ecole' : '/');
   };
 
-  /* ── Splash — brand-only, auto-advances ── */
-  if (step === 0) {
-    return (
-      <div className="flex min-h-[100dvh] flex-col items-center justify-center bg-gradient-to-b from-primary-600 to-primary-800 px-5">
-        <motion.span
-          initial={{ opacity: 0, scale: 0.7 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ type: 'spring', stiffness: 260, damping: 20 }}
-          className="flex h-20 w-20 items-center justify-center rounded-3xl bg-white/15 text-4xl font-black text-white backdrop-blur"
-        >
-          P
-        </motion.span>
-        <motion.h1
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.25, duration: 0.4 }}
-          className="mt-5 font-display text-2xl font-extrabold text-white"
-        >
-          PERMIS<span className="text-primary-200">2.0</span>
-        </motion.h1>
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.45, duration: 0.4 }}
-          className="mt-1.5 text-sm text-white/70"
-        >
-          Ton permis, prêt en Wolof et en Français
-        </motion.p>
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.7 }}
-          className="absolute bottom-14 h-1 w-9 overflow-hidden rounded-full bg-white/20"
-        >
-          <motion.div
-            initial={{ x: '-100%' }}
-            animate={{ x: '0%' }}
-            transition={{ duration: SPLASH_DURATION_MS / 1000 - 0.7, ease: 'linear' }}
-            className="h-full w-full bg-white"
-          />
-        </motion.div>
-      </div>
-    );
-  }
-
   return (
-    <div className="flex min-h-[100dvh] flex-col bg-gradient-to-b from-primary-600 to-primary-800 px-5 pb-[calc(2rem+env(safe-area-inset-bottom))] pt-[calc(2.5rem+env(safe-area-inset-top))]">
-      {/* Brand */}
-      <div className="mx-auto mb-6 w-full max-w-md text-center text-white">
-        <span className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl bg-white/15 text-2xl font-black backdrop-blur">
-          P
-        </span>
-        <h1 className="font-display text-2xl font-extrabold">
-          PERMIS<span className="text-primary-200">2.0</span>
-        </h1>
-        <p className="mt-1 text-sm text-white/75">Crée ton compte en une minute</p>
+    <div>
+      <span className="chip chip-primary">Nouveau compte</span>
+      <h1 className="mt-4 font-display text-2xl font-extrabold text-foreground sm:text-3xl">
+        Crée ton compte en une minute
+      </h1>
+
+      {/* Onboarding progress — 3 clear steps, always visible so it's obvious
+          how much is left and what's already been entered. */}
+      <div className="mt-6 flex items-center gap-2" aria-label={`Étape ${step} sur ${STEPS.length}`}>
+        {STEPS.map((s, i) => {
+          const n = i + 1;
+          const state = n === step ? 'current' : n < step ? 'done' : 'upcoming';
+          return (
+            <div key={s.key} className="flex flex-1 items-center gap-2">
+              <span
+                className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[11px] font-bold ${
+                  state === 'upcoming'
+                    ? 'bg-surface-3 text-muted'
+                    : 'bg-primary-600 text-white'
+                }`}
+              >
+                {state === 'done' ? <i className="ti ti-check" aria-hidden="true" /> : n}
+              </span>
+              <span
+                className={`hidden text-xs font-semibold sm:inline ${
+                  state === 'upcoming' ? 'text-muted' : 'text-foreground'
+                }`}
+              >
+                {s.label}
+              </span>
+              {n < STEPS.length && (
+                <span
+                  className={`h-px flex-1 ${state === 'done' ? 'bg-primary-600' : 'bg-surface-3'}`}
+                />
+              )}
+            </div>
+          );
+        })}
       </div>
 
-      {/* Progress */}
-      <div className="mx-auto mb-5 flex gap-2">
-        {[1, 2, 3].map((i) => (
-          <div
-            key={i}
-            className={`h-1.5 rounded-full transition-all duration-500 ${i === step ? 'w-8 bg-white' : i < step ? 'w-4 bg-white/60' : 'w-4 bg-white/25'}`}
-          />
-        ))}
-      </div>
-
-      {/* Card */}
-      <div className="mx-auto w-full max-w-md rounded-3xl border border-token bg-surface-1 p-6 shadow-card">
+      <div className="mt-7">
         <AnimatePresence mode="wait">
           {/* Step 1 — name */}
           {step === 1 && (
@@ -135,8 +105,8 @@ export default function RegisterPage() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
             >
-              <h2 className="font-display text-xl font-extrabold text-foreground">
-                Comment tu t'appelles ?
+              <h2 className="font-display text-lg font-extrabold text-foreground">
+                Comment tu t&apos;appelles ?
               </h2>
               <p className="mt-1 text-sm text-secondary">Ce nom sera visible sur ton profil.</p>
 
@@ -158,7 +128,7 @@ export default function RegisterPage() {
                 </p>
               )}
 
-              <button onClick={confirmName} className="btn-primary mt-5 w-full">
+              <button onClick={confirmName} className="btn-primary mt-6 w-full">
                 Continuer
               </button>
             </motion.div>
@@ -178,7 +148,7 @@ export default function RegisterPage() {
               >
                 <i className="ti ti-chevron-left" aria-hidden="true" /> Modifier le nom
               </button>
-              <h2 className="font-display text-xl font-extrabold text-foreground">
+              <h2 className="font-display text-lg font-extrabold text-foreground">
                 Quel est ton numéro ?
               </h2>
               <p className="mt-1 text-sm text-secondary">
@@ -204,7 +174,7 @@ export default function RegisterPage() {
                 </p>
               )}
 
-              <button onClick={confirmPhone} className="btn-primary mt-5 w-full">
+              <button onClick={confirmPhone} className="btn-primary mt-6 w-full">
                 Continuer
               </button>
             </motion.div>
@@ -218,7 +188,13 @@ export default function RegisterPage() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
             >
-              <h2 className="font-display text-xl font-extrabold text-foreground">
+              <button
+                onClick={() => setStep(2)}
+                className="mb-3 flex items-center gap-1 text-sm font-semibold text-primary-600"
+              >
+                <i className="ti ti-chevron-left" aria-hidden="true" /> Modifier le numéro
+              </button>
+              <h2 className="font-display text-lg font-extrabold text-foreground">
                 Choisis ton code de sécurité
               </h2>
               <p className="mt-1 text-sm text-secondary">
@@ -249,17 +225,17 @@ export default function RegisterPage() {
                 {isLoading ? 'Création…' : 'Créer mon compte'}
               </button>
               <p className="mt-3 flex items-center justify-center gap-1.5 text-xs text-muted">
-                <i className="ti ti-lock" aria-hidden="true" /> Ta session reste ouverte, pas besoin
-                de te reconnecter.
+                <i className="ti ti-lock" aria-hidden="true" /> Ta session reste ouverte, pas
+                besoin de te reconnecter.
               </p>
             </motion.div>
           )}
         </AnimatePresence>
       </div>
 
-      <p className="mx-auto mt-5 text-center text-sm text-white/80">
+      <p className="mt-6 text-center text-sm text-secondary">
         Déjà un compte ?{' '}
-        <Link href="/auth/login" className="font-bold text-white underline">
+        <Link href="/auth/login" className="font-bold text-primary-600 hover:underline">
           Se connecter
         </Link>
       </p>
