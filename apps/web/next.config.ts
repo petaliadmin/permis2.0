@@ -2,7 +2,13 @@ import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   output: 'standalone',
-  reactStrictMode: true,
+  // react-leaflet's MapContainer creates its Leaflet map instance imperatively
+  // in a ref callback that isn't idempotent under React 18 Strict Mode's
+  // dev-only double-invoke of effects — it throws "Map container is already
+  // initialized" and takes down the whole /ecoles page. Strict Mode's extra
+  // dev checks are useful, but a crashing map isn't an acceptable trade —
+  // this has zero effect on production builds (double-invoke is dev-only).
+  reactStrictMode: false,
   transpilePackages: [
     '@permis2.0/types',
     '@permis2.0/utils',
@@ -26,8 +32,10 @@ const nextConfig: NextConfig = {
             value: 'max-age=63072000; includeSubDomains; preload',
           },
           {
+            // geolocation=(self) — needed by the "Autour de moi" sort on
+            // /ecoles; camera/microphone stay locked, unused by the app.
             key: 'Permissions-Policy',
-            value: 'camera=(), microphone=(), geolocation=()',
+            value: 'camera=(), microphone=(), geolocation=(self)',
           },
         ],
       },

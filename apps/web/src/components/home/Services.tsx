@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import {
   MapPin,
@@ -33,6 +34,8 @@ interface Service {
   key: string;
   badge: string;
   accent: 'primary' | 'blue-violet' | 'violet';
+  image: string;
+  imageAlt: string;
   title: string;
   description: string;
   features: { icon: LucideIcon; label: string }[];
@@ -45,6 +48,9 @@ const SERVICES: Service[] = [
     key: 'find-school',
     badge: '01',
     accent: 'primary',
+    image: '/images/hero.png',
+    imageAlt:
+      "Un élève sénégalais reçoit son permis des mains de son moniteur, devant le véhicule de l'auto-école",
     title: 'Trouver une auto-école',
     description:
       "Un annuaire complet, une carte interactive et des filtres précis pour choisir en toute confiance.",
@@ -63,6 +69,8 @@ const SERVICES: Service[] = [
     key: 'student-platform',
     badge: '02',
     accent: 'blue-violet',
+    image: '/images/home/for-students.jpg',
+    imageAlt: "Élève sénégalaise suivant sa formation sur l'application PERMIS 2.0",
     title: 'Plateforme Élève',
     description:
       'Votre parcours de A à Z : inscription, échanges avec votre auto-école, paiement et suivi pédagogique.',
@@ -82,6 +90,8 @@ const SERVICES: Service[] = [
     key: 'erp',
     badge: '03',
     accent: 'violet',
+    image: '/images/home/for-schools.jpg',
+    imageAlt: "Directeur d'auto-école sénégalais pilotant son activité depuis le tableau de bord ERP",
     title: 'ERP Auto-école',
     description:
       'Un back-office complet pour piloter votre auto-école : élèves, moniteurs, véhicules, examens et facturation.',
@@ -149,36 +159,47 @@ export function Services() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-60px' }}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
-                className={`card-clay flex flex-col border-2 ${accent.ring} transition-colors`}
+                className={`card-clay flex flex-col overflow-hidden !p-0 border-2 ${accent.ring} transition-colors`}
               >
-                <span
-                  className={`flex h-12 w-12 items-center justify-center rounded-2xl font-display text-sm font-extrabold ${accent.badge}`}
-                >
-                  {s.badge}
-                </span>
-                <p className="mt-4 font-display text-xl font-extrabold text-foreground">
-                  {s.title}
-                </p>
-                <p className="mt-2 text-sm text-secondary">{s.description}</p>
-
-                <div className="mt-5 flex flex-wrap gap-2">
-                  {s.features.map((f) => (
-                    <span
-                      key={f.label}
-                      className="inline-flex items-center gap-1.5 rounded-full border border-token bg-surface-2 px-2.5 py-1 text-xs font-semibold text-secondary"
-                    >
-                      <f.icon className="h-3.5 w-3.5" strokeWidth={2} />
-                      {f.label}
-                    </span>
-                  ))}
+                <div className="relative aspect-[16/10] w-full overflow-hidden bg-surface-2">
+                  <Image
+                    src={s.image}
+                    alt={s.imageAlt}
+                    fill
+                    sizes="(min-width: 1024px) 380px, (min-width: 640px) 90vw, 100vw"
+                    className="object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-black/5 to-transparent" />
+                  <span
+                    className={`absolute bottom-3 left-3 flex h-11 w-11 items-center justify-center rounded-2xl font-display text-sm font-extrabold shadow-lg ${accent.badge}`}
+                  >
+                    {s.badge}
+                  </span>
                 </div>
 
-                <Link
-                  href={s.href}
-                  className={`mt-6 inline-flex items-center gap-1.5 text-sm font-bold hover:underline ${accent.cta}`}
-                >
-                  {s.cta} →
-                </Link>
+                <div className="flex flex-1 flex-col p-5">
+                  <p className="font-display text-xl font-extrabold text-foreground">{s.title}</p>
+                  <p className="mt-2 text-sm text-secondary">{s.description}</p>
+
+                  <div className="mt-5 flex flex-wrap gap-2">
+                    {s.features.map((f) => (
+                      <span
+                        key={f.label}
+                        className="inline-flex items-center gap-1.5 rounded-full border border-token bg-surface-2 px-2.5 py-1 text-xs font-semibold text-secondary"
+                      >
+                        <f.icon className="h-3.5 w-3.5" strokeWidth={2} />
+                        {f.label}
+                      </span>
+                    ))}
+                  </div>
+
+                  <Link
+                    href={s.href}
+                    className={`mt-auto inline-flex items-center gap-1.5 pt-6 text-sm font-bold hover:underline ${accent.cta}`}
+                  >
+                    {s.cta} →
+                  </Link>
+                </div>
               </motion.div>
             );
           })}
