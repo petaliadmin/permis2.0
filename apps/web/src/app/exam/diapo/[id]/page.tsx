@@ -265,7 +265,7 @@ export default function DiapoExamPage({ params }: { params: Promise<{ id: string
 
   /* ── Exam question (light, orange) ── */
   return (
-    <div className="flex min-h-svh flex-col bg-surface">
+    <div className="on-light flex min-h-svh flex-col bg-surface">
       <header className="sticky top-0 z-20 bg-surface/95 px-4 pt-[calc(env(safe-area-inset-top)+12px)] pb-3 backdrop-blur-xl">
         <div className="mx-auto max-w-lg">
           <div className="flex items-center gap-3">
