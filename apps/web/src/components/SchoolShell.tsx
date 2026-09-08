@@ -4,42 +4,36 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { SiteFooter } from '@/components/SiteFooter';
 import { useAuthStore } from '@/store/authStore';
-import { useSpaceUrl } from '@/components/SpaceProvider';
+import { SideMenuProvider, MenuButton } from '@/components/SideMenu';
 
 /**
  * Chrome for the auto-école space (school.permis2.com). Desktop-first, no
- * bottom tab bar — the management screens carry their own tabs. Light theme,
- * matching the marketing site.
+ * bottom tab bar — the management screens carry their own tabs. Navigation
+ * (dashboard, packs, assistance, profil, admin, espace élève, logout) lives in
+ * the hamburger drawer. Light theme, matching the marketing site.
  */
-export function SchoolShell({ children }: { children: React.ReactNode }) {
+function SchoolShellInner({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const user = useAuthStore((s) => s.user);
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
-  const learnHref = useSpaceUrl('learn');
 
   return (
     <div className="on-light flex min-h-screen flex-col bg-surface">
       <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-token bg-surface-1/90 px-4 backdrop-blur-xl sm:px-8">
-        <Link href="/" className="flex items-center gap-2.5">
-          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary-600 to-primary-800 text-sm font-black text-white">
-            P
-          </span>
-          <span className="font-display text-sm font-extrabold text-foreground">
-            PERMIS<span className="text-primary-600">2.0</span>
-            <span className="ml-1.5 hidden font-semibold text-muted sm:inline">· Auto-école</span>
-          </span>
-        </Link>
+        <div className="flex items-center gap-3">
+          <MenuButton />
+          <Link href="/" className="flex items-center gap-2.5">
+            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary-600 to-primary-800 text-sm font-black text-white">
+              P
+            </span>
+            <span className="font-display text-sm font-extrabold text-foreground">
+              PERMIS<span className="text-primary-600">2.0</span>
+              <span className="ml-1.5 hidden font-semibold text-muted sm:inline">· Auto-école</span>
+            </span>
+          </Link>
+        </div>
 
         <div className="flex items-center gap-2">
-          {learnHref && (
-            <a
-              href={learnHref}
-              className="hidden items-center gap-1.5 rounded-full border border-token bg-surface-2 px-3.5 py-1.5 text-xs font-bold text-secondary transition-colors hover:border-primary-300 hover:text-primary-600 sm:flex"
-            >
-              <i className="ti ti-school text-sm" aria-hidden="true" />
-              Espace élève
-            </a>
-          )}
           {isAuthenticated && user ? (
             <button
               onClick={() => router.push('/profil')}
@@ -64,5 +58,13 @@ export function SchoolShell({ children }: { children: React.ReactNode }) {
       <main className="flex-1">{children}</main>
       <SiteFooter />
     </div>
+  );
+}
+
+export function SchoolShell({ children }: { children: React.ReactNode }) {
+  return (
+    <SideMenuProvider>
+      <SchoolShellInner>{children}</SchoolShellInner>
+    </SideMenuProvider>
   );
 }

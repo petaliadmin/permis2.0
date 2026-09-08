@@ -14,6 +14,7 @@ import type {
 import { SchoolEnrollmentStatus, SchoolPaymentStatus, SchoolStatus } from '@permis2.0/types';
 import { Stat } from '@permis2.0/ui';
 import { cn } from '@/lib/cn';
+import { SideMenuProvider, MenuButton } from '@/components/SideMenu';
 import { EnrollmentRequestsPanel } from './EnrollmentRequestsPanel';
 import { TeamPanel } from './TeamPanel';
 import { StudentsPanel } from './StudentsPanel';
@@ -100,18 +101,11 @@ export function SchoolDashboard({ school, onBackToPicker, onSchoolUpdated }: Sch
     ).length ?? 0;
 
   return (
+    <SideMenuProvider>
     <div className="on-light min-h-screen bg-surface">
       <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b border-token bg-surface-1/90 px-4 backdrop-blur-xl sm:px-8">
         <div className="flex items-center gap-2.5">
-          {onBackToPicker && (
-            <button
-              onClick={onBackToPicker}
-              className="mr-1 flex h-8 w-8 items-center justify-center rounded-full hover:bg-surface-2"
-              aria-label="Changer d'auto-école"
-            >
-              <i className="ti ti-chevron-left" aria-hidden="true" />
-            </button>
-          )}
+          <MenuButton />
           <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary-500 to-primary-700 text-sm font-black text-white">
             🏫
           </span>
@@ -119,13 +113,14 @@ export function SchoolDashboard({ school, onBackToPicker, onSchoolUpdated }: Sch
             {school.name}
           </p>
         </div>
-        <Link
-          href="/"
-          className="flex items-center gap-1.5 rounded-full border border-token bg-surface-2 px-3.5 py-1.5 text-xs font-bold text-secondary transition-colors hover:border-primary-300 hover:text-primary-600"
-        >
-          <i className="ti ti-external-link text-sm" aria-hidden="true" />
-          <span className="hidden sm:inline">Voir le site</span>
-        </Link>
+        {onBackToPicker && (
+          <button
+            onClick={onBackToPicker}
+            className="rounded-full border border-token bg-surface-2 px-3.5 py-1.5 text-xs font-bold text-secondary transition-colors hover:border-primary-300 hover:text-primary-600"
+          >
+            Changer d&apos;auto-école
+          </button>
+        )}
       </header>
 
       {school.status !== SchoolStatus.ACTIVE && (
@@ -254,5 +249,6 @@ export function SchoolDashboard({ school, onBackToPicker, onSchoolUpdated }: Sch
         )}
       </main>
     </div>
+    </SideMenuProvider>
   );
 }

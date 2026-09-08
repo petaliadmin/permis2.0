@@ -138,22 +138,22 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         />
       </head>
       <body className="on-light bg-surface text-foreground font-sans antialiased">
-        {/* ThemeInit applies the persisted choice after hydration */}
-        <ThemeInit />
-        <OnboardingGate />
-        {/* Skip link — keyboard navigation */}
-        <a
-          href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-xl focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:font-bold focus:text-white focus:shadow-lg"
-        >
-          Aller au contenu principal
-        </a>
-        <SessionSync />
         <SpaceProvider space={space}>
+          {/* ThemeInit applies the persisted choice after hydration */}
+          <ThemeInit />
+          <SessionSync />
+          <OnboardingGate />
+          {/* Skip link — keyboard navigation */}
+          <a
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-xl focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:font-bold focus:text-white focus:shadow-lg"
+          >
+            Aller au contenu principal
+          </a>
           <EntitlementProvider>{children}</EntitlementProvider>
+          <InstallPrompt />
+          <PushPermissionBanner />
         </SpaceProvider>
-        <InstallPrompt />
-        <PushPermissionBanner />
         <ServiceWorkerRegister />
       </body>
     </html>

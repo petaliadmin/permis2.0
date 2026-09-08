@@ -49,9 +49,10 @@ export default function OnboardingPage() {
   const [direction, setDirection] = useState(1);
 
   // Onboarding (feature tour + profile choice) only lives on www — the
-  // subdomain already fixes the profile. Reached elsewhere → straight to sign-up.
+  // subdomain already fixes the profile. Reached elsewhere → straight to the
+  // space home (the sign-up CTA is there / on any protected action).
   useEffect(() => {
-    if (space !== 'www') router.replace('/auth/register');
+    if (space !== 'www') router.replace('/');
   }, [space, router]);
 
   const isSlide = step < SLIDES.length;
