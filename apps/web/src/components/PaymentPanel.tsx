@@ -3,17 +3,24 @@
 import { useMemo, useState } from 'react';
 import qrcode from 'qrcode-generator';
 
+interface PrimaryAction {
+  label: string;
+  onClick: () => void;
+  busy?: boolean;
+}
+
 interface PaymentPanelProps {
-  /** Payment link (Wave deep-link / hosted checkout). */
+  /** Payment link (Wave merchant checkout / deep-link). */
   link?: string;
-  /** Provider-supplied QR as base64 PNG (no data: prefix). */
+  /** Optional pre-rendered QR as base64 PNG (no data: prefix). Falls back to a
+   *  QR generated from `link`. */
   qrCode?: string;
   methodLabel?: string;
-  /** True while waiting for the webhook confirmation. */
-  pending: boolean;
+  /** Short line under the QR, e.g. what happens after paying. */
+  note?: string;
+  /** Main button (e.g. "J'ai payé"). */
+  primaryAction?: PrimaryAction;
   onCancel: () => void;
-  /** Dev only — force the purchase to PAID without a real payment. */
-  devConfirm?: () => void;
 }
 
 function qrDataUrl(text: string): string | null {
@@ -31,9 +38,9 @@ export function PaymentPanel({
   link,
   qrCode,
   methodLabel,
-  pending,
+  note,
+  primaryAction,
   onCancel,
-  devConfirm,
 }: PaymentPanelProps) {
   const [copied, setCopied] = useState(false);
 
@@ -57,7 +64,7 @@ export function PaymentPanel({
   return (
     <div className="py-2">
       <p className="text-center text-sm text-secondary">
-        Paie avec {methodLabel || 'Wave / Orange Money'} — scanne le QR code, ou ouvre le lien
+        Paie avec {methodLabel || 'Wave'} — scanne le QR code, ou ouvre le lien
         {link ? ' sur ce téléphone' : ''}.
       </p>
 
@@ -70,38 +77,30 @@ export function PaymentPanel({
 
       {link && (
         <div className="mt-4 space-y-2">
-          <a
-            href={link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-primary w-full"
-          >
+          <a href={link} target="_blank" rel="noopener noreferrer" className="btn-primary w-full">
             Ouvrir le lien de paiement
           </a>
-          <button
-            type="button"
-            onClick={copy}
-            className="btn-ghost w-full !py-2.5 text-xs"
-          >
+          <button type="button" onClick={copy} className="btn-ghost w-full !py-2.5 text-xs">
             <i className={`ti ${copied ? 'ti-check' : 'ti-copy'}`} aria-hidden="true" />
             {copied ? 'Lien copié' : 'Copier le lien'}
           </button>
         </div>
       )}
 
-      {pending && (
-        <div className="mt-4 flex items-center gap-3 rounded-xl bg-surface-2 p-3">
-          <span className="h-5 w-5 shrink-0 animate-spin rounded-full border-2 border-orange-200 border-t-orange-500" />
-          <p className="text-xs text-secondary">
-            En attente de la confirmation du paiement… (l&apos;accès se débloque
-            automatiquement)
-          </p>
-        </div>
+      {note && (
+        <p className="mt-4 rounded-xl bg-surface-2 px-4 py-3 text-center text-xs text-secondary">
+          {note}
+        </p>
       )}
 
-      {devConfirm && (
-        <button type="button" onClick={devConfirm} className="btn-ghost mt-4 w-full">
-          Simuler la confirmation (dev)
+      {primaryAction && (
+        <button
+          type="button"
+          onClick={primaryAction.onClick}
+          disabled={primaryAction.busy}
+          className="btn-primary mt-4 w-full disabled:opacity-50"
+        >
+          {primaryAction.busy ? 'Un instant…' : primaryAction.label}
         </button>
       )}
 

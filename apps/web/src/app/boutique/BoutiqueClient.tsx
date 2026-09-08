@@ -1,19 +1,16 @@
 'use client';
 
-import { Suspense, useEffect, useRef, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense, useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Sheet, Skeleton } from '@permis2.0/ui';
-import type { PaymentMethod } from '@permis2.0/types';
 import { AppShell } from '@/components/AppShell';
 import { PaymentPanel } from '@/components/PaymentPanel';
 import { usePurchasesStore } from '@/store/purchasesStore';
 import { useAuthStore } from '@/store/authStore';
 import { SUBSCRIPTION_PRICE_ANNUAL } from '@permis2.0/shared';
 import { WHATSAPP_DISPLAY, whatsappLink } from '@/lib/contact';
-
-const IS_DEV =
-  process.env.NODE_ENV !== 'production' && process.env.NEXT_PUBLIC_PAYMENT_LIVE !== 'true';
+import { waveLink } from '@/lib/wave';
 
 /**
  * Temporary payment mode. 'manual' (default) hides the online checkout and
@@ -32,34 +29,6 @@ const BENEFITS = [
   { icon: 'ti-calendar', text: 'Accès illimité pendant 1 an' },
 ];
 
-interface MethodMeta {
-  id: PaymentMethod;
-  label: string;
-  short: string;
-  emoji: string;
-  bg: string;
-  border: string;
-  text: string;
-  needsPhone: boolean;
-}
-
-// Wave only for now — QR code + payment link, no phone required.
-// Add Orange Money / Free Money / Carte back here when they're ready.
-const METHODS: MethodMeta[] = [
-  {
-    id: 'wave',
-    label: 'Wave',
-    short: 'Wave',
-    emoji: '🌊',
-    bg: 'bg-sky-50',
-    border: 'border-sky-400',
-    text: 'text-sky-700',
-    needsPhone: false,
-  },
-];
-
-const DEFAULT_METHOD: PaymentMethod = METHODS[0].id;
-
 function formatXof(n: number) {
   return `${n.toLocaleString('fr-FR')} FCFA`;
 }
@@ -75,7 +44,6 @@ function formatDate(iso: string) {
 /* ── Boutique ─────────────────────────────────────────────────────────────────── */
 function BoutiqueInner() {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const authUser = useAuthStore((s) => s.user);
   const [refreshing, setRefreshing] = useState(false);
@@ -85,22 +53,14 @@ function BoutiqueInner() {
   const loading = usePurchasesStore((s) => s.loading);
   const hasKey = usePurchasesStore((s) => s.hasKey);
   const premiumExpiresAt = usePurchasesStore((s) => s.premiumExpiresAt);
-  const checkoutStatus = usePurchasesStore((s) => s.checkoutStatus);
-  const activePurchaseId = usePurchasesStore((s) => s.activePurchaseId);
-  const error = usePurchasesStore((s) => s.error);
   const fetchProducts = usePurchasesStore((s) => s.fetchProducts);
   const fetchEntitlements = usePurchasesStore((s) => s.fetchEntitlements);
-  const checkout = usePurchasesStore((s) => s.checkout);
   const requestManual = usePurchasesStore((s) => s.requestManual);
-  const pollPurchase = usePurchasesStore((s) => s.pollPurchase);
-  const simulateConfirm = usePurchasesStore((s) => s.simulateConfirm);
-  const resetCheckout = usePurchasesStore((s) => s.resetCheckout);
 
   const [sheetOpen, setSheetOpen] = useState(false);
-  const [method] = useState<PaymentMethod>(DEFAULT_METHOD);
-  const [ussdMsg, setUssdMsg] = useState<string | null>(null);
-  const [pay, setPay] = useState<{ link?: string; qrCode?: string } | null>(null);
-  const returnHandled = useRef(false);
+  // 'pay' = QR + link · 'requested' = user tapped "J'ai payé", team activating
+  const [stage, setStage] = useState<'pay' | 'requested'>('pay');
+  const [submitting, setSubmitting] = useState(false);
   // Products/entitlements seed from a per-origin cache → the first client render
   // can differ from SSR. Hold the catalog-dependent UI until mounted.
   const [mounted, setMounted] = useState(false);
@@ -111,30 +71,14 @@ function BoutiqueInner() {
     fetchEntitlements();
   }, [fetchProducts, fetchEntitlements]);
 
-  // Handle return from Bictorys payment page (?status=success|error) — run once only
-  useEffect(() => {
-    if (returnHandled.current) return;
-    const status = searchParams.get('status');
-    if (!status) return;
-    returnHandled.current = true;
-    router.replace('/boutique');
-    const pending = typeof window !== 'undefined' ? localStorage.getItem('pending-purchase') : null;
-    if (typeof window !== 'undefined') localStorage.removeItem('pending-purchase');
-    if (status === 'success' && pending) {
-      setSheetOpen(true);
-      pollPurchase(pending);
-    } else if (status === 'error') {
-      setSheetOpen(true);
-    }
-  }, [searchParams, pollPurchase, router]);
-
   const subscription = products.find((p) => p.sku === SUBSCRIPTION_SKU);
   const isActive = hasKey('premium_all');
-  const selectedMethod = METHODS.find((m) => m.id === method)!;
+  const priceXof = subscription?.priceXof ?? 2900;
+  const payLink = waveLink(priceXof);
 
-  // ── Manual (WhatsApp) activation helpers ──
+  // ── Manual (WhatsApp) activation helper ──
   const waLink = whatsappLink(
-    `Bonjour PERMIS 2.0 ! 👋\nJe souhaite activer l'Abonnement Annuel (${subscription ? formatXof(subscription.priceXof) : '2 900 FCFA'} / an).\nMon compte : ${authUser?.name ?? ''}${authUser?.phone ? ` — +221 ${authUser.phone}` : ''}`
+    `Bonjour PERMIS 2.0 ! 👋\nJ'ai payé l'Abonnement Annuel (${formatXof(priceXof)}) par Wave.\nMon compte : ${authUser?.name ?? ''}${authUser?.phone ? ` — +221 ${authUser.phone}` : ''}`
   );
 
   const refreshEntitlements = async () => {
@@ -151,30 +95,18 @@ function BoutiqueInner() {
       router.push('/auth/register');
       return;
     }
-    resetCheckout();
-    setUssdMsg(null);
+    setStage('pay');
     setSheetOpen(true);
   };
-  const closeSheet = () => {
-    setSheetOpen(false);
-    resetCheckout();
-    setUssdMsg(null);
-    setPay(null);
-  };
+  const closeSheet = () => setSheetOpen(false);
 
-  const handlePay = async () => {
+  const iPaid = async () => {
     if (!subscription) return;
-    const result = await checkout(subscription.id, undefined, method);
-    if (!result) return;
-
-    if (result.ussdMessage) {
-      // Orange Money / Free Money — show USSD instructions, poll for confirmation
-      setUssdMsg(result.ussdMessage);
-    } else {
-      // Wave / card / sandbox — show the QR code + payment link, stay on the page
-      setPay({ link: result.redirectUrl, qrCode: result.qrCode });
-    }
-    pollPurchase(result.purchaseId);
+    setSubmitting(true);
+    await requestManual(subscription.id); // creates a PENDING purchase for /admin/demandes
+    await fetchEntitlements();
+    setSubmitting(false);
+    setStage('requested');
   };
 
   return (
@@ -252,22 +184,15 @@ function BoutiqueInner() {
               ))}
             </ul>
 
-            {/* Accepted methods banner — online mode only */}
+            {/* Accepted methods — online mode only */}
             {PAYMENT_MODE === 'online' && (
               <div className="border-t border-token px-6 pb-4">
                 <p className="mb-2.5 mt-3 text-xs font-bold uppercase tracking-wide text-muted">
-                  Paiements acceptés
+                  Paiement
                 </p>
-                <div className="flex gap-2">
-                  {METHODS.map((m) => (
-                    <span
-                      key={m.id}
-                      className={`flex items-center gap-1 rounded-lg px-2 py-1 text-[10px] font-bold ${m.bg} ${m.text}`}
-                    >
-                      {m.emoji} {m.short}
-                    </span>
-                  ))}
-                </div>
+                <span className="flex w-fit items-center gap-1 rounded-lg bg-sky-50 px-2 py-1 text-[10px] font-bold text-sky-700">
+                  🌊 Wave
+                </span>
               </div>
             )}
 
@@ -410,8 +335,7 @@ function BoutiqueInner() {
       <Sheet open={sheetOpen} onClose={closeSheet} ariaLabel="Finaliser l'abonnement">
         {subscription && (
           <div>
-            {/* SUCCESS */}
-            {checkoutStatus === 'paid' ? (
+            {isActive ? (
               <div className="py-6 text-center">
                 <motion.div
                   initial={{ scale: 0.6, opacity: 0 }}
@@ -425,136 +349,70 @@ function BoutiqueInner() {
                   Abonnement activé !
                 </h3>
                 <p className="mt-1 text-sm text-secondary">
-                  Tout le contenu premium est maintenant débloqué.
+                  Tout le contenu premium est débloqué.
                 </p>
                 <button className="btn-primary mt-5 w-full" onClick={closeSheet}>
                   Continuer
                 </button>
               </div>
-            ) : /* USSD INSTRUCTIONS (Orange Money / Free Money) */
-            checkoutStatus === 'pending' && ussdMsg ? (
-              <div className="py-4">
-                <div className="flex items-center gap-3 rounded-2xl bg-orange-50 px-4 py-3">
-                  <span className="text-2xl">{selectedMethod.emoji}</span>
-                  <div>
-                    <p className="font-display text-sm font-bold text-orange-800">
-                      Confirmation en attente
-                    </p>
-                    <p className="text-xs text-orange-700">{selectedMethod.label}</p>
-                  </div>
+            ) : stage === 'requested' ? (
+              <div className="py-4 text-center">
+                <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-sky-50 text-3xl">
+                  🌊
                 </div>
-                <div className="mt-4 rounded-xl border border-orange-200 bg-orange-50 p-4">
-                  <p className="mb-2 text-xs font-bold uppercase tracking-wide text-muted">
-                    Instructions
+                <h3 className="font-display text-lg font-extrabold text-foreground">
+                  Paiement signalé
+                </h3>
+                <p className="mt-1 text-sm text-secondary">
+                  Notre équipe vérifie le transfert Wave et active ton abonnement
+                  (généralement en moins d&apos;une heure). Tu peux fermer cette fenêtre.
+                </p>
+                <button
+                  onClick={refreshEntitlements}
+                  disabled={refreshing}
+                  className="btn-primary mt-5 w-full disabled:opacity-50"
+                >
+                  {refreshing ? 'Vérification…' : 'Vérifier mon activation'}
+                </button>
+                {refreshed && (
+                  <p className="mt-2 text-xs font-medium text-secondary">
+                    Pas encore activé — réessaie dans quelques minutes.
                   </p>
-                  <p className="text-sm font-semibold leading-relaxed text-foreground">{ussdMsg}</p>
-                </div>
-                <div className="mt-4 flex items-center gap-3 rounded-xl bg-surface-2 p-3">
-                  <span className="h-5 w-5 shrink-0 animate-spin rounded-full border-2 border-orange-200 border-t-orange-500" />
-                  <p className="text-xs text-secondary">En attente de votre confirmation…</p>
-                </div>
-                {IS_DEV && activePurchaseId && (
-                  <button
-                    className="btn-ghost mt-4 w-full"
-                    onClick={() => simulateConfirm(activePurchaseId)}
-                  >
-                    Simuler la confirmation (dev)
-                  </button>
                 )}
+                <a
+                  href={waLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-3 flex w-full items-center justify-center gap-2 text-xs font-semibold text-secondary hover:text-foreground"
+                >
+                  <i className="ti ti-brand-whatsapp" aria-hidden="true" /> Un souci ? Écris-nous sur WhatsApp
+                </a>
                 <button
                   type="button"
                   onClick={closeSheet}
                   className="mt-3 w-full py-2 text-center text-sm text-muted hover:text-secondary"
                 >
-                  Annuler
-                </button>
-              </div>
-            ) : /* QR CODE + PAYMENT LINK (Wave / card / sandbox) */
-            checkoutStatus === 'pending' ? (
-              <PaymentPanel
-                link={pay?.link}
-                qrCode={pay?.qrCode}
-                methodLabel={selectedMethod.label}
-                pending
-                onCancel={closeSheet}
-                devConfirm={
-                  IS_DEV && activePurchaseId
-                    ? () => simulateConfirm(activePurchaseId)
-                    : undefined
-                }
-              />
-            ) : /* ERROR */
-            checkoutStatus === 'failed' ? (
-              <div className="py-6 text-center">
-                <div className="mx-auto mb-3 text-5xl">😕</div>
-                <h3 className="font-display text-lg font-extrabold text-foreground">
-                  Paiement non complété
-                </h3>
-                <p className="mt-1 text-sm text-secondary">
-                  {error || "Le paiement n'a pas abouti. Veuillez réessayer."}
-                </p>
-                <button
-                  className="btn-primary mt-5 w-full"
-                  onClick={() => {
-                    resetCheckout();
-                    setUssdMsg(null);
-                  }}
-                >
-                  Réessayer
-                </button>
-                <button
-                  type="button"
-                  onClick={closeSheet}
-                  className="mt-3 text-sm text-muted hover:text-secondary"
-                >
-                  Annuler
+                  Fermer
                 </button>
               </div>
             ) : (
-              /* CHECKOUT FORM */
               <>
                 <h3 className="font-display text-lg font-extrabold text-foreground">
-                  Finaliser l&apos;abonnement
+                  Payer l&apos;abonnement
                 </h3>
                 <div className="mt-0.5 flex items-baseline gap-1">
                   <span className="font-display text-2xl font-extrabold text-orange-600">
-                    {formatXof(subscription.priceXof)}
+                    {formatXof(priceXof)}
                   </span>
                   <span className="text-sm text-muted">/ an</span>
                 </div>
-
-                {/* Wave — the only method for now */}
-                <div className="mt-5 flex items-center gap-3 rounded-2xl border-2 border-sky-400 bg-sky-50 px-4 py-3">
-                  <span className="text-2xl" aria-hidden="true">
-                    🌊
-                  </span>
-                  <div className="flex-1">
-                    <p className="font-display text-sm font-bold text-sky-800">Paiement Wave</p>
-                    <p className="text-xs text-sky-700">
-                      QR code ou lien — tu paies depuis ton application Wave.
-                    </p>
-                  </div>
-                </div>
-
-                {error && (
-                  <p className="mt-3 rounded-lg bg-red-50 px-3 py-2 text-center text-sm font-semibold text-danger">
-                    {error}
-                  </p>
-                )}
-
-                <button
-                  className="btn-primary mt-5 w-full"
-                  disabled={loading}
-                  onClick={handlePay}
-                >
-                  <i className="ti ti-lock mr-2" aria-hidden="true" />
-                  Payer {formatXof(subscription.priceXof)} via Wave
-                </button>
-
-                <p className="mt-3 flex items-center justify-center gap-1.5 text-xs text-muted">
-                  <i className="ti ti-shield-check" aria-hidden="true" />
-                  Paiement sécurisé par Bictorys · sans engagement
-                </p>
+                <PaymentPanel
+                  link={payLink}
+                  methodLabel="Wave"
+                  note="Après paiement, appuie sur « J'ai payé » — l'équipe active ton accès (généralement < 1h)."
+                  primaryAction={{ label: "J'ai payé", onClick: iPaid, busy: submitting }}
+                  onCancel={closeSheet}
+                />
               </>
             )}
           </div>
