@@ -35,27 +35,17 @@ const BENEFITS = [
 interface MethodMeta {
   id: PaymentMethod;
   label: string;
-  /** Short label for the button */
   short: string;
   emoji: string;
   bg: string;
   border: string;
   text: string;
-  /** Whether a phone number is required for this method */
   needsPhone: boolean;
 }
 
+// Wave only for now — QR code + payment link, no phone required.
+// Add Orange Money / Free Money / Carte back here when they're ready.
 const METHODS: MethodMeta[] = [
-  {
-    id: 'orange_money',
-    label: 'Orange Money',
-    short: 'Orange',
-    emoji: '🟠',
-    bg: 'bg-orange-50',
-    border: 'border-orange-400',
-    text: 'text-orange-700',
-    needsPhone: true,
-  },
   {
     id: 'wave',
     label: 'Wave',
@@ -64,29 +54,11 @@ const METHODS: MethodMeta[] = [
     bg: 'bg-sky-50',
     border: 'border-sky-400',
     text: 'text-sky-700',
-    needsPhone: true,
-  },
-  {
-    id: 'free_money',
-    label: 'Free Money',
-    short: 'Free',
-    emoji: '💚',
-    bg: 'bg-green-50',
-    border: 'border-green-400',
-    text: 'text-green-700',
-    needsPhone: true,
-  },
-  {
-    id: 'card',
-    label: 'Carte bancaire',
-    short: 'Carte',
-    emoji: '💳',
-    bg: 'bg-slate-100',
-    border: 'border-slate-400',
-    text: 'text-slate-700',
     needsPhone: false,
   },
 ];
+
+const DEFAULT_METHOD: PaymentMethod = METHODS[0].id;
 
 function formatXof(n: number) {
   return `${n.toLocaleString('fr-FR')} FCFA`;
@@ -98,12 +70,6 @@ function formatDate(iso: string) {
     month: 'long',
     year: 'numeric',
   });
-}
-
-function isValidSnPhone(raw: string): boolean {
-  if (!raw.trim()) return false;
-  const digits = raw.replace(/[^\d]/g, '').replace(/^221/, '');
-  return digits.length === 9 && /^7[0-8]/.test(digits);
 }
 
 /* ── Boutique ─────────────────────────────────────────────────────────────────── */
@@ -131,11 +97,14 @@ function BoutiqueInner() {
   const resetCheckout = usePurchasesStore((s) => s.resetCheckout);
 
   const [sheetOpen, setSheetOpen] = useState(false);
-  const [method, setMethod] = useState<PaymentMethod>('orange_money');
-  const [phone, setPhone] = useState('');
+  const [method] = useState<PaymentMethod>(DEFAULT_METHOD);
   const [ussdMsg, setUssdMsg] = useState<string | null>(null);
   const [pay, setPay] = useState<{ link?: string; qrCode?: string } | null>(null);
   const returnHandled = useRef(false);
+  // Products/entitlements seed from a per-origin cache → the first client render
+  // can differ from SSR. Hold the catalog-dependent UI until mounted.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   useEffect(() => {
     fetchProducts();
@@ -193,11 +162,9 @@ function BoutiqueInner() {
     setPay(null);
   };
 
-  const phoneValid = !selectedMethod.needsPhone || isValidSnPhone(phone);
-
   const handlePay = async () => {
-    if (!subscription || !phoneValid) return;
-    const result = await checkout(subscription.id, phone.trim() || undefined, method);
+    if (!subscription) return;
+    const result = await checkout(subscription.id, undefined, method);
     if (!result) return;
 
     if (result.ussdMessage) {
@@ -233,7 +200,7 @@ function BoutiqueInner() {
       </header>
 
       <div className="px-5 pt-6 pb-10">
-        {loading && products.length === 0 ? (
+        {!mounted || (loading && products.length === 0) ? (
           <Skeleton className="h-96 w-full rounded-3xl" />
         ) : !subscription ? (
           <div className="rounded-2xl border border-token bg-surface-1 p-6 text-center">
@@ -556,74 +523,18 @@ function BoutiqueInner() {
                   <span className="text-sm text-muted">/ an</span>
                 </div>
 
-                {/* Method selector */}
-                <p className="mt-5 text-xs font-bold uppercase tracking-wide text-muted">
-                  Moyen de paiement
-                </p>
-                <div className="mt-2 grid grid-cols-4 gap-2">
-                  {METHODS.map((m) => (
-                    <button
-                      key={m.id}
-                      type="button"
-                      onClick={() => {
-                        setMethod(m.id);
-                        setPhone('');
-                      }}
-                      aria-pressed={method === m.id}
-                      className={`flex flex-col items-center gap-1.5 rounded-xl border-2 py-3 transition-all ${
-                        method === m.id
-                          ? `${m.border} ${m.bg}`
-                          : 'border-token bg-surface-1 hover:border-token-strong'
-                      }`}
-                    >
-                      <span className="text-xl" aria-hidden="true">
-                        {m.emoji}
-                      </span>
-                      <span
-                        className={`text-[9px] font-bold leading-tight ${method === m.id ? m.text : 'text-secondary'}`}
-                      >
-                        {m.short}
-                      </span>
-                    </button>
-                  ))}
-                </div>
-
-                {/* Phone input (mobile money only) */}
-                {selectedMethod.needsPhone && (
-                  <div className="mt-4">
-                    <label className="block text-sm font-medium text-foreground">
-                      Numéro {selectedMethod.label}
-                    </label>
-                    <div className="relative mt-1.5">
-                      <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-sm">
-                        🇸🇳
-                      </span>
-                      <input
-                        type="tel"
-                        inputMode="tel"
-                        placeholder="+221 77 000 00 00"
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                        className="w-full rounded-xl border border-token bg-surface-1 py-3 pl-9 pr-4 text-sm text-foreground placeholder-muted focus:border-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-100"
-                        aria-invalid={phone.length > 0 && !isValidSnPhone(phone)}
-                      />
-                    </div>
-                    {phone.length > 0 && !isValidSnPhone(phone) && (
-                      <p className="mt-1 text-xs font-medium text-danger">
-                        Numéro sénégalais invalide (ex : 77, 78, 76, 70…)
-                      </p>
-                    )}
+                {/* Wave — the only method for now */}
+                <div className="mt-5 flex items-center gap-3 rounded-2xl border-2 border-sky-400 bg-sky-50 px-4 py-3">
+                  <span className="text-2xl" aria-hidden="true">
+                    🌊
+                  </span>
+                  <div className="flex-1">
+                    <p className="font-display text-sm font-bold text-sky-800">Paiement Wave</p>
+                    <p className="text-xs text-sky-700">
+                      QR code ou lien — tu paies depuis ton application Wave.
+                    </p>
                   </div>
-                )}
-
-                {/* Card info */}
-                {method === 'card' && (
-                  <p className="mt-4 rounded-xl bg-surface-2 px-4 py-3 text-sm text-secondary">
-                    <i className="ti ti-shield-lock mr-2 text-slate-400" aria-hidden="true" />
-                    Vous serez redirigé vers la page de paiement sécurisée pour saisir votre Visa /
-                    Mastercard.
-                  </p>
-                )}
+                </div>
 
                 {error && (
                   <p className="mt-3 rounded-lg bg-red-50 px-3 py-2 text-center text-sm font-semibold text-danger">
@@ -633,11 +544,11 @@ function BoutiqueInner() {
 
                 <button
                   className="btn-primary mt-5 w-full"
-                  disabled={!phoneValid || loading}
+                  disabled={loading}
                   onClick={handlePay}
                 >
                   <i className="ti ti-lock mr-2" aria-hidden="true" />
-                  Payer {formatXof(subscription.priceXof)} via {selectedMethod.label}
+                  Payer {formatXof(subscription.priceXof)} via Wave
                 </button>
 
                 <p className="mt-3 flex items-center justify-center gap-1.5 text-xs text-muted">
