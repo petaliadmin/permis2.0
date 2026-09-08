@@ -15,10 +15,16 @@ export interface InitiateInput {
 export interface InitiateResult {
   providerRef: string;
   /**
-   * Bictorys `link`: for Wave this is a deep-link to Wave; for card / hosted checkout
-   * it's the Bictorys payment page. Frontend should redirect to it when present.
+   * Payment link: Wave deep-link, or the provider's hosted checkout page. The
+   * frontend shows it as a tappable button AND encodes it as a QR code so the
+   * user can pay from another device — instead of navigating away.
    */
   redirectUrl?: string;
+  /**
+   * Base64 PNG QR code returned by the provider itself (Bictorys), when
+   * available. Preferred over a client-generated QR of `redirectUrl`.
+   */
+  qrCode?: string;
   /**
    * USSD instruction string returned by Bictorys for Orange Money / Free Money
    * (e.g. "Validez la demande de paiement reçue sur votre téléphone").

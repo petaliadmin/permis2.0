@@ -39,7 +39,12 @@ interface PurchasesState {
     productId: string,
     phone?: string,
     method?: PaymentMethod
-  ) => Promise<{ purchaseId: string; redirectUrl?: string; ussdMessage?: string } | null>;
+  ) => Promise<{
+    purchaseId: string;
+    redirectUrl?: string;
+    qrCode?: string;
+    ussdMessage?: string;
+  } | null>;
   requestManual: (productId: string) => Promise<void>;
   claimSeat: (code: string) => Promise<{ ok: boolean; error?: string }>;
   pollPurchase: (purchaseId: string) => Promise<void>;
@@ -206,6 +211,7 @@ export const usePurchasesStore = create<PurchasesState>((set, get) => ({
       return {
         purchaseId: data.purchaseId,
         redirectUrl: data.redirectUrl,
+        qrCode: data.qrCode,
         ussdMessage: data.ussdMessage,
       };
     } catch (error) {

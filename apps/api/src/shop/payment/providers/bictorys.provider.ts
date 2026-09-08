@@ -158,6 +158,7 @@ export class BictorysProvider implements PaymentProvider {
     return {
       providerRef: input.purchaseId,
       redirectUrl,
+      qrCode: json.qrCode,
       ussdMessage: json.message,
       status: 'PENDING',
     };

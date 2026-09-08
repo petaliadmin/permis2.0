@@ -182,7 +182,10 @@ export class ShopService {
       purchaseId: purchase.id,
       status: 'PENDING' as const,
       providerRef: initiated.providerRef,
+      /** Payment link — shown as a button and encoded as a QR code. */
       redirectUrl: initiated.redirectUrl,
+      /** Provider-supplied QR (base64 PNG), preferred over a QR of the link. */
+      qrCode: initiated.qrCode,
       /** USSD instructions for Orange Money / Free Money (show to user, then poll). */
       ussdMessage: initiated.ussdMessage,
     };

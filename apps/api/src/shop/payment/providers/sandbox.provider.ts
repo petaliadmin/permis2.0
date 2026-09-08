@@ -8,9 +8,10 @@ import type {
 
 /**
  * Sandbox provider used until real Orange Money / Wave credentials are available.
- * initiate() returns a PENDING reference and does NOT auto-confirm — confirmation
- * is driven manually via the dev-only POST /shop/confirm/:purchaseId route (which
- * calls ShopService.devConfirm). parseWebhook() trusts the simulated payload.
+ * initiate() returns a PENDING reference and a fake payment link (so the QR /
+ * link checkout UI can be exercised end to end — the link itself is inert,
+ * confirmation is driven by the dev-only POST /shop/purchases/:id/simulate-confirm).
+ * parseWebhook() trusts the simulated payload.
  */
 @Injectable()
 export class SandboxProvider implements PaymentProvider {
@@ -19,6 +20,8 @@ export class SandboxProvider implements PaymentProvider {
   async initiate(input: InitiateInput): Promise<InitiateResult> {
     return {
       providerRef: `sbx_${input.purchaseId}`,
+      // Realistic-looking but inert — lets the front-end render the QR + link.
+      redirectUrl: `https://pay.sandbox.permis2.com/c/${input.purchaseId}?amount=${input.amountXof}&cur=XOF`,
       status: 'PENDING',
     };
   }
