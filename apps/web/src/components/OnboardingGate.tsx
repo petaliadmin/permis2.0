@@ -3,22 +3,23 @@
 import { useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { isOnboardingDone } from '@/lib/onboarding';
+import { useSpace } from '@/components/SpaceProvider';
 
 /**
  * First-run gate: sends a fresh visitor to /onboarding once, before anything
- * else renders. Client-only (localStorage), so guests are covered too — no
- * server/account state is involved until the profile-choice screen finishes.
+ * else renders. Only on `www` — the `learn` / `school` subdomains skip the
+ * feature tour + profile choice entirely (the subdomain already fixes the
+ * profile). Onboarding state is a `.permis2.com` cookie so it carries across
+ * subdomains.
  */
 export function OnboardingGate() {
   const pathname = usePathname();
   const router = useRouter();
+  const space = useSpace();
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    // '/' is exempt on every space: each subdomain's root is a valid entry
-    // point (landing / student home / school dashboard). '/ecoles' is linked
-    // straight from the landing. Onboarding state is a `.permis2.com` cookie so
-    // it carries across www / learn / school.
+    if (space !== 'www') return;
     const exempt =
       pathname.startsWith('/onboarding') ||
       pathname.startsWith('/auth') ||
@@ -29,7 +30,7 @@ export function OnboardingGate() {
     }
     // Only ever needs to fire on the first mount / route change while undone.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname]);
+  }, [pathname, space]);
 
   return null;
 }

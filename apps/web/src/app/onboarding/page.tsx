@@ -1,12 +1,14 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence, type PanInfo } from 'framer-motion';
 import {
   SlideSignsIllustration,
   SlideQuizIllustration,
   SlideProgressIllustration,
 } from './illustrations';
+import { useSpace } from '@/components/SpaceProvider';
 import { gotoSpace, spaceForProfile } from '@/lib/space';
 import { markOnboardingDone, type ProfileChoice } from '@/lib/onboarding';
 
@@ -41,8 +43,16 @@ const SLIDES: Slide[] = [
 const SWIPE_THRESHOLD = 60;
 
 export default function OnboardingPage() {
+  const space = useSpace();
+  const router = useRouter();
   const [step, setStep] = useState(0);
   const [direction, setDirection] = useState(1);
+
+  // Onboarding (feature tour + profile choice) only lives on www — the
+  // subdomain already fixes the profile. Reached elsewhere → straight to sign-up.
+  useEffect(() => {
+    if (space !== 'www') router.replace('/auth/register');
+  }, [space, router]);
 
   const isSlide = step < SLIDES.length;
 

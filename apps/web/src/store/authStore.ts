@@ -4,9 +4,13 @@ import type { User } from '@permis2.0/types';
 
 export type OtpChannel = 'sms' | 'whatsapp';
 
+/** National SN number (9 digits, no country code) — the format the API expects. */
+export function toSnNational(raw: string): string {
+  return raw.replace(/[^\d]/g, '').replace(/^221/, '');
+}
+
 export function isValidSnPhone(raw: string): boolean {
-  const digits = raw.replace(/[^\d]/g, '').replace(/^221/, '');
-  return /^(77|78|76|70|75|33)\d{7}$/.test(digits);
+  return /^(77|78|76|70|75|33)\d{7}$/.test(toSnNational(raw));
 }
 
 export function formatPhone(raw: string): string {
@@ -140,6 +144,7 @@ export const useAuthStore = create<AuthState>()(
       },
 
       loginWithPin: async (phone: string, pin: string) => {
+        phone = toSnNational(phone);
         set({ isLoading: true, error: null });
         try {
           const response = await fetch(`${API_URL}/auth/login-pin`, {
@@ -160,6 +165,7 @@ export const useAuthStore = create<AuthState>()(
       },
 
       requestOtp: async (phone: string, channel: OtpChannel) => {
+        phone = toSnNational(phone);
         set({ isLoading: true, error: null });
         try {
           const response = await fetch(`${API_URL}/auth/otp/request`, {
@@ -177,6 +183,7 @@ export const useAuthStore = create<AuthState>()(
       },
 
       verifyOtp: async (phone: string, otp: string): Promise<boolean> => {
+        phone = toSnNational(phone);
         set({ isLoading: true, error: null });
         try {
           const response = await fetch(`${API_URL}/auth/otp/verify`, {
@@ -193,6 +200,7 @@ export const useAuthStore = create<AuthState>()(
       },
 
       registerWithPin: async (name: string, phone: string, pin: string, profileType?) => {
+        phone = toSnNational(phone);
         set({ isLoading: true, error: null });
         try {
           const response = await fetch(`${API_URL}/auth/register-pin`, {
@@ -235,6 +243,7 @@ export const useAuthStore = create<AuthState>()(
       },
 
       resetPin: async (phone: string, otp: string, pin: string) => {
+        phone = toSnNational(phone);
         set({ isLoading: true, error: null });
         try {
           const response = await fetch(`${API_URL}/auth/reset-pin`, {

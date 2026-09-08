@@ -26,13 +26,16 @@ function GuestPrompt() {
           Connectez-vous pour créer ou gérer votre auto-école sur PERMIS 2.0.
         </p>
         <button
-          onClick={() => router.push('/auth/login?redirect=/')}
+          onClick={() => router.push('/auth/register')}
           className="btn-primary mt-6 w-full"
         >
-          Se connecter
+          Créer mon compte auto-école
         </button>
-        <button onClick={() => router.push('/onboarding')} className="btn-ghost mt-2 w-full">
-          Créer un compte
+        <button
+          onClick={() => router.push('/auth/login?redirect=/')}
+          className="btn-ghost mt-2 w-full"
+        >
+          J&apos;ai déjà un compte
         </button>
       </div>
     </SchoolShell>

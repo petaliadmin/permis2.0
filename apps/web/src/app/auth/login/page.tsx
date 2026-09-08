@@ -6,11 +6,14 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useAuthStore, isValidSnPhone } from '@/store/authStore';
 import { CodeInput } from '@/components/CodeInput';
+import { PhoneInput } from '@/components/PhoneInput';
+import { useSpace } from '@/components/SpaceProvider';
 import { gotoSpace, spaceForProfile } from '@/lib/space';
 
 export default function LoginPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const space = useSpace();
   const loginWithPin = useAuthStore((s) => s.loginWithPin);
   const isLoading = useAuthStore((s) => s.isLoading);
 
@@ -29,7 +32,12 @@ export default function LoginPage() {
         router.push(redirect);
         return;
       }
-      gotoSpace(spaceForProfile(useAuthStore.getState().user?.profileType));
+      // Signing in from a subdomain? Stay there. Otherwise follow the profile.
+      gotoSpace(
+        space !== 'www'
+          ? space
+          : spaceForProfile(useAuthStore.getState().user?.profileType)
+      );
     } catch {
       setErr(useAuthStore.getState().error || 'Connexion impossible.');
     }
@@ -43,17 +51,8 @@ export default function LoginPage() {
       </h1>
       <p className="mt-2 text-sm text-secondary">Ton numéro et ton code de sécurité.</p>
 
-      <label className="mt-7 block text-sm font-medium text-foreground">Téléphone</label>
-      <div className="mt-1.5 flex items-center gap-2 rounded-2xl border border-token bg-surface-2 px-4">
-        <span className="text-sm font-semibold text-secondary">🇸🇳 +221</span>
-        <input
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-          inputMode="tel"
-          placeholder="77 000 00 00"
-          autoFocus
-          className="h-12 w-full bg-transparent text-sm text-foreground placeholder:text-muted focus:outline-none"
-        />
+      <div className="mt-7">
+        <PhoneInput label="Téléphone" value={phone} onChange={setPhone} autoFocus />
       </div>
 
       <div className="mt-5 flex items-center justify-between">

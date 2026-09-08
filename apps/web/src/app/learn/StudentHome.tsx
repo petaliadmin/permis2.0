@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { AppShell } from '@/components/AppShell';
+import { AppShell, MenuButton } from '@/components/AppShell';
 import { useAuthStore } from '@/store/authStore';
 import { countErrors } from '@/lib/errorBank';
 
@@ -87,10 +87,37 @@ export default function StudentHome() {
 
   return (
     <AppShell>
-      <div className="on-light bg-surface px-4 pt-[calc(env(safe-area-inset-top)+20px)]">
+      <div className="on-light bg-surface px-4 pt-[calc(env(safe-area-inset-top)+16px)]">
         <div className="mx-auto max-w-md">
+          {/* ── Top bar ── */}
+          <div className="flex items-center justify-between">
+            <MenuButton />
+            <span className="font-display text-sm font-extrabold text-foreground">
+              PERMIS<span className="text-primary-600">2.0</span>
+            </span>
+            {isAuthenticated ? (
+              <Link
+                href="/profil"
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-primary-100 text-sm font-black text-primary-700"
+              >
+                {firstName(user?.name).charAt(0).toUpperCase() || '?'}
+              </Link>
+            ) : (
+              <Link
+                href="/auth/login"
+                className="rounded-full bg-surface-2 px-3 py-1.5 text-xs font-bold text-secondary"
+              >
+                Se connecter
+              </Link>
+            )}
+          </div>
+
           {/* ── Greeting ── */}
-          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mt-5"
+          >
             <p className="text-sm font-semibold text-secondary">
               {greeting}
               {isAuthenticated && firstName(user?.name) ? `, ${firstName(user?.name)}` : ''} 👋
@@ -122,7 +149,7 @@ export default function StudentHome() {
             </div>
           ) : (
             <Link
-              href="/onboarding"
+              href="/auth/register"
               className="mt-4 flex items-center gap-3 rounded-2xl border border-primary-100 bg-primary-50 p-4 transition-colors hover:border-primary-200"
             >
               <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary-600 text-white">
