@@ -16,6 +16,20 @@ export function middleware(request: NextRequest) {
   const host = request.headers.get('host') ?? request.nextUrl.host;
   const proto =
     request.headers.get('x-forwarded-proto') ?? request.nextUrl.protocol.replace(':', '');
+
+  // ── Dev: consolidate on *.lvh.me ──────────────────────────────────────────
+  // Browsers won't share a cookie across `*.localhost` subdomains, so the
+  // session breaks on `localhost` / `127.0.0.1`. `lvh.me` resolves to
+  // 127.0.0.1 and behaves like a real domain. (No-op in prod.)
+  if (process.env.NODE_ENV !== 'production') {
+    const [hostname, port] = host.split(':');
+    if (hostname === 'localhost' || hostname === '127.0.0.1' || hostname.endsWith('.localhost')) {
+      const sub = hostname.endsWith('.localhost') ? hostname.slice(0, -'.localhost'.length) : 'www';
+      const to = `${sub}.lvh.me${port ? `:${port}` : ''}`;
+      return NextResponse.redirect(`${proto}://${to}${pathname}${search}`, 307);
+    }
+  }
+
   const space = spaceFromHost(host);
 
   // ── Cross-space normalization ──────────────────────────────────────────────

@@ -4,20 +4,20 @@ import { useId, useMemo, useState } from 'react';
 
 interface Country {
   code: string; // dial code without +
-  label: string; // flag + name
+  iso: string; // ISO-3166 alpha-2 — compact label, no flag emoji (Windows
+  name: string; //   renders regional-indicator pairs as bare letters)
 }
 
-// Senegal first (the app's market), then neighbours. No flag emoji — Windows
-// browsers render regional-indicator pairs as bare letters ("SN"), not a flag.
+// Senegal first (the app's market), then neighbours.
 const COUNTRIES: Country[] = [
-  { code: '221', label: 'Sénégal +221' },
-  { code: '220', label: 'Gambie +220' },
-  { code: '223', label: 'Mali +223' },
-  { code: '224', label: 'Guinée +224' },
-  { code: '222', label: 'Mauritanie +222' },
-  { code: '245', label: 'Guinée-Bissau +245' },
-  { code: '238', label: 'Cap-Vert +238' },
-  { code: '225', label: "Côte d'Ivoire +225" },
+  { code: '221', iso: 'SN', name: 'Sénégal' },
+  { code: '220', iso: 'GM', name: 'Gambie' },
+  { code: '223', iso: 'ML', name: 'Mali' },
+  { code: '224', iso: 'GN', name: 'Guinée' },
+  { code: '222', iso: 'MR', name: 'Mauritanie' },
+  { code: '245', iso: 'GW', name: 'Guinée-Bissau' },
+  { code: '238', iso: 'CV', name: 'Cap-Vert' },
+  { code: '225', iso: 'CI', name: "Côte d'Ivoire" },
 ];
 
 /** Split an E.164-ish string into a known dial code + the national part. */
@@ -78,17 +78,18 @@ export function PhoneInput({
       <div className="flex items-stretch gap-2">
         <select
           aria-label="Indicatif pays"
+          title={COUNTRIES.find((c) => c.code === code)?.name}
           value={code}
           disabled={disabled}
           onChange={(e) => {
             setCode(e.target.value);
             emit(e.target.value, national);
           }}
-          className="shrink-0 rounded-xl border border-token bg-surface-2 px-2.5 text-sm font-semibold text-foreground focus:border-primary-400 focus:outline-none"
+          className="w-20 shrink-0 rounded-xl border border-token bg-surface-2 px-2 text-xs font-semibold text-foreground focus:border-primary-400 focus:outline-none"
         >
           {COUNTRIES.map((c) => (
             <option key={c.code} value={c.code}>
-              {c.label}
+              +{c.code} {c.iso}
             </option>
           ))}
         </select>

@@ -143,14 +143,14 @@ export function SchoolDashboard({ school, onBackToPicker, onSchoolUpdated }: Sch
         </div>
       )}
 
-      <nav className="border-b border-token bg-surface-1 px-4 sm:px-8">
-        <div className="mx-auto flex max-w-5xl gap-6">
+      <nav className="border-b border-token bg-surface-1">
+        <div className="no-scrollbar mx-auto flex max-w-5xl gap-6 overflow-x-auto px-4 sm:px-8">
           {TABS.map((t) => (
             <button
               key={t.key}
               onClick={() => setTab(t.key)}
               className={cn(
-                'border-b-2 py-3 text-sm font-bold transition-colors',
+                'shrink-0 border-b-2 py-3 text-sm font-bold transition-colors',
                 tab === t.key ? 'border-primary-600 text-primary-600' : 'border-transparent text-secondary'
               )}
             >

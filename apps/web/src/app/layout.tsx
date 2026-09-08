@@ -117,9 +117,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const space: Space = (h.get('x-permis-space') as Space) || spaceFromHost(h.get('host'));
 
   return (
-    // Dark theme is the default across the app — the `dark` class is applied
-    // server-side too so first paint is dark, not a light-then-dark flash.
-    // ThemeInit reconciles with a persisted 'light'/'system' choice on mount.
+    // The app is light throughout (like the marketing site) — `body.on-light`
+    // pins the light token palette for the whole tree. Immersive result
+    // screens opt back into dark locally with `.on-ink`. `html.dark` is kept
+    // only so any legacy `dark:` utility still has a defined baseline.
     <html
       lang="fr"
       className={`dark ${inter.variable} ${jakarta.variable} ${baloo.variable}`}
@@ -136,7 +137,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="bg-surface text-foreground font-sans antialiased">
+      <body className="on-light bg-surface text-foreground font-sans antialiased">
         {/* ThemeInit applies the persisted choice after hydration */}
         <ThemeInit />
         <OnboardingGate />
