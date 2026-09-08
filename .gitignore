@@ -66,3 +66,6 @@ web-dev.log
 # Real production secrets — pushed to SSM via scripts/aws/set-secrets.sh,
 # never committed. Only the .example template is tracked.
 .env.aws.prod
+
+# Local deploy credentials — never commit
+.env.deploy
