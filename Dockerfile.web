@@ -35,6 +35,10 @@ RUN cd packages/ui && pnpm run build
 ARG NEXT_PUBLIC_API_URL=http://localhost:3001
 ARG NEXT_PUBLIC_PAYMENT_MODE=manual
 ARG NEXT_PUBLIC_PAYMENT_LIVE=false
+# Static Wave merchant checkout base URL (see apps/web/src/lib/wave.ts). Must be
+# a build arg — NEXT_PUBLIC_* is inlined into the client bundle at build time.
+# Empty falls back to the hardcoded merchant link in wave.ts.
+ARG NEXT_PUBLIC_WAVE_PAY_URL=
 # Same VAPID keypair the API uses (VAPID_PUBLIC_KEY in SSM/.env.aws.prod) — the
 # public half only, safe to ship in the client bundle. Without it,
 # pushManager.subscribe() in usePushNotifications.ts silently no-ops and web
@@ -48,6 +52,7 @@ ARG NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=
 ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
 ENV NEXT_PUBLIC_PAYMENT_MODE=${NEXT_PUBLIC_PAYMENT_MODE}
 ENV NEXT_PUBLIC_PAYMENT_LIVE=${NEXT_PUBLIC_PAYMENT_LIVE}
+ENV NEXT_PUBLIC_WAVE_PAY_URL=${NEXT_PUBLIC_WAVE_PAY_URL}
 ENV NEXT_PUBLIC_VAPID_PUBLIC_KEY=${NEXT_PUBLIC_VAPID_PUBLIC_KEY}
 ENV NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=${NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}
 

@@ -9,6 +9,10 @@
 locals {
   ssm_prefix = "/${var.project_name}/prod"
 
+  # Keep this list in sync with .env.aws.prod / docker-compose.aws.yml — it only
+  # governs which CHANGEME placeholders Terraform creates (and cleans up on
+  # destroy). Real values are pushed by scripts/aws/set-secrets.sh, and
+  # deploy-remote.sh reads the whole /permis2-0/prod path regardless.
   ssm_parameter_names = [
     "dockerhub_username",
     "dockerhub_token",
@@ -19,8 +23,11 @@ locals {
     "jwt_expiration",
     "frontend_url",
     "web_url",
-    "termii_api_key",
-    "termii_sender_id",
+    "next_public_api_url",
+    "brevo_api_key",
+    "brevo_sms_sender",
+    "brevo_whatsapp_template_id",
+    "brevo_whatsapp_sender_number",
     "vapid_public_key",
     "vapid_private_key",
     "vapid_email",
@@ -29,7 +36,6 @@ locals {
     "bictorys_api_key",
     "bictorys_secret_key",
     "payment_country",
-    "next_public_api_url",
   ]
 }
 
