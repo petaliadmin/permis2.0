@@ -261,18 +261,35 @@ docker compose -f docker-compose.aws.yml logs --tail=100 web
 En place pour `permis2.com` (Caddy en reverse-proxy, HTTPS automatique via
 Let's Encrypt) :
 
-- `www.permis2.com` → `web:3000`
+- `www.permis2.com` → `web:3000` — site vitrine + annuaire auto-écoles
+- `learn.permis2.com` → `web:3000` — espace élève (apprentissage du code)
+- `school.permis2.com` → `web:3000` — espace auto-école (gestion)
 - `api.permis2.com` → `api:3001`
 - `permis2.com` (apex) → redirige vers `https://www.permis2.com`
 
-**DNS requis chez le registrar** (3 enregistrements A, tous vers l'IP
+Les trois hosts front pointent sur **la même** app Next.js : elle lit le header
+`Host` dans son middleware pour choisir l'espace (voir
+`apps/web/src/lib/space.ts`). La session est partagée : le cookie d'auth est
+scopé `.permis2.com` (voir `apps/api/src/auth/auth.controller.ts`), et le CORS
+de l'API autorise les trois origines `*.permis2.com` (`apps/api/src/main.ts`).
+Aucun changement d'env prod : `NEXT_PUBLIC_API_URL` / `FRONTEND_URL` restent
+inchangés.
+
+**DNS requis chez le registrar** (5 enregistrements A, tous vers l'IP
 élastique — `terraform output public_ip`) :
 
 | Sous-domaine | Cible |
 |---|---|
 | *(vide / `@`)* | IP élastique |
 | `www` | IP élastique |
+| `learn` | IP élastique |
+| `school` | IP élastique |
 | `api` | IP élastique |
+
+Après ajout des enregistrements `learn` / `school` : redéploie (pousse le
+`Caddyfile` mis à jour) puis, une fois le DNS propagé, Caddy émet les
+certificats au redémarrage — `docker compose -f docker-compose.aws.yml restart caddy`
+si besoin de forcer.
 
 Config Terraform/déploiement : `Caddyfile` (racine du repo) définit les
 routes ; `docker-compose.aws.yml` lance le service `caddy` (ports 80/443,

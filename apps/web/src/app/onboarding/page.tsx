@@ -1,15 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence, type PanInfo } from 'framer-motion';
 import {
   SlideSignsIllustration,
   SlideQuizIllustration,
   SlideProgressIllustration,
 } from './illustrations';
-
-type ProfileChoice = 'PARTICULIER' | 'AUTO_ECOLE';
+import { gotoSpace, spaceForProfile } from '@/lib/space';
+import { markOnboardingDone, type ProfileChoice } from '@/lib/onboarding';
 
 interface Slide {
   grad: string;
@@ -42,7 +41,6 @@ const SLIDES: Slide[] = [
 const SWIPE_THRESHOLD = 60;
 
 export default function OnboardingPage() {
-  const router = useRouter();
   const [step, setStep] = useState(0);
   const [direction, setDirection] = useState(1);
 
@@ -59,9 +57,8 @@ export default function OnboardingPage() {
   };
 
   const finish = (choice: ProfileChoice) => {
-    localStorage.setItem('intended_profile_type', choice);
-    localStorage.setItem('permis_onboarding_done', '1');
-    router.replace(choice === 'AUTO_ECOLE' ? '/auto-ecole' : '/traffic-signs');
+    markOnboardingDone(choice);
+    gotoSpace(spaceForProfile(choice));
   };
 
   if (!isSlide) {

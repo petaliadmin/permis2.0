@@ -178,8 +178,8 @@ export default function TrafficSignsClient() {
         accent="blue"
         menu={!selectedCat}
       >
-        <div className="flex items-center gap-2 rounded-2xl bg-white/15 px-4 py-2.5 backdrop-blur-sm">
-          <i className="ti ti-search text-white/80" aria-hidden="true" />
+        <div className="flex items-center gap-2 rounded-2xl border border-token bg-surface-2 px-4 py-2.5">
+          <i className="ti ti-search text-secondary" aria-hidden="true" />
           <input
             value={query}
             onChange={(e) => {
@@ -187,11 +187,11 @@ export default function TrafficSignsClient() {
               setSelectedCat(null);
             }}
             placeholder="Rechercher un panneau…"
-            className="w-full bg-transparent text-sm text-white placeholder-white/60 focus:outline-none"
+            className="w-full bg-transparent text-sm text-foreground placeholder-muted focus:outline-none"
           />
           {query && (
             <button onClick={() => setQuery('')} aria-label="Effacer">
-              <i className="ti ti-x text-white/70" aria-hidden="true" />
+              <i className="ti ti-x text-secondary" aria-hidden="true" />
             </button>
           )}
         </div>

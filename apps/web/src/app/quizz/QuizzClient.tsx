@@ -80,26 +80,26 @@ export default function QuizzClient() {
         accent="violet"
         menu
         actions={
-          <div className="flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1.5">
-            <i className="ti ti-star-filled text-sm text-amber-300" aria-hidden="true" />
+          <div className="chip chip-xp gap-1.5 px-3 py-1.5">
+            <i className="ti ti-star-filled text-sm" aria-hidden="true" />
             <span className="text-sm font-black">{completed * 10}</span>
           </div>
         }
       >
         {/* Streak card */}
-        <div className="flex items-center gap-3 rounded-2xl bg-white/15 p-3.5 backdrop-blur-sm">
-          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/20 text-xl">
+        <div className="flex items-center gap-3 rounded-2xl border border-token bg-surface-2 p-3.5">
+          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-surface-1 text-xl shadow-soft">
             🔥
           </div>
           <div className="flex-1">
-            <p className="text-xs text-white/80">Série actuelle</p>
-            <p className="font-display text-lg font-bold">
+            <p className="text-xs text-secondary">Série actuelle</p>
+            <p className="font-display text-lg font-bold text-foreground">
               {currentStreak} jour{currentStreak !== 1 ? 's' : ''}
             </p>
           </div>
           <button
             onClick={() => router.push('/profil')}
-            className="rounded-full bg-white/20 px-3 py-1.5 text-xs font-bold"
+            className="rounded-full bg-surface-1 px-3 py-1.5 text-xs font-bold text-secondary shadow-soft"
           >
             Voir détails
           </button>

@@ -100,7 +100,7 @@ export function SchoolDashboard({ school, onBackToPicker, onSchoolUpdated }: Sch
     ).length ?? 0;
 
   return (
-    <div className="min-h-screen bg-surface">
+    <div className="on-light min-h-screen bg-surface">
       <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b border-token bg-surface-1/90 px-4 backdrop-blur-xl sm:px-8">
         <div className="flex items-center gap-2.5">
           {onBackToPicker && (
@@ -133,8 +133,8 @@ export function SchoolDashboard({ school, onBackToPicker, onSchoolUpdated }: Sch
           className={cn(
             'px-4 py-2.5 text-center text-sm font-semibold sm:px-8',
             school.status === SchoolStatus.PENDING
-              ? 'bg-orange-50 text-orange-700 dark:bg-orange-900/20 dark:text-orange-300'
-              : 'bg-red-50 text-danger dark:bg-red-900/20'
+              ? 'bg-orange-50 text-orange-700'
+              : 'bg-red-50 text-danger'
           )}
         >
           {school.status === SchoolStatus.PENDING

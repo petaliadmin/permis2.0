@@ -133,9 +133,23 @@ npm run dev
 
 This will start:
 
-- Frontend: http://localhost:3000
-- Backend API: http://localhost:3001
+- Backend API: http://localhost:3001 (also http://api.lvh.me:3001)
 - API Docs: http://localhost:3001/api/docs
+
+**Frontend — three subdomain "spaces", one Next.js app:**
+
+| URL (dev) | Space | Prod |
+|---|---|---|
+| http://www.lvh.me:3000 | marketing site + auto-école directory | www.permis2.com |
+| http://learn.lvh.me:3000 | student space (code learning) | learn.permis2.com |
+| http://school.lvh.me:3000 | auto-école management | school.permis2.com |
+
+`lvh.me` and its subdomains resolve to `127.0.0.1` (public DNS), so the login
+cookie is shared across the three spaces exactly like prod on `*.permis2.com`.
+Plain `http://localhost:3000` still serves every page, but a session started
+there won't carry across subdomains — use `lvh.me` when testing auth flows.
+Offline / DNS blocked? Add `127.0.0.1 www.lvh.me learn.lvh.me school.lvh.me api.lvh.me`
+to your hosts file, or swap `lvh.me` for `localtest.me`.
 
 **Individual services:**
 

@@ -39,9 +39,27 @@ async function bootstrap() {
     })
   );
 
-  // CORS configuration
+  // CORS — the app is served on three subdomains (www / learn / school), each a
+  // distinct browser origin that calls this API with credentials. Allow the
+  // explicit FRONTEND_URL(s) plus any *.permis2.com front host, plus *.localhost
+  // in dev.
+  const allowlist = new Set(
+    (process.env.FRONTEND_URL || 'http://localhost:3000')
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean)
+  );
+  const isDev = process.env.NODE_ENV !== 'production';
   app.enableCors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+    origin: (origin: string | undefined, cb: (err: Error | null, allow?: boolean) => void) => {
+      if (!origin) return cb(null, true); // curl / server-to-server / same-origin
+      const ok =
+        allowlist.has(origin) ||
+        /^https:\/\/(www|learn|school)\.permis2\.com$/.test(origin) ||
+        (isDev &&
+          /^http:\/\/([a-z-]+\.)?(localhost|lvh\.me|localtest\.me)(:\d+)?$/.test(origin));
+      cb(null, ok);
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],

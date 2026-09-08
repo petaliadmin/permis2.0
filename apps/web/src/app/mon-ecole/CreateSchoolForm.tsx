@@ -1,8 +1,7 @@
 'use client';
 
 import { useState, type FormEvent } from 'react';
-import { SiteHeader } from '@/components/SiteHeader';
-import { SiteFooter } from '@/components/SiteFooter';
+import { SchoolShell } from '@/components/SchoolShell';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -49,8 +48,7 @@ export function CreateSchoolForm({ onCreated }: CreateSchoolFormProps) {
   };
 
   return (
-    <div className="min-h-screen bg-surface">
-      <SiteHeader />
+    <SchoolShell>
       <div className="mx-auto max-w-lg px-4 py-12">
         <h1 className="font-display text-2xl font-extrabold text-foreground">
           Créer mon auto-école
@@ -116,7 +114,6 @@ export function CreateSchoolForm({ onCreated }: CreateSchoolFormProps) {
           </button>
         </form>
       </div>
-      <SiteFooter />
-    </div>
+    </SchoolShell>
   );
 }

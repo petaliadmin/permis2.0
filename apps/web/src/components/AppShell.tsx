@@ -8,6 +8,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/cn';
 import { PageTransition } from '@/components/PageTransition';
 import { useAuthStore } from '@/store/authStore';
+import { useSpace, useSpaceUrl } from '@/components/SpaceProvider';
+import type { Space } from '@/lib/space';
 
 /* ─── Offline banner ─────────────────────────────────────────────────────────── */
 function OfflineBanner() {
@@ -77,26 +79,43 @@ export function useSideMenu() {
   return useContext(SideMenuContext);
 }
 
-const MENU_LINKS: { href: string; label: string; icon: string }[] = [
+type MenuLink = { href: string; label: string; icon: string; external?: boolean };
+
+const LEARN_MENU: MenuLink[] = [
+  { href: '/', label: 'Accueil', icon: 'ti-home' },
   { href: '/traffic-signs', label: 'Panneaux', icon: 'ti-road-sign' },
+  { href: '/cours', label: 'Cours', icon: 'ti-book-2' },
   { href: '/quizz', label: 'Quiz', icon: 'ti-cards' },
   { href: '/exam', label: 'Examens', icon: 'ti-clipboard-check' },
   { href: '/boutique', label: 'Abonnement', icon: 'ti-crown' },
-  { href: '/ecoles', label: 'Trouver une auto-école', icon: 'ti-map-pin' },
   { href: '/mes-auto-ecoles', label: 'Mes auto-écoles', icon: 'ti-user-check' },
-  { href: '/mon-ecole', label: 'Gérer mon auto-école', icon: 'ti-building-store' },
-  { href: '/auto-ecole', label: 'Espace auto-école', icon: 'ti-school' },
   { href: '/notifications', label: 'Notifications', icon: 'ti-bell' },
   { href: '/assistance', label: 'Assistance', icon: 'ti-headset' },
   { href: '/profil', label: 'Profil & réglages', icon: 'ti-user' },
 ];
 
+const SCHOOL_MENU: MenuLink[] = [
+  { href: '/', label: 'Tableau de bord', icon: 'ti-layout-dashboard' },
+  { href: '/auto-ecole', label: 'Packs premium', icon: 'ti-crown' },
+  { href: '/assistance', label: 'Assistance', icon: 'ti-headset' },
+  { href: '/profil', label: 'Profil & réglages', icon: 'ti-user' },
+];
+
+function menuForSpace(space: Space): MenuLink[] {
+  if (space === 'school') return SCHOOL_MENU;
+  return LEARN_MENU;
+}
+
 function SideMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
   const pathname = usePathname();
   const router = useRouter();
+  const space = useSpace();
   const user = useAuthStore((s) => s.user);
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const logout = useAuthStore((s) => s.logout);
+  const links = menuForSpace(space);
+  const crossSpace: Space = space === 'school' ? 'learn' : 'school';
+  const crossSpaceHref = useSpaceUrl(crossSpace);
 
   const go = (href: string) => {
     onClose();
@@ -160,7 +179,7 @@ function SideMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
 
             {/* Links */}
             <nav className="flex-1 overflow-y-auto px-3 py-3" aria-label="Menu">
-              {MENU_LINKS.map((l) => {
+              {links.map((l) => {
                 const active = l.href === '/' ? pathname === '/' : pathname.startsWith(l.href);
                 return (
                   <button
@@ -185,6 +204,25 @@ function SideMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
                   </button>
                 );
               })}
+
+              {/* Cross-space shortcut */}
+              {space !== 'www' && crossSpaceHref && (
+                <a
+                  href={crossSpaceHref}
+                  className="mt-1 flex w-full items-center gap-3.5 rounded-xl px-3.5 py-3 text-left text-sm font-semibold text-secondary transition-colors hover:bg-surface-2"
+                >
+                  <i
+                    className={cn(
+                      'ti text-xl text-secondary',
+                      space === 'school' ? 'ti-school' : 'ti-building-store'
+                    )}
+                    aria-hidden="true"
+                  />
+                  {space === 'school' ? 'Espace élève' : 'Espace auto-école'}
+                  <i className="ti ti-external-link ml-auto text-sm text-muted" aria-hidden="true" />
+                </a>
+              )}
+
               {String(user?.role) === 'ADMIN' && (
                 <button
                   onClick={() => go('/admin')}
@@ -224,12 +262,20 @@ function SideMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
 }
 
 /* ─── Navigation ─────────────────────────────────────────────────────────────── */
-const TAB_LINKS: { href: string; label: string; icon: string; accent: Accent }[] = [
+type TabLink = { href: string; label: string; icon: string; accent: Accent };
+
+const LEARN_TABS: TabLink[] = [
+  { href: '/', label: 'Accueil', icon: 'ti-home', accent: 'blue' },
   { href: '/traffic-signs', label: 'Panneaux', icon: 'ti-road-sign', accent: 'blue' },
   { href: '/quizz', label: "Je m'entraine", icon: 'ti-cards', accent: 'violet' },
   { href: '/exam', label: 'Examens', icon: 'ti-clipboard-check', accent: 'orange' },
   { href: '/profil', label: 'Profil', icon: 'ti-user', accent: 'violet' },
 ];
+
+/** Bottom tabs only make sense in the student (learn) space. */
+function tabsForSpace(space: Space): TabLink[] {
+  return space === 'learn' ? LEARN_TABS : [];
+}
 
 interface AppShellProps {
   children: React.ReactNode;
@@ -240,13 +286,16 @@ interface AppShellProps {
 
 export function AppShell({ children, hideNav = false, padded = false }: AppShellProps) {
   const pathname = usePathname();
+  const space = useSpace();
   const [menuOpen, setMenuOpen] = useState(false);
 
   const isActive = (href: string) => (href === '/' ? pathname === '/' : pathname.startsWith(href));
+  const tabs = tabsForSpace(space);
+  const showTabs = !hideNav && tabs.length > 0;
 
   return (
     <SideMenuContext.Provider value={{ open: () => setMenuOpen(true) }}>
-      <div className="min-h-screen bg-surface">
+      <div className="on-light min-h-screen bg-surface">
         <OfflineBanner />
         <SideMenu open={menuOpen} onClose={() => setMenuOpen(false)} />
         <main
@@ -254,20 +303,22 @@ export function AppShell({ children, hideNav = false, padded = false }: AppShell
           className={cn(
             'mx-auto min-h-screen w-full max-w-md bg-surface',
             padded && 'px-4 py-5',
-            !hideNav && 'pb-28'
+            showTabs && 'pb-28'
           )}
         >
           <PageTransition>{children}</PageTransition>
         </main>
 
-        {/* ── Bottom navigation — 4 tabs (mockup) */}
-        {!hideNav && (
+        {/* ── Bottom navigation — student space only */}
+        {showTabs && (
           <nav
-            className="fixed inset-x-0 bottom-0 z-40 mx-auto max-w-md border-t border-token bg-surface-1/95 shadow-nav backdrop-blur-xl pb-[env(safe-area-inset-bottom)]"
+            className={cn(
+              'fixed inset-x-0 bottom-0 z-40 mx-auto max-w-md border-t border-token bg-surface-1/95 shadow-nav backdrop-blur-xl pb-[env(safe-area-inset-bottom)]'
+            )}
             aria-label="Navigation principale"
           >
-            <div className="grid grid-cols-4">
-              {TAB_LINKS.map((tab) => {
+            <div className={cn('grid', tabs.length === 5 ? 'grid-cols-5' : 'grid-cols-4')}>
+              {tabs.map((tab) => {
                 const active = isActive(tab.href);
                 const a = ACCENT[tab.accent];
                 return (
@@ -318,7 +369,7 @@ export function MenuButton({ className }: { className?: string }) {
     <button
       onClick={open}
       className={cn(
-        'flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/15 transition-colors hover:bg-white/25',
+        'flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-surface-2 text-secondary transition-colors hover:bg-surface-3',
         className
       )}
       aria-label="Ouvrir le menu"
@@ -328,7 +379,13 @@ export function MenuButton({ className }: { className?: string }) {
   );
 }
 
-/* ─── PageHeader — full-bleed colored header used by each section ─────────────── */
+const ACCENT_CHIP: Record<Accent, string> = {
+  blue: 'chip-primary',
+  violet: 'chip-violet',
+  orange: 'chip-orange',
+};
+
+/* ─── PageHeader — light section header (matches the marketing site) ─────────── */
 interface PageHeaderProps {
   title: string;
   subtitle?: string;
@@ -343,6 +400,8 @@ interface PageHeaderProps {
   children?: React.ReactNode;
   /** Compact removes the large vertical padding. */
   compact?: boolean;
+  /** Small kicker shown in the accent chip above the title. */
+  eyebrow?: string;
 }
 
 export function PageHeader({
@@ -354,36 +413,21 @@ export function PageHeader({
   actions,
   children,
   compact,
+  eyebrow,
 }: PageHeaderProps) {
-  const a = ACCENT[accent];
   return (
-    <header className="relative overflow-hidden rounded-b-[28px] text-white shadow-lg">
-      {/* blurred background photo */}
-      <Image
-        src="/images/home/header.png"
-        alt=""
-        fill
-        priority
-        className="scale-125 object-cover blur-xl"
-      />
-      {/* accent tint over the photo so text stays legible */}
-      <div className={cn('absolute inset-0 bg-gradient-to-br opacity-85', a.grad)} />
-
-      {/* soft decorative blobs */}
-      <div className="pointer-events-none absolute -right-10 -top-12 h-40 w-40 rounded-full bg-white/10" />
-      <div className="pointer-events-none absolute -left-8 top-10 h-24 w-24 rounded-full bg-white/5" />
-
+    <header className="border-b border-token bg-surface-1">
       <div
         className={cn(
-          'relative px-5 pt-[calc(env(safe-area-inset-top)+16px)]',
-          compact ? 'pb-4' : 'pb-6'
+          'mx-auto max-w-md px-5 pt-[calc(env(safe-area-inset-top)+16px)]',
+          compact ? 'pb-4' : 'pb-5'
         )}
       >
         <div className="flex items-center gap-3">
           {back ? (
             <Link
               href={back}
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/15 transition-colors hover:bg-white/25"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-surface-2 text-secondary transition-colors hover:bg-surface-3"
               aria-label="Retour"
             >
               <i className="ti ti-chevron-left text-lg" aria-hidden="true" />
@@ -393,8 +437,13 @@ export function PageHeader({
           ) : null}
 
           <div className="min-w-0 flex-1">
-            <h1 className="truncate font-display text-xl font-extrabold leading-tight">{title}</h1>
-            {subtitle && <p className="mt-0.5 truncate text-xs text-white/80">{subtitle}</p>}
+            {eyebrow && (
+              <span className={cn('chip mb-1', ACCENT_CHIP[accent])}>{eyebrow}</span>
+            )}
+            <h1 className="truncate font-display text-xl font-extrabold leading-tight text-foreground">
+              {title}
+            </h1>
+            {subtitle && <p className="mt-0.5 truncate text-xs text-secondary">{subtitle}</p>}
           </div>
 
           {actions && <div className="flex shrink-0 items-center gap-2">{actions}</div>}

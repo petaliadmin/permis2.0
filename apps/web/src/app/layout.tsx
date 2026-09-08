@@ -8,6 +8,10 @@ import { ThemeInit } from '@/components/ThemeInit';
 import { OnboardingGate } from '@/components/OnboardingGate';
 import { PushPermissionBanner } from '@/components/PushPermissionBanner';
 import { EntitlementProvider } from '@/components/EntitlementProvider';
+import { SpaceProvider } from '@/components/SpaceProvider';
+import { SessionSync } from '@/components/SessionSync';
+import { headers } from 'next/headers';
+import { spaceFromHost, type Space } from '@/lib/space';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -108,7 +112,10 @@ export const viewport: Viewport = {
   viewportFit: 'cover',
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const h = await headers();
+  const space: Space = (h.get('x-permis-space') as Space) || spaceFromHost(h.get('host'));
+
   return (
     // Dark theme is the default across the app — the `dark` class is applied
     // server-side too so first paint is dark, not a light-then-dark flash.
@@ -140,7 +147,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         >
           Aller au contenu principal
         </a>
-        <EntitlementProvider>{children}</EntitlementProvider>
+        <SessionSync />
+        <SpaceProvider space={space}>
+          <EntitlementProvider>{children}</EntitlementProvider>
+        </SpaceProvider>
         <InstallPrompt />
         <PushPermissionBanner />
         <ServiceWorkerRegister />

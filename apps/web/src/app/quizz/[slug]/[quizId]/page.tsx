@@ -146,7 +146,7 @@ function ResultScreen({
     circ = 2 * Math.PI * r;
 
   return (
-    <div className="flex min-h-screen flex-col bg-surface px-5 pt-[calc(env(safe-area-inset-top)+24px)] pb-8">
+    <div className="on-light flex min-h-screen flex-col bg-surface px-5 pt-[calc(env(safe-area-inset-top)+24px)] pb-8">
       <h1 className="text-center font-display text-lg font-bold text-foreground">Résultat</h1>
 
       <motion.div
@@ -230,7 +230,7 @@ function ResultScreen({
 
 function PaywallScreen({ quizTitle, ctaHref }: { quizTitle: string; ctaHref: string }) {
   return (
-    <div className="flex min-h-screen flex-col bg-surface">
+    <div className="on-light flex min-h-screen flex-col bg-surface">
       <div className="flex-1 px-6 pt-16 text-center">
         <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-3xl bg-violet-100 text-3xl">
           🔒
@@ -477,7 +477,7 @@ export default function QuizPlayerPage() {
 
   if (!category || !quizConfig) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-surface">
+      <div className="on-light flex min-h-screen items-center justify-center bg-surface">
         <p className="text-secondary">
           Quiz introuvable.{' '}
           <Link href="/quizz" className="text-violet-600 underline">
@@ -492,7 +492,7 @@ export default function QuizPlayerPage() {
   // flash the paywall.
   if (!isFreeSeries && !entitlementsReady) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-surface">
+      <div className="on-light flex min-h-screen items-center justify-center bg-surface">
         <div className="h-8 w-8 animate-spin rounded-full border-4 border-violet-500 border-t-transparent" />
       </div>
     );
@@ -507,7 +507,7 @@ export default function QuizPlayerPage() {
   }
   if (phase === 'loading' || (phase === 'quiz' && !q)) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-surface">
+      <div className="on-light flex min-h-screen items-center justify-center bg-surface">
         <div className="h-8 w-8 animate-spin rounded-full border-4 border-violet-500 border-t-transparent" />
       </div>
     );
@@ -527,7 +527,7 @@ export default function QuizPlayerPage() {
 
   /* ── Quiz question ── */
   return (
-    <div className="flex min-h-svh flex-col bg-surface">
+    <div className="on-light flex min-h-svh flex-col bg-surface">
       <header className="sticky top-0 z-20 bg-surface/95 px-4 pt-[calc(env(safe-area-inset-top)+12px)] pb-3 backdrop-blur-xl">
         <div className="mx-auto flex max-w-lg items-center gap-3">
           <Link
@@ -597,7 +597,7 @@ export default function QuizPlayerPage() {
             {/* Subcategory chip — shows which topic this question tests */}
             {quizConfig.categoryKeys.length > 1 && (
               <div className="mb-3">
-                <span className="inline-flex items-center gap-1 rounded-full bg-violet-100 px-2.5 py-0.5 text-[11px] font-bold text-violet-700 dark:bg-violet-900/30 dark:text-violet-300">
+                <span className="inline-flex items-center gap-1 rounded-full bg-violet-100 px-2.5 py-0.5 text-[11px] font-bold text-violet-700">
                   <i className="ti ti-tag text-[10px]" aria-hidden="true" />
                   {q.categorie}
                 </span>

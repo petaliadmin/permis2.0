@@ -49,7 +49,7 @@ function Stars({ count }: { count: number }) {
       {[1, 2, 3].map((n) => (
         <i
           key={n}
-          className={`ti ti-star-filled text-sm ${n <= count ? 'text-amber-400' : 'text-slate-200 dark:text-slate-700'}`}
+          className={`ti ti-star-filled text-sm ${n <= count ? 'text-amber-400' : 'text-slate-200'}`}
           aria-hidden="true"
         />
       ))}
@@ -80,7 +80,7 @@ export default function CategoryPage() {
 
   if (!category) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-surface">
+      <div className="on-light flex min-h-screen items-center justify-center bg-surface">
         <p className="text-secondary">
           Catégorie introuvable.{' '}
           <Link href="/quizz" className="text-violet-600 underline">
@@ -152,11 +152,11 @@ export default function CategoryPage() {
               >
                 <button
                   onClick={() => handleStart(quiz.id)}
-                  className={`flex w-full items-center gap-4 rounded-2xl border p-4 text-left shadow-soft transition-transform active:scale-[0.98] ${isMaitrise ? 'border-amber-200 bg-amber-50/60 dark:border-amber-800/40 dark:bg-amber-950/20' : 'border-token bg-surface-1'}`}
+                  className={`flex w-full items-center gap-4 rounded-2xl border p-4 text-left shadow-soft transition-transform active:scale-[0.98] ${isMaitrise ? 'border-amber-200 bg-amber-50/60' : 'border-token bg-surface-1'}`}
                 >
                   {/* Emoji badge */}
                   <div
-                    className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl text-2xl ${isMaitrise ? 'bg-amber-100 dark:bg-amber-900/30' : 'bg-surface-2'}`}
+                    className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl text-2xl ${isMaitrise ? 'bg-amber-100' : 'bg-surface-2'}`}
                   >
                     {unlocked ? (
                       quiz.emoji
@@ -171,7 +171,7 @@ export default function CategoryPage() {
                         {quiz.title}
                       </p>
                       {isMaitrise && (
-                        <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-bold text-amber-700 dark:bg-amber-900/40 dark:text-amber-400">
+                        <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-bold text-amber-700">
                           Maîtrise
                         </span>
                       )}
@@ -182,7 +182,7 @@ export default function CategoryPage() {
                         </span>
                       )}
                       {status === 'in-progress' && (
-                        <span className="inline-flex items-center gap-1 rounded-full bg-violet-50 px-2 py-0.5 text-[10px] font-bold text-violet-600 dark:bg-violet-900/30 dark:text-violet-300">
+                        <span className="inline-flex items-center gap-1 rounded-full bg-violet-50 px-2 py-0.5 text-[10px] font-bold text-violet-600">
                           <i className="ti ti-progress text-xs" aria-hidden="true" />
                           En cours
                         </span>

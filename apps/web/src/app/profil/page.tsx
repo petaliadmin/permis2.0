@@ -6,7 +6,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { AppShell, PageHeader } from '@/components/AppShell';
 import { useAuthStore, formatPhone } from '@/store/authStore';
-import { useThemeStore, type ThemeMode } from '@/store/themeStore';
 import { useSettingsStore } from '@/store/settingsStore';
 import { usePurchasesStore } from '@/store/purchasesStore';
 import { useNotificationStore } from '@/store/notificationStore';
@@ -30,13 +29,6 @@ const LEVEL_META: Record<string, { next: number; color: string; chip: string }> 
   Confirmé: { next: 600, color: 'bg-violet-500', chip: 'bg-violet-100 text-violet-700' },
   Expert: { next: 9999, color: 'bg-amber-500', chip: 'bg-amber-100 text-amber-700' },
 };
-
-const THEME_LABEL: Record<ThemeMode, string> = {
-  light: '☀️ Clair',
-  dark: '🌙 Sombre',
-  system: '🖥 Système',
-};
-const THEME_NEXT: Record<ThemeMode, ThemeMode> = { light: 'dark', dark: 'system', system: 'light' };
 
 /* ── Rows ───────────────────────────────────────────────────────────────────── */
 function SettingRow({
@@ -176,7 +168,6 @@ export default function ProfilPage() {
   const authPhone = useAuthStore((s) => s.phone);
   const isAuth = useAuthStore((s) => s.isAuthenticated);
   const logout = useAuthStore((s) => s.logout);
-  const { theme, setTheme } = useThemeStore();
   const soundEnabled = useSettingsStore((s) => s.soundEnabled);
   const setSoundEnabled = useSettingsStore((s) => s.setSoundEnabled);
 
@@ -233,12 +224,12 @@ export default function ProfilPage() {
         actions={
           <Link
             href="/notifications"
-            className="relative flex h-9 w-9 items-center justify-center rounded-full bg-white/15"
+            className="relative flex h-9 w-9 items-center justify-center rounded-full bg-surface-2 text-secondary transition-colors hover:bg-surface-3"
             aria-label="Notifications"
           >
             <i className="ti ti-bell text-base" aria-hidden="true" />
             {unreadCount > 0 && (
-              <span className="absolute right-1.5 top-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-orange-400 text-[9px] font-black text-white ring-2 ring-primary-700">
+              <span className="absolute right-1 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-orange-500 text-[9px] font-black text-white ring-2 ring-surface-1">
                 {unreadCount > 9 ? '9+' : unreadCount}
               </span>
             )}
@@ -251,7 +242,7 @@ export default function ProfilPage() {
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          className="-mt-6 rounded-3xl border border-token bg-surface-1 p-5 shadow-card"
+          className="mt-4 rounded-3xl border border-token bg-surface-1 p-5 shadow-card"
         >
           <div className="flex items-center gap-4">
             <div className="relative shrink-0">
@@ -357,13 +348,6 @@ export default function ProfilPage() {
 
         {/* ── Réglages ─── */}
         <div className="mt-6 rounded-2xl border border-token bg-surface-1 px-4 shadow-soft">
-          <SettingRow
-            icon="ti-palette"
-            label="Thème"
-            value={THEME_LABEL[theme]}
-            chevron={false}
-            onClick={() => setTheme(THEME_NEXT[theme])}
-          />
           <SettingRow
             icon={soundEnabled ? 'ti-volume' : 'ti-volume-off'}
             label="Sons des quiz"

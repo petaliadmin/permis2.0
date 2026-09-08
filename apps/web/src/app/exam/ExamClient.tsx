@@ -86,7 +86,7 @@ export default function ExamClient() {
             <button
               key={t.id}
               onClick={() => setTab(t.id)}
-              className={`shrink-0 rounded-full px-4 py-1.5 text-xs font-bold transition-colors ${tab === t.id ? 'bg-white text-orange-600' : 'bg-white/15 text-white'}`}
+              className={`shrink-0 rounded-full px-4 py-1.5 text-xs font-bold transition-colors ${tab === t.id ? 'bg-orange-500 text-white' : 'bg-surface-2 text-secondary'}`}
             >
               {t.label}
             </button>

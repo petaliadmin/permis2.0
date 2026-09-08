@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { spaceFromHost, ownerOf, hostForSpace } from '@/lib/space';
 
 // Only routes that are entirely meaningless without an account.
 // Everything else is accessible as a guest; individual pages prompt for
@@ -9,14 +10,32 @@ const PROTECTED_ROUTES = ['/notifications', '/admin'];
 const AUTH_ROUTES = ['/auth/login', '/auth/register', '/auth/forgot-password'];
 
 export function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
+  const { pathname, search } = request.nextUrl;
+  // In dev `request.url` / `nextUrl.host` report the server address, not the
+  // incoming Host — the real subdomain is only in the header.
+  const host = request.headers.get('host') ?? request.nextUrl.host;
+  const proto =
+    request.headers.get('x-forwarded-proto') ?? request.nextUrl.protocol.replace(':', '');
+  const space = spaceFromHost(host);
+
+  // ── Cross-space normalization ──────────────────────────────────────────────
+  // A deep link to a route owned by another space is bounced to the owning
+  // host (same path). Convenience only — never a security check.
+  const owner = ownerOf(pathname);
+  if (owner && owner !== space) {
+    const targetHost = hostForSpace(host, owner);
+    if (targetHost !== host) {
+      return NextResponse.redirect(`${proto}://${targetHost}${pathname}${search}`, 308);
+    }
+  }
+
   const token = request.cookies.get('access_token')?.value;
   const isProtected = PROTECTED_ROUTES.some((route) => pathname.startsWith(route));
   const isAuthRoute = AUTH_ROUTES.some((route) => pathname.startsWith(route));
 
   if (isProtected && !token) {
     const loginUrl = new URL('/auth/login', request.url);
-    loginUrl.searchParams.set('redirect', pathname);
+    loginUrl.searchParams.set('redirect', pathname + search);
     return NextResponse.redirect(loginUrl);
   }
 
@@ -24,7 +43,10 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/', request.url));
   }
 
-  return NextResponse.next();
+  // Expose the current space to Server Components via `headers()`.
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set('x-permis-space', space);
+  return NextResponse.next({ request: { headers: requestHeaders } });
 }
 
 export const config = {

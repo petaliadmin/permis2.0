@@ -5,8 +5,7 @@ import { useRouter } from 'next/navigation';
 import type { School } from '@permis2.0/types';
 import { Skeleton } from '@permis2.0/ui';
 import { useAuthStore } from '@/store/authStore';
-import { SiteHeader } from '@/components/SiteHeader';
-import { SiteFooter } from '@/components/SiteFooter';
+import { SchoolShell } from '@/components/SchoolShell';
 import { CreateSchoolForm } from './CreateSchoolForm';
 import { SchoolDashboard } from './SchoolDashboard';
 
@@ -15,8 +14,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 function GuestPrompt() {
   const router = useRouter();
   return (
-    <div className="min-h-screen bg-surface">
-      <SiteHeader />
+    <SchoolShell>
       <div className="mx-auto flex max-w-md flex-col items-center px-4 py-20 text-center">
         <span className="chip chip-primary mb-4">
           <i className="ti ti-building-store" aria-hidden="true" />
@@ -28,7 +26,7 @@ function GuestPrompt() {
           Connectez-vous pour créer ou gérer votre auto-école sur PERMIS 2.0.
         </p>
         <button
-          onClick={() => router.push('/auth/login?redirect=/mon-ecole')}
+          onClick={() => router.push('/auth/login?redirect=/')}
           className="btn-primary mt-6 w-full"
         >
           Se connecter
@@ -37,8 +35,7 @@ function GuestPrompt() {
           Créer un compte
         </button>
       </div>
-      <SiteFooter />
-    </div>
+    </SchoolShell>
   );
 }
 
@@ -50,8 +47,7 @@ function SchoolPicker({
   onPick: (school: School) => void;
 }) {
   return (
-    <div className="min-h-screen bg-surface">
-      <SiteHeader />
+    <SchoolShell>
       <div className="mx-auto max-w-lg px-4 py-16">
         <h1 className="font-display text-2xl font-extrabold text-foreground">Vos auto-écoles</h1>
         <p className="mt-1 text-sm text-secondary">Choisissez une auto-école à gérer.</p>
@@ -71,8 +67,7 @@ function SchoolPicker({
           ))}
         </div>
       </div>
-      <SiteFooter />
-    </div>
+    </SchoolShell>
   );
 }
 
@@ -99,13 +94,12 @@ export default function GestionClient() {
 
   if (schools === null) {
     return (
-      <div className="min-h-screen bg-surface">
-        <SiteHeader />
+      <SchoolShell>
         <div className="mx-auto max-w-5xl space-y-4 px-4 py-8">
           <Skeleton className="h-24 w-full" />
           <Skeleton className="h-64 w-full" />
         </div>
-      </div>
+      </SchoolShell>
     );
   }
 

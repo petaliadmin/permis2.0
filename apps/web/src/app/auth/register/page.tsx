@@ -1,11 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuthStore, isValidSnPhone } from '@/store/authStore';
 import { CodeInput } from '@/components/CodeInput';
+import { gotoSpace, spaceForProfile } from '@/lib/space';
+import { getIntendedProfile } from '@/lib/onboarding';
 
 const STEPS = [
   { key: 'name', label: 'Nom' },
@@ -14,7 +15,6 @@ const STEPS = [
 ] as const;
 
 export default function RegisterPage() {
-  const router = useRouter();
   const registerWithPin = useAuthStore((s) => s.registerWithPin);
   const isLoading = useAuthStore((s) => s.isLoading);
   const storeError = useAuthStore((s) => s.error);
@@ -46,12 +46,9 @@ export default function RegisterPage() {
     setErr('');
     if (pin.length !== 4) return setErr('Choisissez un code à 4 chiffres.');
     if (pin !== pinConfirm) return setErr('Les deux codes ne correspondent pas.');
-    const intended = localStorage.getItem('intended_profile_type') as
-      | 'PARTICULIER'
-      | 'AUTO_ECOLE'
-      | null;
+    const intended = getIntendedProfile();
     await registerWithPin(name.trim(), phone, pin, intended ?? undefined);
-    router.push(intended === 'AUTO_ECOLE' ? '/auto-ecole' : '/');
+    gotoSpace(spaceForProfile(intended));
   };
 
   return (

@@ -1,14 +1,16 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useAuthStore, isValidSnPhone } from '@/store/authStore';
 import { CodeInput } from '@/components/CodeInput';
+import { gotoSpace, spaceForProfile } from '@/lib/space';
 
 export default function LoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const loginWithPin = useAuthStore((s) => s.loginWithPin);
   const isLoading = useAuthStore((s) => s.isLoading);
 
@@ -22,7 +24,12 @@ export default function LoginPage() {
     if (pin.length !== 4) return setErr('Entrez votre code à 4 chiffres.');
     try {
       await loginWithPin(phone, pin);
-      router.push('/');
+      const redirect = searchParams.get('redirect');
+      if (redirect && redirect.startsWith('/')) {
+        router.push(redirect);
+        return;
+      }
+      gotoSpace(spaceForProfile(useAuthStore.getState().user?.profileType));
     } catch {
       setErr(useAuthStore.getState().error || 'Connexion impossible.');
     }
