@@ -77,6 +77,11 @@ enum SchoolPaymentStatus {
   CANCELLED
 }
 
+enum SchoolPaymentType {
+  DEVIS
+  FACTURE
+}
+
 model User {
   id           String      @id @default(cuid())
   email        String?     @unique
@@ -657,14 +662,19 @@ model School {
 model SchoolMembership {
   id        String           @id @default(cuid())
   schoolId  String
-  userId    String
+  userId    String?
+  /// Set only when userId is null — a staff member added without a PERMIS 2.0
+  /// account yet. Cleared (and userId filled in) once they register with a
+  /// matching phone — see AuthService.linkGuestSchoolRows.
+  guestName  String?
+  guestPhone String?
   role      SchoolMemberRole
   active    Boolean          @default(true)
   createdAt DateTime         @default(now())
   updatedAt DateTime         @updatedAt
 
   school School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user   User?  @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   assignedStudents SchoolStudent[]
   sessions         Session[]
@@ -672,6 +682,7 @@ model SchoolMembership {
   @@unique([schoolId, userId, role])
   @@index([schoolId])
   @@index([userId])
+  @@index([guestPhone])
   @@map("school_memberships")
 }
 
@@ -714,7 +725,12 @@ model SchoolEnrollmentRequest {
 model SchoolStudent {
   id                             String              @id @default(cuid())
   schoolId                       String
-  userId                         String
+  userId                         String?
+  /// Set only when userId is null — a student added without a PERMIS 2.0
+  /// account yet (manual add, contact import, CSV/Excel import). Cleared
+  /// (and userId filled in) once they register with a matching phone.
+  guestName                      String?
+  guestPhone                     String?
   enrollmentRequestId            String?             @unique
   licenseCategory                String?
   status                         SchoolStudentStatus @default(ACTIVE)
@@ -725,7 +741,7 @@ model SchoolStudent {
   assignedVehicleId              String?
 
   school             School                   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
-  user               User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user               User?                    @relation(fields: [userId], references: [id], onDelete: Cascade)
   enrollmentRequest  SchoolEnrollmentRequest? @relation(fields: [enrollmentRequestId], references: [id])
   assignedInstructor SchoolMembership?        @relation(fields: [assignedInstructorMembershipId], references: [id], onDelete: SetNull)
   assignedVehicle    Vehicle?                 @relation(fields: [assignedVehicleId], references: [id], onDelete: SetNull)
@@ -735,6 +751,7 @@ model SchoolStudent {
   @@unique([schoolId, userId])
   @@index([schoolId, status])
   @@index([userId])
+  @@index([guestPhone])
   @@map("school_students")
 }
 
@@ -798,8 +815,16 @@ model SchoolPayment {
   id          String              @id @default(cuid())
   schoolId    String
   studentId   String
+  type        SchoolPaymentType   @default(FACTURE)
+  /// Sequential per-school, per-type, per-year reference (e.g. "F-2026-0001",
+  /// "D-2026-0001"), generated server-side in SchoolService.createPayment.
+  number      String?
   amountXof   Int
   description String
+  /// Line items ({ label, qty, unitPriceXof }[]) backing amountXof. Optional
+  /// so older rows (created before line items existed) stay valid.
+  items       Json?
+  notes       String?
   status      SchoolPaymentStatus @default(PENDING)
   method      String?
   dueDate     DateTime?

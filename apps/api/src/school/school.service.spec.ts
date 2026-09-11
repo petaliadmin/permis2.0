@@ -51,7 +51,8 @@ describe('SchoolService — tenant isolation', () => {
       },
     };
     notificationService = { create: jest.fn().mockResolvedValue(undefined) };
-    service = new SchoolService(prisma, notificationService as any);
+    const emailService = { sendPdf: jest.fn().mockResolvedValue(undefined) };
+    service = new SchoolService(prisma, notificationService as any, emailService as any);
   });
 
   describe('removeMember', () => {
@@ -145,6 +146,7 @@ describe('SchoolService — tenant isolation', () => {
           schoolId: 's1',
           active: true,
           role: { in: [SchoolMemberRole.OWNER, SchoolMemberRole.MANAGER, SchoolMemberRole.SECRETARY] },
+          userId: { not: null },
         },
         select: { userId: true },
       });

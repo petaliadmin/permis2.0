@@ -6,6 +6,7 @@ import {
   SchoolEnrollmentStatus,
   SchoolMemberRole,
   SchoolPaymentStatus,
+  SchoolPaymentType,
   SchoolStatus,
   SchoolStudentStatus,
 } from '@permis2.0/types';
@@ -22,6 +23,17 @@ import { CreateSessionDto } from './dto/create-session.dto';
 import { UpdateSessionDto } from './dto/update-session.dto';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
+import { BulkAddStudentsDto } from './dto/bulk-add-students.dto';
+import { BulkAddMembersDto } from './dto/bulk-add-members.dto';
+import { BulkCreateVehiclesDto } from './dto/bulk-create-vehicles.dto';
+import { SendPaymentEmailDto } from './dto/send-payment-email.dto';
+import { EmailService } from '../email/email.service';
+
+export interface BulkRowResult {
+  index: number;
+  ok: boolean;
+  error?: string;
+}
 
 const EXPIRY_ALERT_WINDOW_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
 
@@ -63,8 +75,14 @@ function withStudentsCount<T extends { _count: { students: number } }>(
 export class SchoolService {
   constructor(
     private prisma: PrismaService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private emailService: EmailService
   ) {}
+
+  /** Normalizes to the same 9-digit local format User.phone/guestPhone are stored in. */
+  private normalizePhone(phone: string): string {
+    return phone.replace(/\D/g, '').replace(/^221/, '');
+  }
 
   async listActive(filters: {
     city?: string;
@@ -229,9 +247,8 @@ export class SchoolService {
 
   /** Exact phone match only — no fuzzy search, and only {id,name,phone} are exposed. */
   async lookupUserByPhone(phone: string) {
-    const normalized = phone.replace(/\D/g, '').replace(/^221/, '');
     const user = await this.prisma.user.findUnique({
-      where: { phone: normalized },
+      where: { phone: this.normalizePhone(phone) },
       select: { id: true, name: true, phone: true },
     });
     if (!user) throw new NotFoundException('Aucun utilisateur avec ce numéro');
@@ -239,13 +256,24 @@ export class SchoolService {
   }
 
   async addMember(schoolId: string, dto: AddSchoolMemberDto) {
-    const user = await this.prisma.user.findUnique({ where: { id: dto.userId } });
-    if (!user) throw new NotFoundException('Utilisateur introuvable');
+    if (dto.userId) {
+      const user = await this.prisma.user.findUnique({ where: { id: dto.userId } });
+      if (!user) throw new NotFoundException('Utilisateur introuvable');
 
-    return this.prisma.schoolMembership.upsert({
-      where: { schoolId_userId_role: { schoolId, userId: dto.userId, role: dto.role } },
-      create: { schoolId, userId: dto.userId, role: dto.role },
-      update: { active: true },
+      return this.prisma.schoolMembership.upsert({
+        where: { schoolId_userId_role: { schoolId, userId: dto.userId, role: dto.role } },
+        create: { schoolId, userId: dto.userId, role: dto.role },
+        update: { active: true },
+      });
+    }
+
+    return this.prisma.schoolMembership.create({
+      data: {
+        schoolId,
+        role: dto.role,
+        guestName: dto.guestName,
+        guestPhone: this.normalizePhone(dto.guestPhone!),
+      },
     });
   }
 
@@ -289,13 +317,13 @@ export class SchoolService {
     });
 
     const staff = await this.prisma.schoolMembership.findMany({
-      where: { schoolId, active: true, role: { in: STAFF_NOTIFIABLE_ROLES } },
+      where: { schoolId, active: true, role: { in: STAFF_NOTIFIABLE_ROLES }, userId: { not: null } },
       select: { userId: true },
     });
     await Promise.all(
       staff.map((m) =>
         this.notificationService.create(
-          m.userId,
+          m.userId!,
           'Nouvelle pré-inscription',
           `${dto.firstName} ${dto.lastName} a demandé à s'inscrire à ${school.name}.`,
           'info'
@@ -434,15 +462,103 @@ export class SchoolService {
   }
 
   async addStudent(schoolId: string, dto: AddStudentDto) {
-    const user = await this.prisma.user.findUnique({ where: { id: dto.userId } });
-    if (!user) throw new NotFoundException('Utilisateur introuvable');
+    if (dto.userId) {
+      const user = await this.prisma.user.findUnique({ where: { id: dto.userId } });
+      if (!user) throw new NotFoundException('Utilisateur introuvable');
 
-    // Idempotent: adding an already-attached student just updates their category.
-    return this.prisma.schoolStudent.upsert({
-      where: { schoolId_userId: { schoolId, userId: dto.userId } },
-      create: { schoolId, userId: dto.userId, licenseCategory: dto.licenseCategory },
-      update: { licenseCategory: dto.licenseCategory },
+      // Idempotent: adding an already-attached student just updates their category.
+      return this.prisma.schoolStudent.upsert({
+        where: { schoolId_userId: { schoolId, userId: dto.userId } },
+        create: { schoolId, userId: dto.userId, licenseCategory: dto.licenseCategory },
+        update: { licenseCategory: dto.licenseCategory },
+      });
+    }
+
+    return this.prisma.schoolStudent.create({
+      data: {
+        schoolId,
+        licenseCategory: dto.licenseCategory,
+        guestName: dto.guestName,
+        guestPhone: this.normalizePhone(dto.guestPhone!),
+      },
     });
+  }
+
+  // ─── Import en masse (contact, CSV/Excel) ────────────────────────────────────
+
+  /**
+   * Each row is resolved to an existing account by phone when possible,
+   * otherwise created as a guest — same rule as the single-row add flows.
+   * Rows are processed independently so one bad row doesn't block the rest.
+   */
+  async addStudentsBulk(schoolId: string, dto: BulkAddStudentsDto): Promise<BulkRowResult[]> {
+    const results: BulkRowResult[] = [];
+    for (let index = 0; index < dto.rows.length; index++) {
+      const row = dto.rows[index];
+      try {
+        const phone = this.normalizePhone(row.phone);
+        const existingUser = await this.prisma.user.findUnique({ where: { phone } });
+        if (existingUser) {
+          await this.prisma.schoolStudent.upsert({
+            where: { schoolId_userId: { schoolId, userId: existingUser.id } },
+            create: { schoolId, userId: existingUser.id, licenseCategory: row.licenseCategory },
+            update: { licenseCategory: row.licenseCategory },
+          });
+        } else {
+          await this.prisma.schoolStudent.create({
+            data: { schoolId, guestName: row.name, guestPhone: phone, licenseCategory: row.licenseCategory },
+          });
+        }
+        results.push({ index, ok: true });
+      } catch (err: any) {
+        results.push({ index, ok: false, error: err?.message || 'Erreur inconnue' });
+      }
+    }
+    return results;
+  }
+
+  async addMembersBulk(schoolId: string, dto: BulkAddMembersDto): Promise<BulkRowResult[]> {
+    const results: BulkRowResult[] = [];
+    for (let index = 0; index < dto.rows.length; index++) {
+      const row = dto.rows[index];
+      try {
+        const phone = this.normalizePhone(row.phone);
+        const existingUser = await this.prisma.user.findUnique({ where: { phone } });
+        if (existingUser) {
+          await this.prisma.schoolMembership.upsert({
+            where: { schoolId_userId_role: { schoolId, userId: existingUser.id, role: row.role } },
+            create: { schoolId, userId: existingUser.id, role: row.role },
+            update: { active: true },
+          });
+        } else {
+          await this.prisma.schoolMembership.create({
+            data: { schoolId, guestName: row.name, guestPhone: phone, role: row.role },
+          });
+        }
+        results.push({ index, ok: true });
+      } catch (err: any) {
+        results.push({ index, ok: false, error: err?.message || 'Erreur inconnue' });
+      }
+    }
+    return results;
+  }
+
+  async createVehiclesBulk(schoolId: string, dto: BulkCreateVehiclesDto): Promise<BulkRowResult[]> {
+    const results: BulkRowResult[] = [];
+    for (let index = 0; index < dto.rows.length; index++) {
+      const row = dto.rows[index];
+      try {
+        await this.prisma.vehicle.upsert({
+          where: { schoolId_plate: { schoolId, plate: row.plate } },
+          create: { schoolId, ...row },
+          update: { brand: row.brand, model: row.model, category: row.category },
+        });
+        results.push({ index, ok: true });
+      } catch (err: any) {
+        results.push({ index, ok: false, error: err?.message || 'Erreur inconnue' });
+      }
+    }
+    return results;
   }
 
   // ─── Véhicules ────────────────────────────────────────────────────────────────
@@ -579,6 +695,11 @@ export class SchoolService {
 
   // ─── Paiements (factures manuelles) ──────────────────────────────────────────
 
+  /** Includes email — needed to prefill the "envoyer par email" share action. */
+  private static readonly PAYMENT_INCLUDE = {
+    student: { include: { user: { select: { id: true, name: true, phone: true, email: true } } } },
+  } as const;
+
   async listPayments(schoolId: string, studentId?: string, status?: SchoolPaymentStatus) {
     return this.prisma.schoolPayment.findMany({
       where: {
@@ -586,9 +707,19 @@ export class SchoolService {
         ...(studentId ? { studentId } : {}),
         ...(status ? { status } : {}),
       },
-      include: { student: { include: { user: { select: { id: true, name: true, phone: true } } } } },
+      include: SchoolService.PAYMENT_INCLUDE,
       orderBy: { createdAt: 'desc' },
     });
+  }
+
+  /** "F-2026-0001" / "D-2026-0001" — sequential per school, per type, per year. */
+  private async nextPaymentNumber(schoolId: string, type: SchoolPaymentType): Promise<string> {
+    const year = new Date().getFullYear();
+    const prefix = type === SchoolPaymentType.DEVIS ? 'D' : 'F';
+    const count = await this.prisma.schoolPayment.count({
+      where: { schoolId, type, createdAt: { gte: new Date(`${year}-01-01`) } },
+    });
+    return `${prefix}-${year}-${String(count + 1).padStart(4, '0')}`;
   }
 
   async createPayment(schoolId: string, dto: CreatePaymentDto) {
@@ -597,10 +728,39 @@ export class SchoolService {
     });
     if (!student) throw new BadRequestException('Élève introuvable pour cette école');
 
+    const type = dto.type ?? SchoolPaymentType.FACTURE;
+    const amountXof = dto.items.reduce((sum, i) => sum + i.qty * i.unitPriceXof, 0);
+
     return this.prisma.schoolPayment.create({
-      data: { ...dto, schoolId, dueDate: dto.dueDate ? new Date(dto.dueDate) : undefined },
-      include: { student: { include: { user: { select: { id: true, name: true, phone: true } } } } },
+      data: {
+        schoolId,
+        studentId: dto.studentId,
+        type,
+        number: await this.nextPaymentNumber(schoolId, type),
+        amountXof,
+        description: dto.description,
+        items: dto.items as any,
+        notes: dto.notes,
+        method: dto.method,
+        dueDate: dto.dueDate ? new Date(dto.dueDate) : undefined,
+      },
+      include: SchoolService.PAYMENT_INCLUDE,
     });
+  }
+
+  async sendPaymentEmail(schoolId: string, id: string, dto: SendPaymentEmailDto) {
+    // Composite where — the "règle d'or": never trust id alone.
+    const payment = await this.prisma.schoolPayment.findFirst({ where: { id, schoolId } });
+    if (!payment) throw new NotFoundException('Facture introuvable');
+
+    await this.emailService.sendPdf(dto.to, {
+      subject: `${payment.number ?? (payment.type === SchoolPaymentType.DEVIS ? 'Devis' : 'Facture')} — ${payment.description}`,
+      text: `Veuillez trouver ci-joint votre ${payment.type === SchoolPaymentType.DEVIS ? 'devis' : 'facture'}.`,
+      filename: dto.filename,
+      base64: dto.pdfBase64,
+    });
+
+    return { sent: true };
   }
 
   async updatePayment(schoolId: string, id: string, dto: UpdatePaymentDto) {
@@ -615,7 +775,7 @@ export class SchoolService {
         dueDate: dto.dueDate ? new Date(dto.dueDate) : undefined,
         paidAt: dto.status === SchoolPaymentStatus.PAID ? new Date() : undefined,
       },
-      include: { student: { include: { user: { select: { id: true, name: true, phone: true } } } } },
+      include: SchoolService.PAYMENT_INCLUDE,
     });
   }
 

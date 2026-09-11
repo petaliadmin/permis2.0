@@ -123,8 +123,30 @@ export class AuthService {
 
     const pinHash = await bcrypt.hash(pin, 12);
     const user = await this.userService.create({ name, phone, pinHash, profileType });
+    await this.linkGuestSchoolRows(user.id, phone);
 
     return { accessToken: this.generateAccessToken(user), user: this.sanitizeUser(user) };
+  }
+
+  /**
+   * A student/staff member added to a school without a PERMIS 2.0 account
+   * (guestName/guestPhone, no userId) who later registers with that same
+   * phone gets auto-attached to their existing SchoolStudent/SchoolMembership
+   * rows instead of starting from scratch. Best-effort — never blocks registration.
+   */
+  private async linkGuestSchoolRows(userId: string, phone: string) {
+    try {
+      await this.prisma.schoolStudent.updateMany({
+        where: { userId: null, guestPhone: phone },
+        data: { userId, guestName: null, guestPhone: null },
+      });
+      await this.prisma.schoolMembership.updateMany({
+        where: { userId: null, guestPhone: phone },
+        data: { userId, guestName: null, guestPhone: null },
+      });
+    } catch {
+      // Best-effort linkage only — registration must still succeed.
+    }
   }
 
   /** Reset the 4-digit PIN after verifying a fresh SMS OTP. */

@@ -172,15 +172,15 @@ export function SessionsPanel({
     >
       <div className="min-w-0">
         <p className="truncate font-display text-sm font-bold text-foreground">
-          {s.student?.user?.name ?? 'Élève'}
+          {s.student?.user?.name ?? s.student?.guestName ?? 'Élève'}
         </p>
         <p className="text-xs text-secondary">
           {TYPE_LABEL[s.type]} · {fmtDateTime(s.startsAt)}
         </p>
-        {(s.instructor?.user || s.vehicle) && (
+        {(s.instructor || s.vehicle) && (
           <p className="mt-0.5 text-xs text-muted">
-            {s.instructor?.user && `Moniteur : ${s.instructor.user.name}`}
-            {s.instructor?.user && s.vehicle ? ' · ' : ''}
+            {s.instructor && `Moniteur : ${s.instructor.user?.name ?? s.instructor.guestName}`}
+            {s.instructor && s.vehicle ? ' · ' : ''}
             {s.vehicle && `Véhicule : ${s.vehicle.plate}`}
           </p>
         )}
@@ -237,7 +237,7 @@ export function SessionsPanel({
         {open && (
           <div>
             <p className="font-display text-lg font-bold text-foreground">
-              {open.student?.user?.name ?? 'Élève'}
+              {open.student?.user?.name ?? open.student?.guestName ?? 'Élève'}
             </p>
             <span className={cn('chip mt-1', STATUS_CHIP[open.status])}>
               {STATUS_LABEL[open.status]}
@@ -251,9 +251,10 @@ export function SessionsPanel({
                 <i className="ti ti-calendar" aria-hidden="true" /> {fmtDateTime(open.startsAt)} —{' '}
                 {fmtDateTime(open.endsAt)}
               </p>
-              {open.instructor?.user && (
+              {open.instructor && (
                 <p className="flex items-center gap-2">
-                  <i className="ti ti-steering-wheel" aria-hidden="true" /> {open.instructor.user.name}
+                  <i className="ti ti-steering-wheel" aria-hidden="true" />{' '}
+                  {open.instructor.user?.name ?? open.instructor.guestName}
                 </p>
               )}
               {open.vehicle && (
@@ -314,7 +315,7 @@ export function SessionsPanel({
               <option value="">Sélectionner</option>
               {(students ?? []).map((s) => (
                 <option key={s.id} value={s.id}>
-                  {s.user?.name ?? s.id}
+                  {s.user?.name ?? s.guestName ?? s.id}
                 </option>
               ))}
             </select>
@@ -365,7 +366,7 @@ export function SessionsPanel({
               <option value="">Aucun</option>
               {instructors.map((m) => (
                 <option key={m.id} value={m.id}>
-                  {m.user?.name ?? m.id}
+                  {m.user?.name ?? m.guestName ?? m.id}
                 </option>
               ))}
             </select>

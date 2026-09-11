@@ -5,6 +5,8 @@ import type { SchoolMembership } from '@permis2.0/types';
 import { SchoolMemberRole } from '@permis2.0/types';
 import { EmptyState, Skeleton } from '@permis2.0/ui';
 import { cn } from '@/lib/cn';
+import { isContactPickerSupported, pickContacts } from '@/lib/contactPicker';
+import { ImportSheet } from './ImportSheet';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -34,12 +36,16 @@ interface TeamPanelProps {
 }
 
 export function TeamPanel({ schoolId, members, onChanged }: TeamPanelProps) {
+  const [mode, setMode] = useState<'account' | 'guest'>('account');
   const [phone, setPhone] = useState('');
   const [found, setFound] = useState<FoundUser | null>(null);
+  const [guestName, setGuestName] = useState('');
+  const [guestPhone, setGuestPhone] = useState('');
   const [role, setRole] = useState<SchoolMemberRole>(SchoolMemberRole.INSTRUCTOR);
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
   const [removing, setRemoving] = useState<string | null>(null);
+  const [importOpen, setImportOpen] = useState(false);
 
   const lookup = async () => {
     setError('');
@@ -62,18 +68,28 @@ export function TeamPanel({ schoolId, members, onChanged }: TeamPanelProps) {
   };
 
   const addMember = async () => {
-    if (!found) return;
+    if (mode === 'account' && !found) return;
+    if (mode === 'guest' && (!guestName.trim() || !guestPhone.trim())) {
+      setError('Nom et téléphone obligatoires.');
+      return;
+    }
     setBusy(true);
     try {
       const res = await fetch(`${API_URL}/schools/${schoolId}/members`, {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: found.id, role }),
+        body: JSON.stringify(
+          mode === 'account'
+            ? { userId: found!.id, role }
+            : { guestName: guestName.trim(), guestPhone: guestPhone.trim(), role }
+        ),
       });
       if (res.ok) {
         setFound(null);
         setPhone('');
+        setGuestName('');
+        setGuestPhone('');
         onChanged();
       } else {
         setError("Impossible d'ajouter ce membre.");
@@ -81,6 +97,14 @@ export function TeamPanel({ schoolId, members, onChanged }: TeamPanelProps) {
     } finally {
       setBusy(false);
     }
+  };
+
+  const importContact = async () => {
+    const [contact] = await pickContacts(false);
+    if (!contact) return;
+    setMode('guest');
+    setGuestName(contact.name);
+    setGuestPhone(contact.phone);
   };
 
   const removeMember = async (membershipId: string) => {
@@ -99,36 +123,87 @@ export function TeamPanel({ schoolId, members, onChanged }: TeamPanelProps) {
   return (
     <div className="space-y-6">
       <div className="card-clay">
-        <p className="font-display text-sm font-bold text-foreground">Ajouter un membre</p>
-        <p className="mt-1 text-xs text-secondary">
-          La personne doit déjà avoir un compte PERMIS 2.0.
-        </p>
-        <div className="mt-3 flex gap-2">
-          <input
-            value={phone}
-            onChange={(e) => {
-              setPhone(e.target.value);
-              setFound(null);
-            }}
-            placeholder="77 123 45 67"
-            className="flex-1 rounded-xl border border-token bg-surface-2 px-3.5 py-2.5 text-sm focus:border-primary-400 focus:outline-none"
-          />
-          <button onClick={lookup} disabled={busy} className="btn-ghost !px-4 !py-2.5 text-sm">
-            Rechercher
+        <div className="flex items-center justify-between gap-2">
+          <p className="font-display text-sm font-bold text-foreground">Ajouter un membre</p>
+          <button onClick={() => setImportOpen(true)} className="btn-ghost !px-3 !py-1.5 text-xs">
+            <i className="ti ti-file-spreadsheet" aria-hidden="true" />
+            Importer
           </button>
         </div>
+
+        <div className="mt-3 flex gap-2">
+          <button
+            onClick={() => setMode('account')}
+            className={cn('chip', mode === 'account' ? 'chip-primary' : 'bg-surface-2 text-secondary')}
+          >
+            Compte existant
+          </button>
+          <button
+            onClick={() => setMode('guest')}
+            className={cn('chip', mode === 'guest' ? 'chip-primary' : 'bg-surface-2 text-secondary')}
+          >
+            Sans compte
+          </button>
+        </div>
+
+        {mode === 'account' ? (
+          <>
+            <p className="mt-3 text-xs text-secondary">La personne doit déjà avoir un compte PERMIS 2.0.</p>
+            <div className="mt-3 flex gap-2">
+              <input
+                value={phone}
+                onChange={(e) => {
+                  setPhone(e.target.value);
+                  setFound(null);
+                }}
+                placeholder="77 123 45 67"
+                className="flex-1 rounded-xl border border-token bg-surface-2 px-3.5 py-2.5 text-sm focus:border-primary-400 focus:outline-none"
+              />
+              <button onClick={lookup} disabled={busy} className="btn-ghost !px-4 !py-2.5 text-sm">
+                Rechercher
+              </button>
+            </div>
+          </>
+        ) : (
+          <div className="mt-3 space-y-2">
+            {isContactPickerSupported() && (
+              <button onClick={importContact} className="btn-ghost w-full !py-2.5 text-sm">
+                <i className="ti ti-address-book" aria-hidden="true" />
+                Importer un contact du téléphone
+              </button>
+            )}
+            <input
+              value={guestName}
+              onChange={(e) => setGuestName(e.target.value)}
+              placeholder="Nom complet"
+              className="w-full rounded-xl border border-token bg-surface-2 px-3.5 py-2.5 text-sm focus:border-primary-400 focus:outline-none"
+            />
+            <input
+              value={guestPhone}
+              onChange={(e) => setGuestPhone(e.target.value)}
+              placeholder="77 123 45 67"
+              className="w-full rounded-xl border border-token bg-surface-2 px-3.5 py-2.5 text-sm focus:border-primary-400 focus:outline-none"
+            />
+          </div>
+        )}
+
         {error && <p className="mt-2 text-xs font-medium text-danger">{error}</p>}
 
-        {found && (
+        {((mode === 'account' && found) || mode === 'guest') && (
           <div className="mt-3 flex flex-wrap items-center gap-2 rounded-xl bg-surface-2 p-3">
-            <div className="flex-1">
-              <p className="text-sm font-bold text-foreground">{found.name}</p>
-              <p className="text-xs text-secondary">{found.phone}</p>
-            </div>
+            {mode === 'account' && found && (
+              <div className="flex-1">
+                <p className="text-sm font-bold text-foreground">{found.name}</p>
+                <p className="text-xs text-secondary">{found.phone}</p>
+              </div>
+            )}
             <select
               value={role}
               onChange={(e) => setRole(e.target.value as SchoolMemberRole)}
-              className="rounded-full border border-token bg-surface-1 px-3 py-1.5 text-xs font-bold text-secondary focus:border-primary-400 focus:outline-none"
+              className={cn(
+                'rounded-full border border-token bg-surface-1 px-3 py-1.5 text-xs font-bold text-secondary focus:border-primary-400 focus:outline-none',
+                mode === 'guest' && 'flex-1'
+              )}
             >
               {ASSIGNABLE_ROLES.map((r) => (
                 <option key={r} value={r}>
@@ -142,6 +217,14 @@ export function TeamPanel({ schoolId, members, onChanged }: TeamPanelProps) {
           </div>
         )}
       </div>
+
+      <ImportSheet
+        schoolId={schoolId}
+        kind="members"
+        open={importOpen}
+        onClose={() => setImportOpen(false)}
+        onImported={onChanged}
+      />
 
       {members === null ? (
         <div className="space-y-2.5">
@@ -163,15 +246,22 @@ export function TeamPanel({ schoolId, members, onChanged }: TeamPanelProps) {
               className="flex items-center justify-between rounded-2xl border border-token bg-surface-1 p-4 shadow-soft"
             >
               <div>
-                <p className="font-display text-sm font-bold text-foreground">{m.user?.name}</p>
-                <p className="text-xs text-secondary">{m.user?.phone}</p>
+                <p className="font-display text-sm font-bold text-foreground">
+                  {m.user?.name ?? m.guestName}
+                  {!m.userId && (
+                    <span className="ml-1.5 chip bg-surface-2 text-secondary align-middle text-[10px]">
+                      Sans compte
+                    </span>
+                  )}
+                </p>
+                <p className="text-xs text-secondary">{m.user?.phone ?? m.guestPhone}</p>
               </div>
               <div className="flex items-center gap-2">
                 <span className="chip chip-primary">{ROLE_LABEL[m.role]}</span>
                 {m.role !== SchoolMemberRole.OWNER && (
                   <button
                     onClick={() => {
-                      if (confirm(`Retirer ${m.user?.name} de l'équipe ?`)) removeMember(m.id);
+                      if (confirm(`Retirer ${m.user?.name ?? m.guestName} de l'équipe ?`)) removeMember(m.id);
                     }}
                     disabled={removing === m.id}
                     className={cn(

@@ -5,6 +5,8 @@ import type { SchoolMembership, SchoolStudent, Vehicle } from '@permis2.0/types'
 import { SchoolMemberRole, SchoolStudentStatus } from '@permis2.0/types';
 import { EmptyState, Sheet, Skeleton } from '@permis2.0/ui';
 import { cn } from '@/lib/cn';
+import { isContactPickerSupported, pickContacts } from '@/lib/contactPicker';
+import { ImportSheet } from './ImportSheet';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -76,8 +78,12 @@ export function StudentsPanel({
   );
 
   const [addOpen, setAddOpen] = useState(false);
+  const [importOpen, setImportOpen] = useState(false);
+  const [mode, setMode] = useState<'account' | 'guest'>('account');
   const [phone, setPhone] = useState('');
   const [found, setFound] = useState<FoundUser | null>(null);
+  const [guestName, setGuestName] = useState('');
+  const [guestPhone, setGuestPhone] = useState('');
   const [addCategory, setAddCategory] = useState('');
   const [addError, setAddError] = useState('');
   const [busy, setBusy] = useState(false);
@@ -88,7 +94,7 @@ export function StudentsPanel({
   );
   const open = students?.find((s) => s.id === openId) ?? null;
 
-  const patchStudent = async (extra: Record<string, unknown> = {}) => {
+  const patchStudent = async (data: Record<string, unknown>) => {
     if (!open) return;
     setSubmitting(true);
     try {
@@ -96,12 +102,7 @@ export function StudentsPanel({
         method: 'PATCH',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          licenseCategory: category || undefined,
-          assignedInstructorMembershipId: instructorId || null,
-          assignedVehicleId: vehicleId || null,
-          ...extra,
-        }),
+        body: JSON.stringify(data),
       });
       if (res.ok) {
         setOpenId(null);
@@ -112,6 +113,16 @@ export function StudentsPanel({
     }
   };
 
+  const saveAssignment = () =>
+    patchStudent({
+      licenseCategory: category || undefined,
+      assignedInstructorMembershipId: instructorId || null,
+      assignedVehicleId: vehicleId || null,
+    });
+
+  // Status transitions must only touch `status` — sending the local form's
+  // category/instructor/vehicle values here would silently overwrite them
+  // with whatever happens to be in the inputs at that moment.
   const setStatus = (target: string) => patchStudent({ status: target });
 
   const lookup = async () => {
@@ -134,21 +145,37 @@ export function StudentsPanel({
     }
   };
 
+  const closeAdd = () => {
+    setAddOpen(false);
+    setMode('account');
+    setFound(null);
+    setPhone('');
+    setGuestName('');
+    setGuestPhone('');
+    setAddCategory('');
+    setAddError('');
+  };
+
   const addStudent = async () => {
-    if (!found) return;
+    if (mode === 'account' && !found) return;
+    if (mode === 'guest' && (!guestName.trim() || !guestPhone.trim())) {
+      setAddError('Nom et téléphone obligatoires.');
+      return;
+    }
     setBusy(true);
     try {
       const res = await fetch(`${API_URL}/schools/${schoolId}/students`, {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: found.id, licenseCategory: addCategory || undefined }),
+        body: JSON.stringify(
+          mode === 'account'
+            ? { userId: found!.id, licenseCategory: addCategory || undefined }
+            : { guestName: guestName.trim(), guestPhone: guestPhone.trim(), licenseCategory: addCategory || undefined }
+        ),
       });
       if (res.ok) {
-        setAddOpen(false);
-        setFound(null);
-        setPhone('');
-        setAddCategory('');
+        closeAdd();
         onChanged();
       } else {
         setAddError("Impossible d'ajouter cet élève.");
@@ -156,6 +183,14 @@ export function StudentsPanel({
     } finally {
       setBusy(false);
     }
+  };
+
+  const importContact = async () => {
+    const [contact] = await pickContacts(false);
+    if (!contact) return;
+    setMode('guest');
+    setGuestName(contact.name);
+    setGuestPhone(contact.phone);
   };
 
   if (students === null) {
@@ -182,10 +217,16 @@ export function StudentsPanel({
             </button>
           ))}
         </div>
-        <button onClick={() => setAddOpen(true)} className="btn-ghost !px-4 !py-2 text-xs">
-          <i className="ti ti-plus" aria-hidden="true" />
-          Ajouter un élève
-        </button>
+        <div className="flex gap-2">
+          <button onClick={() => setImportOpen(true)} className="btn-ghost !px-4 !py-2 text-xs">
+            <i className="ti ti-file-spreadsheet" aria-hidden="true" />
+            Importer
+          </button>
+          <button onClick={() => setAddOpen(true)} className="btn-ghost !px-4 !py-2 text-xs">
+            <i className="ti ti-plus" aria-hidden="true" />
+            Ajouter un élève
+          </button>
+        </div>
       </div>
 
       {filtered.length === 0 ? (
@@ -209,16 +250,22 @@ export function StudentsPanel({
             >
               <div className="min-w-0">
                 <p className="truncate font-display text-sm font-bold text-foreground">
-                  {s.user?.name}
+                  {s.user?.name ?? s.guestName}
+                  {!s.userId && (
+                    <span className="ml-1.5 chip bg-surface-2 text-secondary align-middle text-[10px]">
+                      Sans compte
+                    </span>
+                  )}
                 </p>
                 <p className="text-xs text-secondary">
-                  {s.user?.phone}
+                  {s.user?.phone ?? s.guestPhone}
                   {s.licenseCategory ? ` · Permis ${s.licenseCategory}` : ''} · {fmtDate(s.enrolledAt)}
                 </p>
-                {(s.assignedInstructor?.user || s.assignedVehicle) && (
+                {(s.assignedInstructor || s.assignedVehicle) && (
                   <p className="mt-0.5 text-xs text-muted">
-                    {s.assignedInstructor?.user && `Moniteur : ${s.assignedInstructor.user.name}`}
-                    {s.assignedInstructor?.user && s.assignedVehicle ? ' · ' : ''}
+                    {s.assignedInstructor &&
+                      `Moniteur : ${s.assignedInstructor.user?.name ?? s.assignedInstructor.guestName}`}
+                    {s.assignedInstructor && s.assignedVehicle ? ' · ' : ''}
                     {s.assignedVehicle && `Véhicule : ${s.assignedVehicle.plate}`}
                   </p>
                 )}
@@ -235,14 +282,17 @@ export function StudentsPanel({
       <Sheet open={!!open} onClose={() => setOpenId(null)} ariaLabel="Détail de l'élève">
         {open && (
           <div>
-            <p className="font-display text-lg font-bold text-foreground">{open.user?.name}</p>
-            <span className={cn('chip mt-1', STATUS_CHIP[open.status])}>
-              {STATUS_LABEL[open.status]}
-            </span>
+            <p className="font-display text-lg font-bold text-foreground">
+              {open.user?.name ?? open.guestName}
+            </p>
+            <div className="mt-1 flex flex-wrap gap-1.5">
+              <span className={cn('chip', STATUS_CHIP[open.status])}>{STATUS_LABEL[open.status]}</span>
+              {!open.userId && <span className="chip bg-surface-2 text-secondary">Sans compte</span>}
+            </div>
 
             <div className="mt-4 space-y-1.5 text-sm text-secondary">
               <p className="flex items-center gap-2">
-                <i className="ti ti-phone" aria-hidden="true" /> {open.user?.phone}
+                <i className="ti ti-phone" aria-hidden="true" /> {open.user?.phone ?? open.guestPhone}
               </p>
               {open.user?.email && (
                 <p className="flex items-center gap-2">
@@ -274,7 +324,7 @@ export function StudentsPanel({
                   <option value="">Aucun</option>
                   {instructors.map((m) => (
                     <option key={m.id} value={m.id}>
-                      {m.user?.name ?? m.id}
+                      {m.user?.name ?? m.guestName ?? m.id}
                     </option>
                   ))}
                 </select>
@@ -299,7 +349,7 @@ export function StudentsPanel({
 
             <button
               disabled={submitting}
-              onClick={() => patchStudent()}
+              onClick={saveAssignment}
               className="btn-ghost mt-3 w-full"
             >
               Enregistrer
@@ -324,45 +374,102 @@ export function StudentsPanel({
       </Sheet>
 
       {/* Add sheet */}
-      <Sheet open={addOpen} onClose={() => setAddOpen(false)} ariaLabel="Ajouter un élève">
+      <Sheet open={addOpen} onClose={closeAdd} ariaLabel="Ajouter un élève">
         <p className="font-display text-lg font-bold text-foreground">Ajouter un élève</p>
-        <p className="mt-1 text-xs text-secondary">
-          La personne doit déjà avoir un compte PERMIS 2.0.
-        </p>
+
         <div className="mt-3 flex gap-2">
-          <input
-            value={phone}
-            onChange={(e) => {
-              setPhone(e.target.value);
-              setFound(null);
-            }}
-            placeholder="77 123 45 67"
-            className="flex-1 rounded-xl border border-token bg-surface-2 px-3.5 py-2.5 text-sm focus:border-primary-400 focus:outline-none"
-          />
-          <button onClick={lookup} disabled={busy} className="btn-ghost !px-4 !py-2.5 text-sm">
-            Rechercher
+          <button
+            onClick={() => setMode('account')}
+            className={cn('chip', mode === 'account' ? 'chip-primary' : 'bg-surface-2 text-secondary')}
+          >
+            Compte existant
+          </button>
+          <button
+            onClick={() => setMode('guest')}
+            className={cn('chip', mode === 'guest' ? 'chip-primary' : 'bg-surface-2 text-secondary')}
+          >
+            Sans compte
           </button>
         </div>
-        {addError && <p className="mt-2 text-xs font-medium text-danger">{addError}</p>}
 
-        {found && (
-          <div className="mt-3 space-y-3 rounded-xl bg-surface-2 p-3">
-            <div>
-              <p className="text-sm font-bold text-foreground">{found.name}</p>
-              <p className="text-xs text-secondary">{found.phone}</p>
+        {mode === 'account' ? (
+          <>
+            <p className="mt-3 text-xs text-secondary">La personne doit déjà avoir un compte PERMIS 2.0.</p>
+            <div className="mt-3 flex gap-2">
+              <input
+                value={phone}
+                onChange={(e) => {
+                  setPhone(e.target.value);
+                  setFound(null);
+                }}
+                placeholder="77 123 45 67"
+                className="flex-1 rounded-xl border border-token bg-surface-2 px-3.5 py-2.5 text-sm focus:border-primary-400 focus:outline-none"
+              />
+              <button onClick={lookup} disabled={busy} className="btn-ghost !px-4 !py-2.5 text-sm">
+                Rechercher
+              </button>
             </div>
+
+            {found && (
+              <div className="mt-3 space-y-3 rounded-xl bg-surface-2 p-3">
+                <div>
+                  <p className="text-sm font-bold text-foreground">{found.name}</p>
+                  <p className="text-xs text-secondary">{found.phone}</p>
+                </div>
+                <input
+                  value={addCategory}
+                  onChange={(e) => setAddCategory(e.target.value)}
+                  placeholder="Catégorie de permis (ex: B)"
+                  className="w-full rounded-xl border border-token bg-surface-1 px-3.5 py-2.5 text-sm focus:border-primary-400 focus:outline-none"
+                />
+              </div>
+            )}
+          </>
+        ) : (
+          <div className="mt-3 space-y-3">
+            {isContactPickerSupported() && (
+              <button onClick={importContact} className="btn-ghost w-full !py-2.5 text-sm">
+                <i className="ti ti-address-book" aria-hidden="true" />
+                Importer un contact du téléphone
+              </button>
+            )}
+            <input
+              value={guestName}
+              onChange={(e) => setGuestName(e.target.value)}
+              placeholder="Nom complet"
+              className="w-full rounded-xl border border-token bg-surface-2 px-3.5 py-2.5 text-sm focus:border-primary-400 focus:outline-none"
+            />
+            <input
+              value={guestPhone}
+              onChange={(e) => setGuestPhone(e.target.value)}
+              placeholder="77 123 45 67"
+              className="w-full rounded-xl border border-token bg-surface-2 px-3.5 py-2.5 text-sm focus:border-primary-400 focus:outline-none"
+            />
             <input
               value={addCategory}
               onChange={(e) => setAddCategory(e.target.value)}
               placeholder="Catégorie de permis (ex: B)"
-              className="w-full rounded-xl border border-token bg-surface-1 px-3.5 py-2.5 text-sm focus:border-primary-400 focus:outline-none"
+              className="w-full rounded-xl border border-token bg-surface-2 px-3.5 py-2.5 text-sm focus:border-primary-400 focus:outline-none"
             />
-            <button onClick={addStudent} disabled={busy} className="btn-primary w-full">
-              Ajouter comme élève
-            </button>
           </div>
         )}
+
+        {addError && <p className="mt-3 text-xs font-medium text-danger">{addError}</p>}
+
+        {((mode === 'account' && found) || mode === 'guest') && (
+          <button onClick={addStudent} disabled={busy} className="btn-primary mt-3 w-full">
+            {busy ? 'Ajout…' : 'Ajouter comme élève'}
+          </button>
+        )}
       </Sheet>
+
+      <ImportSheet
+        schoolId={schoolId}
+        kind="students"
+        open={importOpen}
+        onClose={() => setImportOpen(false)}
+        onImported={onChanged}
+      />
     </div>
   );
 }

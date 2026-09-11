@@ -242,6 +242,7 @@ export function SchoolDashboard({ school, onBackToPicker, onSchoolUpdated }: Sch
         {tab === 'finances' && (
           <PaymentsPanel
             schoolId={school.id}
+            school={school}
             payments={payments}
             students={students}
             onChanged={fetchPayments}

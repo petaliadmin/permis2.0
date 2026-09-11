@@ -505,12 +505,15 @@ export interface School {
 export interface SchoolMembership {
   id: string;
   schoolId: string;
-  userId: string;
+  userId?: string | null;
+  /** Set only when userId is null — a staff member added without a PERMIS 2.0 account yet. */
+  guestName?: string | null;
+  guestPhone?: string | null;
   role: SchoolMemberRole;
   active: boolean;
   createdAt: Date;
   updatedAt: Date;
-  user?: Pick<User, 'id' | 'name' | 'phone' | 'email'>;
+  user?: Pick<User, 'id' | 'name' | 'phone' | 'email'> | null;
 }
 
 /** A student pre-registration lead for a school. */
@@ -540,19 +543,22 @@ export interface SchoolEnrollmentRequest {
 export interface SchoolStudent {
   id: string;
   schoolId: string;
-  userId: string;
+  userId?: string | null;
+  /** Set only when userId is null — a student added without a PERMIS 2.0 account yet. */
+  guestName?: string | null;
+  guestPhone?: string | null;
   enrollmentRequestId?: string | null;
   licenseCategory?: string | null;
   status: SchoolStudentStatus;
   enrolledAt: Date;
   createdAt: Date;
   updatedAt: Date;
-  user?: Pick<User, 'id' | 'name' | 'phone' | 'email'>;
+  user?: Pick<User, 'id' | 'name' | 'phone' | 'email'> | null;
   /** Included by GET /schools/my-enrollments. */
   school?: Pick<School, 'id' | 'slug' | 'name' | 'city' | 'district' | 'logoUrl'>;
   assignedInstructorMembershipId?: string | null;
   assignedVehicleId?: string | null;
-  assignedInstructor?: { id: string; user?: Pick<User, 'id' | 'name' | 'phone'> } | null;
+  assignedInstructor?: SchoolPersonRef | null;
   assignedVehicle?: Pick<Vehicle, 'id' | 'plate' | 'brand' | 'model'> | null;
 }
 
@@ -606,9 +612,17 @@ export interface Session {
   createdAt: Date;
   updatedAt: Date;
   school?: Pick<School, 'id' | 'slug' | 'name' | 'city' | 'district' | 'logoUrl'>;
-  student?: { id: string; user?: Pick<User, 'id' | 'name' | 'phone'> };
-  instructor?: { id: string; user?: Pick<User, 'id' | 'name' | 'phone'> } | null;
+  student?: SchoolPersonRef;
+  instructor?: SchoolPersonRef | null;
   vehicle?: Pick<Vehicle, 'id' | 'plate' | 'brand' | 'model'> | null;
+}
+
+/** A student/instructor as embedded in Session/SchoolPayment — may be a guest (no `user`). */
+export interface SchoolPersonRef {
+  id: string;
+  user?: Pick<User, 'id' | 'name' | 'phone' | 'email'> | null;
+  guestName?: string | null;
+  guestPhone?: string | null;
 }
 
 export enum SchoolPaymentStatus {
@@ -618,12 +632,28 @@ export enum SchoolPaymentStatus {
   CANCELLED = 'CANCELLED',
 }
 
+export enum SchoolPaymentType {
+  DEVIS = 'DEVIS',
+  FACTURE = 'FACTURE',
+}
+
+export interface SchoolPaymentItem {
+  label: string;
+  qty: number;
+  unitPriceXof: number;
+}
+
 export interface SchoolPayment {
   id: string;
   schoolId: string;
   studentId: string;
+  type: SchoolPaymentType;
+  /** Sequential reference, e.g. "F-2026-0001" / "D-2026-0001". */
+  number?: string | null;
   amountXof: number;
   description: string;
+  items?: SchoolPaymentItem[] | null;
+  notes?: string | null;
   status: SchoolPaymentStatus;
   method?: string | null;
   dueDate?: Date | null;
@@ -631,5 +661,5 @@ export interface SchoolPayment {
   createdAt: Date;
   updatedAt: Date;
   school?: Pick<School, 'id' | 'slug' | 'name' | 'city' | 'district' | 'logoUrl'>;
-  student?: { id: string; user?: Pick<User, 'id' | 'name' | 'phone'> };
+  student?: SchoolPersonRef;
 }

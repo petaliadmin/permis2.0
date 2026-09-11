@@ -4,9 +4,10 @@ import { SchoolService } from './school.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { SchoolRolesGuard } from './guards/school-roles.guard';
 import { NotificationModule } from '../notification/notification.module';
+import { EmailModule } from '../email/email.module';
 
 @Module({
-  imports: [NotificationModule],
+  imports: [NotificationModule, EmailModule],
   controllers: [SchoolController],
   providers: [SchoolService, PrismaService, SchoolRolesGuard],
   exports: [SchoolService],

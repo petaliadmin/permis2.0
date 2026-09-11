@@ -5,6 +5,7 @@ import type { Vehicle } from '@permis2.0/types';
 import { VehicleStatus } from '@permis2.0/types';
 import { EmptyState, Sheet, Skeleton } from '@permis2.0/ui';
 import { cn } from '@/lib/cn';
+import { ImportSheet } from './ImportSheet';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -46,6 +47,7 @@ interface VehiclesPanelProps {
 export function VehiclesPanel({ schoolId, vehicles, onChanged }: VehiclesPanelProps) {
   const [editing, setEditing] = useState<Vehicle | null>(null);
   const [formOpen, setFormOpen] = useState(false);
+  const [importOpen, setImportOpen] = useState(false);
   const [form, setForm] = useState(emptyForm);
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
@@ -139,7 +141,11 @@ export function VehiclesPanel({ schoolId, vehicles, onChanged }: VehiclesPanelPr
 
   return (
     <div>
-      <div className="mb-4 flex items-center justify-end">
+      <div className="mb-4 flex items-center justify-end gap-2">
+        <button onClick={() => setImportOpen(true)} className="btn-ghost !px-4 !py-2 text-xs">
+          <i className="ti ti-file-spreadsheet" aria-hidden="true" />
+          Importer
+        </button>
         <button onClick={openCreate} className="btn-ghost !px-4 !py-2 text-xs">
           <i className="ti ti-plus" aria-hidden="true" />
           Ajouter un véhicule
@@ -304,6 +310,14 @@ export function VehiclesPanel({ schoolId, vehicles, onChanged }: VehiclesPanelPr
           </p>
         )}
       </Sheet>
+
+      <ImportSheet
+        schoolId={schoolId}
+        kind="vehicles"
+        open={importOpen}
+        onClose={() => setImportOpen(false)}
+        onImported={onChanged}
+      />
     </div>
   );
 }

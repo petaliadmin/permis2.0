@@ -24,6 +24,10 @@ import { CreateSessionDto } from './dto/create-session.dto';
 import { UpdateSessionDto } from './dto/update-session.dto';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
+import { BulkAddStudentsDto } from './dto/bulk-add-students.dto';
+import { BulkAddMembersDto } from './dto/bulk-add-members.dto';
+import { BulkCreateVehiclesDto } from './dto/bulk-create-vehicles.dto';
+import { SendPaymentEmailDto } from './dto/send-payment-email.dto';
 
 const STAFF_ROLES = [SchoolMemberRole.OWNER, SchoolMemberRole.MANAGER, SchoolMemberRole.SECRETARY];
 const STUDENTS_VIEW_ROLES = [...STAFF_ROLES, SchoolMemberRole.INSTRUCTOR, SchoolMemberRole.COACH];
@@ -151,6 +155,15 @@ export class SchoolController {
     return this.schoolService.addMember(schoolId, dto);
   }
 
+  @Post(':schoolId/members/bulk')
+  @UseGuards(AuthGuard('jwt'), SchoolRolesGuard)
+  @SchoolRoles(SchoolMemberRole.OWNER)
+  @ApiBearerAuth()
+  @ApiResponse({ status: 201, description: 'Staff members imported (CSV/Excel or contact import), per-row result' })
+  async addMembersBulk(@Param('schoolId') schoolId: string, @Body() dto: BulkAddMembersDto) {
+    return this.schoolService.addMembersBulk(schoolId, dto);
+  }
+
   @Delete(':schoolId/members/:membershipId')
   @UseGuards(AuthGuard('jwt'), SchoolRolesGuard)
   @SchoolRoles(SchoolMemberRole.OWNER)
@@ -234,6 +247,15 @@ export class SchoolController {
     return this.schoolService.addStudent(schoolId, dto);
   }
 
+  @Post(':schoolId/students/bulk')
+  @UseGuards(AuthGuard('jwt'), SchoolRolesGuard)
+  @SchoolRoles(...STAFF_ROLES)
+  @ApiBearerAuth()
+  @ApiResponse({ status: 201, description: 'Students imported (CSV/Excel or contact import), per-row result' })
+  async addStudentsBulk(@Param('schoolId') schoolId: string, @Body() dto: BulkAddStudentsDto) {
+    return this.schoolService.addStudentsBulk(schoolId, dto);
+  }
+
   @Patch(':schoolId/students/:id')
   @UseGuards(AuthGuard('jwt'), SchoolRolesGuard)
   @SchoolRoles(...STAFF_ROLES)
@@ -265,6 +287,15 @@ export class SchoolController {
   @ApiResponse({ status: 201, description: 'Vehicle added to the fleet' })
   async createVehicle(@Param('schoolId') schoolId: string, @Body() dto: CreateVehicleDto) {
     return this.schoolService.createVehicle(schoolId, dto);
+  }
+
+  @Post(':schoolId/vehicles/bulk')
+  @UseGuards(AuthGuard('jwt'), SchoolRolesGuard)
+  @SchoolRoles(...VEHICLE_WRITE_ROLES)
+  @ApiBearerAuth()
+  @ApiResponse({ status: 201, description: 'Vehicles imported from CSV/Excel, per-row result (upsert by plate)' })
+  async createVehiclesBulk(@Param('schoolId') schoolId: string, @Body() dto: BulkCreateVehiclesDto) {
+    return this.schoolService.createVehiclesBulk(schoolId, dto);
   }
 
   @Patch(':schoolId/vehicles/:id')
@@ -362,5 +393,18 @@ export class SchoolController {
     @Body() dto: UpdatePaymentDto
   ) {
     return this.schoolService.updatePayment(schoolId, id, dto);
+  }
+
+  @Post(':schoolId/payments/:id/send-email')
+  @UseGuards(AuthGuard('jwt'), SchoolRolesGuard)
+  @SchoolRoles(...FINANCE_ROLES)
+  @ApiBearerAuth()
+  @ApiResponse({ status: 201, description: 'Devis/facture PDF emailed to the given address' })
+  async sendPaymentEmail(
+    @Param('schoolId') schoolId: string,
+    @Param('id') id: string,
+    @Body() dto: SendPaymentEmailDto
+  ) {
+    return this.schoolService.sendPaymentEmail(schoolId, id, dto);
   }
 }
