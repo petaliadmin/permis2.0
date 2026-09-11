@@ -3,9 +3,9 @@
 #
 # DNS required (A records, all -> the Elastic IP from `terraform output public_ip`):
 #   permis2.com, www.permis2.com, api.permis2.com,
-#   learn.permis2.com, school.permis2.com
+#   learn.permis2.com, school.permis2.com, admin.permis2.com
 #
-# The one Next.js app (web:3000) serves all three front hosts; it reads the
+# The one Next.js app (web:3000) serves all four front hosts; it reads the
 # Host header in middleware to pick the space (see apps/web/src/lib/space.ts).
 
 {
@@ -13,7 +13,7 @@
 }
 
 # ── Front hosts — all proxy to the same Next.js container ──────────────────────
-www.permis2.com, learn.permis2.com, school.permis2.com {
+www.permis2.com, learn.permis2.com, school.permis2.com, admin.permis2.com {
 	encode zstd gzip
 	reverse_proxy web:3000 {
 		header_up X-Forwarded-For {http.request.remote.host}

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuthStore } from '@/store/authStore';
+import { useSpaceUrl } from '@/components/SpaceProvider';
 import { useAdminGuard, AccessDenied, ADMIN_SECTIONS, adminFetch } from './adminShared';
 
 const NAV = [
@@ -15,6 +16,7 @@ function Sidebar() {
   const pathname = usePathname();
   const user = useAuthStore((s) => s.user);
   const [pendingCount, setPendingCount] = useState(0);
+  const backToSiteHref = useSpaceUrl('learn', '/profil');
 
   useEffect(() => {
     adminFetch<{ id: string }[]>('/admin/purchases?status=PENDING')
@@ -76,13 +78,13 @@ function Sidebar() {
 
       {/* Footer */}
       <div className="border-t border-token px-3.5 py-3.5">
-        <Link
-          href="/profil"
+        <a
+          href={backToSiteHref ?? '/profil'}
           className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold text-secondary transition-colors hover:bg-surface-2 hover:text-foreground"
         >
           <i className="ti ti-arrow-left text-lg text-slate-400" aria-hidden="true" />
           Retour au site
-        </Link>
+        </a>
         {user && (
           <div className="mt-2 flex items-center gap-2.5 rounded-xl px-3 py-2">
             <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-violet-100 text-xs font-black text-violet-700 dark:bg-violet-900/40 dark:text-violet-300">
@@ -98,6 +100,7 @@ function Sidebar() {
 
 function Topbar() {
   const pathname = usePathname();
+  const siteHref = useSpaceUrl('www', '/');
   const current =
     NAV.slice()
       .reverse()
@@ -112,13 +115,13 @@ function Topbar() {
         <i className="ti ti-chevron-right text-xs text-slate-300" aria-hidden="true" />
         <span className="text-foreground">{current}</span>
       </div>
-      <Link
-        href="/"
+      <a
+        href={siteHref ?? '/'}
         className="flex items-center gap-1.5 rounded-full border border-token bg-surface-2 px-3.5 py-1.5 text-xs font-bold text-secondary transition-colors hover:border-violet-300 hover:text-violet-600"
       >
         <i className="ti ti-external-link text-sm" aria-hidden="true" />
         Voir le site
-      </Link>
+      </a>
     </header>
   );
 }

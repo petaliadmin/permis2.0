@@ -69,6 +69,7 @@ function Drawer({ open, onClose }: { open: boolean; onClose: () => void }) {
   const logout = useAuthStore((s) => s.logout);
   const links = menuForSpace(space);
   const crossSpaceHref = useSpaceUrl(space === 'school' ? 'learn' : 'school');
+  const adminHref = useSpaceUrl('admin', '/admin');
 
   const go = (href: string) => {
     onClose();
@@ -172,14 +173,15 @@ function Drawer({ open, onClose }: { open: boolean; onClose: () => void }) {
                 </a>
               )}
 
-              {String(user?.role) === 'ADMIN' && (
-                <button
-                  onClick={() => go('/admin')}
+              {String(user?.role) === 'ADMIN' && adminHref && (
+                <a
+                  href={adminHref}
+                  onClick={onClose}
                   className="mt-1 flex w-full items-center gap-3.5 rounded-xl px-3.5 py-3 text-left text-sm font-semibold text-violet-700 transition-colors hover:bg-violet-50"
                 >
                   <i className="ti ti-shield-lock text-xl" aria-hidden="true" />
                   Administration
-                </button>
+                </a>
               )}
             </nav>
 

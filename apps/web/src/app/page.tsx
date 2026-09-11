@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { headers } from 'next/headers';
+import { redirect } from 'next/navigation';
 import { spaceFromHost, type Space } from '@/lib/space';
 import HomeClient from './HomeClient';
 import StudentHome from './learn/StudentHome';
@@ -26,6 +27,8 @@ export async function generateMetadata(): Promise<Metadata> {
         'Pré-inscriptions, élèves, équipe, planning et paiements de votre auto-école, dans un seul tableau de bord.',
       alternates: { canonical: '/' },
     };
+  if (space === 'admin')
+    return { title: 'Administration', robots: { index: false, follow: false } };
   return {
     title: 'PERMIS 2.0 — Réviser le code et trouver son auto-école au Sénégal',
     description:
@@ -36,6 +39,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function Page() {
   const space = await currentSpace();
+  if (space === 'admin') redirect('/admin');
   if (space === 'learn') return <StudentHome />;
   if (space === 'school') return <GestionClient />;
   return <HomeClient />;

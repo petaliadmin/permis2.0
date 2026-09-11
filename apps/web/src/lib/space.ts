@@ -1,30 +1,34 @@
 /**
- * Subdomain "spaces". One Next.js app is served on three hosts:
+ * Subdomain "spaces". One Next.js app is served on four hosts:
  *   - permis2.com / www.permis2.com  → `www`   (marketing + auto-école directory)
  *   - learn.permis2.com              → `learn` (student learning app)
  *   - school.permis2.com             → `school` (auto-école management)
+ *   - admin.permis2.com              → `admin` (platform administration)
  *
  * Spaces are *themed entry points*, not a security boundary: they pick the
  * default home + menu, and deep links to another space's routes get redirected
  * to the owning host — but real access stays enforced by the API guards
  * (platform Role, per-school SchoolMemberRole). The auth cookie is already
  * `Domain=.permis2.com` (apps/api/src/auth/auth.controller.ts) so the session
- * is shared across all three.
+ * is shared across all four; the admin space additionally requires
+ * `role === 'ADMIN'`, enforced by `/admin`'s own guard + the API.
  *
- * Local dev uses `*.localhost` (learn.localhost:3000, school.localhost:3000),
- * which every modern browser resolves to 127.0.0.1 automatically.
+ * Local dev uses `*.localhost` (learn.localhost:3000, school.localhost:3000,
+ * admin.localhost:3000), which every modern browser resolves to 127.0.0.1
+ * automatically.
  */
 
-export type Space = 'www' | 'learn' | 'school';
+export type Space = 'www' | 'learn' | 'school' | 'admin';
 
 const SUBDOMAIN_PREFIXES: Record<string, Space> = {
   'learn.': 'learn',
   'school.': 'school',
+  'admin.': 'admin',
   'www.': 'www',
 };
 
 /** Route prefixes each space owns. Anything not listed is "neutral" (loads on
- *  any host): `/`, `/auth/*`, `/onboarding`, `/admin`. */
+ *  any host): `/`, `/auth/*`, `/onboarding`. */
 const OWNED_PREFIXES: Record<Space, string[]> = {
   www: ['/ecoles', '/pack-ecole', '/assistance'],
   learn: [
@@ -39,6 +43,7 @@ const OWNED_PREFIXES: Record<Space, string[]> = {
     '/profil',
   ],
   school: ['/mon-ecole', '/auto-ecole'],
+  admin: ['/admin'],
 };
 
 export function spaceFromHost(host?: string | null): Space {
@@ -51,7 +56,7 @@ export function spaceFromHost(host?: string | null): Space {
 
 /** The space that owns a pathname, or `null` for neutral routes. */
 export function ownerOf(pathname: string): Space | null {
-  for (const space of ['learn', 'school', 'www'] as const) {
+  for (const space of ['learn', 'school', 'admin', 'www'] as const) {
     for (const prefix of OWNED_PREFIXES[space]) {
       if (pathname === prefix || pathname.startsWith(prefix + '/')) return space;
     }

@@ -283,18 +283,19 @@ Let's Encrypt) :
 - `www.permis2.com` → `web:3000` — site vitrine + annuaire auto-écoles
 - `learn.permis2.com` → `web:3000` — espace élève (apprentissage du code)
 - `school.permis2.com` → `web:3000` — espace auto-école (gestion)
+- `admin.permis2.com` → `web:3000` — administration (accès réservé au rôle ADMIN)
 - `api.permis2.com` → `api:3001`
 - `permis2.com` (apex) → redirige vers `https://www.permis2.com`
 
-Les trois hosts front pointent sur **la même** app Next.js : elle lit le header
+Les quatre hosts front pointent sur **la même** app Next.js : elle lit le header
 `Host` dans son middleware pour choisir l'espace (voir
 `apps/web/src/lib/space.ts`). La session est partagée : le cookie d'auth est
 scopé `.permis2.com` (voir `apps/api/src/auth/auth.controller.ts`), et le CORS
-de l'API autorise les trois origines `*.permis2.com` (`apps/api/src/main.ts`).
+de l'API autorise les quatre origines `*.permis2.com` (`apps/api/src/main.ts`).
 Aucun changement d'env prod : `NEXT_PUBLIC_API_URL` / `FRONTEND_URL` restent
 inchangés.
 
-**DNS requis chez le registrar** (5 enregistrements A, tous vers l'IP
+**DNS requis chez le registrar** (6 enregistrements A, tous vers l'IP
 élastique — `terraform output public_ip`) :
 
 | Sous-domaine | Cible |
@@ -303,10 +304,11 @@ inchangés.
 | `www` | IP élastique |
 | `learn` | IP élastique |
 | `school` | IP élastique |
+| `admin` | IP élastique |
 | `api` | IP élastique |
 
-Après ajout des enregistrements `learn` / `school` : redéploie (pousse le
-`Caddyfile` mis à jour) puis, une fois le DNS propagé, Caddy émet les
+Après ajout d'un nouvel enregistrement (`learn` / `school` / `admin`) : redéploie
+(pousse le `Caddyfile` mis à jour) puis, une fois le DNS propagé, Caddy émet les
 certificats au redémarrage — `docker compose -f docker-compose.aws.yml restart caddy`
 si besoin de forcer.
 
