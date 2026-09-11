@@ -223,12 +223,31 @@ aws ssm start-session --target <instance_id> --region <region>
 Une fois connecté sur l'instance (invite `sh-4.2$` ou similaire) :
 ```bash
 cd /opt/permis2-0
-docker compose -f docker-compose.aws.yml exec -T -e NODE_ENV=development api \
-  sh -c "pnpm add -D ts-node tsconfig-paths typescript --silent && pnpm run prisma:seed"
-docker compose -f docker-compose.aws.yml exec -T api \
-  sh -c "pnpm add -D ts-node tsconfig-paths typescript --silent && pnpm run sync:content"
+docker compose -f docker-compose.aws.yml exec -T -u root api \
+  sh -c "npx --yes -p ts-node@10.9.2 -p typescript@5.4.2 ts-node prisma/seed.ts"
+docker compose -f docker-compose.aws.yml exec -T -u root api \
+  sh -c "npx --yes -p ts-node@10.9.2 -p typescript@5.4.2 ts-node prisma/sync-content.ts"
 exit
 ```
+
+Deux pièges rencontrés au premier déploiement greenfield (2026-09-11), d'où la
+forme ci-dessus plutôt que `pnpm add -D ... && pnpm run prisma:seed` :
+- **`pnpm add -D` échoue dans le conteneur runtime** : `ERR_PNPM_UNEXPECTED_STORE`
+  en tant qu'utilisateur `node` (le store a été lié par `root` au build), puis
+  `ERR_PNPM_INCLUDED_DEPS_CONFLICT` même en `-u root` (l'image ne contient que
+  les deps de prod ; pnpm refuse d'y ajouter des devDependencies). `npx` évite
+  le problème — il installe dans son propre cache, jamais dans `node_modules`.
+- **`-r tsconfig-paths/register` inutile ici** : `seed.ts` et `sync-content.ts`
+  n'utilisent aucun alias `@/...`, seulement `@prisma/client` + imports
+  relatifs — l'omettre évite un `MODULE_NOT_FOUND` (npx installe chaque `-p`
+  dans un répertoire temporaire que la résolution `-r` ne voit pas depuis
+  `/app`). Si un futur script de seed a besoin des alias, résous le chemin
+  absolu du module avant de le passer à `-r` :
+  `npx --yes -p ts-node@10.9.2 -p typescript@5.4.2 -p tsconfig-paths@4.2.0 node -e "console.log(require.resolve('tsconfig-paths/register'))"`.
+- Ne pas figer `ts-node`/`typescript` sur `latest` : un ts-node récent contre
+  un TypeScript incompatible plante avec `Cannot read properties of undefined
+  (reading 'fileExists')`. Les versions ci-dessus correspondent à celles
+  d'`apps/api/package.json` — les mettre à jour ensemble si ce fichier change.
 
 `sync:content` est idempotent — relance-le après chaque mise à jour des JSON
 de contenu (ex. `apps/web/public/data/diapos.json`) pour les propager en prod,
