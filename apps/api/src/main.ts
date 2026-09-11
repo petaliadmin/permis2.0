@@ -39,10 +39,10 @@ async function bootstrap() {
     })
   );
 
-  // CORS — the app is served on three subdomains (www / learn / school), each a
-  // distinct browser origin that calls this API with credentials. Allow the
-  // explicit FRONTEND_URL(s) plus any *.permis2.com front host, plus *.localhost
-  // in dev.
+  // CORS — the app is served on four subdomains (www / learn / school / admin),
+  // each a distinct browser origin that calls this API with credentials. Allow
+  // the explicit FRONTEND_URL(s) plus any *.permis2.com front host, plus
+  // *.localhost in dev.
   const allowlist = new Set(
     (process.env.FRONTEND_URL || 'http://localhost:3000')
       .split(',')
@@ -55,7 +55,7 @@ async function bootstrap() {
       if (!origin) return cb(null, true); // curl / server-to-server / same-origin
       const ok =
         allowlist.has(origin) ||
-        /^https:\/\/(www|learn|school)\.permis2\.com$/.test(origin) ||
+        /^https:\/\/(www|learn|school|admin)\.permis2\.com$/.test(origin) ||
         (isDev &&
           /^http:\/\/([a-z-]+\.)?(localhost|lvh\.me|localtest\.me)(:\d+)?$/.test(origin));
       cb(null, ok);
