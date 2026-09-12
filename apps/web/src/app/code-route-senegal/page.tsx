@@ -299,6 +299,26 @@ export default async function CodeRouteSenegalPage() {
             </div>
           </section>
 
+          <section>
+            <h2 className="font-display text-xl font-bold text-foreground">
+              Pour aller plus loin
+            </h2>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <Link
+                href="/blog/comprendre-priorites-circulation-senegal"
+                className="rounded-full border border-token bg-surface-1 px-3.5 py-2 text-xs font-semibold text-primary-600 hover:bg-surface-2"
+              >
+                Tout comprendre sur les priorités de circulation
+              </Link>
+              <Link
+                href="/blog/erreurs-frequentes-examen-code-route"
+                className="rounded-full border border-token bg-surface-1 px-3.5 py-2 text-xs font-semibold text-primary-600 hover:bg-surface-2"
+              >
+                Les erreurs les plus fréquentes à l'examen
+              </Link>
+            </div>
+          </section>
+
           <div className="flex flex-col gap-3 rounded-2xl bg-primary-50 p-5 sm:flex-row sm:items-center sm:justify-between">
             <p className="font-display text-sm font-bold text-primary-700">
               Prêt à commencer à réviser ?

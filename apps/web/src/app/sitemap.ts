@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next';
 import { slugify } from '@/lib/slug';
 import { QUIZ_CATEGORIES } from './quizz/config';
+import { getBlogPostsSorted } from '@/content/blog';
 
 const SITE_URL = 'https://www.permis2.com';
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
@@ -15,6 +16,7 @@ const ROUTES: { path: string; priority: number }[] = [
   { path: '/code-route-senegal', priority: 0.9 },
   { path: '/permis-conduire-senegal', priority: 0.9 },
   { path: '/auto-ecoles-senegal', priority: 0.8 },
+  { path: '/blog', priority: 0.7 },
   { path: '/cours', priority: 0.9 },
   { path: '/quizz', priority: 0.9 },
   { path: '/tests', priority: 0.8 },
@@ -92,11 +94,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }));
 
+  const blogEntries: MetadataRoute.Sitemap = getBlogPostsSorted().map((post) => ({
+    url: `${SITE_URL}/blog/${post.slug}`,
+    lastModified: new Date(post.updatedAt),
+    changeFrequency: 'monthly',
+    priority: 0.6,
+  }));
+
   return [
     ...staticEntries,
     ...schoolEntries,
     ...signEntries,
     ...quizCategoryEntries,
     ...cityEntries,
+    ...blogEntries,
   ];
 }

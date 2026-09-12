@@ -50,6 +50,11 @@ export function SiteFooter() {
                   Examens blancs
                 </Link>
               </li>
+              <li>
+                <Link href="/blog" className="text-secondary hover:text-foreground">
+                  Blog & conseils
+                </Link>
+              </li>
             </ul>
           </div>
 
