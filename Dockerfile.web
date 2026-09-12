@@ -49,12 +49,16 @@ ARG NEXT_PUBLIC_VAPID_PUBLIC_KEY=
 # the map shows an explicit "unavailable" message instead of failing silently
 # (the VAPID key above did exactly that for months before commit edf6d5a).
 ARG NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=
+# GA4 measurement ID (see components/GoogleAnalytics.tsx) — empty disables
+# analytics entirely, which is what local/dev builds want by default.
+ARG NEXT_PUBLIC_GA_MEASUREMENT_ID=G-4CEM1P53F5
 ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
 ENV NEXT_PUBLIC_PAYMENT_MODE=${NEXT_PUBLIC_PAYMENT_MODE}
 ENV NEXT_PUBLIC_PAYMENT_LIVE=${NEXT_PUBLIC_PAYMENT_LIVE}
 ENV NEXT_PUBLIC_WAVE_PAY_URL=${NEXT_PUBLIC_WAVE_PAY_URL}
 ENV NEXT_PUBLIC_VAPID_PUBLIC_KEY=${NEXT_PUBLIC_VAPID_PUBLIC_KEY}
 ENV NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=${NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}
+ENV NEXT_PUBLIC_GA_MEASUREMENT_ID=${NEXT_PUBLIC_GA_MEASUREMENT_ID}
 
 # Build the Next.js application — produces .next/standalone with output:'standalone'
 RUN pnpm --filter @permis2.0/web run build
