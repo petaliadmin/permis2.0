@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { forwardRef, useImperativeHandle, useState } from 'react';
 import type { Vehicle } from '@permis2.0/types';
 import { VehicleStatus } from '@permis2.0/types';
 import { EmptyState, Sheet, Skeleton } from '@permis2.0/ui';
@@ -44,7 +44,15 @@ interface VehiclesPanelProps {
   onChanged: () => void;
 }
 
-export function VehiclesPanel({ schoolId, vehicles, onChanged }: VehiclesPanelProps) {
+export interface VehiclesPanelHandle {
+  openCreate: () => void;
+}
+
+export const VehiclesPanel = forwardRef<VehiclesPanelHandle, VehiclesPanelProps>(function VehiclesPanel({
+  schoolId,
+  vehicles,
+  onChanged,
+}, ref) {
   const [editing, setEditing] = useState<Vehicle | null>(null);
   const [formOpen, setFormOpen] = useState(false);
   const [importOpen, setImportOpen] = useState(false);
@@ -58,6 +66,8 @@ export function VehiclesPanel({ schoolId, vehicles, onChanged }: VehiclesPanelPr
     setError('');
     setFormOpen(true);
   };
+
+  useImperativeHandle(ref, () => ({ openCreate }), []);
 
   const openEdit = (v: Vehicle) => {
     setEditing(v);
@@ -85,9 +95,17 @@ export function VehiclesPanel({ schoolId, vehicles, onChanged }: VehiclesPanelPr
         brand: form.brand || undefined,
         model: form.model || undefined,
         category: form.category || undefined,
-        status: form.status,
-        insuranceExpiresAt: form.insuranceExpiresAt || undefined,
-        technicalInspectionExpiresAt: form.technicalInspectionExpiresAt || undefined,
+        // CreateVehicleDto has no `status` field (new vehicles always start ACTIVE
+        // server-side) — the whitelist validator 400s if it's sent on POST.
+        ...(editing ? { status: form.status } : {}),
+        // The date inputs yield bare "YYYY-MM-DD" strings — Prisma's DateTime column
+        // throws (500) on those, it needs a full ISO datetime.
+        insuranceExpiresAt: form.insuranceExpiresAt
+          ? new Date(form.insuranceExpiresAt).toISOString()
+          : undefined,
+        technicalInspectionExpiresAt: form.technicalInspectionExpiresAt
+          ? new Date(form.technicalInspectionExpiresAt).toISOString()
+          : undefined,
         notes: form.notes || undefined,
       };
       const res = await fetch(
@@ -320,4 +338,4 @@ export function VehiclesPanel({ schoolId, vehicles, onChanged }: VehiclesPanelPr
       />
     </div>
   );
-}
+});

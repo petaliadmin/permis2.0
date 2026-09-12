@@ -153,9 +153,9 @@ export class SchoolService {
   async listMine(userId: string) {
     const memberships = await this.prisma.schoolMembership.findMany({
       where: { userId, active: true },
-      include: { school: true },
+      include: { school: { include: { _count: { select: ACTIVE_STUDENTS_COUNT } } } },
     });
-    return memberships.map((m) => ({ ...m.school, myRole: m.role }));
+    return memberships.map((m) => ({ ...withStudentsCount(m.school), myRole: m.role }));
   }
 
   private static readonly SCHOOL_SUMMARY_SELECT = {

@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { forwardRef, useImperativeHandle, useMemo, useState } from 'react';
 import type { SchoolMembership, SchoolStudent, Vehicle } from '@permis2.0/types';
 import { SchoolMemberRole, SchoolStudentStatus } from '@permis2.0/types';
 import { EmptyState, Sheet, Skeleton } from '@permis2.0/ui';
@@ -59,13 +59,17 @@ interface StudentsPanelProps {
   onChanged: () => void;
 }
 
-export function StudentsPanel({
+export interface StudentsPanelHandle {
+  openCreate: () => void;
+}
+
+export const StudentsPanel = forwardRef<StudentsPanelHandle, StudentsPanelProps>(function StudentsPanel({
   schoolId,
   students,
   members,
   vehicles,
   onChanged,
-}: StudentsPanelProps) {
+}, ref) {
   const [filter, setFilter] = useState<(typeof FILTERS)[number]>('ALL');
   const [openId, setOpenId] = useState<string | null>(null);
   const [category, setCategory] = useState('');
@@ -87,6 +91,8 @@ export function StudentsPanel({
   const [addCategory, setAddCategory] = useState('');
   const [addError, setAddError] = useState('');
   const [busy, setBusy] = useState(false);
+
+  useImperativeHandle(ref, () => ({ openCreate: () => setAddOpen(true) }), []);
 
   const filtered = useMemo(
     () => (students ?? []).filter((s) => filter === 'ALL' || s.status === filter),
@@ -472,4 +478,4 @@ export function StudentsPanel({
       />
     </div>
   );
-}
+});

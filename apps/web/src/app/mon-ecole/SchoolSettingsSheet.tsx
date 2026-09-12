@@ -1,0 +1,255 @@
+'use client';
+
+import { useRef, useState } from 'react';
+import type { School } from '@permis2.0/types';
+import { Sheet } from '@permis2.0/ui';
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+const MAX_LOGO_DIMENSION = 512;
+
+/** Downscales an image file client-side and returns it as a JPEG data URL — there's no
+ * object storage yet, so the logo is stored inline as `School.logoUrl` (a TEXT column). */
+function fileToResizedDataUrl(file: File, maxDimension = MAX_LOGO_DIMENSION): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const objectUrl = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(objectUrl);
+      const scale = Math.min(1, maxDimension / Math.max(img.width, img.height));
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.round(img.width * scale);
+      canvas.height = Math.round(img.height * scale);
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return reject(new Error('Canvas non supporté'));
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      resolve(canvas.toDataURL('image/jpeg', 0.85));
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(objectUrl);
+      reject(new Error("Impossible de lire l'image."));
+    };
+    img.src = objectUrl;
+  });
+}
+
+interface SchoolSettingsSheetProps {
+  open: boolean;
+  onClose: () => void;
+  school: School;
+  /** Refetches /schools/mine so the updated name/logo/info flow back down. */
+  onSaved: () => void;
+}
+
+export function SchoolSettingsSheet({ open, onClose, school, onSaved }: SchoolSettingsSheetProps) {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [form, setForm] = useState(() => ({
+    name: school.name ?? '',
+    city: school.city ?? '',
+    district: school.district ?? '',
+    address: school.address ?? '',
+    phone: school.phone ?? '',
+    whatsapp: school.whatsapp ?? '',
+    email: school.email ?? '',
+  }));
+  const [logoUrl, setLogoUrl] = useState(school.logoUrl ?? '');
+  const [logoError, setLogoError] = useState('');
+  const [error, setError] = useState('');
+  const [busy, setBusy] = useState(false);
+
+  // Re-syncs the form whenever a fresh `school` prop lands while the sheet is open
+  // (e.g. reopening for a different school) without fighting the user's own edits.
+  const schoolIdRef = useRef(school.id);
+  if (schoolIdRef.current !== school.id) {
+    schoolIdRef.current = school.id;
+    setForm({
+      name: school.name ?? '',
+      city: school.city ?? '',
+      district: school.district ?? '',
+      address: school.address ?? '',
+      phone: school.phone ?? '',
+      whatsapp: school.whatsapp ?? '',
+      email: school.email ?? '',
+    });
+    setLogoUrl(school.logoUrl ?? '');
+  }
+
+  const onPickLogo = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file) return;
+    setLogoError('');
+    if (!file.type.startsWith('image/')) {
+      setLogoError('Choisissez un fichier image.');
+      return;
+    }
+    if (file.size > 8 * 1024 * 1024) {
+      setLogoError('Image trop lourde (max 8 Mo).');
+      return;
+    }
+    try {
+      setLogoUrl(await fileToResizedDataUrl(file));
+    } catch {
+      setLogoError("Impossible de traiter cette image.");
+    }
+  };
+
+  const submit = async () => {
+    if (!form.name.trim()) {
+      setError("Le nom de l'auto-école est obligatoire.");
+      return;
+    }
+    setBusy(true);
+    setError('');
+    try {
+      const res = await fetch(`${API_URL}/schools/${school.id}`, {
+        method: 'PATCH',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: form.name.trim(),
+          city: form.city.trim() || undefined,
+          district: form.district.trim() || undefined,
+          address: form.address.trim() || undefined,
+          phone: form.phone.trim() || undefined,
+          whatsapp: form.whatsapp.trim() || undefined,
+          email: form.email.trim() || undefined,
+          logoUrl: logoUrl || undefined,
+        }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.message || 'Une erreur est survenue.');
+      }
+      onSaved();
+      onClose();
+    } catch (e: any) {
+      setError(e.message || 'Une erreur est survenue.');
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <Sheet open={open} onClose={onClose} ariaLabel="Modifier les informations de l'auto-école">
+      <p className="font-display text-lg font-bold text-foreground">Infos de l&apos;auto-école</p>
+      <p className="mt-1 text-xs text-secondary">
+        Ces informations apparaissent sur votre fiche publique dans l&apos;annuaire.
+      </p>
+
+      {/* Logo */}
+      <div className="mt-4 flex items-center gap-4">
+        <button
+          type="button"
+          onClick={() => fileInputRef.current?.click()}
+          className="group relative flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-primary-500 to-primary-700 text-2xl font-black text-white"
+          aria-label="Changer le logo"
+        >
+          {logoUrl ? (
+            <img src={logoUrl} alt="" className="h-full w-full object-cover" />
+          ) : (
+            <span>🏫</span>
+          )}
+          <span className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
+            <i className="ti ti-camera text-xl text-white" aria-hidden="true" />
+          </span>
+        </button>
+        <div className="min-w-0 flex-1">
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            onChange={onPickLogo}
+            className="hidden"
+          />
+          <button onClick={() => fileInputRef.current?.click()} className="btn-ghost !px-4 !py-2 text-xs">
+            <i className="ti ti-upload" aria-hidden="true" />
+            {logoUrl ? 'Changer le logo' : 'Ajouter un logo'}
+          </button>
+          {logoUrl && (
+            <button
+              onClick={() => setLogoUrl('')}
+              className="ml-2 text-xs font-semibold text-danger"
+            >
+              Retirer
+            </button>
+          )}
+          {logoError && <p className="mt-1.5 text-xs font-medium text-danger">{logoError}</p>}
+        </div>
+      </div>
+
+      <div className="mt-5 space-y-3">
+        <div>
+          <label className="mb-1 block text-xs font-bold text-secondary">Nom de l&apos;auto-école</label>
+          <input
+            value={form.name}
+            onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+            className="w-full rounded-xl border border-token bg-surface-2 px-3.5 py-2.5 text-sm focus:border-primary-400 focus:outline-none"
+          />
+        </div>
+        <div className="grid gap-3 sm:grid-cols-2">
+          <div>
+            <label className="mb-1 block text-xs font-bold text-secondary">Ville</label>
+            <input
+              value={form.city}
+              onChange={(e) => setForm((f) => ({ ...f, city: e.target.value }))}
+              className="w-full rounded-xl border border-token bg-surface-2 px-3.5 py-2.5 text-sm focus:border-primary-400 focus:outline-none"
+            />
+          </div>
+          <div>
+            <label className="mb-1 block text-xs font-bold text-secondary">Quartier</label>
+            <input
+              value={form.district}
+              onChange={(e) => setForm((f) => ({ ...f, district: e.target.value }))}
+              className="w-full rounded-xl border border-token bg-surface-2 px-3.5 py-2.5 text-sm focus:border-primary-400 focus:outline-none"
+            />
+          </div>
+        </div>
+        <div>
+          <label className="mb-1 block text-xs font-bold text-secondary">Adresse</label>
+          <input
+            value={form.address}
+            onChange={(e) => setForm((f) => ({ ...f, address: e.target.value }))}
+            className="w-full rounded-xl border border-token bg-surface-2 px-3.5 py-2.5 text-sm focus:border-primary-400 focus:outline-none"
+          />
+        </div>
+        <div className="grid gap-3 sm:grid-cols-2">
+          <div>
+            <label className="mb-1 block text-xs font-bold text-secondary">Téléphone</label>
+            <input
+              value={form.phone}
+              onChange={(e) => setForm((f) => ({ ...f, phone: e.target.value }))}
+              placeholder="77 123 45 67"
+              className="w-full rounded-xl border border-token bg-surface-2 px-3.5 py-2.5 text-sm focus:border-primary-400 focus:outline-none"
+            />
+          </div>
+          <div>
+            <label className="mb-1 block text-xs font-bold text-secondary">WhatsApp</label>
+            <input
+              value={form.whatsapp}
+              onChange={(e) => setForm((f) => ({ ...f, whatsapp: e.target.value }))}
+              placeholder="77 123 45 67"
+              className="w-full rounded-xl border border-token bg-surface-2 px-3.5 py-2.5 text-sm focus:border-primary-400 focus:outline-none"
+            />
+          </div>
+        </div>
+        <div>
+          <label className="mb-1 block text-xs font-bold text-secondary">Email</label>
+          <input
+            type="email"
+            value={form.email}
+            onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
+            className="w-full rounded-xl border border-token bg-surface-2 px-3.5 py-2.5 text-sm focus:border-primary-400 focus:outline-none"
+          />
+        </div>
+      </div>
+
+      {error && (
+        <p className="mt-3 rounded-xl bg-red-50 px-3 py-2 text-sm font-medium text-danger">{error}</p>
+      )}
+
+      <button disabled={busy} onClick={submit} className="btn-primary mt-4 w-full">
+        {busy ? 'Enregistrement…' : 'Enregistrer'}
+      </button>
+    </Sheet>
+  );
+}

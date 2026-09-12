@@ -57,7 +57,7 @@ export default function AdminSchoolsPage() {
   const updateStatus = async (school: School, target: SchoolStatus) => {
     setUpdating(school.id);
     try {
-      await adminFetch(`/admin/schools/${school.id}/status`, { json: { status: target } });
+      await adminFetch(`/admin/schools/${school.id}/status`, { method: 'PATCH', json: { status: target } });
       setSchools((list) => list.map((s) => (s.id === school.id ? { ...s, status: target } : s)));
       flash(`${school.name} : ${STATUS_LABEL[target].toLowerCase()}.`);
     } catch (e: any) {

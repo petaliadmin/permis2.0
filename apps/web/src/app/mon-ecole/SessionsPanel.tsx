@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { forwardRef, useImperativeHandle, useMemo, useState } from 'react';
 import type { SchoolMembership, SchoolStudent, Session, Vehicle } from '@permis2.0/types';
 import { SchoolMemberRole, SessionStatus, SessionType } from '@permis2.0/types';
 import { EmptyState, Sheet, Skeleton } from '@permis2.0/ui';
@@ -50,14 +50,18 @@ interface SessionsPanelProps {
   onChanged: () => void;
 }
 
-export function SessionsPanel({
+export interface SessionsPanelHandle {
+  openCreate: () => void;
+}
+
+export const SessionsPanel = forwardRef<SessionsPanelHandle, SessionsPanelProps>(function SessionsPanel({
   schoolId,
   sessions,
   students,
   members,
   vehicles,
   onChanged,
-}: SessionsPanelProps) {
+}, ref) {
   const [filter, setFilter] = useState<(typeof FILTERS)[number]>('ALL');
   const [openId, setOpenId] = useState<string | null>(null);
   const [notes, setNotes] = useState('');
@@ -74,6 +78,8 @@ export function SessionsPanel({
     notes: '',
   });
   const [createError, setCreateError] = useState('');
+
+  useImperativeHandle(ref, () => ({ openCreate: () => setCreateOpen(true) }), []);
 
   const instructors = (members ?? []).filter(
     (m) => m.active && (m.role === SchoolMemberRole.INSTRUCTOR || m.role === SchoolMemberRole.COACH)
@@ -410,4 +416,4 @@ export function SessionsPanel({
       </Sheet>
     </div>
   );
-}
+});

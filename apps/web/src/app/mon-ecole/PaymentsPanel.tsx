@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { forwardRef, useImperativeHandle, useMemo, useState } from 'react';
 import type { School, SchoolPayment, SchoolPaymentItem, SchoolStudent } from '@permis2.0/types';
 import { SchoolPaymentStatus, SchoolPaymentType } from '@permis2.0/types';
 import { EmptyState, Sheet, Skeleton } from '@permis2.0/ui';
@@ -55,7 +55,17 @@ interface PaymentsPanelProps {
   onChanged: () => void;
 }
 
-export function PaymentsPanel({ schoolId, school, payments, students, onChanged }: PaymentsPanelProps) {
+export interface PaymentsPanelHandle {
+  openCreate: () => void;
+}
+
+export const PaymentsPanel = forwardRef<PaymentsPanelHandle, PaymentsPanelProps>(function PaymentsPanel({
+  schoolId,
+  school,
+  payments,
+  students,
+  onChanged,
+}, ref) {
   const [filter, setFilter] = useState<(typeof FILTERS)[number]>('ALL');
   const [openId, setOpenId] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -74,6 +84,8 @@ export function PaymentsPanel({ schoolId, school, payments, students, onChanged 
   });
   const [items, setItems] = useState<SchoolPaymentItem[]>([emptyItem()]);
   const [createError, setCreateError] = useState('');
+
+  useImperativeHandle(ref, () => ({ openCreate: () => setCreateOpen(true) }), []);
 
   const filtered = useMemo(
     () => (payments ?? []).filter((p) => filter === 'ALL' || p.status === filter),
@@ -570,4 +582,4 @@ export function PaymentsPanel({ schoolId, school, payments, students, onChanged 
       </Sheet>
     </div>
   );
-}
+});
