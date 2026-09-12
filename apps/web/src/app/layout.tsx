@@ -10,6 +10,7 @@ import { PushPermissionBanner } from '@/components/PushPermissionBanner';
 import { EntitlementProvider } from '@/components/EntitlementProvider';
 import { SpaceProvider } from '@/components/SpaceProvider';
 import { SessionSync } from '@/components/SessionSync';
+import { GoogleAnalytics } from '@/components/GoogleAnalytics';
 import { headers } from 'next/headers';
 import { spaceFromHost, type Space } from '@/lib/space';
 
@@ -94,13 +95,23 @@ export const metadata: Metadata = {
   formatDetection: { telephone: false },
 };
 
-const jsonLd = {
+const websiteJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
   name: APP_NAME,
   url: SITE_URL,
   description: SEO_DESCRIPTION,
   inLanguage: 'fr-SN',
+};
+
+const organizationJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: APP_NAME,
+  url: SITE_URL,
+  logo: `${SITE_URL}/apple-touch-icon.png`,
+  description: SEO_DESCRIPTION,
+  areaServed: { '@type': 'Country', name: 'Sénégal' },
 };
 
 export const viewport: Viewport = {
@@ -134,7 +145,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         {/* Basic WebSite structured data — sitelinks searchbox eligibility */}
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
         />
       </head>
       <body className="on-light bg-surface text-foreground font-sans antialiased">
@@ -155,6 +170,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <PushPermissionBanner />
         </SpaceProvider>
         <ServiceWorkerRegister />
+        <GoogleAnalytics />
       </body>
     </html>
   );

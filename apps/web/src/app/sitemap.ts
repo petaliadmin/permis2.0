@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next';
 
 const SITE_URL = 'https://www.permis2.com';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
 // Static, guest-accessible content routes only — dynamic per-item pages
 // (a single quiz attempt, a course lesson id) aren't meaningful standalone
@@ -17,14 +18,42 @@ const ROUTES: { path: string; priority: number }[] = [
   { path: '/auto-ecole', priority: 0.6 },
   { path: '/pack-ecole', priority: 0.4 },
   { path: '/assistance', priority: 0.4 },
+  { path: '/a-propos', priority: 0.3 },
+  { path: '/contact', priority: 0.3 },
+  { path: '/mentions-legales', priority: 0.1 },
+  { path: '/politique-confidentialite', priority: 0.1 },
 ];
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const lastModified = new Date();
-  return ROUTES.map(({ path, priority }) => ({
+interface SchoolSlugEntry {
+  slug: string;
+  updatedAt: string;
+}
+
+async function fetchSchoolEntries(): Promise<SchoolSlugEntry[]> {
+  try {
+    const res = await fetch(`${API_URL}/schools/sitemap`, { next: { revalidate: 3600 } });
+    if (!res.ok) return [];
+    return res.json();
+  } catch {
+    // API unreachable at build/request time — ship the static routes rather than fail the sitemap.
+    return [];
+  }
+}
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const staticEntries: MetadataRoute.Sitemap = ROUTES.map(({ path, priority }) => ({
     url: `${SITE_URL}${path}`,
-    lastModified,
     changeFrequency: 'weekly',
     priority,
   }));
+
+  const schools = await fetchSchoolEntries();
+  const schoolEntries: MetadataRoute.Sitemap = schools.map(({ slug, updatedAt }) => ({
+    url: `${SITE_URL}/ecoles/${slug}`,
+    lastModified: new Date(updatedAt),
+    changeFrequency: 'weekly',
+    priority: 0.7,
+  }));
+
+  return [...staticEntries, ...schoolEntries];
 }

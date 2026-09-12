@@ -30,7 +30,15 @@ const SUBDOMAIN_PREFIXES: Record<string, Space> = {
 /** Route prefixes each space owns. Anything not listed is "neutral" (loads on
  *  any host): `/`, `/auth/*`, `/onboarding`. */
 const OWNED_PREFIXES: Record<Space, string[]> = {
-  www: ['/ecoles', '/pack-ecole', '/assistance'],
+  www: [
+    '/ecoles',
+    '/pack-ecole',
+    '/assistance',
+    '/a-propos',
+    '/contact',
+    '/mentions-legales',
+    '/politique-confidentialite',
+  ],
   learn: [
     '/traffic-signs',
     '/cours',

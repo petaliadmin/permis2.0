@@ -34,6 +34,16 @@ function Sheet({ open, onClose, children, ariaLabel, className }: SheetProps) {
   const [dragging, setDragging] = React.useState(false);
   const dragState = React.useRef<{ startY: number; startTime: number } | null>(null);
 
+  // Callers pass onClose as a fresh inline arrow fn on every render (e.g.
+  // `onClose={() => setOpen(false)}`) — read it through a ref so the effect
+  // below only depends on `open`, not on that ever-changing identity.
+  // Otherwise every keystroke inside the sheet (state update → re-render →
+  // new onClose reference) would re-run the effect below, which re-grabs
+  // focus (first the trigger, then the panel's first field), yanking focus
+  // out of whatever the user was typing in.
+  const onCloseRef = React.useRef(onClose);
+  onCloseRef.current = onClose;
+
   // Lock body scroll, handle Escape key, and manage focus.
   React.useEffect(() => {
     if (!open) return;
@@ -42,7 +52,7 @@ function Sheet({ open, onClose, children, ariaLabel, className }: SheetProps) {
 
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        onClose();
+        onCloseRef.current();
         return;
       }
       // Trap focus inside the panel.
@@ -85,7 +95,7 @@ function Sheet({ open, onClose, children, ariaLabel, className }: SheetProps) {
         triggerRef.current.focus();
       }
     };
-  }, [open, onClose]);
+  }, [open]);
 
   // Reset any leftover drag offset whenever the sheet is opened.
   React.useEffect(() => {

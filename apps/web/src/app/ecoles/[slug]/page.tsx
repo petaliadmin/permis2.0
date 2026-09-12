@@ -7,6 +7,38 @@ import EcoleProfileClient from './EcoleProfileClient';
 // Server Component (RSC replaces them with a throwing stub), so this Server
 // Component resolves its own API_URL locally, same as the front-end stores do.
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+const SITE_URL = 'https://www.permis2.com';
+
+function schoolJsonLd(school: School) {
+  const streetAddress = [school.district, school.address].filter(Boolean).join(', ');
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'DrivingSchool',
+    name: school.name,
+    url: `${SITE_URL}/ecoles/${school.slug}`,
+    ...(school.logoUrl ? { image: school.logoUrl } : {}),
+    ...(school.phone || school.whatsapp ? { telephone: school.phone || school.whatsapp } : {}),
+    ...(school.email ? { email: school.email } : {}),
+    address: {
+      '@type': 'PostalAddress',
+      ...(streetAddress ? { streetAddress } : {}),
+      ...(school.city ? { addressLocality: school.city } : {}),
+      addressCountry: 'SN',
+    },
+    ...(school.latitude != null && school.longitude != null
+      ? {
+          geo: {
+            '@type': 'GeoCoordinates',
+            latitude: school.latitude,
+            longitude: school.longitude,
+          },
+        }
+      : {}),
+    ...(school.priceXof != null
+      ? { priceRange: `À partir de ${school.priceXof.toLocaleString('fr-FR')} FCFA` }
+      : {}),
+  };
+}
 
 async function fetchSchool(slug: string): Promise<School | null> {
   try {
@@ -40,5 +72,13 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const school = await fetchSchool(slug);
   if (!school) notFound();
 
-  return <EcoleProfileClient school={school} />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schoolJsonLd(school)) }}
+      />
+      <EcoleProfileClient school={school} />
+    </>
+  );
 }

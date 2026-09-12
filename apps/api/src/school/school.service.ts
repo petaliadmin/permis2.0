@@ -106,6 +106,14 @@ export class SchoolService {
     }).then((schools) => schools.map(withStudentsCount));
   }
 
+  /** Lean, unbounded list for sitemap generation — active schools only. */
+  async listSlugsForSitemap() {
+    return this.prisma.school.findMany({
+      where: { status: SchoolStatus.ACTIVE },
+      select: { slug: true, updatedAt: true },
+    });
+  }
+
   async getOne(schoolId: string, viewer?: { userId: string; role: Role }) {
     const school = await this.prisma.school.findUnique({
       where: { id: schoolId },

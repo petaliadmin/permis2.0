@@ -6,7 +6,7 @@ export function SiteFooter() {
   return (
     <footer className="border-t border-token bg-surface-1">
       <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
-        <div className="grid gap-8 sm:grid-cols-3">
+        <div className="grid gap-8 sm:grid-cols-4">
           <div>
             <p className="font-display text-base font-extrabold text-foreground">
               PERMIS<span className="text-primary-600">2.0</span>
@@ -47,6 +47,32 @@ export function SiteFooter() {
                 </Link>
               </li>
               <li className="text-secondary">WhatsApp · {WHATSAPP_DISPLAY}</li>
+            </ul>
+          </div>
+
+          <div>
+            <p className="text-xs font-bold uppercase tracking-wide text-muted">À propos</p>
+            <ul className="mt-3 space-y-2 text-sm">
+              <li>
+                <Link href="/a-propos" className="text-secondary hover:text-foreground">
+                  Qui sommes-nous
+                </Link>
+              </li>
+              <li>
+                <Link href="/contact" className="text-secondary hover:text-foreground">
+                  Contact
+                </Link>
+              </li>
+              <li>
+                <Link href="/mentions-legales" className="text-secondary hover:text-foreground">
+                  Mentions légales
+                </Link>
+              </li>
+              <li>
+                <Link href="/politique-confidentialite" className="text-secondary hover:text-foreground">
+                  Confidentialité
+                </Link>
+              </li>
             </ul>
           </div>
         </div>

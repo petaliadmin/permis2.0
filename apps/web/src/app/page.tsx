@@ -2,9 +2,20 @@ import type { Metadata } from 'next';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { spaceFromHost, type Space } from '@/lib/space';
+import { HOME_FAQS } from '@/lib/homeFaq';
 import HomeClient from './HomeClient';
 import StudentHome from './learn/StudentHome';
 import GestionClient from './mon-ecole/GestionClient';
+
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: HOME_FAQS.map((faq) => ({
+    '@type': 'Question',
+    name: faq.question,
+    acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+  })),
+};
 
 async function currentSpace(): Promise<Space> {
   const h = await headers();
@@ -19,6 +30,7 @@ export async function generateMetadata(): Promise<Metadata> {
       description:
         'Panneaux, cours, séries de quiz et examens blancs du code de la route sénégalais.',
       alternates: { canonical: '/' },
+      robots: { index: false, follow: false },
     };
   if (space === 'school')
     return {
@@ -26,6 +38,7 @@ export async function generateMetadata(): Promise<Metadata> {
       description:
         'Pré-inscriptions, élèves, équipe, planning et paiements de votre auto-école, dans un seul tableau de bord.',
       alternates: { canonical: '/' },
+      robots: { index: false, follow: false },
     };
   if (space === 'admin')
     return { title: 'Administration', robots: { index: false, follow: false } };
@@ -42,5 +55,13 @@ export default async function Page() {
   if (space === 'admin') redirect('/admin');
   if (space === 'learn') return <StudentHome />;
   if (space === 'school') return <GestionClient />;
-  return <HomeClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+      <HomeClient />
+    </>
+  );
 }

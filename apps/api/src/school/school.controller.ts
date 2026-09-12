@@ -97,6 +97,12 @@ export class SchoolController {
     return this.schoolService.listMyPayments(req.user.userId);
   }
 
+  @Get('sitemap')
+  @ApiResponse({ status: 200, description: 'Active school slugs + updatedAt, for sitemap generation' })
+  async sitemap() {
+    return this.schoolService.listSlugsForSitemap();
+  }
+
   @Get('by-slug/:slug')
   @UseGuards(OptionalJwtAuthGuard)
   @ApiResponse({ status: 200, description: 'School details by public slug' })
