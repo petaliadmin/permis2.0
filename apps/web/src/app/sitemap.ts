@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next';
 import { slugify } from '@/lib/slug';
+import { QUIZ_CATEGORIES } from './quizz/config';
 
 const SITE_URL = 'https://www.permis2.com';
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
@@ -74,5 +75,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }));
 
-  return [...staticEntries, ...schoolEntries, ...signEntries];
+  const quizCategoryEntries: MetadataRoute.Sitemap = QUIZ_CATEGORIES.map(({ slug }) => ({
+    url: `${SITE_URL}/quizz/${slug}`,
+    changeFrequency: 'monthly',
+    priority: 0.6,
+  }));
+
+  return [...staticEntries, ...schoolEntries, ...signEntries, ...quizCategoryEntries];
 }
