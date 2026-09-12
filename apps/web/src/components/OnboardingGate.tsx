@@ -20,10 +20,20 @@ export function OnboardingGate() {
   useEffect(() => {
     if (typeof window === 'undefined') return;
     if (space !== 'www') return;
+    // Public/trust marketing pages a search visitor can land on directly —
+    // must never bounce into the signup flow before they've seen the content.
+    const PUBLIC_ROUTES = [
+      '/assistance',
+      '/a-propos',
+      '/contact',
+      '/mentions-legales',
+      '/politique-confidentialite',
+    ];
     const exempt =
       pathname.startsWith('/onboarding') ||
       pathname.startsWith('/auth') ||
       pathname.startsWith('/ecoles') ||
+      PUBLIC_ROUTES.some((route) => pathname === route) ||
       pathname === '/';
     if (!isOnboardingDone() && !exempt) {
       router.replace('/onboarding');
