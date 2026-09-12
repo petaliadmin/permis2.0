@@ -210,6 +210,13 @@ export default async function SignDetailPage({
             S'entraîner sur les panneaux
             <i className="ti ti-arrow-right" aria-hidden="true" />
           </Link>
+
+          <Link
+            href="/code-route-senegal"
+            className="mt-4 block text-center text-xs font-semibold text-secondary hover:text-foreground"
+          >
+            En savoir plus sur le Code de la route au Sénégal
+          </Link>
         </div>
       </AppShell>
     </>

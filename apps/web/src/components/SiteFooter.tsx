@@ -26,6 +26,11 @@ export function SiteFooter() {
                 </Link>
               </li>
               <li>
+                <Link href="/code-route-senegal" className="text-secondary hover:text-foreground">
+                  Code de la route Sénégal
+                </Link>
+              </li>
+              <li>
                 <Link href="/traffic-signs" className="text-secondary hover:text-foreground">
                   Réviser le code
                 </Link>

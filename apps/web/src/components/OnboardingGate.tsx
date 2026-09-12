@@ -28,6 +28,7 @@ export function OnboardingGate() {
       '/contact',
       '/mentions-legales',
       '/politique-confidentialite',
+      '/code-route-senegal',
     ];
     const exempt =
       pathname.startsWith('/onboarding') ||

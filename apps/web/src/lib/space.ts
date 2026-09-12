@@ -38,6 +38,7 @@ const OWNED_PREFIXES: Record<Space, string[]> = {
     '/contact',
     '/mentions-legales',
     '/politique-confidentialite',
+    '/code-route-senegal',
   ],
   learn: [
     '/traffic-signs',
