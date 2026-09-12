@@ -18,6 +18,12 @@ const nextConfig: NextConfig = {
   ],
   images: {
     formats: ['image/avif', 'image/webp'],
+    // Default is 60s, which forces the (expensive) optimizer to re-run on
+    // almost every request instead of serving a cached variant — confirmed
+    // in prod via `Cache-Control: max-age=60, must-revalidate` + `X-Nextjs-Cache: MISS`
+    // on the hero image, the page's LCP element. These are static assets
+    // under public/ that only change on redeploy, so cache them for a year.
+    minimumCacheTTL: 31536000,
   },
   async headers() {
     return [
