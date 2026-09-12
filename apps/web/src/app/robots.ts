@@ -17,6 +17,8 @@ export default function robots(): MetadataRoute.Robots {
         '/mes-auto-ecoles',
         '/onboarding',
         '/quizz/erreurs',
+        '/quizz/*/*',
+        '/exam/diapo/',
       ],
     },
     sitemap: `${SITE_URL}/sitemap.xml`,

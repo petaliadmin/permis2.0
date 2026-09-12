@@ -22,6 +22,7 @@ import { addError, removeError } from '@/lib/errorBank';
 import { loadData } from '@/lib/dataSource';
 import { playSuccessSound, playFailureSound } from '@/lib/feedbackSound';
 import { postWithSync } from '@/lib/syncQueue';
+import { trackEvent } from '@/lib/analytics';
 
 interface Question {
   id: string;
@@ -385,6 +386,7 @@ export default function QuizPlayerPage() {
         setQuestions(session);
         setPhase('quiz');
         startRef.current = Date.now();
+        trackEvent('quiz_started', { category: slug, quiz_id: quizId });
       })
       .catch(() => setPhase('loading'));
   }, [quizConfig, isFreeSeries, isPremium]);
@@ -445,6 +447,7 @@ export default function QuizPlayerPage() {
         total: questions.length,
         mode: 'series',
       });
+      trackEvent('quiz_completed', { category: slug, quiz_id: quizId, score: pct });
       setPhase('done');
       return;
     }

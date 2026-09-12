@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { User } from '@permis2.0/types';
+import { trackEvent } from '@/lib/analytics';
 
 export type OtpChannel = 'sms' | 'whatsapp';
 
@@ -135,6 +136,7 @@ export const useAuthStore = create<AuthState>()(
             token: data.accessToken,
             isAuthenticated: true,
           });
+          trackEvent('signup', { method: 'email' });
         } catch (error: any) {
           set({ error: error.message });
           throw error;
@@ -215,6 +217,7 @@ export const useAuthStore = create<AuthState>()(
           }
           const data = await response.json();
           set({ user: data.user, token: data.accessToken, isAuthenticated: true, phone });
+          trackEvent('signup', { method: 'phone', profile_type: profileType });
 
           // Merge guest progress into the freshly created account (best effort).
           const guestXp = computeGuestXp();

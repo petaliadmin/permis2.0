@@ -1,16 +1,22 @@
 'use client';
 
+import { useEffect } from 'react';
 import Link from 'next/link';
 import type { School } from '@permis2.0/types';
 import { SiteHeader } from '@/components/SiteHeader';
 import { SiteFooter } from '@/components/SiteFooter';
 import { whatsappLinkTo } from '@/lib/contact';
 import { directionsUrl } from '@/lib/geo';
+import { trackEvent } from '@/lib/analytics';
 import { EnrollmentForm } from './EnrollmentForm';
 
 const fmtXof = (n: number) => `${n.toLocaleString('fr-FR')} FCFA`;
 
 export default function EcoleProfileClient({ school }: { school: School }) {
+  useEffect(() => {
+    trackEvent('school_viewed', { school_id: school.id, school_name: school.name });
+  }, [school.id, school.name]);
+
   const location = [school.district, school.city].filter(Boolean).join(', ');
   // JSONB doesn't preserve key order — restore a natural week order for display.
   const DAY_ORDER = ['lun', 'mar', 'mer', 'jeu', 'ven', 'sam', 'dim'];

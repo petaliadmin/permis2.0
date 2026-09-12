@@ -11,6 +11,7 @@ import { useAuthStore } from '@/store/authStore';
 import { SUBSCRIPTION_PRICE_ANNUAL } from '@permis2.0/shared';
 import { WHATSAPP_DISPLAY, whatsappLink } from '@/lib/contact';
 import { waveLink } from '@/lib/wave';
+import { trackEvent } from '@/lib/analytics';
 
 /**
  * Temporary payment mode. 'manual' (default) hides the online checkout and
@@ -107,6 +108,7 @@ function BoutiqueInner() {
     await fetchEntitlements();
     setSubmitting(false);
     setStage('requested');
+    trackEvent('subscription_started', { product_id: subscription.id });
   };
 
   return (

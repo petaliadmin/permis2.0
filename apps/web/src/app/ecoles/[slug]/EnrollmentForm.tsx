@@ -4,6 +4,7 @@ import { useState, type FormEvent } from 'react';
 import type { School } from '@permis2.0/types';
 import { API_URL } from '@/lib/dataSource';
 import { isValidSnPhone } from '@/store/authStore';
+import { trackEvent } from '@/lib/analytics';
 
 interface EnrollmentFormProps {
   school: School;
@@ -49,6 +50,7 @@ export function EnrollmentForm({ school }: EnrollmentFormProps) {
       });
       if (!res.ok) throw new Error();
       setStatus('success');
+      trackEvent('school_contacted', { school_id: school.id, school_name: school.name });
     } catch {
       setStatus('error');
       setError('Une erreur est survenue. Réessayez ou contactez-nous directement.');

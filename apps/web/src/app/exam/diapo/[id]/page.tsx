@@ -10,6 +10,7 @@ import { usePurchasesStore } from '@/store/purchasesStore';
 import { useSettingsStore } from '@/store/settingsStore';
 import { loadData } from '@/lib/dataSource';
 import { playSuccessSound, playFailureSound } from '@/lib/feedbackSound';
+import { trackEvent } from '@/lib/analytics';
 
 const FREE_UP_TO = 2;
 
@@ -72,8 +73,9 @@ export default function DiapoExamPage({ params }: { params: Promise<{ id: string
     loadData<DiapoExam | { exams: DiapoExam[] }>(`/exams/diapos/${id}`, '/data/diapos.json')
       .then((d) => {
         // API returns the exam directly; the offline fallback returns the full list
-        if ('exams' in d) setExam(d.exams.find((e) => e.id === Number(id)) ?? null);
-        else setExam(d);
+        const found = 'exams' in d ? (d.exams.find((e) => e.id === Number(id)) ?? null) : d;
+        setExam(found);
+        if (found) trackEvent('exam_started', { exam_id: id });
       })
       .catch(console.error)
       .finally(() => setLoading(false));
@@ -130,8 +132,18 @@ export default function DiapoExamPage({ params }: { params: Promise<{ id: string
     }
   };
   const goNext = () => {
-    if (currentQ < total - 1) setCurrentQ((n) => n + 1);
-    else setFinished(true);
+    if (currentQ < total - 1) {
+      setCurrentQ((n) => n + 1);
+      return;
+    }
+    const score = exam.questions.filter((qst) =>
+      answersMatch(userAnswers[qst.q] ?? [], qst.answer)
+    ).length;
+    trackEvent('exam_completed', {
+      exam_id: id,
+      score: Math.round((score / total) * 100),
+    });
+    setFinished(true);
   };
   const goPrev = () => {
     if (currentQ > 0) setCurrentQ((n) => n - 1);
