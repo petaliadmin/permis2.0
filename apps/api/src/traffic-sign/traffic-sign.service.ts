@@ -65,6 +65,16 @@ export const SIGN_CATEGORIES: Record<string, TrafficSignCategory> = {
   },
 };
 
+/** Deterministic, accent-free URL slug from a sign's display name — kept in sync with apps/web/src/lib/slug.ts. */
+export function slugifySignName(name: string): string {
+  return name
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
 @Injectable()
 export class TrafficSignService {
   constructor(private prisma: PrismaService) {}
@@ -96,6 +106,14 @@ export class TrafficSignService {
       throw new NotFoundException('Traffic sign not found');
     }
 
+    return sign;
+  }
+
+  /** No dedicated slug column — matched against the small, rarely-changing sign list at request time. */
+  async findBySlug(slug: string) {
+    const signs = await this.prisma.trafficSign.findMany();
+    const sign = signs.find((s) => slugifySignName(s.name) === slug);
+    if (!sign) throw new NotFoundException('Traffic sign not found');
     return sign;
   }
 

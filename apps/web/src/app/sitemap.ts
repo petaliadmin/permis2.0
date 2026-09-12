@@ -1,4 +1,5 @@
 import type { MetadataRoute } from 'next';
+import { slugify } from '@/lib/slug';
 
 const SITE_URL = 'https://www.permis2.com';
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
@@ -40,6 +41,17 @@ async function fetchSchoolEntries(): Promise<SchoolSlugEntry[]> {
   }
 }
 
+async function fetchSignSlugs(): Promise<string[]> {
+  try {
+    const res = await fetch(`${API_URL}/traffic-signs?take=500`, { next: { revalidate: 86400 } });
+    if (!res.ok) return [];
+    const { data } = (await res.json()) as { data: { name: string }[] };
+    return [...new Set(data.map((s) => slugify(s.name)))];
+  } catch {
+    return [];
+  }
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticEntries: MetadataRoute.Sitemap = ROUTES.map(({ path, priority }) => ({
     url: `${SITE_URL}${path}`,
@@ -47,7 +59,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority,
   }));
 
-  const schools = await fetchSchoolEntries();
+  const [schools, signSlugs] = await Promise.all([fetchSchoolEntries(), fetchSignSlugs()]);
+
   const schoolEntries: MetadataRoute.Sitemap = schools.map(({ slug, updatedAt }) => ({
     url: `${SITE_URL}/ecoles/${slug}`,
     lastModified: new Date(updatedAt),
@@ -55,5 +68,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
-  return [...staticEntries, ...schoolEntries];
+  const signEntries: MetadataRoute.Sitemap = signSlugs.map((slug) => ({
+    url: `${SITE_URL}/traffic-signs/${slug}`,
+    changeFrequency: 'monthly',
+    priority: 0.6,
+  }));
+
+  return [...staticEntries, ...schoolEntries, ...signEntries];
 }

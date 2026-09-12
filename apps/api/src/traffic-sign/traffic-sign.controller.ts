@@ -60,6 +60,18 @@ export class TrafficSignController {
     );
   }
 
+  @Get('by-slug/:slug')
+  @ApiResponse({ status: 200, description: 'Traffic sign details by URL slug' })
+  @ApiResponse({ status: 404, description: 'Sign not found' })
+  async findBySlug(@Param('slug') slug: string) {
+    const sign = await this.trafficSignService.findBySlug(slug);
+    const [relatedSigns, questions] = await Promise.all([
+      this.trafficSignService.getRelatedSigns(sign.id, 4),
+      this.trafficSignService.getQuestionsForSign(sign.id, 3),
+    ]);
+    return { ...sign, relatedSigns, questions };
+  }
+
   @Get(':id/related')
   @ApiResponse({ status: 200, description: 'Related traffic signs' })
   async getRelated(@Param('id') id: string, @Query('limit') limit?: string) {

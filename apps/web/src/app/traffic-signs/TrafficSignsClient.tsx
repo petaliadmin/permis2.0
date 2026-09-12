@@ -2,11 +2,13 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AppShell, PageHeader } from '@/components/AppShell';
 import { Sheet } from '@permis2.0/ui';
 import { useWolofAudio } from '@/hooks/useWolofAudio';
 import { API_URL } from '@/lib/dataSource';
+import { slugify } from '@/lib/slug';
 
 /** Shape returned by GET /traffic-signs (DB) — mapped to the UI shape below. */
 interface ApiSign {
@@ -441,8 +443,8 @@ export default function TrafficSignsClient() {
               </div>
             )}
 
-            {wolof.available && (
-              <div className="mt-1 flex w-full gap-3">
+            <div className="mt-1 flex w-full gap-3">
+              {wolof.available && (
                 <button
                   onClick={wolof.toggle}
                   className="btn-primary flex-1"
@@ -454,8 +456,14 @@ export default function TrafficSignsClient() {
                   />
                   {wolof.playing ? 'Stop' : 'Wolof'}
                 </button>
-              </div>
-            )}
+              )}
+              <Link
+                href={`/traffic-signs/${slugify(selectedSign.name)}`}
+                className="btn-ghost flex-1 text-center"
+              >
+                Fiche complète
+              </Link>
+            </div>
           </div>
         )}
       </Sheet>
