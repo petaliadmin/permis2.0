@@ -36,7 +36,7 @@ export function OnboardingGate() {
       pathname.startsWith('/onboarding') ||
       pathname.startsWith('/auth') ||
       pathname.startsWith('/ecoles') ||
-      PUBLIC_ROUTES.some((route) => pathname === route) ||
+      PUBLIC_ROUTES.some((route) => pathname === route || pathname.startsWith(route + '/')) ||
       pathname === '/';
     if (!isOnboardingDone() && !exempt) {
       router.replace('/onboarding');

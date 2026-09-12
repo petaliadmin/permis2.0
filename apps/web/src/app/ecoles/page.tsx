@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import EcolesClient from './EcolesClient';
 
 export const metadata: Metadata = {
@@ -9,5 +10,9 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return <EcolesClient />;
+  return (
+    <Suspense>
+      <EcolesClient />
+    </Suspense>
+  );
 }

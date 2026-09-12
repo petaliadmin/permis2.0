@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { SiteHeader } from '@/components/SiteHeader';
 import { SiteFooter } from '@/components/SiteFooter';
+import { slugify } from '@/lib/slug';
 
 const SITE_URL = 'https://www.permis2.com';
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
@@ -150,12 +151,13 @@ export default async function AutoEcolesSenegalPage() {
               </p>
               <div className="mt-3 flex flex-wrap gap-2">
                 {cities.map((city) => (
-                  <span
+                  <Link
                     key={city}
-                    className="rounded-full border border-token bg-surface-1 px-3 py-1.5 text-xs font-semibold text-secondary"
+                    href={`/auto-ecoles-senegal/${slugify(city)}`}
+                    className="rounded-full border border-token bg-surface-1 px-3 py-1.5 text-xs font-semibold text-secondary hover:bg-surface-2"
                   >
                     {city}
-                  </span>
+                  </Link>
                 ))}
               </div>
             </section>

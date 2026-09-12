@@ -13,7 +13,7 @@ export type SchoolSort = 'recent' | 'price-asc' | 'price-desc' | 'name';
 
 export const EMPTY_SCHOOL_FILTERS: SchoolFilters = { city: '', category: '', q: '', maxPriceXof: '' };
 
-const CITIES = [
+export const CITIES = [
   'Dakar',
   'Guédiawaye',
   'Rufisque',

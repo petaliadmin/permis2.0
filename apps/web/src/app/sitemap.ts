@@ -32,6 +32,7 @@ const ROUTES: { path: string; priority: number }[] = [
 interface SchoolSlugEntry {
   slug: string;
   updatedAt: string;
+  city: string | null;
 }
 
 async function fetchSchoolEntries(): Promise<SchoolSlugEntry[]> {
@@ -84,5 +85,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }));
 
-  return [...staticEntries, ...schoolEntries, ...signEntries, ...quizCategoryEntries];
+  const cities = [...new Set(schools.map((s) => s.city).filter((c): c is string => !!c))];
+  const cityEntries: MetadataRoute.Sitemap = cities.map((city) => ({
+    url: `${SITE_URL}/auto-ecoles-senegal/${slugify(city)}`,
+    changeFrequency: 'weekly',
+    priority: 0.6,
+  }));
+
+  return [
+    ...staticEntries,
+    ...schoolEntries,
+    ...signEntries,
+    ...quizCategoryEntries,
+    ...cityEntries,
+  ];
 }

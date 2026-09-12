@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
+import { useSearchParams } from 'next/navigation';
 import type { School } from '@permis2.0/types';
 import { Skeleton, EmptyState } from '@permis2.0/ui';
 import { API_URL } from '@/lib/dataSource';
@@ -24,7 +25,13 @@ const SchoolsMap = dynamic(
 );
 
 export default function EcolesClient() {
-  const [filters, setFilters] = useState<SchoolFilters>(EMPTY_SCHOOL_FILTERS);
+  // Deep-link support (e.g. /ecoles?city=Dakar from the /auto-ecoles-senegal city pages).
+  const searchParams = useSearchParams();
+  const cityParam = searchParams.get('city') ?? '';
+  const [filters, setFilters] = useState<SchoolFilters>({
+    ...EMPTY_SCHOOL_FILTERS,
+    city: cityParam,
+  });
   const [sort, setSort] = useState<SchoolSort>('recent');
   const [schools, setSchools] = useState<School[]>([]);
   const [loading, setLoading] = useState(true);
