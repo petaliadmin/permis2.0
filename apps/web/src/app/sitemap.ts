@@ -14,6 +14,7 @@ const ROUTES: { path: string; priority: number }[] = [
   { path: '/traffic-signs', priority: 1 },
   { path: '/code-route-senegal', priority: 0.9 },
   { path: '/permis-conduire-senegal', priority: 0.9 },
+  { path: '/auto-ecoles-senegal', priority: 0.8 },
   { path: '/cours', priority: 0.9 },
   { path: '/quizz', priority: 0.9 },
   { path: '/tests', priority: 0.8 },

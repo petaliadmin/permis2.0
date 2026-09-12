@@ -26,6 +26,11 @@ export function SiteFooter() {
                 </Link>
               </li>
               <li>
+                <Link href="/auto-ecoles-senegal" className="text-secondary hover:text-foreground">
+                  Auto-écoles Sénégal
+                </Link>
+              </li>
+              <li>
                 <Link href="/ecoles" className="text-secondary hover:text-foreground">
                   Trouver une auto-école
                 </Link>

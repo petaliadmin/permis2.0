@@ -30,6 +30,7 @@ export function OnboardingGate() {
       '/politique-confidentialite',
       '/code-route-senegal',
       '/permis-conduire-senegal',
+      '/auto-ecoles-senegal',
     ];
     const exempt =
       pathname.startsWith('/onboarding') ||

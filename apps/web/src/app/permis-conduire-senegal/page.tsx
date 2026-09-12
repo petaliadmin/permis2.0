@@ -156,7 +156,10 @@ export default async function PermisConduireSenegalPage() {
                 </span>
                 <span>
                   <strong className="text-foreground">Choisissez une auto-école</strong> dans notre{' '}
-                  <Link href="/ecoles" className="font-semibold text-primary-600 hover:underline">
+                  <Link
+                    href="/auto-ecoles-senegal"
+                    className="font-semibold text-primary-600 hover:underline"
+                  >
                     annuaire d'auto-écoles
                   </Link>{' '}
                   et pré-inscrivez-vous en ligne.
