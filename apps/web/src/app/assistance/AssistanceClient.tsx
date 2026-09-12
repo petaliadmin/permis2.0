@@ -3,8 +3,8 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AppShell, PageHeader } from '@/components/AppShell';
-import { SUBSCRIPTION_PRICE_ANNUAL } from '@permis2.0/shared';
 import { WHATSAPP_DISPLAY, whatsappLink } from '@/lib/contact';
+import { ASSISTANCE_FAQS as FAQ } from '@/lib/assistanceFaq';
 
 const HELP_ITEMS = [
   {
@@ -34,25 +34,6 @@ const HELP_ITEMS = [
     desc: 'Partagez vos idées',
     color: '#16A34A',
     soft: 'bg-green-50',
-  },
-];
-
-const FAQ = [
-  {
-    q: "Comment fonctionne l'abonnement ?",
-    a: `L'abonnement à ${SUBSCRIPTION_PRICE_ANNUAL} débloque tous les quiz, les séries d'examen et le mode examen officiel. Contactez-nous sur WhatsApp au ${WHATSAPP_DISPLAY} pour l'activer — c'est immédiat.`,
-  },
-  {
-    q: 'Le contenu est-il conforme au Code sénégalais ?',
-    a: 'Oui. Les panneaux, priorités, vitesses et infractions suivent le Code de la route du Sénégal. Toute information non vérifiable est signalée.',
-  },
-  {
-    q: 'Puis-je réviser sans connexion ?',
-    a: "Oui, l'app est une PWA : les leçons consultées sont mises en cache pour une révision hors-ligne.",
-  },
-  {
-    q: 'Quels moyens de paiement acceptez-vous ?',
-    a: `Wave et Orange Money, directement auprès de notre équipe : écrivez-nous sur WhatsApp au ${WHATSAPP_DISPLAY} et votre abonnement est activé immédiatement après le paiement.`,
   },
 ];
 
@@ -129,7 +110,7 @@ export default function AssistanceClient() {
                 onClick={() => setOpen(open === i ? null : i)}
                 className="flex w-full items-center gap-3 p-4 text-left"
               >
-                <span className="flex-1 text-sm font-semibold text-foreground">{f.q}</span>
+                <span className="flex-1 text-sm font-semibold text-foreground">{f.question}</span>
                 <i
                   className={`ti ti-chevron-down text-secondary transition-transform ${open === i ? 'rotate-180' : ''}`}
                   aria-hidden="true"
@@ -143,7 +124,7 @@ export default function AssistanceClient() {
                     exit={{ height: 0, opacity: 0 }}
                     transition={{ duration: 0.25 }}
                   >
-                    <p className="px-4 pb-4 text-sm leading-relaxed text-secondary">{f.a}</p>
+                    <p className="px-4 pb-4 text-sm leading-relaxed text-secondary">{f.answer}</p>
                   </motion.div>
                 )}
               </AnimatePresence>
