@@ -21,6 +21,11 @@ export function SiteFooter() {
             <p className="text-xs font-bold uppercase tracking-wide text-muted">Découvrir</p>
             <ul className="mt-3 space-y-2 text-sm">
               <li>
+                <Link href="/permis-conduire-senegal" className="text-secondary hover:text-foreground">
+                  Permis de conduire Sénégal
+                </Link>
+              </li>
+              <li>
                 <Link href="/ecoles" className="text-secondary hover:text-foreground">
                   Trouver une auto-école
                 </Link>

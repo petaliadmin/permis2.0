@@ -150,7 +150,15 @@ export default async function CodeRouteSenegalPage() {
               C'est l'ensemble des règles qui organisent la circulation : signalisation, priorités
               aux intersections, vitesses, dépassement, stationnement et comportement à adopter
               selon les situations. L'examen du Code vérifie que le candidat connaît et sait
-              appliquer ces règles avant de passer à l'épreuve pratique de conduite.
+              appliquer ces règles avant de passer à l'épreuve pratique de conduite — voir notre
+              page{' '}
+              <Link
+                href="/permis-conduire-senegal"
+                className="font-semibold text-primary-600 hover:underline"
+              >
+                Permis de conduire au Sénégal
+              </Link>{' '}
+              pour le parcours complet.
             </p>
             <p className="mt-3">
               <strong className="text-foreground">Information pédagogique, pas réglementaire :</strong>{' '}
