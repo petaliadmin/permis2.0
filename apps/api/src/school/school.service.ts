@@ -110,7 +110,7 @@ export class SchoolService {
   async listSlugsForSitemap() {
     return this.prisma.school.findMany({
       where: { status: SchoolStatus.ACTIVE },
-      select: { slug: true, updatedAt: true },
+      select: { slug: true, updatedAt: true, city: true },
     });
   }
 
@@ -218,11 +218,16 @@ export class SchoolService {
 
   async create(userId: string, dto: CreateSchoolDto) {
     const base = slugify(dto.name) || 'ecole';
-    return this.prisma.$transaction(async (tx) => {
-      // Retry on the rare slug collision instead of pre-checking existence.
-      for (let attempt = 0; attempt < 5; attempt++) {
-        const slug = attempt === 0 ? base : `${base}-${attempt + 1}`;
-        try {
+    // Retry on the rare slug collision instead of pre-checking existence.
+    // Each attempt gets its OWN transaction: once a query inside a Postgres
+    // transaction errors, that transaction is aborted and every later query
+    // on it fails with 25P02 ("current transaction is aborted") — retrying
+    // the create with a new slug inside the same `tx` never actually works,
+    // it just replaces the real P2002 with a confusing abort error.
+    for (let attempt = 0; attempt < 5; attempt++) {
+      const slug = attempt === 0 ? base : `${base}-${attempt + 1}`;
+      try {
+        return await this.prisma.$transaction(async (tx) => {
           const school = await tx.school.create({
             data: { ...dto, slug, status: SchoolStatus.PENDING },
           });
@@ -230,12 +235,12 @@ export class SchoolService {
             data: { schoolId: school.id, userId, role: SchoolMemberRole.OWNER },
           });
           return school;
-        } catch (err: any) {
-          if (err?.code !== 'P2002' || attempt === 4) throw err;
-        }
+        });
+      } catch (err: any) {
+        if (err?.code !== 'P2002' || attempt === 4) throw err;
       }
-      throw new Error('Impossible de générer un slug unique');
-    });
+    }
+    throw new Error('Impossible de générer un slug unique');
   }
 
   async update(schoolId: string, dto: UpdateSchoolDto) {
