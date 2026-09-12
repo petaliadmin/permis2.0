@@ -59,7 +59,12 @@ export const metadata: Metadata = {
   applicationName: APP_NAME,
   manifest: '/manifest.json',
   alternates: { canonical: '/' },
-  verification: { google: 'dmRztJ-JkfX2AjwBovRsv6s56g7GlanGMCi69guMWSs' },
+  verification: {
+    google: [
+      'dmRztJ-JkfX2AjwBovRsv6s56g7GlanGMCi69guMWSs',
+      'ezrE2BeEk3wnpihGaujlfiR3WE2OAkjc9mFEosmwTCo',
+    ],
+  },
   robots: {
     index: true,
     follow: true,
@@ -138,10 +143,17 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       suppressHydrationWarning
     >
       <head>
+        {/* Self-hosted (was a render-blocking cdn.jsdelivr.net stylesheet) — icons are
+            used site-wide (nav, buttons) so the font is preloaded, not just linked. */}
         <link
-          rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css"
+          rel="preload"
+          href="/fonts/tabler-icons/fonts/tabler-icons.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
         />
+        <link rel="stylesheet" href="/fonts/tabler-icons/tabler-icons.min.css" />
+
         {/* Basic WebSite structured data — sitelinks searchbox eligibility */}
         <script
           type="application/ld+json"

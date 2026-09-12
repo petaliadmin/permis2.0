@@ -22,6 +22,12 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
+        // Self-hosted icon webfont — content-addressed by version in the vendor
+        // package, safe to cache aggressively (a version bump changes the path).
+        source: '/fonts/tabler-icons/:path*',
+        headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
+      },
+      {
         source: '/(.*)',
         headers: [
           { key: 'X-Frame-Options', value: 'DENY' },
