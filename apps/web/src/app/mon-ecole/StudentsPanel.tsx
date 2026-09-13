@@ -83,7 +83,7 @@ export const StudentsPanel = forwardRef<StudentsPanelHandle, StudentsPanelProps>
 
   const [addOpen, setAddOpen] = useState(false);
   const [importOpen, setImportOpen] = useState(false);
-  const [mode, setMode] = useState<'account' | 'guest'>('account');
+  const [mode, setMode] = useState<'account' | 'guest'>('guest');
   const [phone, setPhone] = useState('');
   const [found, setFound] = useState<FoundUser | null>(null);
   const [guestName, setGuestName] = useState('');
@@ -153,7 +153,7 @@ export const StudentsPanel = forwardRef<StudentsPanelHandle, StudentsPanelProps>
 
   const closeAdd = () => {
     setAddOpen(false);
-    setMode('account');
+    setMode('guest');
     setFound(null);
     setPhone('');
     setGuestName('');
@@ -401,7 +401,7 @@ export const StudentsPanel = forwardRef<StudentsPanelHandle, StudentsPanelProps>
         {mode === 'account' ? (
           <>
             <p className="mt-3 text-xs text-secondary">La personne doit déjà avoir un compte PERMIS 2.0.</p>
-            <div className="mt-3 flex gap-2">
+            <div className="mt-3 flex gap-3">
               <input
                 value={phone}
                 onChange={(e) => {
@@ -411,7 +411,7 @@ export const StudentsPanel = forwardRef<StudentsPanelHandle, StudentsPanelProps>
                 placeholder="77 123 45 67"
                 className="flex-1 rounded-xl border border-token bg-surface-2 px-3.5 py-2.5 text-sm focus:border-primary-400 focus:outline-none"
               />
-              <button onClick={lookup} disabled={busy} className="btn-ghost !px-4 !py-2.5 text-sm">
+              <button onClick={lookup} disabled={busy} className="btn-ghost ml-1 !px-4 !py-2.5 text-sm">
                 Rechercher
               </button>
             </div>

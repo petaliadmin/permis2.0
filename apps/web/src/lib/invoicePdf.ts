@@ -3,7 +3,10 @@ import autoTable from 'jspdf-autotable';
 import type { School, SchoolPayment, SchoolPaymentItem, SchoolPersonRef } from '@permis2.0/types';
 import { SchoolPaymentType } from '@permis2.0/types';
 
-const fmtXof = (n: number) => `${n.toLocaleString('fr-FR')} FCFA`;
+// Not `toLocaleString('fr-FR')` — its thousands separator is a narrow
+// no-break space (U+202F), which jsPDF's default Helvetica font can't
+// encode and renders as a stray "/" instead. Plain ASCII space instead.
+const fmtXof = (n: number) => `${String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' ')} FCFA`;
 const fmtDate = (d: string | Date) =>
   new Date(d).toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' });
 

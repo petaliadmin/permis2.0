@@ -1,10 +1,11 @@
 'use client';
 
 import { forwardRef, useImperativeHandle, useMemo, useState } from 'react';
-import type { SchoolMembership, SchoolStudent, Session, Vehicle } from '@permis2.0/types';
+import type { School, SchoolMembership, SchoolPersonRef, SchoolStudent, Session, Vehicle } from '@permis2.0/types';
 import { SchoolMemberRole, SessionStatus, SessionType } from '@permis2.0/types';
 import { EmptyState, Sheet, Skeleton } from '@permis2.0/ui';
 import { cn } from '@/lib/cn';
+import { whatsappLinkTo } from '@/lib/contact';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -32,6 +33,30 @@ const fmtDateTime = (d: string | Date) =>
 /** yyyy-mm-ddThh:mm for a native <input type="datetime-local">. */
 const toDateTimeInput = (d?: string | Date | null) => (d ? new Date(d).toISOString().slice(0, 16) : '');
 
+const personName = (p?: SchoolPersonRef | null) => p?.user?.name ?? p?.guestName ?? '';
+const personPhone = (p?: SchoolPersonRef | null) => p?.user?.phone ?? p?.guestPhone ?? '';
+
+/** Pre-filled wa.me messages for a school staff member to send with one tap — the
+ * app has no WhatsApp Business API integration, so this stays a manual send. */
+function studentNotifyMessage(schoolName: string, s: Session): string {
+  const lines = [
+    `Bonjour ${personName(s.student)},`,
+    `Petit rappel : votre séance de ${TYPE_LABEL[s.type]} chez ${schoolName} est prévue le ${fmtDateTime(s.startsAt)}.`,
+  ];
+  if (s.instructor) lines.push(`Moniteur : ${personName(s.instructor)}.`);
+  if (s.vehicle) lines.push(`Véhicule : ${s.vehicle.plate}.`);
+  return lines.join('\n');
+}
+
+function instructorNotifyMessage(schoolName: string, s: Session): string {
+  const lines = [
+    `Bonjour ${personName(s.instructor)},`,
+    `Vous avez une séance de ${TYPE_LABEL[s.type]} avec ${personName(s.student)} le ${fmtDateTime(s.startsAt)} (${schoolName}).`,
+  ];
+  if (s.vehicle) lines.push(`Véhicule : ${s.vehicle.plate}.`);
+  return lines.join('\n');
+}
+
 function nextActions(status: string): { label: string; target: string }[] {
   if (status !== SessionStatus.SCHEDULED) return [];
   return [
@@ -43,6 +68,7 @@ function nextActions(status: string): { label: string; target: string }[] {
 
 interface SessionsPanelProps {
   schoolId: string;
+  school: Pick<School, 'name'>;
   sessions: Session[] | null;
   students: SchoolStudent[] | null;
   members: SchoolMembership[] | null;
@@ -56,6 +82,7 @@ export interface SessionsPanelHandle {
 
 export const SessionsPanel = forwardRef<SessionsPanelHandle, SessionsPanelProps>(function SessionsPanel({
   schoolId,
+  school,
   sessions,
   students,
   members,
@@ -267,6 +294,31 @@ export const SessionsPanel = forwardRef<SessionsPanelHandle, SessionsPanelProps>
                 <p className="flex items-center gap-2">
                   <i className="ti ti-car" aria-hidden="true" /> {open.vehicle.plate}
                 </p>
+              )}
+            </div>
+
+            <div className="mt-4 flex flex-wrap gap-2">
+              {personPhone(open.student) && (
+                <a
+                  href={whatsappLinkTo(personPhone(open.student), studentNotifyMessage(school.name, open))}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-ghost flex-1 !py-2 text-xs"
+                >
+                  <i className="ti ti-brand-whatsapp" aria-hidden="true" />
+                  Notifier l&apos;élève
+                </a>
+              )}
+              {open.instructor && personPhone(open.instructor) && (
+                <a
+                  href={whatsappLinkTo(personPhone(open.instructor), instructorNotifyMessage(school.name, open))}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-ghost flex-1 !py-2 text-xs"
+                >
+                  <i className="ti ti-brand-whatsapp" aria-hidden="true" />
+                  Notifier le moniteur
+                </a>
               )}
             </div>
 

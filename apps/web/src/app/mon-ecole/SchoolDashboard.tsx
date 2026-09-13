@@ -411,6 +411,7 @@ export function SchoolDashboard({ school, onBackToPicker, onSchoolUpdated }: Sch
           <SessionsPanel
             ref={sessionsRef}
             schoolId={school.id}
+            school={school}
             sessions={sessions}
             students={students}
             members={members}

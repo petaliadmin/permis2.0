@@ -131,10 +131,22 @@ export function SchoolSettingsSheet({ open, onClose, school, onSaved }: SchoolSe
 
   return (
     <Sheet open={open} onClose={onClose} ariaLabel="Modifier les informations de l'auto-école">
-      <p className="font-display text-lg font-bold text-foreground">Infos de l&apos;auto-école</p>
-      <p className="mt-1 text-xs text-secondary">
-        Ces informations apparaissent sur votre fiche publique dans l&apos;annuaire.
-      </p>
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <p className="font-display text-lg font-bold text-foreground">Infos de l&apos;auto-école</p>
+          <p className="mt-1 text-xs text-secondary">
+            Ces informations apparaissent sur votre fiche publique dans l&apos;annuaire.
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="Fermer"
+          className="-mr-1 -mt-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-secondary hover:bg-surface-2"
+        >
+          <i className="ti ti-x text-lg" aria-hidden="true" />
+        </button>
+      </div>
 
       {/* Logo */}
       <div className="mt-4 flex items-center gap-4">

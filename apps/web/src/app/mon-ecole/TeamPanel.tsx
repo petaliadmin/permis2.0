@@ -3,10 +3,13 @@
 import { useState } from 'react';
 import type { SchoolMembership } from '@permis2.0/types';
 import { SchoolMemberRole } from '@permis2.0/types';
-import { EmptyState, Skeleton } from '@permis2.0/ui';
+import { EmptyState, Sheet, Skeleton } from '@permis2.0/ui';
 import { cn } from '@/lib/cn';
 import { isContactPickerSupported, pickContacts } from '@/lib/contactPicker';
 import { ImportSheet } from './ImportSheet';
+
+const fmtDate = (d: string | Date) =>
+  new Date(d).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' });
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -36,7 +39,7 @@ interface TeamPanelProps {
 }
 
 export function TeamPanel({ schoolId, members, onChanged }: TeamPanelProps) {
-  const [mode, setMode] = useState<'account' | 'guest'>('account');
+  const [mode, setMode] = useState<'account' | 'guest'>('guest');
   const [phone, setPhone] = useState('');
   const [found, setFound] = useState<FoundUser | null>(null);
   const [guestName, setGuestName] = useState('');
@@ -46,6 +49,9 @@ export function TeamPanel({ schoolId, members, onChanged }: TeamPanelProps) {
   const [busy, setBusy] = useState(false);
   const [removing, setRemoving] = useState<string | null>(null);
   const [importOpen, setImportOpen] = useState(false);
+  const [openId, setOpenId] = useState<string | null>(null);
+
+  const open = (members ?? []).find((m) => m.id === openId) ?? null;
 
   const lookup = async () => {
     setError('');
@@ -114,7 +120,10 @@ export function TeamPanel({ schoolId, members, onChanged }: TeamPanelProps) {
         method: 'DELETE',
         credentials: 'include',
       });
-      if (res.ok) onChanged();
+      if (res.ok) {
+        setOpenId(null);
+        onChanged();
+      }
     } finally {
       setRemoving(null);
     }
@@ -149,7 +158,7 @@ export function TeamPanel({ schoolId, members, onChanged }: TeamPanelProps) {
         {mode === 'account' ? (
           <>
             <p className="mt-3 text-xs text-secondary">La personne doit déjà avoir un compte PERMIS 2.0.</p>
-            <div className="mt-3 flex gap-2">
+            <div className="mt-3 flex gap-3">
               <input
                 value={phone}
                 onChange={(e) => {
@@ -159,7 +168,7 @@ export function TeamPanel({ schoolId, members, onChanged }: TeamPanelProps) {
                 placeholder="77 123 45 67"
                 className="flex-1 rounded-xl border border-token bg-surface-2 px-3.5 py-2.5 text-sm focus:border-primary-400 focus:outline-none"
               />
-              <button onClick={lookup} disabled={busy} className="btn-ghost !px-4 !py-2.5 text-sm">
+              <button onClick={lookup} disabled={busy} className="btn-ghost ml-1 !px-4 !py-2.5 text-sm">
                 Rechercher
               </button>
             </div>
@@ -245,8 +254,12 @@ export function TeamPanel({ schoolId, members, onChanged }: TeamPanelProps) {
               key={m.id}
               className="flex items-center justify-between rounded-2xl border border-token bg-surface-1 p-4 shadow-soft"
             >
-              <div>
-                <p className="font-display text-sm font-bold text-foreground">
+              <button
+                type="button"
+                onClick={() => setOpenId(m.id)}
+                className="min-w-0 flex-1 text-left"
+              >
+                <p className="truncate font-display text-sm font-bold text-foreground">
                   {m.user?.name ?? m.guestName}
                   {!m.userId && (
                     <span className="ml-1.5 chip bg-surface-2 text-secondary align-middle text-[10px]">
@@ -255,8 +268,8 @@ export function TeamPanel({ schoolId, members, onChanged }: TeamPanelProps) {
                   )}
                 </p>
                 <p className="text-xs text-secondary">{m.user?.phone ?? m.guestPhone}</p>
-              </div>
-              <div className="flex items-center gap-2">
+              </button>
+              <div className="flex shrink-0 items-center gap-2">
                 <span className="chip chip-primary">{ROLE_LABEL[m.role]}</span>
                 {m.role !== SchoolMemberRole.OWNER && (
                   <button
@@ -278,6 +291,48 @@ export function TeamPanel({ schoolId, members, onChanged }: TeamPanelProps) {
           ))}
         </div>
       )}
+
+      {/* Detail sheet */}
+      <Sheet open={!!open} onClose={() => setOpenId(null)} ariaLabel="Détail du membre">
+        {open && (
+          <div>
+            <p className="font-display text-lg font-bold text-foreground">
+              {open.user?.name ?? open.guestName}
+            </p>
+            <div className="mt-1 flex flex-wrap gap-1.5">
+              <span className="chip chip-primary">{ROLE_LABEL[open.role]}</span>
+              {!open.userId && <span className="chip bg-surface-2 text-secondary">Sans compte</span>}
+            </div>
+
+            <div className="mt-4 space-y-1.5 text-sm text-secondary">
+              <p className="flex items-center gap-2">
+                <i className="ti ti-phone" aria-hidden="true" /> {open.user?.phone ?? open.guestPhone}
+              </p>
+              {open.user?.email && (
+                <p className="flex items-center gap-2">
+                  <i className="ti ti-mail" aria-hidden="true" /> {open.user.email}
+                </p>
+              )}
+              <p className="flex items-center gap-2">
+                <i className="ti ti-calendar" aria-hidden="true" /> Membre depuis le {fmtDate(open.createdAt)}
+              </p>
+            </div>
+
+            {open.role !== SchoolMemberRole.OWNER && (
+              <button
+                onClick={() => {
+                  if (confirm(`Retirer ${open.user?.name ?? open.guestName} de l'équipe ?`))
+                    removeMember(open.id);
+                }}
+                disabled={removing === open.id}
+                className={cn('btn-danger mt-4 w-full', removing === open.id && 'opacity-50')}
+              >
+                Retirer de l&apos;équipe
+              </button>
+            )}
+          </div>
+        )}
+      </Sheet>
     </div>
   );
 }
