@@ -41,6 +41,7 @@ const THEMES: Theme[] = [
       'Priorité & Arrêt (STOP / Cédez)',
       'Panneaux de priorité',
       'Rond-point & Giratoire',
+      'Véhicules prioritaires',
     ],
   },
   {
@@ -52,8 +53,8 @@ const THEMES: Theme[] = [
     categories: [
       'Panneaux de danger',
       "Panneaux d'interdiction",
+      "Panneaux d'obligation",
       'Panneaux de direction',
-      'Signalisation de voie',
       'Restrictions (hauteur/largeur/poids)',
       'Signalisation temporaire',
       'Feux tricolores',
@@ -90,6 +91,14 @@ const THEMES: Theme[] = [
       'Véhicule et équipements',
       'Réglementation',
     ],
+  },
+  {
+    id: 'demarches',
+    label: 'Obtenir son permis',
+    desc: 'Documents, dépôt du dossier, examens du code et de conduite',
+    icon: 'ti-id-badge-2',
+    color: '#0EA5E9',
+    categories: ['Obtenir son permis de conduire'],
   },
 ];
 

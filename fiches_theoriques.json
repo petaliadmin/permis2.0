@@ -1,67 +1,90 @@
 {
   "titre": "Fiches de révision – Code de la route Sénégal",
-  "version": "1.0",
+  "version": "2.0",
   "fiches": [
     {
       "id": "fiche_001",
       "titre": "La priorité à droite",
       "categorie": "priorite_intersection",
-      "contenu": "En l'absence de signalisation, la priorité va toujours au véhicule venant de droite. Cette règle s'applique dans toutes les intersections non signalisées.",
+      "contenu": "En l'absence de tout panneau ou marquage, la règle par défaut à chaque intersection est la priorité à droite : tout véhicule arrivant de votre droite est prioritaire, et vous devez le laisser passer.\n\nQUAND S'APPLIQUE-T-ELLE\nCette règle ne s'applique qu'aux intersections sans signalisation de priorité (pas de panneau STOP, cédez-le-passage, feu ou route prioritaire). Dès qu'un panneau ou un feu est présent, c'est lui qui fixe la priorité, pas la position à droite.\n\nCOMMENT L'APPLIQUER\nÀ l'approche d'une intersection non signalée, ralentissez et regardez à droite. Si un véhicule y est visible et suffisamment proche pour représenter un danger, laissez-le passer avant de vous engager. En cas de doute sur qui doit céder, ralentissez : mieux vaut perdre quelques secondes qu'avoir un accident.\n\nCe principe structure l'ensemble de la circulation dès qu'aucune signalisation n'indique le contraire — il reste la règle la plus fréquemment mal appliquée par les conducteurs débutants.",
       "points_cles": [
-        "Tout véhicule venant de votre droite est prioritaire",
-        "Vous cédez le passage aux véhicules venant de votre droite",
-        "Cette règle cède devant toute signalisation spécifique (STOP, cédez, route prioritaire)"
+        "Tout véhicule venant de votre droite est prioritaire à une intersection non signalée",
+        "La règle s'applique uniquement en l'absence de panneau, feu ou marquage de priorité",
+        "En cas de doute, ralentissez et laissez passer plutôt que de forcer le passage"
+      ],
+      "regles": [
+        "Ralentir systématiquement à l'approche d'une intersection non signalée",
+        "Céder le passage à tout véhicule venant de la droite, même une moto ou un vélo",
+        "Ne jamais présumer que l'autre conducteur va céder le passage"
       ],
       "exceptions": [
         "Sur une route prioritaire (losange jaune), vous ne cédez pas le passage aux routes secondaires",
         "Au STOP, tous les véhicules sont prioritaires",
-        "Dans un giratoire, les véhicules déjà engagés sont prioritaires"
-      ]
+        "Dans un giratoire, les véhicules déjà engagés sont prioritaires",
+        "Sur une place ou dans un parking, restez prudent : la priorité à droite n'y est pas toujours appliquée strictement"
+      ],
+      "erreurs_frequentes": [
+        "Accélérer pour « passer avant » le véhicule venant de la droite",
+        "Ne pas ralentir dans les quartiers résidentiels sous prétexte qu'il n'y a pas de panneau"
+      ],
+      "illustrations": ["/icons/panneaux/AB1.svg"]
     },
     {
       "id": "fiche_002",
       "titre": "Le panneau STOP",
       "categorie": "priorite_arret",
-      "contenu": "Le panneau STOP (octogone rouge) oblige à un arrêt complet, même si la route semble dégagée.",
+      "contenu": "Le panneau STOP est un octogone rouge à écriture blanche, unique par sa forme parmi tous les panneaux — reconnaissable même de dos ou dans le brouillard. Il impose un arrêt complet et obligatoire, quelles que soient les conditions de circulation.\n\nCOMMENT S'ARRÊTER CORRECTEMENT\nL'arrêt doit être total : les roues doivent cesser complètement de tourner, ne serait-ce qu'une seconde. Ralentir fortement sans immobiliser le véhicule (le « stop roulé ») reste une infraction, même si aucun autre véhicule n'est visible. L'arrêt se fait au niveau de la ligne d'effet (ligne blanche au sol), pas au niveau du panneau lui-même si celui-ci est plus avancé.\n\nAPRÈS L'ARRÊT\nUne fois arrêté, vérifiez la circulation dans les deux sens avant de repartir. Au STOP, vous devez céder le passage à tous les véhicules circulant sur la voie que vous coupez ou rejoignez, sans exception — y compris s'ils arrivent de votre droite ou de votre gauche.\n\nLe non-respect du STOP est l'une des infractions les plus sanctionnées, car c'est aussi l'une des causes les plus fréquentes d'accidents aux intersections.",
       "points_cles": [
         "Arrêt COMPLET obligatoire – ralentir n'est pas suffisant",
         "S'arrêter au niveau de la ligne blanche au sol (pas du panneau)",
         "Vérifier dans les deux sens avant de repartir",
-        "Céder le passage à TOUS les véhicules"
+        "Céder le passage à TOUS les véhicules",
+        "Le panneau reste valable même sans marquage au sol visible"
       ],
       "erreurs_frequentes": [
         "S'arrêter trop tôt (avant la ligne blanche)",
         "Ne pas s'arrêter complètement (roulement lent)",
         "Penser qu'on peut passer avant les voitures venant de gauche"
-      ]
+      ],
+      "illustrations": ["/icons/panneaux/AB4.svg"]
     },
     {
       "id": "fiche_003",
       "titre": "Le cédez-le-passage",
       "categorie": "priorite_arret",
-      "contenu": "Le triangle inversé rouge (cédez-le-passage) oblige à laisser passer les véhicules sur la voie principale, sans arrêt obligatoire.",
+      "contenu": "Le panneau cédez-le-passage — un triangle pointe en bas, fond blanc bordé de rouge — impose de laisser la priorité aux véhicules circulant sur la voie que vous abordez, sans obligation d'arrêt total si la voie est déjà dégagée.\n\nDIFFÉRENCE AVEC LE STOP\nContrairement au STOP, un arrêt n'est obligatoire que si la présence d'un véhicule prioritaire l'exige. Si la voie est réellement libre dans les deux sens, vous pouvez vous engager sans vous arrêter, mais toujours après avoir ralenti et vérifié.\n\nCOMPORTEMENT ATTENDU\nRalentissez systématiquement à l'approche du panneau, même si la visibilité semble bonne. Regardez dans les deux sens de la voie prioritaire. En cas de doute sur la distance ou la vitesse d'un véhicule qui approche, cédez-lui le passage plutôt que de tenter de vous insérer.\n\nCe panneau se rencontre souvent en amont d'un STOP, d'une route prioritaire ou à l'approche d'un giratoire.",
       "points_cles": [
         "Pas d'arrêt obligatoire si la voie est dégagée",
-        "Ralentir et vérifier avant de s'engager",
+        "Ralentir et vérifier avant de s'engager, même si la visibilité semble bonne",
         "Les véhicules sur la voie principale sont prioritaires"
-      ]
+      ],
+      "regles": [
+        "Céder le passage à tout véhicule déjà engagé sur la voie prioritaire",
+        "Ne jamais couper la trajectoire d'un véhicule prioritaire, même à faible vitesse"
+      ],
+      "illustrations": ["/icons/panneaux/AB3a.svg"]
     },
     {
       "id": "fiche_004",
       "titre": "Route prioritaire – Losange jaune",
       "categorie": "signalisation_priorite",
-      "contenu": "Le panneau losange jaune-orange indique que vous êtes sur une route prioritaire. Les véhicules des voies secondaires doivent vous céder le passage.",
+      "contenu": "Le panneau losange jaune bordé de blanc annonce le début d'une route à caractère prioritaire : les véhicules qui rejoignent cette route depuis une voie secondaire doivent vous céder le passage, même s'il n'y a ni STOP ni cédez-le-passage visible de leur côté.\n\nDÉBUT ET FIN DE PRIORITÉ\nLe losange plein (jaune sur fond blanc) marque le début de la route prioritaire. Le même losange barré d'une diagonale noire signale sa fin : à partir de ce panneau, la priorité à droite (ou toute autre règle standard) reprend ses droits.\n\nCE QUE CELA CHANGE POUR VOUS\nSi vous circulez sur une route prioritaire, vous n'avez pas à ralentir aux intersections avec les voies secondaires — mais restez vigilant : tous les conducteurs ne respectent pas cette priorité. Si vous arrivez d'une voie secondaire qui rejoint une route prioritaire, vous devez céder le passage même en l'absence de panneau cédez-le-passage à cet endroit précis, le losange en amont suffisant à l'indiquer.\n\nCe type de signalisation est fréquent sur les axes principaux reliant les villes, où la circulation est plus dense et plus rapide.",
       "points_cles": [
         "Losange plein jaune = début de route prioritaire",
         "Losange barré = fin de route prioritaire",
         "Vous êtes prioritaire sur tous les véhicules venant des voies secondaires"
-      ]
+      ],
+      "exceptions": [
+        "La priorité cesse dès le panneau de fin de route prioritaire (losange barré)",
+        "Un feu tricolore ou un agent de circulation reste toujours prioritaire sur ce panneau"
+      ],
+      "illustrations": ["/icons/panneaux/AB6.svg", "/icons/panneaux/AB7.svg"]
     },
     {
       "id": "fiche_005",
       "titre": "Le dépassement – Règles essentielles",
       "categorie": "depassement",
-      "contenu": "Le dépassement est une manœuvre dangereuse qui nécessite une grande prudence et le respect de conditions strictes.",
+      "contenu": "Le dépassement consiste à doubler un véhicule qui vous précède en empruntant temporairement la voie de circulation opposée ou une voie adjacente. C'est l'une des manœuvres les plus accidentogènes du code de la route et elle obéit à des règles strictes.\n\nAVANT DE DÉPASSER\nVérifiez vos rétroviseurs et votre angle mort, mettez votre clignotant gauche suffisamment tôt pour prévenir les autres usagers, et assurez-vous d'une visibilité et d'une distance suffisantes pour terminer la manœuvre sans danger. Le marquage au sol doit être une ligne discontinue de votre côté : une ligne continue interdit tout dépassement.\n\nOÙ LE DÉPASSEMENT EST INTERDIT\nMême en l'absence de ligne continue, il est interdit de dépasser en haut d'une côte, dans un virage, à l'approche d'une intersection, lorsque la visibilité est insuffisante, lorsque vous êtes vous-même en train d'être dépassé, ou lorsqu'un panneau l'interdit explicitement.\n\nDISTANCES DE SÉCURITÉ AVEC UN CYCLISTE\nLors du dépassement d'un cycliste, la distance latérale de sécurité est d'au moins 1,50 mètre hors agglomération, et d'au moins 1 mètre en agglomération. Ces distances protègent le cycliste d'un déséquilibre en cas de vent ou de nid-de-poule.\n\nAPRÈS LE DÉPASSEMENT\nNe vous rabattez qu'après avoir vu l'intégralité du véhicule dépassé dans votre rétroviseur intérieur, puis reprenez votre voie de circulation normale sans freinage brusque.",
       "points_cles": [
         "Vérifier les rétroviseurs et l'angle mort",
         "Mettre le clignotant gauche",
@@ -70,120 +93,101 @@
         "Visibilité suffisante obligatoire",
         "Reprendre la voie de droite après le dépassement"
       ],
-      "interdictions": [
-        "En haut d'une côte",
-        "Dans un virage",
-        "À l'approche d'une intersection",
-        "Sur ligne continue",
-        "Lorsqu'on est soi-même dépassé",
-        "En cas de visibilité insuffisante",
-        "Quand un panneau l'interdit explicitement"
+      "regles": [
+        "Dépassement interdit en haut d'une côte ou dans un virage",
+        "Dépassement interdit à l'approche d'une intersection",
+        "Ne jamais dépasser un véhicule qui est lui-même en train d'en dépasser un autre",
+        "Distance latérale d'au moins 1,50 m avec un cycliste hors agglomération, 1 m en agglomération"
       ],
-      "distances_securite": {
-        "cycliste_hors_agglomeration": "1,50 mètre minimum",
-        "cycliste_en_agglomeration": "1,00 mètre minimum"
-      }
+      "erreurs_frequentes": [
+        "Dépasser sur une ligne continue en pensant que la voie est dégagée",
+        "Se rabattre trop tôt, coupant la trajectoire du véhicule dépassé",
+        "Sous-estimer la distance nécessaire pour un dépassement sûr"
+      ],
+      "illustrations": ["/icons/panneaux/B4.svg"]
     },
     {
       "id": "fiche_006",
       "titre": "L'éclairage du véhicule",
       "categorie": "eclairage",
-      "contenu": "L'usage des feux dépend des conditions de visibilité et de la présence d'autres usagers.",
+      "contenu": "L'usage des feux du véhicule n'est pas qu'une question de confort visuel : c'est une obligation qui dépend des conditions de circulation, de l'heure et de la météo, et qui protège autant votre propre visibilité que celle des autres usagers à votre égard.\n\nDE NUIT EN AGGLOMÉRATION ÉCLAIRÉE\nLes feux de croisement sont obligatoires. Les feux de route sont à proscrire : sur une voie déjà éclairée par l'éclairage public, ils éblouissent inutilement les autres conducteurs et piétons.\n\nDE NUIT HORS AGGLOMÉRATION\nUtilisez les feux de route lorsque la voie est libre devant vous, pour bénéficier d'un éclairage maximal. Dès qu'un véhicule arrive en face ou que vous suivez un véhicule de près, basculez immédiatement sur les feux de croisement pour ne pas l'éblouir. Circuler sans aucun feu la nuit est strictement interdit.\n\nPAR BROUILLARD\nUtilisez les feux de croisement associés aux feux antibrouillard si le véhicule en est équipé. Les feux de route sont à éviter : la lumière se reflète sur les gouttelettes en suspension et crée un mur lumineux qui réduit encore la visibilité au lieu de l'améliorer.\n\nAPPEL DE PHARES\nDe nuit, l'appel de phares (alternance rapide feux de croisement / feux de route) sert à signaler votre présence avant un dépassement ou à un usager qui ne vous a pas vu. Il ne remplace jamais le clignotant.",
+      "points_cles": [
+        "Feux de croisement obligatoires de nuit en agglomération",
+        "Feux de route autorisés hors agglomération si aucun véhicule en face",
+        "Ne jamais circuler sans aucun feu la nuit",
+        "Feux de croisement + antibrouillard par temps de brouillard, jamais les feux de route"
+      ],
       "regles": [
-        {
-          "situation": "Nuit en ville éclairée",
-          "feux": "Feux de croisement obligatoires",
-          "interdits": "Feux de route (éblouissement)"
-        },
-        {
-          "situation": "Nuit hors agglomération",
-          "feux": "Feux de route si voie libre, feux de croisement si véhicule en face",
-          "interdits": "Circuler sans feux"
-        },
-        {
-          "situation": "Brouillard",
-          "feux": "Feux de croisement + antibrouillard",
-          "interdits": "Feux de route (créent un mur lumineux)"
-        },
-        {
-          "situation": "Appel de phares (dépassement nuit)",
-          "feux": "Alternance feux de croisement / feux de route",
-          "interdits": "Appel avec feux de position uniquement"
-        }
+        "Basculer en feux de croisement dès qu'un véhicule arrive en face ou que vous suivez un véhicule de près",
+        "Ne jamais utiliser les feux de route en agglomération éclairée",
+        "L'appel de phares ne remplace jamais le clignotant"
       ]
     },
     {
       "id": "fiche_007",
       "titre": "Arrêt vs Stationnement",
       "categorie": "stationnement_arret",
-      "contenu": "La différence entre arrêt et stationnement est fondamentale pour comprendre les règles de circulation.",
-      "definitions": {
-        "arret": "Immobilisation momentanée du véhicule, conducteur présent et prêt à repartir immédiatement (ex: laisser descendre un passager)",
-        "stationnement": "Immobilisation prolongée du véhicule, conducteur absent ou non prêt à repartir"
-      },
-      "zones_interdites_arret_stationnement": [
-        "Sur les passages pour piétons",
-        "Sur les intersections et carrefours",
-        "Sur les voies de tramway",
-        "Devant les bouches d'incendie",
-        "En double file",
-        "Sur les pistes cyclables"
+      "contenu": "Le code de la route distingue nettement l'arrêt du stationnement, une distinction qui détermine où vous avez le droit — ou non — d'immobiliser votre véhicule.\n\nL'ARRÊT\nL'arrêt est une immobilisation momentanée : le conducteur reste au volant ou à proximité immédiate, prêt à repartir sans délai — par exemple pour laisser descendre un passager. Certains emplacements interdisent même l'arrêt, pas seulement le stationnement.\n\nLE STATIONNEMENT\nLe stationnement est une immobilisation prolongée : le conducteur s'éloigne du véhicule ou n'est pas en mesure de repartir immédiatement. Les règles y sont plus strictes que pour un simple arrêt.\n\nZONES OÙ ARRÊT ET STATIONNEMENT SONT TOUS DEUX INTERDITS\nSur les passages pour piétons, aux intersections et carrefours, sur les voies de tramway, devant les bouches d'incendie, en double file, et sur les pistes cyclables — ces zones doivent rester dégagées à tout moment pour la sécurité et la fluidité de la circulation.\n\nZONES OÙ SEUL LE STATIONNEMENT EST INTERDIT\nLà où un panneau rond à fond bleu barré de rouge l'indique, en zone bleue sans disque de stationnement affiché, devant une entrée de garage, ou sur un emplacement réservé (personnes à mobilité réduite, livraisons) — un arrêt bref y reste toléré, un stationnement non.",
+      "points_cles": [
+        "Arrêt = immobilisation momentanée, conducteur prêt à repartir",
+        "Stationnement = immobilisation prolongée, conducteur absent ou non prêt à repartir",
+        "Certaines zones interdisent même l'arrêt bref (passages piétons, intersections, pistes cyclables)"
       ],
-      "zones_interdites_stationnement_seul": [
-        "Là où un panneau l'interdit (cercle rouge barré)",
-        "Zone bleue sans disque de stationnement",
-        "Devant les entrées de garage",
-        "Sur les emplacements réservés (handicapés, livraisons)"
-      ]
+      "regles": [
+        "Ne jamais s'arrêter ni stationner sur un passage piéton, une intersection ou une piste cyclable",
+        "Ne jamais stationner en double file, même brièvement",
+        "Respecter les emplacements réservés (handicapés, livraisons) même pour un arrêt court",
+        "Utiliser un disque de stationnement en zone bleue"
+      ],
+      "illustrations": ["/icons/panneaux/B6.svg", "/icons/panneaux/B6a.svg"]
     },
     {
       "id": "fiche_008",
       "titre": "La ceinture de sécurité",
       "categorie": "securite",
-      "contenu": "Le port de la ceinture de sécurité est OBLIGATOIRE pour tous les occupants du véhicule.",
+      "contenu": "Le port de la ceinture de sécurité est obligatoire pour le conducteur et tous les passagers, à l'avant comme à l'arrière, sur tous les types de route et à tout moment — de jour comme de nuit, en ville comme sur route ou autoroute.\n\nPOURQUOI C'EST UNE OBLIGATION\nEn cas de choc, un occupant non attaché continue sa trajectoire à la vitesse du véhicule avant l'impact et peut être projeté contre le pare-brise, le tableau de bord, voire hors du véhicule. La ceinture répartit la force de décélération sur les parties les plus solides du corps (bassin, thorax) et réduit le risque de décès d'environ 50 % en cas d'accident.\n\nRESPONSABILITÉ DU CONDUCTEUR\nLe conducteur est responsable du port de la ceinture de tous les occupants mineurs du véhicule. Un enfant doit en outre être installé dans un système de retenue adapté à son âge et à sa taille lorsque celui-ci est disponible.\n\nIDÉES REÇUES\nCirculer « juste pour un court trajet » ou « à faible vitesse en ville » ne dispense en rien de l'obligation : la majorité des accidents mortels surviennent à quelques kilomètres seulement du point de départ.",
       "regles": [
         "Obligatoire en agglomération ET hors agglomération",
         "Obligatoire de jour ET de nuit",
         "Pour le conducteur ET tous les passagers",
-        "Sur toutes les routes (nationale, départementale, autoroute)"
+        "Sur toutes les routes (nationale, départementale, autoroute)",
+        "Vérifier que tous les passagers, y compris à l'arrière, sont attachés avant de démarrer"
       ],
-      "statistiques": "La ceinture réduit le risque de décès de 50% en cas d'accident."
+      "erreurs_frequentes": [
+        "Détacher sa ceinture « juste pour se garer »",
+        "Considérer qu'un trajet court ou en ville ne nécessite pas la ceinture"
+      ]
     },
     {
       "id": "fiche_009",
       "titre": "Passage à niveau",
       "categorie": "passage_a_niveau",
-      "contenu": "Les passages à niveau sont des zones de danger extrême. Le train a toujours la priorité absolue.",
-      "balises": [
-        "3 bandes rouges = à 150 mètres du passage à niveau",
-        "2 bandes rouges = à 100 mètres",
-        "1 bande rouge = à 50 mètres"
+      "contenu": "Un passage à niveau est un croisement à même niveau entre une route et une voie ferrée. C'est une zone de danger extrême : un train ne peut ni freiner rapidement, ni faire d'écart, et il est toujours prioritaire sur tout véhicule routier.\n\nLES BALISES D'ANNONCE\nTrois panneaux successifs annoncent l'approche du passage à niveau, chacun portant un nombre de bandes rouges obliques : trois bandes à 150 mètres, deux bandes à 100 mètres, une bande à 50 mètres. Ralentissez dès la première balise.\n\nAU PASSAGE À NIVEAU\nSi le feu clignote en orange ou rouge, ou si une sonnerie retentit, l'arrêt est obligatoire, même si aucune barrière n'est visible. Ne vous engagez jamais tant que le signal clignote, même si vous ne voyez aucun train. Attendez que les barrières soient complètement relevées avant de vous engager.\n\nNE JAMAIS S'ENGAGER SI...\nLe passage est encombré de l'autre côté : mieux vaut rester du bon côté des barrières que de risquer d'être bloqué sur les rails.",
+      "points_cles": [
+        "Le train est toujours prioritaire, sans exception",
+        "Trois bandes rouges = 150 m, deux bandes = 100 m, une bande = 50 m avant le passage",
+        "Arrêt obligatoire dès que le feu clignote, même sans train visible"
       ],
-      "comportement": [
+      "regles": [
         "Ralentir dès les premières balises",
-        "Si le feu clignote (orange) : ARRÊT OBLIGATOIRE",
+        "Si le feu clignote (orange) : arrêt obligatoire",
         "Ne jamais s'engager si le feu clignote",
         "Attendre que les barrières soient complètement relevées",
         "Ne pas s'engager si le passage est encombré"
-      ]
+      ],
+      "illustrations": ["/icons/panneaux/A7.svg", "/icons/panneaux/A8.svg"]
     },
     {
       "id": "fiche_010",
       "titre": "Premiers secours en cas d'accident",
       "categorie": "premiers_secours",
-      "contenu": "En cas d'accident, il faut agir vite et dans le bon ordre pour limiter les conséquences.",
-      "protocole_pca": {
-        "P": "PROTÉGER – Baliser les lieux, couper le contact, allumer les feux de détresse",
-        "C": "ALERTER – Appeler les secours (police/gendarmerie, SAMU)",
-        "A": "SECOURIR – Apporter les premiers soins sans déplacer les blessés"
-      },
-      "numeros_urgence_senegal": {
-        "police_secours": "17",
-        "pompiers": "18",
-        "samu": "15",
-        "urgences_generales": "1515"
-      },
-      "a_ne_pas_faire": [
+      "contenu": "Face à un accident de la route, la rapidité et l'ordre des actions comptent autant que la bonne volonté : mal agir peut aggraver l'état d'un blessé. Le protocole à retenir tient en trois lettres : PAS — Protéger, Alerter, Secourir.\n\nPROTÉGER\nMettez-vous en sécurité avant toute chose : allumez vos feux de détresse, coupez le contact du ou des véhicules accidentés, et balisez les lieux (triangle de présignalisation, gilet réfléchissant) pour éviter un sur-accident. Ne vous exposez jamais inutilement à la circulation.\n\nALERTER\nAppelez les secours en donnant votre position la plus précise possible, le nombre de blessés et leur état apparent. Au Sénégal : Police secours (17), Sapeurs-pompiers (18), SAMU (15), numéro d'urgence unique (1515).\n\nSECOURIR\nApportez les premiers gestes de secours sans déplacer les blessés, sauf danger immédiat (incendie, risque de sur-accident). Rassurez la victime et restez avec elle jusqu'à l'arrivée des secours.\n\nCE QU'IL NE FAUT JAMAIS FAIRE\nNe déplacez pas un blessé sans nécessité absolue — un geste maladroit peut aggraver une fracture ou une lésion de la colonne vertébrale. Ne donnez jamais à boire ou à manger à un blessé. Ne retirez jamais le casque d'un motocycliste accidenté : seul un professionnel formé doit le faire, avec la technique adaptée.",
+      "points_cles": [
+        "Protocole PAS : Protéger, Alerter, Secourir, dans cet ordre",
+        "Numéros d'urgence au Sénégal : Police 17, Pompiers 18, SAMU 15, urgences 1515",
+        "Ne jamais déplacer un blessé sauf danger immédiat"
+      ],
+      "erreurs_frequentes": [
         "Déplacer un blessé sauf danger immédiat",
         "Donner à manger ou à boire à un blessé",
         "Retirer le casque d'un motocycliste"
@@ -193,138 +197,85 @@
       "id": "fiche_011",
       "titre": "Vitesses maximales autorisées au Sénégal",
       "categorie": "vitesse",
-      "contenu": "Les limitations de vitesse varient selon le type de route et les conditions.",
-      "limites": [
-        {
-          "type_route": "En agglomération",
-          "vitesse_max": "50 km/h",
-          "note": "Sauf indication contraire"
-        },
-        {
-          "type_route": "Route nationale hors agglomération",
-          "vitesse_max": "90 km/h",
-          "note": "Sauf indication contraire"
-        },
-        {
-          "type_route": "Route express / voie rapide",
-          "vitesse_max": "110 km/h",
-          "note": ""
-        },
-        {
-          "type_route": "Autoroute",
-          "vitesse_max": "130 km/h",
-          "note": ""
-        },
-        {
-          "type_route": "Par temps de pluie (autoroute)",
-          "vitesse_max": "110 km/h",
-          "note": "Réduction obligatoire"
-        },
-        {
-          "type_route": "Brouillard (visibilité < 50m)",
-          "vitesse_max": "50 km/h",
-          "note": "Sur toutes les routes"
-        }
-      ]
+      "contenu": "La vitesse maximale autorisée dépend du type de route parcourue et des conditions de circulation. Ces limites s'appliquent sauf signalisation contraire, qui prévaut toujours sur la limite générale.\n\nLIMITES SELON LE TYPE DE ROUTE\nEn agglomération : 50 km/h. Sur route nationale hors agglomération : 90 km/h. Sur route express ou voie rapide : 110 km/h. Sur autoroute : 130 km/h.\n\nLIMITES RÉDUITES SELON LES CONDITIONS\nPar temps de pluie, la vitesse maximale sur autoroute est ramenée à 110 km/h — la distance de freinage augmente fortement sur chaussée mouillée. Par brouillard, dès que la visibilité descend sous 50 mètres, la vitesse est limitée à 50 km/h sur toutes les routes, quelle que soit leur catégorie.\n\nPOURQUOI CES LIMITES EXISTENT\nLa distance de freinage augmente avec le carré de la vitesse : rouler deux fois plus vite ne double pas la distance d'arrêt, elle la quadruple. Respecter la limite, c'est se garder une marge de manœuvre en cas d'imprévu — piéton, animal, véhicule qui freine brusquement.",
+      "points_cles": [
+        "50 km/h en agglomération, sauf indication contraire",
+        "90 km/h sur route nationale hors agglomération",
+        "110 km/h sur route express ou voie rapide",
+        "130 km/h sur autoroute, ramenée à 110 km/h par temps de pluie",
+        "50 km/h maximum dès que la visibilité descend sous 50 mètres (brouillard), sur toutes les routes"
+      ],
+      "illustrations": ["/icons/panneaux/B5.svg"]
     },
     {
       "id": "fiche_012",
       "titre": "Signaux des agents de circulation",
       "categorie": "signaux_agents",
-      "contenu": "Les gestes des policiers et agents de la circulation ont une valeur absolue, même contre les feux.",
-      "gestes": [
-        {
-          "geste": "Agent de face (ou de dos) – bras levés",
-          "signification": "STOP – Arrêt obligatoire pour tous les conducteurs"
-        },
-        {
-          "geste": "Agent de profil – bras tendus horizontalement",
-          "signification": "PASSAGE – Les véhicules dans l'axe du corps peuvent passer"
-        },
-        {
-          "geste": "Agent faisant des cercles avec le bras",
-          "signification": "Accélérez / Circulez"
-        }
-      ],
-      "priorite": "Les signaux des agents priment sur les feux tricolores et tous les autres panneaux."
+      "contenu": "Aux carrefours où un policier ou un agent de la circulation est présent, ses gestes priment sur tous les autres moyens de signalisation — feux tricolores, panneaux STOP ou cédez-le-passage compris. C'est la règle de priorité absolue du code de la route.\n\nAGENT FACE À VOUS OU DE DOS, BRAS LEVÉS VERS LE CIEL\nCe geste signifie STOP : arrêt obligatoire pour tous les conducteurs qui lui font face ou qui sont dans son dos.\n\nAGENT DE PROFIL, BRAS TENDUS À L'HORIZONTALE\nLes conducteurs situés dans l'axe de son corps (devant et derrière lui) peuvent circuler ; ceux qui lui font face latéralement doivent s'arrêter.\n\nAGENT FAISANT DES CERCLES AVEC LE BRAS\nCe geste signifie « accélérez » ou « circulez » : il invite à dégager rapidement le carrefour, en général pour fluidifier la circulation.\n\nPOURQUOI CETTE PRIORITÉ ABSOLUE\nUn agent régule la circulation en temps réel, souvent en réponse à un embouteillage, un accident ou une panne de feux. Ignorer ses gestes au profit d'un feu ou d'un panneau peut créer un accident grave, car les autres usagers suivent ses instructions.",
+      "points_cles": [
+        "Les gestes d'un agent priment toujours sur les feux et les panneaux",
+        "Bras levés = STOP pour tous",
+        "Bras à l'horizontale = passage pour les véhicules dans l'axe du corps",
+        "Cercles avec le bras = accélérez / circulez"
+      ]
     },
     {
       "id": "fiche_013",
       "titre": "Panneaux de danger",
       "categorie": "signalisation_danger",
-      "contenu": "Les panneaux de danger annoncent un risque imminent. Ils sont triangulaires, fond blanc, bordure rouge.",
+      "contenu": "Les panneaux de danger annoncent un risque à venir sur la route : ils ont une forme triangulaire, un fond blanc et une bordure rouge, et sont reconnaissables de loin même dans de mauvaises conditions de visibilité.\n\nOÙ SONT-ILS IMPLANTÉS\nEn agglomération, ils sont placés environ 50 mètres avant le danger ; hors agglomération, environ 150 mètres avant, pour laisser le temps d'adapter sa conduite à une vitesse plus élevée.\n\nCE QU'ILS IMPOSENT — ET CE QU'ILS N'IMPOSENT PAS\nUn panneau de danger n'interdit rien et n'impose aucune manœuvre précise : il signale une situation qui demande de la prudence (ralentir, augmenter la distance de sécurité, être prêt à réagir). Le danger annoncé cesse généralement au niveau du panneau lui-même, sauf indication de distance complémentaire.\n\nQUELQUES EXEMPLES COURANTS\nVirage dangereux à gauche ou à droite, chaussée glissante, passage à niveau, débouché de cyclistes, endroit fréquenté par des enfants, descente dangereuse. Chacun appelle une adaptation de conduite spécifique à la situation annoncée.",
       "points_cles": [
         "Forme triangulaire, fond blanc, bordure rouge",
         "Implantés à 50 m en agglomération, 150 m hors agglomération",
         "Ils n'interdisent rien mais imposent la prudence",
         "Le danger cesse généralement au niveau du panneau"
       ],
-      "exemples": [
-        "Virage à droite/ gauche",
-        "Chaussée glissante",
-        "Passage à niveau",
-        "Débouché de cyclistes"
-      ]
+      "illustrations": ["/icons/panneaux/A1a.svg", "/icons/panneaux/A4.svg", "/icons/panneaux/A14.svg"]
     },
     {
       "id": "fiche_014",
       "titre": "Panneaux d'interdiction",
       "categorie": "signalisation_interdiction",
-      "contenu": "Les panneaux d'interdiction imposent une obligation de ne pas faire quelque chose. Ils sont circulaires, fond blanc, bordure rouge.",
+      "contenu": "Les panneaux d'interdiction imposent de ne pas effectuer une action précise. Ils sont ronds, à fond blanc bordé de rouge — la forme circulaire signale une obligation ou une interdiction, la bordure rouge spécifiquement une interdiction.\n\nDÉBUT ET FIN D'INTERDICTION\nL'interdiction prend effet dès le panneau et se poursuit jusqu'à la prochaine intersection, sauf si un panneau de fin d'interdiction (fond blanc barré d'une diagonale noire) y met fin avant.\n\nEXEMPLES COURANTS\nSens interdit (B1) : la voie ne doit pas être empruntée dans ce sens. Interdiction de dépasser (B4) : aucun dépassement n'est permis jusqu'à la fin de la zone signalée. Limitation de vitesse (B5) : chiffre indiquant la vitesse maximale autorisée sur ce tronçon. Accès interdit aux piétons (B9) : la voie n'est pas ouverte aux usagers non motorisés.\n\nÀ RETENIR\nUne interdiction reste valable même si la chaussée semble dégagée ou si personne n'est visible pour la faire respecter — elle protège une situation qui n'est pas toujours immédiatement visible (carrefour caché, sortie d'école, etc.).",
       "points_cles": [
         "Forme circulaire, fond blanc, bordure rouge",
         "L'interdiction prend effet au niveau du panneau",
         "Elle se poursuit jusqu'à la prochaine intersection ou un panneau de fin d'interdiction",
         "Les panneaux de fin d'interdiction sont blancs avec une barre noire"
       ],
-      "exemples": [
-        "Sens interdit (B1)",
-        "Interdiction de dépasser (B4)",
-        "Limitation de vitesse (B5)",
-        "Accès interdit aux piétons (B9)"
-      ]
+      "illustrations": ["/icons/panneaux/B0.svg", "/icons/panneaux/B1.svg", "/icons/panneaux/B9.svg"]
     },
     {
       "id": "fiche_015",
       "titre": "Panneaux d'obligation",
-      "categorie": "signalisation_voie",
-      "contenu": "Les panneaux d'obligation imposent un comportement obligatoire. Ils sont circulaires, fond bleu, symbole blanc.",
+      "categorie": "signalisation_obligation",
+      "contenu": "Les panneaux d'obligation imposent un comportement précis au conducteur. Ils sont circulaires, fond bleu, symbole blanc — cette combinaison de forme et de couleur les distingue immédiatement des interdictions (fond blanc, bordure rouge).\n\nQUAND L'OBLIGATION PREND-ELLE EFFET\nL'obligation s'applique dès le panneau, sans délai. Elle cesse généralement à la prochaine intersection, ou plus tôt si un panneau de fin d'obligation (barre rouge diagonale sur fond blanc) l'indique.\n\nEXEMPLES COURANTS\nTourner à droite ou à gauche obligatoire (C1a, C1b) : la seule direction autorisée à cette intersection. Direction obligatoire à la prochaine intersection (C2) : indique un choix limité entre deux directions. Piste cyclable obligatoire (C3) : les cyclistes doivent l'emprunter si elle existe. Vitesse minimale obligatoire (C5) : utilisé notamment sur voie rapide pour éviter les véhicules trop lents qui gênent la fluidité.\n\nÀ RETENIR\nLes panneaux d'obligation sont moins nombreux que les interdictions, mais leur non-respect (par exemple ignorer un « tourner à droite obligatoire ») peut créer une trajectoire dangereuse et surprenante pour les autres usagers qui s'attendent à votre manœuvre.",
       "points_cles": [
         "Forme circulaire, fond bleu, symbole blanc",
         "L'obligation prend effet immédiatement",
         "Les panneaux de fin d'obligation ont une barre rouge diagonale",
         "Ils sont moins nombreux que les interdictions"
       ],
-      "exemples": [
-        "Tourner à droite obligatoire (C1a)",
-        "Piste cyclable obligatoire (C3)",
-        "Vitesse minimale obligatoire (C5)",
-        "Chaînes à neige obligatoires (C6)"
-      ]
+      "illustrations": ["/icons/panneaux/C1a.svg", "/icons/panneaux/C2.svg"]
     },
     {
       "id": "fiche_016",
       "titre": "Signalisation temporaire (chantiers)",
       "categorie": "signalisation_temporaire",
-      "contenu": "La signalisation temporaire signale des dangers ou des restrictions liés à des travaux ou des chantiers.",
+      "contenu": "La signalisation temporaire (fond jaune, bordures rouges) prime sur la signalisation permanente : lorsqu'un chantier ou un événement impose une déviation ou une restriction provisoire, ce sont ces panneaux jaunes qu'il faut suivre, même s'ils contredisent un panneau permanent resté en place.\n\nÀ QUOI ELLE SERT\nElle balise les zones de travaux, les déviations temporaires, les rétrécissements de chaussée liés à un chantier, et toute restriction ponctuelle non couverte par la signalisation habituelle.\n\nCOMPORTEMENT À ADOPTER\nRalentissez systématiquement à l'approche d'un chantier signalé, respectez scrupuleusement les déviations indiquées même si elles semblent longues, et restez attentif aux ouvriers et engins qui peuvent être proches de la voie de circulation. La couleur jaune vif est volontairement contrastée pour capter l'attention même de nuit ou sous la pluie.",
       "points_cles": [
         "Fond jaune, bordures rouges",
         "Elle prime sur la signalisation permanente",
         "Elle balise les déviations et les obstacles temporaires",
         "Respecter scrupuleusement les indications temporaires"
       ],
-      "exemples": [
-        "Fanion de chantier (AK1)",
-        "Déviation temporaire (AK7a)",
-        "Rétrécissement temporaire de chaussée",
-        "Panneaux de fermeture de voie"
-      ]
+      "illustrations": ["/icons/panneaux/AK1.svg"]
     },
     {
       "id": "fiche_017",
       "titre": "Panneaux de restriction (hauteur / largeur / poids)",
       "categorie": "signalisation_restriction",
-      "contenu": "Ces panneaux limitent les dimensions ou le poids des véhicules pouvant emprunter un passage.",
+      "contenu": "Les panneaux de restriction limitent l'accès d'un passage aux véhicules dont les dimensions ou le poids dépassent une valeur indiquée — pont, tunnel, passage sous ouvrage d'art. Ils sont ronds, à fond blanc bordé de rouge, avec un chiffre indiquant la limite.\n\nTROIS TYPES DE LIMITATION\nLimitation de hauteur (par exemple 3,50 m) pour les passages sous un pont ou un tunnel. Limitation de largeur pour les passages étroits. Limitation de poids total autorisé pour les ouvrages qui ne supportent pas de charges lourdes (ponts anciens, par exemple).\n\nÀ VÉRIFIER AVANT DE S'ENGAGER\nEn tant que conducteur, vous devez connaître les dimensions et le poids de votre propre véhicule, en particulier s'il transporte une charge ou tracte une remorque. Un panonceau sous le panneau principal peut préciser que la restriction ne concerne qu'une catégorie de véhicules (poids lourds uniquement, par exemple).\n\nEN CAS DE DOUTE\nNe vous engagez jamais si vous n'êtes pas certain que votre véhicule respecte la limite indiquée : un accrochage avec un pont ou un tunnel peut endommager gravement le véhicule et bloquer la circulation pendant plusieurs heures.",
       "points_cles": [
         "Limitation de hauteur (ex: 3.50m)",
         "Limitation de largeur",
@@ -335,6 +286,132 @@
         "Vérifier les dimensions de son véhicule avant de s'engager",
         "Un panonceau peut préciser la catégorie de véhicules concernée",
         "En cas de doute, ne pas s'engager"
+      ],
+      "illustrations": ["/icons/panneaux/M1.svg", "/icons/panneaux/M2.svg", "/icons/panneaux/M3.svg"]
+    },
+    {
+      "id": "fiche_018",
+      "titre": "Le carrefour giratoire (rond-point)",
+      "categorie": "priorite_giratoire",
+      "contenu": "Le giratoire (rond-point) est un carrefour où la circulation s'organise en boucle autour d'un îlot central, dans le sens inverse des aiguilles d'une montre. Il fluidifie le trafic en réduisant les points de conflit par rapport à un carrefour classique.\n\nRÈGLE GÉNÉRALE\nLes véhicules déjà engagés dans l'anneau du giratoire sont prioritaires sur ceux qui souhaitent y entrer. Avant de vous engager, cédez donc le passage aux véhicules venant de votre gauche qui circulent déjà dans l'anneau.\n\nCOMMENT S'ENGAGER ET EN SORTIR\nRalentissez à l'approche, regardez sur votre gauche, et engagez-vous dès que l'anneau est dégagé ou suffisamment loin. Une fois dans le giratoire, restez sur la voie adaptée à votre sortie et actionnez votre clignotant droit juste avant de sortir, pour prévenir les véhicules qui vous suivent ou qui souhaitent entrer.\n\nCAS PARTICULIER : LE GIRATOIRE À FEUX\nCertains grands giratoires très fréquentés sont régulés par des feux tricolores à leur entrée : dans ce cas, la règle du feu prime sur la règle générale du giratoire. Le panneau annonçant le giratoire (flèches en cercle sur fond bleu) confirme que vous devez céder le passage à l'anneau.",
+      "points_cles": [
+        "Les véhicules déjà engagés dans l'anneau sont prioritaires sur ceux qui entrent",
+        "Céder le passage aux véhicules venant de la gauche avant de s'engager",
+        "Clignotant droit actionné juste avant la sortie souhaitée",
+        "Un feu à l'entrée du giratoire prime sur la règle générale de priorité à l'anneau"
+      ],
+      "erreurs_frequentes": [
+        "S'engager sans céder le passage à l'anneau",
+        "Changer de voie brusquement à l'intérieur du giratoire",
+        "Oublier le clignotant de sortie"
+      ],
+      "illustrations": ["/icons/panneaux/AB25.svg"]
+    },
+    {
+      "id": "fiche_019",
+      "titre": "Les feux tricolores",
+      "categorie": "feux_tricolores",
+      "contenu": "Le feu tricolore régule la circulation à un carrefour en alternant trois couleurs, chacune imposant un comportement précis au conducteur qui lui fait face.\n\nROUGE\nArrêt obligatoire avant la ligne d'effet (ligne blanche au sol) ou avant le feu si aucune ligne n'est marquée. S'arrêter après la ligne, y compris de quelques centimètres, constitue déjà une infraction.\n\nORANGE\nSignifie arrêt obligatoire, sauf si vous êtes si proche du carrefour au moment où il s'allume que vous ne pourriez plus vous arrêter sans danger (freinage brusque, risque d'être percuté par le véhicule suivant) — dans ce seul cas, vous pouvez terminer le franchissement. L'orange n'est jamais une invitation à accélérer pour « passer avant que ça passe au rouge ».\n\nVERT\nLe passage est autorisé, mais uniquement si la voie est réellement dégagée au-delà du carrefour : s'engager au vert pour se retrouver bloqué au milieu du carrefour (et donc gêner la circulation transversale) est une faute, même si le feu était vert au moment de s'engager.\n\nFEU CLIGNOTANT ORANGE\nIndique un carrefour à priorité normale (souvent la nuit, quand la circulation est faible) : il invite à la prudence sans imposer d'arrêt automatique — les règles de priorité habituelles (à droite, panneaux) s'appliquent alors.\n\nFLÈCHES DIRECTIONNELLES\nUn feu avec flèche ne s'applique qu'à la direction indiquée (par exemple tourner à gauche) ; les autres directions restent régies par le feu principal rond.",
+      "points_cles": [
+        "Rouge = arrêt obligatoire avant la ligne d'effet, sans exception",
+        "Orange = arrêt obligatoire, sauf si le freinage créerait un danger immédiat",
+        "Vert = passage autorisé seulement si la voie est dégagée au-delà du carrefour",
+        "Feu orange clignotant = prudence, priorité habituelle applicable",
+        "Les gestes d'un agent de circulation priment toujours sur le feu"
+      ],
+      "erreurs_frequentes": [
+        "Accélérer à l'orange pour « passer avant le rouge »",
+        "S'engager au vert sans vérifier que la sortie du carrefour est dégagée",
+        "Ne pas s'arrêter complètement avant la ligne d'effet au rouge"
+      ]
+    },
+    {
+      "id": "fiche_020",
+      "titre": "Les véhicules prioritaires",
+      "categorie": "vehicules_prioritaires",
+      "contenu": "Certains véhicules bénéficient d'une priorité de passage lorsqu'ils sont en intervention urgente, signalée par l'usage simultané de leurs avertisseurs sonores (sirène) et lumineux (gyrophare) : police, sapeurs-pompiers, ambulances et véhicules du SAMU.\n\nCOMPORTEMENT À ADOPTER\nDès que vous identifiez un véhicule prioritaire en intervention (sirène et gyrophare actifs) qui approche, dégagez-lui le passage le plus rapidement et le plus sûrement possible : ralentissez, serrez à droite, et si nécessaire arrêtez-vous sur le bas-côté pour le laisser passer. Ne freinez jamais brusquement devant lui — un freinage trop soudain peut provoquer une collision.\n\nAU CARREFOUR OU AU FEU\nUn véhicule prioritaire en intervention peut franchir un feu rouge, un STOP ou dépasser la vitesse autorisée, en toute légalité, pour peu qu'il le fasse avec prudence. Cela ne vous autorise pas à en faire autant : vous restez soumis aux règles normales, mais devez faciliter son passage même si cela implique de vous arrêter à un endroit inhabituel, dans la mesure où cela ne crée pas de danger.\n\nAPRÈS SON PASSAGE\nReprenez une conduite normale une fois le véhicule prioritaire passé, en réintégrant prudemment la circulation.",
+      "points_cles": [
+        "Sirène + gyrophare actifs = véhicule prioritaire en intervention, à laisser passer immédiatement",
+        "Serrer à droite et ralentir, voire s'arrêter, pour dégager le passage",
+        "Un véhicule prioritaire peut franchir un feu rouge ou un STOP en intervention — pas vous",
+        "Ne jamais freiner brusquement devant un véhicule prioritaire qui approche"
+      ]
+    },
+    {
+      "id": "fiche_021",
+      "titre": "Obtenir son permis au Sénégal : vue d'ensemble",
+      "categorie": "procedure_permis",
+      "contenu": "Obtenir un permis de conduire au Sénégal suit un parcours en plusieurs étapes, généralement encadré par une auto-école agréée du début à la fin — de l'ouverture du dossier jusqu'au retrait du titre définitif.\n\nÉTAPE 1 — S'INSCRIRE DANS UNE AUTO-ÉCOLE\nChoisissez une auto-école agréée pour la catégorie de permis visée (A pour les motos, B pour les véhicules légers, C pour les poids lourds, D pour le transport en commun...). L'auto-école ouvre votre dossier administratif et vous accompagne pour réunir les pièces demandées.\n\nÉTAPE 2 — CONSTITUER ET DÉPOSER LE DOSSIER\nUne fois les documents réunis (voir la fiche dédiée), le dossier est déposé auprès du service compétent, le plus souvent par l'intermédiaire de l'auto-école elle-même.\n\nÉTAPE 3 — SE FORMER ET PRÉPARER LE CODE\nEn parallèle ou après le dépôt du dossier, vous suivez les cours de code de la route (théorie) proposés par votre auto-école, que vous pouvez compléter avec les leçons, quiz et examens blancs de PERMIS 2.0.\n\nÉTAPE 4 — PASSER L'EXAMEN DU CODE\nL'épreuve théorique valide votre connaissance des règles de circulation et de la signalisation.\n\nÉTAPE 5 — SE FORMER À LA CONDUITE ET PASSER L'ÉPREUVE PRATIQUE\nAprès (ou en parallèle du) code, vous suivez des heures de conduite avec un moniteur, jusqu'à être présenté à l'épreuve pratique.\n\nÉTAPE 6 — RETIRER SON PERMIS\nUne fois les deux épreuves réussies, le titre définitif est délivré selon les modalités et délais du service compétent.\n\nCette organisation, les délais et les frais exacts (administratifs comme de formation) peuvent varier selon la catégorie de permis, la région et l'auto-école choisie — PERMIS 2.0 est un outil de préparation et de mise en relation, pas une source officielle : pour toute question administrative précise, votre auto-école ou les services compétents de l'État restent la référence.",
+      "points_cles": [
+        "Le parcours passe par une auto-école agréée, du dossier jusqu'au permis",
+        "Deux épreuves à réussir : le code (théorie) puis la conduite (pratique)",
+        "Les délais et frais exacts varient selon la catégorie, la région et l'auto-école",
+        "PERMIS 2.0 prépare et met en relation, mais n'est pas une source officielle"
+      ]
+    },
+    {
+      "id": "fiche_022",
+      "titre": "Les documents à fournir pour son dossier",
+      "categorie": "procedure_permis",
+      "contenu": "Le dossier de demande de permis de conduire réunit plusieurs catégories de pièces justificatives. La liste précise et les formulaires exacts peuvent varier légèrement selon la catégorie de permis visée et évoluer avec le temps — votre auto-école vous communiquera la liste à jour et vous aidera à réunir chaque pièce.\n\nPIÈCE D'IDENTITÉ\nUne carte nationale d'identité (CNI) en cours de validité, ou à défaut un extrait de naissance récent, pour prouver votre identité et votre âge — chaque catégorie de permis a un âge minimum requis.\n\nCERTIFICAT MÉDICAL D'APTITUDE\nUn certificat établi par un médecin agréé atteste que vous êtes physiquement et visuellement apte à conduire la catégorie de véhicule visée. Ce certificat a généralement une durée de validité limitée : ne le faites pas établir trop tôt par rapport au dépôt du dossier.\n\nPHOTOS D'IDENTITÉ\nPlusieurs photos d'identité récentes et aux normes (fond neutre, visage dégagé) sont demandées pour le dossier et pour le titre lui-même.\n\nJUSTIFICATIF DE DOMICILE\nUn document récent (facture, attestation) prouvant votre lieu de résidence, ou un certificat de résidence délivré par les autorités locales.\n\nFORMULAIRE DE DEMANDE ET TIMBRE FISCAL\nUn formulaire de demande à remplir, généralement fourni par l'auto-école ou le service compétent, accompagné du paiement des frais administratifs (souvent sous forme de timbre fiscal ou de quittance).\n\nOÙ TROUVER CHAQUE DOCUMENT\nLa CNI ou l'extrait de naissance s'obtiennent auprès de votre mairie ou du service d'état civil de votre lieu de naissance. Le certificat médical s'obtient auprès d'un médecin ou d'un centre de santé agréé pour ce type d'examen — votre auto-école peut généralement vous orienter vers un praticien habitué à la démarche. Le justificatif ou certificat de résidence s'obtient auprès de votre quartier ou de votre mairie. Le timbre fiscal s'achète auprès des services des impôts ou de la recette compétente.\n\nConservez une copie de chaque document et vérifiez leur date de validité avant le dépôt : un document expiré (certificat médical notamment) est le motif de rejet de dossier le plus fréquent.",
+      "points_cles": [
+        "Pièce d'identité (CNI ou extrait de naissance), certificat médical d'aptitude, photos d'identité, justificatif de domicile",
+        "Le certificat médical a une durée de validité limitée — à établir proche du dépôt du dossier",
+        "Le formulaire de demande s'accompagne du paiement des frais administratifs (timbre fiscal)",
+        "Votre auto-école communique la liste exacte et à jour selon la catégorie visée"
+      ],
+      "erreurs_frequentes": [
+        "Déposer un certificat médical déjà expiré",
+        "Oublier une pièce et devoir revenir déposer le dossier une seconde fois",
+        "Utiliser des photos non conformes aux normes demandées"
+      ]
+    },
+    {
+      "id": "fiche_023",
+      "titre": "Où et comment déposer son dossier",
+      "categorie": "procedure_permis",
+      "contenu": "Une fois le dossier complet, il doit être déposé et enregistré auprès du service compétent en matière de permis de conduire, le plus souvent via votre auto-école qui centralise cette démarche pour ses élèves.\n\nLE RÔLE DE L'AUTO-ÉCOLE\nDans la grande majorité des cas, c'est l'auto-école qui se charge de transmettre le dossier au service compétent, car elle connaît la procédure, les formulaires à jour et les interlocuteurs. C'est l'un des principaux services rendus par une auto-école, au-delà des simples cours de code et de conduite.\n\nVÉRIFICATION DU DOSSIER\nAvant transmission, le dossier est généralement vérifié pièce par pièce : toute pièce manquante, expirée ou non conforme peut retarder l'enregistrement de votre demande. Il est recommandé de demander à votre auto-école une liste de vérification et de la suivre point par point avant le dépôt.\n\nSUIVI DU DOSSIER\nDemandez à votre auto-école un accusé ou un numéro de suivi de votre dossier, et conservez-le : il vous sera utile en cas de question sur l'avancement de votre demande.\n\nÀ NOTER\nLes délais de traitement, les frais exacts et les modalités précises de dépôt (guichet, plateforme, auto-école uniquement...) relèvent des services compétents de l'État sénégalais et peuvent évoluer. PERMIS 2.0 ne représente pas ces services — pour toute question précise sur l'état de votre dossier, adressez-vous directement à votre auto-école ou au service concerné.",
+      "points_cles": [
+        "Le dépôt se fait le plus souvent via l'auto-école, qui centralise la démarche",
+        "Faites vérifier votre dossier pièce par pièce avant le dépôt",
+        "Conservez un accusé ou numéro de suivi de votre dossier",
+        "Les délais et modalités exactes dépendent des services compétents, pas de PERMIS 2.0"
+      ]
+    },
+    {
+      "id": "fiche_024",
+      "titre": "L'examen du Code : où et comment le passer",
+      "categorie": "procedure_permis",
+      "contenu": "L'examen du Code de la route est l'épreuve théorique du permis de conduire : il vérifie votre connaissance des règles de circulation, de la signalisation et des comportements de sécurité.\n\nFORMAT DE L'ÉPREUVE\nL'examen se présente généralement sous forme de questionnaire à choix multiples portant sur des situations de conduite, des panneaux ou des règles de priorité. Le nombre de questions, le temps imparti et le score minimum pour réussir sont fixés par le service organisateur — votre auto-école vous communiquera le format exact en vigueur pour votre session.\n\nOÙ SE PRÉSENTE L'EXAMEN\nSelon l'organisation en vigueur, l'épreuve se déroule soit dans les locaux du service compétent, soit dans des centres d'examen dédiés, votre auto-école se chargeant de vous y inscrire et de vous communiquer la date, l'heure et le lieu convoqués.\n\nCOMMENT BIEN SE PRÉPARER\nRévisez régulièrement plutôt qu'au dernier moment : la mémorisation des panneaux et des priorités se travaille sur la durée. Utilisez les leçons, les quiz par thème et les examens blancs de PERMIS 2.0 pour vous entraîner dans des conditions proches de l'épreuve réelle, et pour identifier vos points faibles avant le jour J.\n\nLE JOUR DE L'EXAMEN\nPrésentez-vous avec une pièce d'identité et votre convocation si vous en avez reçu une, en arrivant en avance. Lisez chaque question et chaque proposition attentivement avant de répondre — de nombreuses erreurs viennent d'une lecture trop rapide plutôt que d'un manque de connaissance.\n\nEN CAS D'ÉCHEC\nUn échec à l'épreuve théorique n'est pas définitif : une nouvelle présentation est généralement possible après un délai et selon les modalités fixées par le service organisateur ou votre auto-école, qui vous accompagnera pour la suite.",
+      "points_cles": [
+        "Épreuve théorique sous forme de questionnaire sur les règles et la signalisation",
+        "L'auto-école inscrit le candidat et communique date, heure et lieu",
+        "S'entraîner régulièrement avec des quiz et examens blancs vaut mieux qu'une révision de dernière minute",
+        "Un échec permet généralement une nouvelle présentation, selon les modalités en vigueur"
+      ]
+    },
+    {
+      "id": "fiche_025",
+      "titre": "L'examen de conduite : où et comment le passer",
+      "categorie": "procedure_permis",
+      "contenu": "L'épreuve pratique de conduite évalue votre capacité à manœuvrer un véhicule en toute sécurité et à appliquer concrètement les règles apprises pendant la préparation du Code.\n\nAVANT L'ÉPREUVE\nL'accès à l'épreuve pratique suppose généralement d'avoir suivi un nombre d'heures de conduite avec un moniteur de votre auto-école, et parfois d'avoir déjà validé l'épreuve théorique — les prérequis exacts dépendent de la catégorie de permis visée et des règles en vigueur.\n\nDÉROULEMENT TYPE\nL'épreuve se déroule à bord d'un véhicule de l'auto-école, en présence d'un examinateur, sur un parcours pouvant mêler circulation ouverte et manœuvres spécifiques (créneau, marche arrière, démarrage en côte selon la catégorie). L'examinateur évalue votre maîtrise du véhicule, le respect des règles de circulation et des priorités, ainsi que votre comportement général au volant (anticipation, vérifications, courtoisie).\n\nOÙ SE DÉROULE L'ÉPREUVE\nLe point de départ, le trajet et les manœuvres demandées dépendent du centre d'examen et de l'organisation locale ; votre auto-école vous y prépare spécifiquement lors des dernières séances de conduite, souvent en reproduisant les conditions réelles de l'épreuve.\n\nCOMMENT BIEN S'Y PRÉSENTER\nAssurez-vous d'avoir bien dormi et d'arriver reposé, réglez le siège et les rétroviseurs avant de démarrer, et prenez le temps de vos vérifications habituelles (ceinture, clignotants) sans vous précipiter. Le stress fait perdre des automatismes déjà acquis pendant la formation — respirez et conduisez comme lors de vos séances d'entraînement.\n\nEN CAS D'ÉCHEC\nComme pour le Code, un échec à l'épreuve pratique permet généralement une nouvelle présentation après un complément de formation, selon les modalités fixées par le service organisateur ou votre auto-école.",
+      "points_cles": [
+        "L'épreuve pratique suit généralement un nombre d'heures de conduite minimum avec un moniteur",
+        "L'examinateur évalue la maîtrise du véhicule, le respect des règles et le comportement général",
+        "L'auto-école prépare spécifiquement aux conditions réelles de l'épreuve lors des dernières séances",
+        "Rester calme et appliquer les automatismes acquis pendant la formation compte autant que la technique"
+      ]
+    },
+    {
+      "id": "fiche_026",
+      "titre": "Après l'examen : retrait et validité du permis",
+      "categorie": "procedure_permis",
+      "contenu": "Une fois les deux épreuves — Code et conduite — réussies, il reste une dernière étape avant de pouvoir conduire en toute légalité : le retrait du titre définitif.\n\nRETRAIT DU PERMIS\nSelon l'organisation en vigueur, le permis peut être remis directement après la réussite de l'épreuve pratique, ou nécessiter un délai de fabrication et de retrait auprès du service compétent ou de votre auto-école. Renseignez-vous sur le délai et le lieu de retrait applicables à votre situation.\n\nEN ATTENDANT LE TITRE DÉFINITIF\nSelon les cas, un document provisoire peut vous être remis pour attester de la réussite de vos épreuves en attendant le titre définitif — vérifiez auprès du service compétent si ce document vous autorise déjà à conduire seul ou non.\n\nVÉRIFIER SON PERMIS À LA RÉCEPTION\nÀ la remise du titre, vérifiez immédiatement l'exactitude de votre identité, de la ou des catégories obtenues et de la date de délivrance. Signalez sans délai toute erreur au service compétent : une correction est plus simple à ce moment qu'après coup.\n\nCONDUITE ACCOMPAGNÉE OU PROBATOIRE\nSelon la réglementation en vigueur au moment de l'obtention, un jeune conducteur peut être soumis à des règles particulières pendant une période initiale (disque, limitations spécifiques) — votre auto-école ou le service compétent vous indiquera si cela s'applique à votre cas.\n\nENTRETENIR SES CONNAISSANCES\nObtenir le permis n'est qu'une étape : continuer à réviser les règles de circulation et la signalisation, notamment celles qui évoluent (nouveaux panneaux, nouvelles zones), reste utile tout au long de votre vie de conducteur. Les leçons et quiz de PERMIS 2.0 restent accessibles après l'obtention du permis pour cet entretien des connaissances.",
+      "points_cles": [
+        "Le délai et les modalités de retrait du titre définitif dépendent du service compétent",
+        "Vérifiez immédiatement l'exactitude des informations sur le permis à sa réception",
+        "Un jeune conducteur peut être soumis à des règles particulières pendant une période initiale",
+        "Continuer à réviser après l'obtention du permis reste utile pour rester à jour"
       ]
     }
   ]

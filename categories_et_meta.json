@@ -170,6 +170,20 @@
       "description": "Comportement à adopter en cas d'accident, alerte des secours.",
       "couleur": "#C0392B",
       "icone": "first_aid"
+    },
+    {
+      "id": "signalisation_obligation",
+      "label": "Panneaux d'obligation",
+      "description": "Panneaux ronds à fond bleu imposant un comportement (direction, piste cyclable, vitesse minimale...).",
+      "couleur": "#2471A3",
+      "icone": "obligation_sign"
+    },
+    {
+      "id": "procedure_permis",
+      "label": "Obtenir son permis de conduire",
+      "description": "Étapes, documents et démarches pour obtenir son permis de conduire au Sénégal : dossier, examen du code, épreuve de conduite.",
+      "couleur": "#0EA5E9",
+      "icone": "id_card"
     }
   ],
   "niveaux_difficulte": [
