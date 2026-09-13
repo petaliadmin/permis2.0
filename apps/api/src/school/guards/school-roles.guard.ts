@@ -4,6 +4,8 @@ import {
   ExecutionContext,
   ForbiddenException,
   BadRequestException,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Role, SchoolMemberRole } from '@permis2.0/types';
@@ -47,9 +49,17 @@ export class SchoolRolesGuard implements CanActivate {
 
     const membership = await this.prisma.schoolMembership.findFirst({
       where: { schoolId, userId: user.userId, active: true, role: { in: requiredRoles } },
-      select: { id: true },
+      select: { id: true, school: { select: { subscriptionExpiresAt: true } } },
     });
     if (!membership) throw new ForbiddenException('Accès non autorisé pour cette auto-école');
+
+    // Platform access gate: the school management space requires a PAID
+    // school_subscription. 402 (not 403) so the frontend can distinguish
+    // "wrong role" from "pay to unlock" and show the subscribe screen.
+    const subscriptionExpiresAt = membership.school.subscriptionExpiresAt;
+    if (!subscriptionExpiresAt || subscriptionExpiresAt <= new Date()) {
+      throw new HttpException('Abonnement école requis', HttpStatus.PAYMENT_REQUIRED);
+    }
 
     request.schoolMembership = membership;
     return true;

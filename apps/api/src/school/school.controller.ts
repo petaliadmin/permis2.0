@@ -46,7 +46,8 @@ export class SchoolController {
     @Query('category') category?: string,
     @Query('maxPriceXof') maxPriceXof?: string,
     @Query('q') q?: string,
-    @Query('take') take?: string
+    @Query('take') take?: string,
+    @Query('featured') featured?: string
   ) {
     return this.schoolService.listActive({
       city,
@@ -54,6 +55,7 @@ export class SchoolController {
       q,
       maxPriceXof: maxPriceXof ? parseInt(maxPriceXof, 10) : undefined,
       take: take ? parseInt(take, 10) : undefined,
+      featured: featured === 'true',
     });
   }
 

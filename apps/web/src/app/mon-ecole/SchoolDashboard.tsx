@@ -13,6 +13,9 @@ import type {
 import { SchoolEnrollmentStatus, SchoolPaymentStatus, SchoolStatus } from '@permis2.0/types';
 import { Sheet } from '@permis2.0/ui';
 import { cn } from '@/lib/cn';
+import { useAuthStore } from '@/store/authStore';
+import { usePurchasesStore } from '@/store/purchasesStore';
+import { whatsappLink, WHATSAPP_DISPLAY } from '@/lib/contact';
 import { SideMenuProvider, MenuButton } from '@/components/SideMenu';
 import { EnrollmentRequestsPanel } from './EnrollmentRequestsPanel';
 import { TeamPanel } from './TeamPanel';
@@ -110,6 +113,122 @@ function OverviewTile({
       <span className="text-xs font-semibold leading-snug text-secondary">{label}</span>
       {sublabel && <span className="text-[11px] font-medium leading-snug text-muted">{sublabel}</span>}
     </button>
+  );
+}
+
+const fmtDateShort = (d: string | Date) =>
+  new Date(d).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' });
+
+/** Top 20 visibility boost — a separate weekly add-on, purchasable once the
+ * school's own subscription is active (this card only renders inside the
+ * gated dashboard). Same manual/WhatsApp purchase pattern as the paywall. */
+function VisibilityCard({
+  school,
+  onSchoolUpdated,
+}: {
+  school: School;
+  onSchoolUpdated: () => void;
+}) {
+  const authUser = useAuthStore((s) => s.user);
+  const products = usePurchasesStore((s) => s.products);
+  const fetchProducts = usePurchasesStore((s) => s.fetchProducts);
+  const requestManual = usePurchasesStore((s) => s.requestManual);
+  const [open, setOpen] = useState(false);
+  const [stage, setStage] = useState<'pay' | 'requested'>('pay');
+  const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    fetchProducts();
+  }, [fetchProducts]);
+
+  const product = products.find((p) => p.sku === 'top20_semaine');
+  const price = product?.priceXof ?? 5000;
+  const featuredUntil = school.featuredUntil ? new Date(school.featuredUntil) : null;
+  const isFeatured = !!featuredUntil && featuredUntil > new Date();
+
+  const waLink = whatsappLink(
+    `Bonjour PERMIS 2.0 ! 👋\nJe souhaite ${isFeatured ? 'prolonger' : 'activer'} le forfait Top 20 (${fmtXof(price)}/semaine) pour mon auto-école « ${school.name} ».\nMon compte : ${authUser?.name ?? ''}${authUser?.phone ? ` — +221 ${authUser.phone}` : ''}`
+  );
+
+  const openSheet = () => {
+    setStage('pay');
+    setOpen(true);
+  };
+
+  const iPaid = async () => {
+    if (!product) return;
+    setSubmitting(true);
+    await requestManual(product.id, school.id);
+    setSubmitting(false);
+    setStage('requested');
+  };
+
+  return (
+    <>
+      <div className="rounded-2xl border border-token bg-surface-1 p-4 shadow-soft">
+        <div className="flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <p className="font-display text-sm font-bold text-foreground">Visibilité — Top 20</p>
+            <p className="mt-0.5 truncate text-xs text-secondary">
+              {isFeatured
+                ? `En vedette sur l'accueil jusqu'au ${fmtDateShort(featuredUntil!)}`
+                : "Pas encore en vedette sur la page d'accueil."}
+            </p>
+          </div>
+          <button onClick={openSheet} className="btn-ghost shrink-0 !px-3.5 !py-2 text-xs">
+            {isFeatured ? 'Prolonger' : 'Booster'}
+          </button>
+        </div>
+      </div>
+
+      <Sheet open={open} onClose={() => setOpen(false)} ariaLabel="Forfait Top 20">
+        {stage === 'pay' ? (
+          <div>
+            <p className="font-display text-lg font-bold text-foreground">Forfait Top 20 — 1 semaine</p>
+            <p className="mt-1 text-sm text-secondary">
+              Votre auto-école mise en avant dans le Top 20 affiché sur la page d&apos;accueil, pendant
+              7 jours.
+            </p>
+            <p className="mt-4 font-display text-3xl font-black text-violet-600">{fmtXof(price)}</p>
+            <a
+              href={waLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl bg-[#25D366] py-3.5 text-sm font-bold text-white shadow-md transition-transform active:scale-[0.98]"
+            >
+              <i className="ti ti-brand-whatsapp text-xl" aria-hidden="true" />
+              Contacter l&apos;équipe · {WHATSAPP_DISPLAY}
+            </a>
+            <button
+              onClick={iPaid}
+              disabled={!product || submitting}
+              className="btn-primary mt-2 w-full disabled:opacity-60"
+            >
+              {submitting ? 'Enregistrement…' : "J'ai payé"}
+            </button>
+          </div>
+        ) : (
+          <div className="py-4 text-center">
+            <i className="ti ti-clock text-3xl text-violet-500" aria-hidden="true" />
+            <p className="mt-2 font-display text-base font-bold text-foreground">
+              Activation en cours
+            </p>
+            <p className="mt-1 text-sm text-secondary">
+              Notre équipe active votre visibilité sous peu.
+            </p>
+            <button
+              onClick={() => {
+                onSchoolUpdated();
+                setOpen(false);
+              }}
+              className="btn-ghost mt-4 w-full"
+            >
+              Fermer
+            </button>
+          </div>
+        )}
+      </Sheet>
+    </>
   );
 }
 
@@ -355,6 +474,13 @@ export function SchoolDashboard({ school, onBackToPicker, onSchoolUpdated }: Sch
                 </div>
               )}
             </div>
+
+            {school.subscriptionExpiresAt && (
+              <p className="px-1 text-xs text-muted">
+                Abonnement actif jusqu&apos;au {fmtDateShort(school.subscriptionExpiresAt)}
+              </p>
+            )}
+            <VisibilityCard school={school} onSchoolUpdated={onSchoolUpdated} />
 
             {vehiclesNeedingAttention > 0 && (
               <button

@@ -104,6 +104,7 @@ export class AdminService {
       include: {
         user: { select: { id: true, name: true, phone: true, email: true } },
         product: { select: { title: true, sku: true } },
+        school: { select: { id: true, name: true } },
       },
     });
   }
@@ -120,16 +121,6 @@ export class AdminService {
     return this.shopService.markPaid(id);
   }
 
-  /**
-   * PAID school_pack purchases with their seat pool, for the "Écoles" admin
-   * view — how many of the seats sold to an auto-école referent have been
-   * claimed by students so far. Delegates to ShopService so the same
-   * query/shape backs both this platform-wide view and each buyer's own
-   * /auto-ecole dashboard (ShopService.listSchoolPacks(userId)).
-   */
-  async listSchoolPacks() {
-    return this.shopService.listSchoolPacks();
-  }
 
   // ─── Schools (multi-tenant, Phase 0) ─────────────────────────────────────────
 

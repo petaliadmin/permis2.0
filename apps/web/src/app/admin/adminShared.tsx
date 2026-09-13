@@ -15,16 +15,9 @@ export const ADMIN_SECTIONS = [
     color: '#16A34A',
   },
   {
-    href: '/admin/ecoles',
-    label: 'Auto-écoles',
-    desc: 'Packs vendus, codes à distribuer',
-    icon: 'ti-school',
-    color: '#DB2777',
-  },
-  {
     href: '/admin/schools',
-    label: 'Modération écoles',
-    desc: 'Activer ou suspendre une fiche auto-école',
+    label: 'Écoles',
+    desc: 'Statut, abonnement et visibilité Top 20',
     icon: 'ti-building-store',
     color: '#0D9488',
   },

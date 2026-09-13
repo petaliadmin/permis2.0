@@ -25,7 +25,6 @@ const LEARN_MENU: MenuLink[] = [
 
 const SCHOOL_MENU: MenuLink[] = [
   { href: '/', label: 'Tableau de bord', icon: 'ti-layout-dashboard' },
-  { href: '/auto-ecole', label: 'Packs premium', icon: 'ti-crown' },
   { href: '/assistance', label: 'Assistance', icon: 'ti-headset' },
   { href: '/profil', label: 'Profil & réglages', icon: 'ti-user' },
 ];

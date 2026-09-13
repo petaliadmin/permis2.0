@@ -64,7 +64,7 @@ export function ForSchools() {
               ))}
             </ul>
 
-            <Link href="/auto-ecole" className="btn-violet mt-8 inline-flex">
+            <Link href="/mon-ecole" className="btn-violet mt-8 inline-flex">
               Inscrire mon auto-école
             </Link>
           </motion.div>

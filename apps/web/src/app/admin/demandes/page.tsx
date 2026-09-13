@@ -12,6 +12,7 @@ interface PendingPurchase {
   createdAt: string;
   user: { id: string; name: string; phone: string | null; email: string | null };
   product: { title: string; sku: string };
+  school: { id: string; name: string } | null;
 }
 
 const fmtDate = (d: string) =>
@@ -111,6 +112,9 @@ export default function AdminDemandesPage() {
                         aria-hidden="true"
                         title="Demande via WhatsApp"
                       />
+                    )}
+                    {p.school && (
+                      <span className="mt-0.5 block text-xs text-muted">Pour {p.school.name}</span>
                     )}
                   </td>
                   <td className="px-4 py-3 font-bold text-foreground">{fmtXof(p.amountXof)}</td>

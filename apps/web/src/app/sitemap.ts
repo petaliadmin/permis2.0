@@ -22,8 +22,6 @@ const ROUTES: { path: string; priority: number }[] = [
   { path: '/tests', priority: 0.8 },
   { path: '/exam', priority: 0.7 },
   { path: '/boutique', priority: 0.5 },
-  { path: '/auto-ecole', priority: 0.6 },
-  { path: '/pack-ecole', priority: 0.4 },
   { path: '/assistance', priority: 0.4 },
   { path: '/a-propos', priority: 0.3 },
   { path: '/contact', priority: 0.3 },

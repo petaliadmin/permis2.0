@@ -8,6 +8,11 @@ import { useAuthStore } from '@/store/authStore';
 import { SchoolShell } from '@/components/SchoolShell';
 import { CreateSchoolForm } from './CreateSchoolForm';
 import { SchoolDashboard } from './SchoolDashboard';
+import { SubscriptionPaywall } from './SubscriptionPaywall';
+
+function hasActiveSubscription(school: School): boolean {
+  return !!school.subscriptionExpiresAt && new Date(school.subscriptionExpiresAt) > new Date();
+}
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -114,6 +119,10 @@ export default function GestionClient() {
 
   if (!active) {
     return <SchoolPicker schools={schools} onPick={setSelected} />;
+  }
+
+  if (!hasActiveSubscription(active)) {
+    return <SubscriptionPaywall school={active} onRefresh={fetchMine} />;
   }
 
   return (

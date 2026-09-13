@@ -111,7 +111,6 @@ model User {
   passwordResetTokens PasswordResetToken[]
   entitlements        Entitlement[]
   purchases           Purchase[]
-  claimedPackSeats    PackSeat[]
 
   // Multi-tenant — Phase 0 fondations (relations virtuelles, aucune colonne ajoutée sur users)
   schoolMemberships           SchoolMembership[]
@@ -484,8 +483,6 @@ model Product {
   ordre        Int      @default(0)
   grants       String[]
   validityDays Int?
-  /// Number of seats in the pack, for kind = "school_pack" only; null for individual products.
-  seats        Int?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
@@ -498,6 +495,9 @@ model Purchase {
   id          String   @id @default(cuid())
   userId      String
   productId   String
+  /// Set only for school-scoped products (school_subscription, featured_placement) —
+  /// which School the purchase applies to. Null for individual (student) products.
+  schoolId    String?
   provider    String
   method      String?
   phone       String?
@@ -507,30 +507,14 @@ model Purchase {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  product   Product    @relation(fields: [productId], references: [id])
-  packSeats PackSeat[]
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id])
+  school  School? @relation(fields: [schoolId], references: [id], onDelete: SetNull)
 
   @@unique([providerRef])
   @@index([userId])
+  @@index([schoolId])
   @@map("purchases")
-}
-
-/// One claimable seat within a school_pack Purchase. Generated on markPaid,
-/// claimed by a student via a code instead of the buyer receiving the grant.
-model PackSeat {
-  id              String    @id @default(cuid())
-  purchaseId      String
-  code            String    @unique
-  claimedByUserId String?
-  claimedAt       DateTime?
-  createdAt       DateTime  @default(now())
-
-  purchase  Purchase @relation(fields: [purchaseId], references: [id], onDelete: Cascade)
-  claimedBy User?    @relation(fields: [claimedByUserId], references: [id])
-
-  @@index([purchaseId])
-  @@map("pack_seats")
 }
 
 model DrivingCourse {
@@ -645,6 +629,14 @@ model School {
   /// single `priceXof` (legacy/simple pricing) until they fill this in.
   pricesByCategory  Json?
 
+  /// Platform access gate: the school's staff can use /mon-ecole only while this
+  /// is in the future. Extended by a PAID school_subscription Purchase (see
+  /// ShopService.markPaid) — enforced centrally in SchoolRolesGuard.
+  subscriptionExpiresAt DateTime?
+  /// While in the future, the school appears in the homepage "Top 20" list.
+  /// Extended by a PAID featured_placement Purchase.
+  featuredUntil         DateTime?
+
   latitude  Float?
   longitude Float?
 
@@ -657,6 +649,7 @@ model School {
   vehicles           Vehicle[]
   sessions           Session[]
   payments           SchoolPayment[]
+  purchases          Purchase[]
 
   @@index([status])
   @@index([city])

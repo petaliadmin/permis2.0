@@ -328,7 +328,7 @@ export interface Subscription {
 
 // ─── Boutique / Premium (Sprint 6) ────────────────────────────────────────────
 
-export type ProductKind = 'PACK' | 'EXAM' | 'subscription' | 'school_pack';
+export type ProductKind = 'PACK' | 'EXAM' | 'subscription' | 'school_subscription' | 'featured_placement';
 export type PurchaseStatus = 'PENDING' | 'PAID' | 'FAILED';
 
 /**
@@ -386,38 +386,14 @@ export interface Product {
   updatedAt: Date;
   /** Computed by the API: the current user already owns all of this product's grants. */
   owned?: boolean;
-  /** Number of seats in the pack, for kind = "school_pack" only. */
-  seats?: number | null;
-}
-
-/** A claimable seat within a school_pack Purchase (Horizon 0: white-label licenses for auto-écoles). */
-export interface PackSeat {
-  id: string;
-  purchaseId: string;
-  code: string;
-  claimedByUserId?: string | null;
-  claimedAt?: Date | null;
-  createdAt: Date;
-}
-
-/**
- * A PAID school_pack purchase with its seat pool — returned by
- * GET /admin/school-packs (all, superadmin) and GET /shop/school-pack/mine
- * (the buyer's own, for the /auto-ecole dashboard).
- */
-export interface SchoolPackSummary {
-  id: string;
-  createdAt: Date;
-  buyer: { id: string; name: string; phone: string | null; email: string | null };
-  product: { title: string; sku: string; seats: number | null };
-  seats: { id: string; code: string; claimedAt: Date | null; claimedBy: { name: string } | null }[];
-  claimedCount: number;
 }
 
 export interface Purchase {
   id: string;
   userId: string;
   productId: string;
+  /** Set for school-scoped products (school_subscription, featured_placement). */
+  schoolId?: string | null;
   provider: PaymentProviderId;
   /** The Mobile Money / card method the user chose at checkout. */
   method?: PaymentMethod | null;
@@ -429,6 +405,7 @@ export interface Purchase {
   updatedAt: Date;
   // Optionally included by the API
   product?: Pick<Product, 'id' | 'sku' | 'title' | 'kind' | 'priceXof'>;
+  school?: { id: string; name: string } | null;
 }
 
 export interface Entitlement {
@@ -495,6 +472,10 @@ export interface School {
   priceXof?: number | null;
   /** Price in FCFA per licenseCategories code, e.g. { "A": 80000, "B": 150000 }. */
   pricesByCategory?: Record<string, number> | null;
+  /** Platform access gate — /mon-ecole requires this to be in the future. */
+  subscriptionExpiresAt?: Date | null;
+  /** While in the future, the school appears in the homepage "Top 20" list. */
+  featuredUntil?: Date | null;
   latitude?: number | null;
   longitude?: number | null;
   createdAt: Date;

@@ -32,7 +32,6 @@ const SUBDOMAIN_PREFIXES: Record<string, Space> = {
 const OWNED_PREFIXES: Record<Space, string[]> = {
   www: [
     '/ecoles',
-    '/pack-ecole',
     '/assistance',
     '/a-propos',
     '/contact',
@@ -54,7 +53,7 @@ const OWNED_PREFIXES: Record<Space, string[]> = {
     '/notifications',
     '/profil',
   ],
-  school: ['/mon-ecole', '/auto-ecole'],
+  school: ['/mon-ecole'],
   admin: ['/admin'],
 };
 

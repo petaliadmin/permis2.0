@@ -1,13 +1,7 @@
-import type { Metadata } from 'next';
-import AutoEcoleClient from './AutoEcoleClient';
+import { redirect } from 'next/navigation';
 
-export const metadata: Metadata = {
-  title: 'Espace Auto-École — packs premium pour vos élèves',
-  description:
-    "Vous dirigez une auto-école au Sénégal ? Achetez des packs premium PERMIS 2.0 pour vos élèves, distribuez des codes d'accès et suivez leur activation depuis un tableau de bord dédié.",
-  alternates: { canonical: '/auto-ecole' },
-};
-
+// The old "pack école" (bulk seat codes for students) is gone — auto-écoles
+// now subscribe directly from their own management space.
 export default function Page() {
-  return <AutoEcoleClient />;
+  redirect('/mon-ecole');
 }

@@ -4,22 +4,16 @@ import {
   ForbiddenException,
   BadRequestException,
 } from '@nestjs/common';
-import * as crypto from 'crypto';
 import type { Prisma } from '@prisma/client';
 
 import { PrismaService } from '../prisma/prisma.service';
 import { EntitlementService } from '../entitlement/entitlement.service';
 import { PaymentService } from './payment/payment.service';
 import { CheckoutDto } from './dto/checkout.dto';
+import { SchoolMemberRole } from '@permis2.0/types';
 
-/** Short, unambiguous claim code for a school-pack seat (excludes 0/O/1/I). */
-function generateSeatCode(): string {
-  const alphabet = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  const bytes = crypto.randomBytes(8);
-  let code = '';
-  for (let i = 0; i < 8; i++) code += alphabet[bytes[i] % alphabet.length];
-  return code;
-}
+/** Product kinds whose purchase applies to a School rather than the buying user. */
+const SCHOOL_SCOPED_KINDS = ['school_subscription', 'featured_placement'];
 
 /**
  * Boutique back-end (Sprint 6): products, checkout, payment webhook handling, and
@@ -103,16 +97,35 @@ export class ShopService {
   }
 
   /**
+   * A school_subscription/featured_placement purchase must be attributed to a
+   * school the buyer actually owns — otherwise anyone could pay to extend a
+   * stranger's subscription or visibility. Returns the validated schoolId, or
+   * throws.
+   */
+  private async assertOwnerOfSchool(userId: string, schoolId: string | undefined) {
+    if (!schoolId) throw new BadRequestException('schoolId requis pour ce produit');
+    const membership = await this.prisma.schoolMembership.findFirst({
+      where: { schoolId, userId, active: true, role: SchoolMemberRole.OWNER },
+      select: { id: true },
+    });
+    if (!membership) throw new ForbiddenException("Vous n'êtes pas propriétaire de cette auto-école");
+    return schoolId;
+  }
+
+  /**
    * Manual (WhatsApp) payment mode: records a PENDING purchase when the user
    * opens the WhatsApp link, so the admin has a trackable request to confirm
    * instead of relying entirely on the WhatsApp conversation. No provider is
    * involved — confirmation happens via AdminService.confirmPurchase (which
    * calls markPaid), not a webhook.
    */
-  async requestManual(userId: string, productId: string) {
+  async requestManual(userId: string, productId: string, schoolId?: string) {
     const product = await this.prisma.product.findUnique({ where: { id: productId } });
     if (!product || !product.active) {
       throw new NotFoundException('Product not found');
+    }
+    if (SCHOOL_SCOPED_KINDS.includes(product.kind)) {
+      schoolId = await this.assertOwnerOfSchool(userId, schoolId);
     }
 
     // Re-clicking the WhatsApp link shouldn't pile up duplicate requests.
@@ -125,6 +138,7 @@ export class ShopService {
       data: {
         userId,
         productId,
+        schoolId,
         provider: 'manual',
         method: 'whatsapp',
         amountXof: product.priceXof,
@@ -233,9 +247,8 @@ export class ShopService {
   /**
    * Upserts one entitlement grant for a user within a transaction. Subscription
    * (validityDays set): extends from a still-active expiry (renewal) or from now,
-   * so paying/claiming early never loses remaining time. Permanent grant
-   * (validityDays null) stays non-expiring. Shared by markPaid (direct purchase)
-   * and claimSeat (school-pack seat claim) so both follow the same expiry rule.
+   * so paying early never loses remaining time. Permanent grant (validityDays
+   * null) stays non-expiring.
    */
   private async grantEntitlementToUser(
     tx: Prisma.TransactionClient,
@@ -263,13 +276,32 @@ export class ShopService {
   }
 
   /**
+   * Extends a School's `subscriptionExpiresAt` or `featuredUntil` within a
+   * transaction — same renewal rule as grantEntitlementToUser (extends from a
+   * still-active expiry, or from now).
+   */
+  private async extendSchoolField(
+    tx: Prisma.TransactionClient,
+    schoolId: string,
+    field: 'subscriptionExpiresAt' | 'featuredUntil',
+    validityDays: number
+  ) {
+    const now = new Date();
+    const school = await tx.school.findUniqueOrThrow({ where: { id: schoolId } });
+    const current = school[field];
+    const base = current && current > now ? current : now;
+    const next = new Date(base.getTime() + validityDays * 24 * 60 * 60 * 1000);
+    await tx.school.update({ where: { id: schoolId }, data: { [field]: next } });
+  }
+
+  /**
    * Flips a purchase to PAID and grants its product's entitlements. Idempotent:
    * a no-op if already PAID, and entitlement upserts dedupe on (userId, key).
    *
-   * A `school_pack` product is a white-label bulk license (Horizon 0, sold to
-   * an auto-école): the buyer is the school's referent account, not a student,
-   * so it does NOT receive the grants directly. Instead we generate `seats`
-   * claimable `PackSeat` codes; each student redeems one via claimSeat().
+   * `school_subscription`/`featured_placement` are school-scoped: they extend
+   * a field on `purchase.school` rather than granting the buyer an Entitlement
+   * (which is a user-scoped concept). Every other kind keeps the direct
+   * per-grant Entitlement behavior.
    */
   async markPaid(purchaseId: string) {
     const purchase = await this.prisma.purchase.findUnique({
@@ -289,22 +321,13 @@ export class ShopService {
         data: { status: 'PAID' },
       });
 
-      if (purchase.product.kind === 'school_pack') {
-        const seats = purchase.product.seats ?? 0;
-        for (let i = 0; i < seats; i++) {
-          // Retry on the rare code collision (unique constraint) instead of
-          // pre-checking existence — cheaper for a handful of seats per pack.
-          for (let attempt = 0; attempt < 5; attempt++) {
-            try {
-              await tx.packSeat.create({
-                data: { purchaseId: purchase.id, code: generateSeatCode() },
-              });
-              break;
-            } catch (err: any) {
-              if (err?.code !== 'P2002' || attempt === 4) throw err;
-            }
-          }
+      if (SCHOOL_SCOPED_KINDS.includes(purchase.product.kind)) {
+        if (!purchase.schoolId) {
+          throw new BadRequestException('Purchase has no schoolId for a school-scoped product');
         }
+        const field =
+          purchase.product.kind === 'school_subscription' ? 'subscriptionExpiresAt' : 'featuredUntil';
+        await this.extendSchoolField(tx, purchase.schoolId, field, purchase.product.validityDays ?? 0);
         return;
       }
 
@@ -320,78 +343,6 @@ export class ShopService {
     });
 
     return this.prisma.purchase.findUnique({ where: { id: purchase.id } });
-  }
-
-  /**
-   * PAID school_pack purchases with their seat pool. With no userId, this is
-   * platform-wide (the superadmin "Auto-écoles" view); scoped to a userId, it's
-   * "my packs" for the buyer's own /auto-ecole dashboard.
-   */
-  async listSchoolPacks(userId?: string) {
-    const purchases = await this.prisma.purchase.findMany({
-      where: {
-        status: 'PAID',
-        product: { kind: 'school_pack' },
-        ...(userId ? { userId } : {}),
-      },
-      orderBy: { createdAt: 'desc' },
-      include: {
-        user: { select: { id: true, name: true, phone: true, email: true } },
-        product: { select: { title: true, sku: true, seats: true } },
-        packSeats: {
-          select: { id: true, code: true, claimedAt: true, claimedBy: { select: { name: true } } },
-          orderBy: { createdAt: 'asc' },
-        },
-      },
-    });
-    return purchases.map((p) => ({
-      id: p.id,
-      createdAt: p.createdAt,
-      buyer: p.user,
-      product: p.product,
-      seats: p.packSeats,
-      claimedCount: p.packSeats.filter((s) => s.claimedAt).length,
-    }));
-  }
-
-  /**
-   * A student redeems a school-pack seat code, granting them the pack
-   * product's entitlements directly (bypassing the buyer/referent account).
-   */
-  async claimSeat(userId: string, code: string) {
-    const seat = await this.prisma.packSeat.findUnique({
-      where: { code: code.trim().toUpperCase() },
-      include: { purchase: { include: { product: true } } },
-    });
-    if (!seat) {
-      throw new NotFoundException('Code invalide');
-    }
-    if (seat.purchase.status !== 'PAID') {
-      throw new BadRequestException('Ce pack n’est pas encore actif');
-    }
-
-    await this.prisma.$transaction(async (tx) => {
-      // Atomic claim: only succeeds if still unclaimed, closing the race
-      // between two students submitting the same code concurrently.
-      const { count } = await tx.packSeat.updateMany({
-        where: { id: seat.id, claimedAt: null },
-        data: { claimedByUserId: userId, claimedAt: new Date() },
-      });
-      if (count === 0) {
-        throw new BadRequestException('Ce code a déjà été utilisé');
-      }
-      for (const key of seat.purchase.product.grants) {
-        await this.grantEntitlementToUser(
-          tx,
-          userId,
-          key,
-          seat.purchase.product.validityDays,
-          seat.purchase.id
-        );
-      }
-    });
-
-    return { ok: true, grants: seat.purchase.product.grants };
   }
 
   /**

@@ -13,13 +13,15 @@ export function PartnerSchools() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`${API_URL}/schools?take=6`)
+    fetch(`${API_URL}/schools?featured=true&take=20`)
       .then((res) => (res.ok ? res.json() : []))
       .then((data) => setSchools(Array.isArray(data) ? data : []))
       .catch(() => setSchools([]))
       .finally(() => setLoading(false));
   }, []);
 
+  // Purely a paid-visibility feature — no featured school yet means nothing to show,
+  // rather than falling back to an arbitrary/unpaid list under a "Top 20" banner.
   if (!loading && schools.length === 0) return null;
 
   return (
@@ -32,7 +34,7 @@ export function PartnerSchools() {
         className="flex items-center justify-between"
       >
         <h2 className="font-display text-2xl font-extrabold text-foreground sm:text-3xl">
-          Auto-écoles partenaires
+          Top 20 des auto-écoles
         </h2>
         <Link href="/ecoles" className="text-sm font-bold text-primary-600 hover:underline">
           Voir toutes les auto-écoles →

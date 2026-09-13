@@ -90,8 +90,10 @@ export class SchoolService {
     maxPriceXof?: number;
     q?: string;
     take?: number;
+    /** Homepage "Top 20": only schools with a currently-active featured_placement. */
+    featured?: boolean;
   }) {
-    const take = Math.min(filters.take ?? 20, 50);
+    const take = Math.min(filters.take ?? 20, filters.featured ? 20 : 50);
     return this.prisma.school.findMany({
       where: {
         status: SchoolStatus.ACTIVE,
@@ -99,9 +101,10 @@ export class SchoolService {
         ...(filters.category ? { licenseCategories: { has: filters.category } } : {}),
         ...(filters.maxPriceXof != null ? { priceXof: { lte: filters.maxPriceXof } } : {}),
         ...(filters.q ? { name: { contains: filters.q, mode: 'insensitive' } } : {}),
+        ...(filters.featured ? { featuredUntil: { gt: new Date() } } : {}),
       },
       include: { _count: { select: ACTIVE_STUDENTS_COUNT } },
-      orderBy: { createdAt: 'desc' },
+      orderBy: filters.featured ? { featuredUntil: 'desc' } : { createdAt: 'desc' },
       take,
     }).then((schools) => schools.map(withStudentsCount));
   }

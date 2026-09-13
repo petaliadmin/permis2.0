@@ -1,7 +1,7 @@
 'use client';
 
 import { create } from 'zustand';
-import type { Product, Purchase, PaymentMethod, SchoolPackSummary } from '@permis2.0/types';
+import type { Product, Purchase, PaymentMethod } from '@permis2.0/types';
 import { useAuthStore } from './authStore';
 import { fetchWithCache, peekCache, userScopedKey } from '@/lib/offlineCache';
 
@@ -15,10 +15,6 @@ interface PurchasesState {
   /** ISO expiry of the premium_all subscription, or null if none/permanent. */
   premiumExpiresAt: string | null;
   purchases: Purchase[];
-  /** The current user's own PAID school_pack purchases, for /auto-ecole. */
-  schoolPacks: SchoolPackSummary[];
-  /** True once fetchMySchoolPacks() has completed at least once. */
-  schoolPacksReady: boolean;
   loading: boolean;
   /** True once fetchEntitlements() has completed at least once (even for guests). */
   entitlementsReady: boolean;
@@ -34,7 +30,6 @@ interface PurchasesState {
   fetchProducts: () => Promise<void>;
   fetchEntitlements: () => Promise<void>;
   fetchPurchases: () => Promise<void>;
-  fetchMySchoolPacks: () => Promise<void>;
   checkout: (
     productId: string,
     phone?: string,
@@ -45,8 +40,8 @@ interface PurchasesState {
     qrCode?: string;
     ussdMessage?: string;
   } | null>;
-  requestManual: (productId: string) => Promise<void>;
-  claimSeat: (code: string) => Promise<{ ok: boolean; error?: string }>;
+  /** schoolId is required for school-scoped products (school_subscription, featured_placement). */
+  requestManual: (productId: string, schoolId?: string) => Promise<void>;
   pollPurchase: (purchaseId: string) => Promise<void>;
   simulateConfirm: (purchaseId: string) => Promise<void>;
   resetCheckout: () => void;
@@ -73,8 +68,6 @@ export const usePurchasesStore = create<PurchasesState>((set, get) => ({
   entitlementKeys: cachedEntitlements?.data.keys ?? [],
   premiumExpiresAt: cachedPremium?.expiresAt ?? null,
   purchases: cachedPurchases?.data ?? [],
-  schoolPacks: [],
-  schoolPacksReady: false,
   loading: false,
   entitlementsReady: false,
   checkoutStatus: 'idle',
@@ -146,22 +139,6 @@ export const usePurchasesStore = create<PurchasesState>((set, get) => ({
     }
   },
 
-  fetchMySchoolPacks: async () => {
-    if (!useAuthStore.getState().isAuthenticated) {
-      set({ schoolPacks: [], schoolPacksReady: true });
-      return;
-    }
-    try {
-      const res = await fetch(`${API_URL}/shop/school-pack/mine`, { credentials: 'include' });
-      if (!res.ok) throw new Error(String(res.status));
-      const data: SchoolPackSummary[] = await res.json();
-      set({ schoolPacks: data, schoolPacksReady: true });
-    } catch (error) {
-      console.error('Error fetching school packs:', error);
-      set({ schoolPacksReady: true });
-    }
-  },
-
   checkout: async (productId, phone?, method?) => {
     if (!useAuthStore.getState().isAuthenticated) {
       set({ checkoutStatus: 'failed', error: 'Connectez-vous pour acheter.' });
@@ -226,46 +203,17 @@ export const usePurchasesStore = create<PurchasesState>((set, get) => ({
    * up in the admin's "Demandes" list. Best-effort — never blocks or fails
    * the WhatsApp redirect the user is about to make.
    */
-  requestManual: async (productId) => {
+  requestManual: async (productId, schoolId) => {
     if (!useAuthStore.getState().isAuthenticated) return;
     try {
       await fetch(`${API_URL}/shop/request-manual`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ productId }),
+        body: JSON.stringify({ productId, schoolId }),
       });
     } catch {
       /* the WhatsApp conversation is still the source of truth — ignore */
-    }
-  },
-
-  /**
-   * Horizon 0: redeem a school-pack seat code (sold to an auto-école). On
-   * success, refetches entitlements so premium content unlocks immediately —
-   * same as a direct checkout, just without a Purchase/payment step for this user.
-   */
-  claimSeat: async (code) => {
-    if (!useAuthStore.getState().isAuthenticated) {
-      return { ok: false, error: 'Connectez-vous pour utiliser un code.' };
-    }
-    try {
-      const res = await fetch(`${API_URL}/shop/school-pack/claim`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ code }),
-      });
-      if (!res.ok) {
-        const body = await res.json().catch(() => ({}) as { message?: string | string[] });
-        const m = body.message;
-        const msg = Array.isArray(m) ? m[0] : typeof m === 'string' ? m : `Erreur ${res.status}`;
-        return { ok: false, error: msg };
-      }
-      await get().fetchEntitlements();
-      return { ok: true };
-    } catch {
-      return { ok: false, error: 'Impossible de joindre le serveur. Vérifiez votre connexion.' };
     }
   },
 

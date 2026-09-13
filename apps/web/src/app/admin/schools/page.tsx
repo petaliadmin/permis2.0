@@ -21,6 +21,17 @@ const STATUS_CHIP: Record<string, string> = {
 const fmtDate = (d: string) =>
   new Date(d).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' });
 
+/** Renders a future/past expiry as a chip — reused for both subscription and Top 20 columns. */
+function ExpiryChip({ date, activeLabel }: { date: string | Date | null | undefined; activeLabel: string }) {
+  if (!date) return <span className="chip bg-surface-2 text-secondary">—</span>;
+  const active = new Date(date) > new Date();
+  return (
+    <span className={`chip ${active ? 'chip-success' : 'chip-danger'}`}>
+      {active ? `${activeLabel} · ${fmtDate(String(date))}` : `Expiré le ${fmtDate(String(date))}`}
+    </span>
+  );
+}
+
 /** The single forward action that makes sense from the current status. */
 function nextAction(status: string): { label: string; target: SchoolStatus } | null {
   switch (status) {
@@ -70,11 +81,11 @@ export default function AdminSchoolsPage() {
   return (
     <>
       <AdminPageHeader
-        title="Modération des écoles"
+        title="Écoles"
         subtitle={
           loading
             ? 'Chargement…'
-            : `${schools.length} auto-école${schools.length > 1 ? 's' : ''} — activez une fiche pour la rendre visible dans l'annuaire public`
+            : `${schools.length} auto-école${schools.length > 1 ? 's' : ''} — statut, abonnement et visibilité Top 20`
         }
       />
 
@@ -99,6 +110,8 @@ export default function AdminSchoolsPage() {
               <tr className="border-b border-token bg-surface-2/60 text-left text-[11px] font-bold uppercase tracking-wide text-muted">
                 <th className="px-4 py-3 font-bold">Auto-école</th>
                 <th className="px-4 py-3 font-bold">Statut</th>
+                <th className="px-4 py-3 font-bold">Abonnement</th>
+                <th className="px-4 py-3 font-bold">Top 20</th>
                 <th className="px-4 py-3 font-bold">Créée le</th>
                 <th className="px-4 py-3 text-right font-bold">Action</th>
               </tr>
@@ -123,6 +136,12 @@ export default function AdminSchoolsPage() {
                     </td>
                     <td className="px-4 py-3">
                       <span className={`chip ${STATUS_CHIP[s.status]}`}>{STATUS_LABEL[s.status]}</span>
+                    </td>
+                    <td className="px-4 py-3">
+                      <ExpiryChip date={s.subscriptionExpiresAt} activeLabel="Actif" />
+                    </td>
+                    <td className="px-4 py-3">
+                      <ExpiryChip date={s.featuredUntil} activeLabel="En vedette" />
                     </td>
                     <td className="px-4 py-3 text-xs text-muted">{fmtDate(String(s.createdAt))}</td>
                     <td className="px-4 py-3 text-right">

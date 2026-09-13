@@ -272,34 +272,47 @@ async function main() {
     });
     console.log('✅ Seeded product: abo_annuel');
 
-    // Seed boutique products — school_pack (Horizon 0: white-label bulk licenses
-    // sold to an auto-école). Price per seat decreases with pack size to
-    // incentivize volume. Each seat grants the same premium_all access as
-    // abo_annuel, for the same validity period.
-    const schoolPacks = [
-      { sku: 'pack_ecole_10', title: 'Pack École — 10 places', seats: 10, priceXof: 25000, ordre: 10 },
-      { sku: 'pack_ecole_20', title: 'Pack École — 20 places', seats: 20, priceXof: 46000, ordre: 11 },
-      { sku: 'pack_ecole_50', title: 'Pack École — 50 places', seats: 50, priceXof: 100000, ordre: 12 },
-    ];
-    for (const pack of schoolPacks) {
-      const data = {
-        title: pack.title,
-        description: `Accès premium (${pack.seats} élèves) pour votre auto-école, distribué par code individuel.`,
-        kind: 'school_pack',
-        priceXof: pack.priceXof,
-        active: true,
-        ordre: pack.ordre,
-        grants: ['premium_all'],
+    // Seed boutique products — school-level plans. Replaces the old "pack école"
+    // (bulk seat codes for students): auto-écoles now pay directly for their own
+    // access to the platform, plus an optional weekly visibility boost.
+    const schoolProducts = [
+      {
+        sku: 'abo_ecole_annuel',
+        title: 'Abonnement École — Annuel',
+        description: "Accès complet à l'espace de gestion (élèves, équipe, véhicules, planning, finances).",
+        kind: 'school_subscription',
+        priceXof: 12000,
+        ordre: 10,
         validityDays: 365,
-        seats: pack.seats,
+      },
+      {
+        sku: 'top20_semaine',
+        title: 'Forfait Top 20 — 1 semaine',
+        description: "Votre auto-école mise en avant dans le Top 20 affiché sur la page d'accueil, pendant 7 jours.",
+        kind: 'featured_placement',
+        priceXof: 5000,
+        ordre: 11,
+        validityDays: 7,
+      },
+    ];
+    for (const product of schoolProducts) {
+      const data = {
+        title: product.title,
+        description: product.description,
+        kind: product.kind,
+        priceXof: product.priceXof,
+        active: true,
+        ordre: product.ordre,
+        grants: [] as string[],
+        validityDays: product.validityDays,
       };
       await prisma.product.upsert({
-        where: { sku: pack.sku },
+        where: { sku: product.sku },
         update: data,
-        create: { sku: pack.sku, ...data },
+        create: { sku: product.sku, ...data },
       });
     }
-    console.log(`✅ Seeded ${schoolPacks.length} school_pack products`);
+    console.log(`✅ Seeded ${schoolProducts.length} school-level products`);
 
     // Demo auto-écoles — see seed-schools.ts (also runnable standalone via
     // `pnpm run prisma:seed:schools`, e.g. after restoring a DB backup that
