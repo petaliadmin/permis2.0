@@ -491,7 +491,10 @@ export interface School {
   openingHours?: Record<string, string> | null;
   services: string[];
   licenseCategories: string[];
+  /** Starting price shown on cards/search — derived server-side from the minimum of pricesByCategory. */
   priceXof?: number | null;
+  /** Price in FCFA per licenseCategories code, e.g. { "A": 80000, "B": 150000 }. */
+  pricesByCategory?: Record<string, number> | null;
   latitude?: number | null;
   longitude?: number | null;
   createdAt: Date;

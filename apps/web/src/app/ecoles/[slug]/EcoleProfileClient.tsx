@@ -78,10 +78,23 @@ export default function EcoleProfileClient({ school }: { school: School }) {
                     </span>
                   ))}
                 </div>
-                {school.priceXof != null && (
-                  <p className="mt-4 font-display text-xl font-extrabold text-primary-600">
-                    À partir de {fmtXof(school.priceXof)}
-                  </p>
+                {school.pricesByCategory && Object.keys(school.pricesByCategory).length > 0 ? (
+                  <div className="mt-4 space-y-1.5 border-t border-token pt-3">
+                    {Object.entries(school.pricesByCategory).map(([code, price]) => (
+                      <div key={code} className="flex items-center justify-between text-sm">
+                        <span className="font-semibold text-foreground">Permis {code}</span>
+                        <span className="font-display font-extrabold text-primary-600">
+                          {fmtXof(price)}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  school.priceXof != null && (
+                    <p className="mt-4 font-display text-xl font-extrabold text-primary-600">
+                      À partir de {fmtXof(school.priceXof)}
+                    </p>
+                  )
                 )}
               </div>
             )}

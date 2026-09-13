@@ -79,6 +79,15 @@ export class UpdateSchoolDto {
   @Min(0)
   priceXof?: number;
 
+  @ApiProperty({
+    required: false,
+    description: 'Price in FCFA per license category code, e.g. { "A": 80000, "B": 150000 }',
+    example: { B: 150000 },
+  })
+  @IsOptional()
+  @IsObject()
+  pricesByCategory?: Record<string, number>;
+
   @ApiProperty({ required: false })
   @IsOptional()
   @IsLatitude()

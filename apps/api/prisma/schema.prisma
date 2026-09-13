@@ -636,7 +636,14 @@ model School {
   openingHours      Json?
   services          String[] @default([])
   licenseCategories String[] @default([])
+  /// Starting price shown on cards/search — kept in sync with the minimum
+  /// value of `pricesByCategory` server-side, never edited directly once
+  /// per-category pricing is set. See SchoolService.update().
   priceXof          Int?
+  /// Per-category price in FCFA, e.g. { "A": 80000, "B": 150000 }. Keys are
+  /// `licenseCategories` codes. Optional — a school can still expose only the
+  /// single `priceXof` (legacy/simple pricing) until they fill this in.
+  pricesByCategory  Json?
 
   latitude  Float?
   longitude Float?

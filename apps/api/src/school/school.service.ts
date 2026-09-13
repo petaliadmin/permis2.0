@@ -247,7 +247,19 @@ export class SchoolService {
     // schoolId already validated by SchoolRolesGuard for this request's caller.
     const school = await this.prisma.school.findUnique({ where: { id: schoolId } });
     if (!school) throw new NotFoundException('École introuvable');
-    return this.prisma.school.update({ where: { id: schoolId }, data: dto });
+
+    // `priceXof` (used by the /ecoles search filter and "à partir de" cards)
+    // is derived, never client-set once per-category pricing is in play — the
+    // school edits pricesByCategory, this keeps the summary field in sync.
+    const data: Omit<UpdateSchoolDto, 'priceXof'> & { priceXof?: number | null } = { ...dto };
+    if (dto.pricesByCategory) {
+      const values = Object.values(dto.pricesByCategory).filter(
+        (v): v is number => typeof v === 'number' && Number.isFinite(v)
+      );
+      data.priceXof = values.length > 0 ? Math.min(...values) : null;
+    }
+
+    return this.prisma.school.update({ where: { id: schoolId }, data });
   }
 
   async listMembers(schoolId: string) {

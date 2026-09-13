@@ -2,6 +2,7 @@
 
 import { Suspense, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Sheet, Skeleton } from '@permis2.0/ui';
 import { AppShell } from '@/components/AppShell';
@@ -192,8 +193,8 @@ function BoutiqueInner() {
                 <p className="mb-2.5 mt-3 text-xs font-bold uppercase tracking-wide text-muted">
                   Paiement
                 </p>
-                <span className="flex w-fit items-center gap-1 rounded-lg bg-sky-50 px-2 py-1 text-[10px] font-bold text-sky-700">
-                  🌊 Wave
+                <span className="flex w-fit items-center rounded-lg bg-sky-50 px-2 py-1">
+                  <Image src="/images/payments/wave.png" alt="Wave" width={46} height={20} />
                 </span>
               </div>
             )}
@@ -359,8 +360,8 @@ function BoutiqueInner() {
               </div>
             ) : stage === 'requested' ? (
               <div className="py-4 text-center">
-                <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-sky-50 text-3xl">
-                  🌊
+                <div className="mx-auto mb-3 flex h-14 w-24 items-center justify-center rounded-2xl bg-sky-50">
+                  <Image src="/images/payments/wave.png" alt="Wave" width={69} height={30} />
                 </div>
                 <h3 className="font-display text-lg font-extrabold text-foreground">
                   Paiement signalé

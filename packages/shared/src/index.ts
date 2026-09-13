@@ -22,6 +22,15 @@ export const COLORS = {
 // API Configuration
 export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
+/** License categories a school can offer/price — School.licenseCategories codes. */
+export const LICENSE_CATEGORIES = [
+  { code: 'A', label: 'Motos et scooters' },
+  { code: 'B', label: 'Véhicules légers (voiture particulière)' },
+  { code: 'C', label: 'Poids lourds' },
+  { code: 'D', label: 'Transport en commun' },
+  { code: 'E', label: 'Remorques et attelages' },
+] as const;
+
 // Exam Configuration
 export const EXAM_CONFIG = {
   duration: 30 * 60 * 1000, // 30 minutes
