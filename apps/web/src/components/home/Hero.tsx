@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { motion } from 'framer-motion';
 import { Star, School, Users, Trophy, type LucideIcon } from 'lucide-react';
 
 interface Stat {
@@ -34,12 +33,7 @@ export function Hero() {
       <div className="pointer-events-none absolute -right-24 -top-24 -z-10 h-96 w-96 rounded-full bg-white/10 blur-3xl" />
 
       <div className="relative mx-auto w-full max-w-6xl">
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="max-w-xl"
-        >
+        <div className="max-w-xl animate-fade-in [animation-duration:0.6s]">
           <span className="chip bg-white/15 text-white backdrop-blur">
             🇸🇳 La plateforme n°1 du permis au Sénégal
           </span>
@@ -64,14 +58,9 @@ export function Hero() {
               Découvrir les auto-écoles
             </Link>
           </div>
-        </motion.div>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.25 }}
-          className="mt-14 grid grid-cols-2 gap-3 sm:mt-20 sm:flex sm:flex-wrap sm:gap-4"
-        >
+        <div className="mt-14 grid grid-cols-2 gap-3 animate-fade-in [animation-delay:0.25s] [animation-duration:0.6s] sm:mt-20 sm:flex sm:flex-wrap sm:gap-4">
           {STATS.map(({ icon: Icon, label, sub }) => (
             <div
               key={label}
@@ -88,7 +77,7 @@ export function Hero() {
               </span>
             </div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

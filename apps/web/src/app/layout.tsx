@@ -3,10 +3,9 @@ import { Inter, Plus_Jakarta_Sans, Baloo_2 } from 'next/font/google';
 import { APP_NAME, APP_SLOGAN } from '@permis2.0/shared';
 import './globals.css';
 import { ServiceWorkerRegister } from '@/components/pwa/ServiceWorkerRegister';
-import { InstallPrompt } from '@/components/pwa/InstallPrompt';
+import { PwaOverlays } from '@/components/PwaOverlays';
 import { ThemeInit } from '@/components/ThemeInit';
 import { OnboardingGate } from '@/components/OnboardingGate';
-import { PushPermissionBanner } from '@/components/PushPermissionBanner';
 import { EntitlementProvider } from '@/components/EntitlementProvider';
 import { SpaceProvider } from '@/components/SpaceProvider';
 import { SessionSync } from '@/components/SessionSync';
@@ -178,8 +177,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             Aller au contenu principal
           </a>
           <EntitlementProvider>{children}</EntitlementProvider>
-          <InstallPrompt />
-          <PushPermissionBanner />
+          <PwaOverlays />
         </SpaceProvider>
         <ServiceWorkerRegister />
         <GoogleAnalytics />
