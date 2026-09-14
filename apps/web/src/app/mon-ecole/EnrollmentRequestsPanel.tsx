@@ -124,7 +124,7 @@ export function EnrollmentRequestsPanel({ schoolId, requests, onChanged }: Enrol
           description="Les nouvelles pré-inscriptions apparaîtront ici."
         />
       ) : (
-        <div className="space-y-2.5">
+        <div className="space-y-2.5 lg:grid lg:grid-cols-2 lg:gap-2.5 lg:space-y-0 xl:grid-cols-3">
           {filtered.map((r) => (
             <button
               key={r.id}

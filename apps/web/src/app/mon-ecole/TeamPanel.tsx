@@ -248,7 +248,7 @@ export function TeamPanel({ schoolId, members, onChanged }: TeamPanelProps) {
           description="Ajoutez vos moniteurs, secrétaires ou comptables."
         />
       ) : (
-        <div className="space-y-2.5">
+        <div className="space-y-2.5 lg:grid lg:grid-cols-2 lg:gap-2.5 lg:space-y-0 xl:grid-cols-3">
           {members.map((m) => (
             <div
               key={m.id}

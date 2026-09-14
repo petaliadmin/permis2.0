@@ -253,13 +253,13 @@ export const SessionsPanel = forwardRef<SessionsPanelHandle, SessionsPanelProps>
           {upcoming.length > 0 && (
             <section>
               <p className="mb-2 text-xs font-bold uppercase tracking-wide text-muted">À venir</p>
-              <div className="space-y-2.5">{upcoming.map(renderRow)}</div>
+              <div className="space-y-2.5 lg:grid lg:grid-cols-2 lg:gap-2.5 lg:space-y-0 xl:grid-cols-3">{upcoming.map(renderRow)}</div>
             </section>
           )}
           {past.length > 0 && (
             <section>
               <p className="mb-2 text-xs font-bold uppercase tracking-wide text-muted">Passées</p>
-              <div className="space-y-2.5">{past.map(renderRow)}</div>
+              <div className="space-y-2.5 lg:grid lg:grid-cols-2 lg:gap-2.5 lg:space-y-0 xl:grid-cols-3">{past.map(renderRow)}</div>
             </section>
           )}
         </div>

@@ -40,7 +40,7 @@ export function PushPermissionBanner() {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 80, opacity: 0 }}
           transition={{ type: 'spring', stiffness: 280, damping: 28 }}
-          className="fixed bottom-[calc(env(safe-area-inset-bottom)+72px)] left-4 right-4 z-50 rounded-2xl border border-orange-200 bg-surface-1 p-4 shadow-xl"
+          className="fixed bottom-[calc(env(safe-area-inset-bottom)+72px)] left-4 right-4 z-50 mx-auto max-w-sm rounded-2xl border border-orange-200 bg-surface-1 p-4 shadow-xl lg:bottom-6"
         >
           <div className="flex items-start gap-3">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-orange-100 text-xl">

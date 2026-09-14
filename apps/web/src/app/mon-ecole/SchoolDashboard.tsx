@@ -27,29 +27,26 @@ import { SchoolSettingsSheet } from './SchoolSettingsSheet';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
-const TABS = [
-  { key: 'overview', label: "Vue d'ensemble" },
-  { key: 'demandes', label: 'Demandes' },
-  { key: 'eleves', label: 'Élèves' },
-  { key: 'equipe', label: 'Équipe' },
-  { key: 'vehicules', label: 'Véhicules' },
-  { key: 'planning', label: 'Planning' },
-  { key: 'finances', label: 'Finances' },
+/**
+ * Single canonical tab list — icon included so it can drive both the mobile
+ * bottom-bar/"Plus"-sheet split (only 5 slots fit a `grid-cols-5` bottom bar)
+ * and the `lg:` sidebar (no slot limit, renders all 7 flat).
+ */
+const TABS: { key: string; label: string; icon: string }[] = [
+  { key: 'overview', label: "Vue d'ensemble", icon: 'ti-home' },
+  { key: 'demandes', label: 'Demandes', icon: 'ti-inbox' },
+  { key: 'eleves', label: 'Élèves', icon: 'ti-users' },
+  { key: 'equipe', label: 'Équipe', icon: 'ti-users-group' },
+  { key: 'vehicules', label: 'Véhicules', icon: 'ti-car' },
+  { key: 'planning', label: 'Planning', icon: 'ti-calendar' },
+  { key: 'finances', label: 'Finances', icon: 'ti-receipt' },
 ] as const;
 type TabKey = (typeof TABS)[number]['key'];
 
-/** The 4 primary destinations shown in the bottom bar — the rest live behind "Plus". */
-const BOTTOM_TABS: { key: TabKey; label: string; icon: string }[] = [
-  { key: 'overview', label: 'Accueil', icon: 'ti-home' },
-  { key: 'demandes', label: 'Demandes', icon: 'ti-inbox' },
-  { key: 'eleves', label: 'Élèves', icon: 'ti-users' },
-  { key: 'planning', label: 'Planning', icon: 'ti-calendar' },
-];
-const MORE_TABS: { key: TabKey; label: string; icon: string }[] = [
-  { key: 'equipe', label: 'Équipe', icon: 'ti-users-group' },
-  { key: 'vehicules', label: 'Véhicules', icon: 'ti-car' },
-  { key: 'finances', label: 'Finances', icon: 'ti-receipt' },
-];
+/** The 4 primary destinations shown in the mobile bottom bar — the rest live behind "Plus". */
+const BOTTOM_KEYS: TabKey[] = ['overview', 'demandes', 'eleves', 'planning'];
+const BOTTOM_TABS = TABS.filter((t) => BOTTOM_KEYS.includes(t.key));
+const MORE_TABS = TABS.filter((t) => !BOTTOM_KEYS.includes(t.key));
 
 const PENDING_STATUSES: string[] = [SchoolEnrollmentStatus.SENT, SchoolEnrollmentStatus.IN_PROGRESS];
 const PENDING_PAYMENT_STATUSES: string[] = [SchoolPaymentStatus.PENDING, SchoolPaymentStatus.OVERDUE];
@@ -308,6 +305,10 @@ export function SchoolDashboard({ school, onBackToPicker, onSchoolUpdated }: Sch
 
   const moreActive = MORE_TABS.some((t) => t.key === tab);
 
+  /** Numeric badge shown on a nav item (bottom bar or sidebar) — count-based, only when > 0. */
+  const tabBadge = (key: TabKey): number =>
+    key === 'demandes' ? pendingCount : key === 'finances' ? pendingPaymentsCount : 0;
+
   const fab: { label: string; icon: string; onClick: () => void } | null =
     tab === 'eleves'
       ? { label: 'Ajouter un élève', icon: 'ti-user-plus', onClick: () => studentsRef.current?.openCreate() }
@@ -321,7 +322,7 @@ export function SchoolDashboard({ school, onBackToPicker, onSchoolUpdated }: Sch
 
   return (
     <SideMenuProvider>
-    <div className="on-light min-h-screen bg-surface pb-32">
+    <div className="on-light min-h-screen bg-surface pb-32 lg:pb-0">
       <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b border-token bg-surface-1/90 px-4 backdrop-blur-xl sm:px-8">
         <div className="flex min-w-0 items-center gap-2.5">
           <MenuButton />
@@ -379,7 +380,61 @@ export function SchoolDashboard({ school, onBackToPicker, onSchoolUpdated }: Sch
         </div>
       )}
 
-      <main className="mx-auto max-w-5xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+      <div className="lg:mx-auto lg:flex lg:max-w-[1400px] lg:items-start">
+        {/* ── Sidebar navigation — lg: and up, replaces the mobile bottom bar/FAB/"Plus" sheet ── */}
+        <aside className="sticky top-16 hidden h-[calc(100vh-4rem)] w-64 shrink-0 flex-col overflow-y-auto border-r border-token bg-surface-1 px-3 py-5 lg:flex">
+          <nav className="flex flex-col gap-1" aria-label="Navigation de l'auto-école">
+            {TABS.map((t) => {
+              const active = tab === t.key;
+              const badge = tabBadge(t.key);
+              return (
+                <button
+                  key={t.key}
+                  onClick={() => setTab(t.key)}
+                  aria-current={active ? 'page' : undefined}
+                  className={cn(
+                    'flex items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-semibold transition-colors',
+                    active
+                      ? 'bg-primary-50 text-primary-700'
+                      : 'text-secondary hover:bg-surface-2 hover:text-foreground'
+                  )}
+                >
+                  <i className={`ti ${t.icon} text-lg`} aria-hidden="true" />
+                  <span className="flex-1">{t.label}</span>
+                  {t.key === 'vehicules' && vehiclesNeedingAttention > 0 && (
+                    <span className="h-2 w-2 shrink-0 rounded-full bg-danger" aria-hidden="true" />
+                  )}
+                  {badge > 0 && (
+                    <span className="flex h-5 min-w-5 shrink-0 items-center justify-center rounded-full bg-primary-600 px-1.5 text-[10px] font-bold text-white">
+                      {badge}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </nav>
+
+          <div className="mt-auto space-y-1 pt-4">
+            <button
+              onClick={() => setSettingsOpen(true)}
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-semibold text-secondary transition-colors hover:bg-surface-2 hover:text-foreground"
+            >
+              <i className="ti ti-building-store text-lg" aria-hidden="true" />
+              <span className="flex-1">Infos de l&apos;auto-école</span>
+            </button>
+            {onBackToPicker && (
+              <button
+                onClick={onBackToPicker}
+                className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-semibold text-secondary transition-colors hover:bg-surface-2 hover:text-foreground"
+              >
+                <i className="ti ti-replace text-lg" aria-hidden="true" />
+                <span className="flex-1">Changer d&apos;auto-école</span>
+              </button>
+            )}
+          </div>
+        </aside>
+
+      <main className="mx-auto max-w-5xl flex-1 px-4 py-6 sm:px-6 sm:py-8 lg:mx-0 lg:max-w-6xl lg:px-8">
         {tab === 'overview' && (
           <div className="space-y-3">
             {/* Needs attention — the two actionable counters, surfaced first */}
@@ -561,21 +616,24 @@ export function SchoolDashboard({ school, onBackToPicker, onSchoolUpdated }: Sch
           />
         )}
       </main>
+      </div>
 
-      {/* ── Floating action button — contextual to the active tab ── */}
+      {/* ── Floating action button — contextual to the active tab, mobile only
+           (each panel's own toolbar already has an equivalent "Ajouter" button
+           for the lg: sidebar layout) ── */}
       {fab && (
         <button
           onClick={fab.onClick}
           aria-label={fab.label}
-          className="fixed bottom-[calc(84px+env(safe-area-inset-bottom))] right-4 z-30 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-primary-500 to-primary-700 text-white shadow-card transition-transform active:scale-90 sm:right-8"
+          className="fixed bottom-[calc(84px+env(safe-area-inset-bottom))] right-4 z-30 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-primary-500 to-primary-700 text-white shadow-card transition-transform active:scale-90 sm:right-8 lg:hidden"
         >
           <i className={`ti ${fab.icon} text-2xl`} aria-hidden="true" />
         </button>
       )}
 
-      {/* ── Bottom navigation — mobile-app style ── */}
+      {/* ── Bottom navigation — mobile only, replaced by the sidebar at lg: ── */}
       <nav
-        className="fixed inset-x-0 bottom-0 z-40 border-t border-token bg-surface-1/95 shadow-nav backdrop-blur-xl pb-[env(safe-area-inset-bottom)]"
+        className="fixed inset-x-0 bottom-0 z-40 border-t border-token bg-surface-1/95 shadow-nav backdrop-blur-xl pb-[env(safe-area-inset-bottom)] lg:hidden"
         aria-label="Navigation de l'auto-école"
       >
         <div className="mx-auto grid max-w-5xl grid-cols-5">

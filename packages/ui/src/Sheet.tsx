@@ -22,10 +22,15 @@ const FOCUSABLE = [
 ].join(', ');
 
 /**
- * Bottom sheet — the native-mobile modal pattern (slides up from the bottom,
- * dimmed backdrop, rounded top corners, drag handle). Pure CSS transitions so
- * the UI package stays dependency-light. Closes on backdrop tap or Escape.
- * Focus is moved into the panel when opened and returned on close.
+ * Bottom sheet on narrow viewports (the native-mobile modal pattern: slides
+ * up from the bottom, dimmed backdrop, rounded top corners, drag handle),
+ * centered dialog on `lg:` and up (a backoffice/desktop screen has no thumb
+ * to drag a sheet with, and a full-width strip pinned to the bottom of a
+ * 1440px window reads as broken, not native). Pure CSS/Tailwind breakpoints
+ * so the UI package stays dependency-light — no JS viewport detection, no
+ * icon font (a plain inline SVG close glyph). Closes on backdrop tap,
+ * Escape, or (mobile only) a drag-down past a threshold. Focus is moved into
+ * the panel when opened and returned on close.
  */
 function Sheet({ open, onClose, children, ariaLabel, className }: SheetProps) {
   const panelRef = React.useRef<HTMLDivElement>(null);
@@ -133,13 +138,14 @@ function Sheet({ open, onClose, children, ariaLabel, className }: SheetProps) {
       aria-hidden={!open}
       className={cn(
         'fixed inset-0 z-50 transition-opacity duration-300',
+        'lg:flex lg:items-center lg:justify-center lg:p-6',
         open ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
       )}
     >
       {/* Backdrop */}
       <div onClick={onClose} className="absolute inset-0 bg-dark/40 backdrop-blur-sm" />
 
-      {/* Panel */}
+      {/* Panel — bottom sheet on mobile, centered dialog from lg: up */}
       <div
         ref={panelRef}
         role="dialog"
@@ -148,6 +154,8 @@ function Sheet({ open, onClose, children, ariaLabel, className }: SheetProps) {
         className={cn(
           'absolute inset-x-0 bottom-0 rounded-t-3xl bg-surface-1 shadow-card',
           'pb-[env(safe-area-inset-bottom)]',
+          'lg:static lg:w-full lg:max-w-lg lg:rounded-3xl lg:pb-0',
+          'lg:max-h-[85vh] lg:overflow-y-auto',
           className
         )}
         style={{
@@ -155,9 +163,9 @@ function Sheet({ open, onClose, children, ariaLabel, className }: SheetProps) {
           transition: dragging ? 'none' : 'transform 300ms cubic-bezier(0.22,1,0.36,1)',
         }}
       >
-        {/* Drag handle */}
+        {/* Drag handle — mobile only, no pointer/touch drag-to-dismiss on desktop */}
         <div
-          className="flex touch-none justify-center pt-3"
+          className="flex touch-none justify-center pt-3 lg:hidden"
           onPointerDown={onHandlePointerDown}
           onPointerMove={onHandlePointerMove}
           onPointerUp={onHandlePointerUp}
@@ -165,7 +173,28 @@ function Sheet({ open, onClose, children, ariaLabel, className }: SheetProps) {
         >
           <span className="h-1.5 w-10 rounded-full bg-surface-3" />
         </div>
-        <div className="px-5 pb-6 pt-4">{children}</div>
+        {/* Close button — desktop only, mobile relies on the drag handle / backdrop tap */}
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="Fermer"
+          className="absolute right-4 top-4 hidden h-9 w-9 items-center justify-center rounded-full text-secondary transition-colors hover:bg-surface-2 lg:flex"
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M18 6 6 18M6 6l12 12" />
+          </svg>
+        </button>
+        <div className="px-5 pb-6 pt-4 lg:pt-5">{children}</div>
       </div>
     </div>
   );

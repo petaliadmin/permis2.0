@@ -282,7 +282,7 @@ export const PaymentsPanel = forwardRef<PaymentsPanelHandle, PaymentsPanelProps>
           description="Créez un devis ou une facture pour suivre les échéances de vos élèves."
         />
       ) : (
-        <div className="space-y-2.5">
+        <div className="space-y-2.5 lg:grid lg:grid-cols-2 lg:gap-2.5 lg:space-y-0 xl:grid-cols-3">
           {filtered.map((p) => (
             <button
               key={p.id}

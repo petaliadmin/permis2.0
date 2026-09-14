@@ -177,7 +177,7 @@ export const VehiclesPanel = forwardRef<VehiclesPanelHandle, VehiclesPanelProps>
           description="Ajoutez les véhicules de votre flotte pour suivre leurs échéances."
         />
       ) : (
-        <div className="space-y-2.5">
+        <div className="space-y-2.5 lg:grid lg:grid-cols-2 lg:gap-2.5 lg:space-y-0 xl:grid-cols-3">
           {vehicles.map((v) => (
             <button
               key={v.id}

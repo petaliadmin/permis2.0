@@ -164,11 +164,12 @@ export function SchoolSettingsSheet({ open, onClose, school, onSaved }: SchoolSe
             Ces informations apparaissent sur votre fiche publique dans l&apos;annuaire.
           </p>
         </div>
+        {/* lg: and up gets Sheet's own built-in close button (top-right corner) */}
         <button
           type="button"
           onClick={onClose}
           aria-label="Fermer"
-          className="-mr-1 -mt-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-secondary hover:bg-surface-2"
+          className="-mr-1 -mt-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-secondary hover:bg-surface-2 lg:hidden"
         >
           <i className="ti ti-x text-lg" aria-hidden="true" />
         </button>
