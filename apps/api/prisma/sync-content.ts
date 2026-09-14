@@ -26,6 +26,8 @@ interface PanneauJson {
   icon: string;
   description: string;
   advice: string[];
+  contexte_usage?: string;
+  regle_associee?: string;
 }
 
 async function syncPanneaux() {
@@ -39,6 +41,8 @@ async function syncPanneaux() {
       description: p.description,
       meaning: p.description,
       advice: p.advice,
+      contexte_usage: p.contexte_usage ?? null,
+      regle_associee: p.regle_associee ?? null,
       ordre: i,
       icone: p.icon,
       image: `/icons/panneaux/${p.code}.svg`,

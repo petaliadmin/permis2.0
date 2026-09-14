@@ -221,10 +221,15 @@ async function main() {
             contexte_usage: pan.contexte_usage,
             regle_associee: pan.regle_associee,
             icone: pan.icone,
-            image: `/images/signs/${pan.code}.svg`,
+            image: `/icons/panneaux/${pan.code}.svg`,
           };
+          // Matched by code, not name: sync-content.ts (the source of truth
+          // for this content post-launch, see apps/web/public/data/panneaux.json)
+          // matches by code too — matching by name here let the two pipelines
+          // drift apart and create duplicate rows for the same sign whenever
+          // the display name differed between the two JSON sources.
           const existingSign = await prisma.trafficSign.findFirst({
-            where: { name: pan.nom },
+            where: { code: pan.code },
           });
           if (existingSign) {
             await prisma.trafficSign.update({ where: { id: existingSign.id }, data: signData });
