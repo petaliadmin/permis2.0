@@ -77,6 +77,9 @@ importers:
       helmet:
         specifier: ^7.1.0
         version: 7.2.0
+      nodemailer:
+        specifier: ^10.0.9
+        version: 10.0.9
       passport:
         specifier: ^0.7.0
         version: 0.7.0
@@ -4400,6 +4403,10 @@ packages:
   node-releases@2.0.49:
     resolution: {integrity: sha512-f06bl1D+8ZDkn2oOQQKAh5/otFWqVnM1Q5oerA8Pex7UfT66Tx4IPHIqVVFKqFT3FUtaDstdgkM7yT7JWhqxfw==}
     engines: {node: '>=18'}
+
+  nodemailer@10.0.9:
+    resolution: {integrity: sha512-BF0qcyplCwp+jMk6HCjFykBz/YhhZSsxrARhOldLwFWH+8kGjQsd2WIMIZhqEuyXRoGFi0ONbDeWDMDoL8MhLw==}
+    engines: {node: '>=20.0.0'}
 
   nopt@8.1.0:
     resolution: {integrity: sha512-ieGu42u/Qsa4TFktmaKEwM6MQH0pOWnaB3htzh0JRtx84+Mebc0cbZYN5bC+6WTZ4+77xrL9Pn5m7CV6VIkV7A==}
@@ -10444,6 +10451,8 @@ snapshots:
   node-int64@0.4.0: {}
 
   node-releases@2.0.49: {}
+
+  nodemailer@10.0.9: {}
 
   nopt@8.1.0:
     dependencies:

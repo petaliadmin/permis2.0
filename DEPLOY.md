@@ -145,11 +145,13 @@ cp scripts/aws/.env.aws.prod.example .env.aws.prod
 - `FRONTEND_URL`, `WEB_URL`, `NEXT_PUBLIC_API_URL` → remplace `CHANGEME` par
   l'IP élastique de l'étape 2 (`terraform output public_ip`), par exemple
   `http://51.44.12.9:3000` / `:3001`.
-- `DEXCHANGE_API_KEY`, `BREVO_API_KEY`, `BICTORYS_API_KEY`, `BICTORYS_SECRET_KEY`, `VAPID_*` →
+- `DEXCHANGE_API_KEY`, `SMTP_*`, `BICTORYS_API_KEY`, `BICTORYS_SECRET_KEY`, `VAPID_*` →
   tes clés réelles si tu utilises ces services en prod ; laisse vide sinon
-  (OTP seulement loggé côté serveur / paiement en mode sandbox). WhatsApp
-  (DExchange) nécessite en plus qu'un numéro soit connecté via QR code depuis
-  le dashboard DExchange — sans ça, "whatsapp" part en SMS classique.
+  (OTP et email seulement loggés côté serveur / paiement en mode sandbox).
+  WhatsApp (DExchange) nécessite en plus qu'un numéro soit connecté via QR
+  code depuis le dashboard DExchange — sans ça, "whatsapp" part en SMS
+  classique. Email (factures/devis) part par SMTP simple (nodemailer) —
+  `SMTP_HOST` vide désactive l'envoi réel (log console seulement).
 
 Puis pousse tout vers SSM Parameter Store :
 ```bash

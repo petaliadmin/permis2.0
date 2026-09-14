@@ -63,10 +63,10 @@ export class AuthService {
   async verifyOtp(rawPhone: string, code: string): Promise<boolean> {
     const phone = this.normalizePhone(rawPhone);
 
-    // TEMPORARY: SMS/WhatsApp delivery is blocked pending Brevo Sender ID
-    // approval for Senegal, so outside production any code is accepted as
-    // long as a (still-valid, unused) OTP was actually requested for this
-    // phone. Remove this bypass once Brevo delivery is confirmed working.
+    // TEMPORARY: outside production, any code is accepted as long as a
+    // (still-valid, unused) OTP was actually requested for this phone, so
+    // testing isn't blocked on real SMS/WhatsApp delivery. Remove this
+    // bypass once DExchange delivery is confirmed working end to end.
     const bypass = process.env.NODE_ENV !== 'production';
     const codeHash = crypto.createHash('sha256').update(code.trim()).digest('hex');
 

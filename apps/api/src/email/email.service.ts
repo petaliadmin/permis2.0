@@ -1,55 +1,62 @@
 import { Injectable, Logger } from '@nestjs/common';
+import { createTransport, type Transporter } from 'nodemailer';
 
 /**
- * Sends transactional email via Brevo (brevo.com) — SMS/WhatsApp moved to
- * DExchange (see SmsService), but email still goes through Brevo, its own
- * BREVO_API_KEY. When the key is absent (local dev), the send is logged to
- * the console instead of hitting the network, mirroring SmsService's dev
- * fallback.
+ * Sends transactional email over plain SMTP via nodemailer — no HTTP
+ * email-API vendor, works with any SMTP server (transactional-email host,
+ * mailbox provider, etc.) configured via SMTP_* env vars. When SMTP_HOST is
+ * absent (local dev), the send is logged to the console instead of hitting
+ * the network, mirroring SmsService's dev fallback.
  */
 @Injectable()
 export class EmailService {
   private readonly logger = new Logger(EmailService.name);
+  private transporter: Transporter | null = null;
+
+  /** Lazily builds (and caches) the transporter — env vars don't change at runtime. */
+  private getTransporter(): Transporter | null {
+    const host = process.env.SMTP_HOST;
+    if (!host) return null;
+
+    if (!this.transporter) {
+      this.transporter = createTransport({
+        host,
+        port: Number(process.env.SMTP_PORT || 587),
+        secure: process.env.SMTP_SECURE === 'true',
+        auth: process.env.SMTP_USER
+          ? { user: process.env.SMTP_USER, pass: process.env.SMTP_PASSWORD }
+          : undefined,
+      });
+    }
+    return this.transporter;
+  }
 
   async sendPdf(
     to: string,
     opts: { subject: string; text: string; filename: string; base64: string }
   ): Promise<void> {
-    const apiKey = process.env.BREVO_API_KEY;
+    const transporter = this.getTransporter();
 
-    if (!apiKey) {
+    if (!transporter) {
       this.logger.log(`[EMAIL DEV] to ${to}: "${opts.subject}" with attachment ${opts.filename}`);
       return;
     }
 
     try {
-      const res = await fetch('https://api.brevo.com/v3/smtp/email', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-          'api-key': apiKey,
+      await transporter.sendMail({
+        from: {
+          name: process.env.SMTP_FROM_NAME || 'PERMIS 2.0',
+          address: process.env.SMTP_FROM_EMAIL || 'no-reply@permis2.com',
         },
-        body: JSON.stringify({
-          sender: {
-            email: process.env.BREVO_EMAIL_SENDER || 'no-reply@permis2.com',
-            name: process.env.BREVO_EMAIL_SENDER_NAME || 'PERMIS 2.0',
-          },
-          to: [{ email: to }],
-          subject: opts.subject,
-          textContent: opts.text,
-          attachment: [{ name: opts.filename, content: opts.base64 }],
-        }),
+        to,
+        subject: opts.subject,
+        text: opts.text,
+        attachments: [{ filename: opts.filename, content: opts.base64, encoding: 'base64' }],
       });
-
-      if (!res.ok) {
-        const detail = await res.text().catch(() => '');
-        this.logger.error(`Brevo email ${res.status}: ${detail}`);
-      }
     } catch (err) {
-      this.logger.error(`Brevo email unreachable: ${String(err)}`);
+      this.logger.error(`SMTP email failed: ${String(err)}`);
       // Do not throw — the caller (e.g. an invoice send) should not 500 just
-      // because the mail provider is briefly unreachable.
+      // because the mail server is briefly unreachable.
     }
   }
 }
