@@ -44,10 +44,20 @@ export function SubscriptionPaywall({ school, onRefresh }: SubscriptionPaywallPr
 
   const product = products.find((p) => p.sku === 'abo_ecole_annuel');
   const price = product?.priceXof ?? 12000;
-  const expired = !!school.subscriptionExpiresAt;
+
+  // trialEndsAt is set once at creation and never touched again — a school
+  // whose subscriptionExpiresAt still equals it has never had a real paid
+  // subscription (only ever the free trial), regardless of whether that
+  // trial is still running or has lapsed. Any purchase pushes
+  // subscriptionExpiresAt strictly past trialEndsAt (see ShopService.markPaid).
+  const onOriginalTrial =
+    !!school.trialEndsAt &&
+    !!school.subscriptionExpiresAt &&
+    new Date(school.subscriptionExpiresAt).getTime() === new Date(school.trialEndsAt).getTime();
+  const everSubscribed = !!school.trialEndsAt && !onOriginalTrial;
 
   const waLink = whatsappLink(
-    `Bonjour PERMIS 2.0 ! 👋\nJe souhaite ${expired ? 'renouveler' : 'activer'} l'abonnement annuel (${fmtXof(price)}) pour mon auto-école « ${school.name} ».\nMon compte : ${authUser?.name ?? ''}${authUser?.phone ? ` — +221 ${authUser.phone}` : ''}`
+    `Bonjour PERMIS 2.0 ! 👋\nJe souhaite ${everSubscribed ? 'renouveler' : 'activer'} l'abonnement annuel (${fmtXof(price)}) pour mon auto-école « ${school.name} ».\nMon compte : ${authUser?.name ?? ''}${authUser?.phone ? ` — +221 ${authUser.phone}` : ''}`
   );
 
   const iPaid = async () => {
@@ -71,12 +81,18 @@ export function SubscriptionPaywall({ school, onRefresh }: SubscriptionPaywallPr
           🏫
         </span>
         <h1 className="mt-4 font-display text-2xl font-extrabold text-foreground">
-          {expired ? 'Abonnement expiré' : 'Abonnement requis'}
+          {everSubscribed
+            ? 'Abonnement expiré'
+            : onOriginalTrial
+              ? 'Essai gratuit terminé'
+              : 'Abonnement requis'}
         </h1>
         <p className="mt-2 text-sm text-secondary">
-          {expired
+          {everSubscribed
             ? `L'abonnement de « ${school.name} » est arrivé à échéance.`
-            : `Activez l'abonnement de « ${school.name} » pour accéder à l'espace de gestion.`}
+            : onOriginalTrial
+              ? `Les 3 mois d'essai gratuit de « ${school.name} » sont terminés. Activez l'abonnement annuel pour continuer à accéder à l'espace de gestion.`
+              : `Activez l'abonnement de « ${school.name} » pour accéder à l'espace de gestion.`}
         </p>
 
         {stage === 'pay' ? (

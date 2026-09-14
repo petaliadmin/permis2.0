@@ -474,6 +474,9 @@ export interface School {
   pricesByCategory?: Record<string, number> | null;
   /** Platform access gate — /mon-ecole requires this to be in the future. */
   subscriptionExpiresAt?: Date | null;
+  /** End of the one-time free trial, set once at creation. subscriptionExpiresAt
+   * === trialEndsAt means no purchase has ever extended past the original trial. */
+  trialEndsAt?: Date | null;
   /** While in the future, the school appears in the homepage "Top 20" list. */
   featuredUntil?: Date | null;
   latitude?: number | null;

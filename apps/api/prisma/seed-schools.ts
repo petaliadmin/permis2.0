@@ -164,6 +164,11 @@ const demoSchools = [
 ];
 
 export async function seedDemoSchools(prisma: PrismaClient) {
+  // Only applied on create, never on update — re-seeding must not reset an
+  // existing demo school's trial back to a fresh 3 months every time.
+  const trialEndsAt = new Date();
+  trialEndsAt.setMonth(trialEndsAt.getMonth() + 3);
+
   for (const s of demoSchools) {
     const phoneDigits = 700000000 + Math.floor(Math.random() * 99999999);
     const data = {
@@ -185,7 +190,7 @@ export async function seedDemoSchools(prisma: PrismaClient) {
     await prisma.school.upsert({
       where: { slug: s.slug },
       update: data,
-      create: { slug: s.slug, ...data },
+      create: { slug: s.slug, ...data, subscriptionExpiresAt: trialEndsAt, trialEndsAt },
     });
   }
   console.log(`✅ Seeded ${demoSchools.length} demo auto-écoles`);

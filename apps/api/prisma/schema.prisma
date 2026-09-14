@@ -630,9 +630,16 @@ model School {
   pricesByCategory  Json?
 
   /// Platform access gate: the school's staff can use /mon-ecole only while this
-  /// is in the future. Extended by a PAID school_subscription Purchase (see
+  /// is in the future. Set to createdAt + 3 months at creation (free trial),
+  /// then extended by a PAID school_subscription Purchase (see
   /// ShopService.markPaid) — enforced centrally in SchoolRolesGuard.
   subscriptionExpiresAt DateTime?
+  /// End of the one-time free trial, set once at creation and never touched
+  /// again (unlike subscriptionExpiresAt, which purchases extend). Lets the
+  /// frontend tell "still in/just finished the free trial" apart from "paid
+  /// subscription active/expired": subscriptionExpiresAt === trialEndsAt means
+  /// no purchase has ever extended past the original trial.
+  trialEndsAt           DateTime?
   /// While in the future, the school appears in the homepage "Top 20" list.
   /// Extended by a PAID featured_placement Purchase.
   featuredUntil         DateTime?

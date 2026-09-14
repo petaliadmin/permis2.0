@@ -477,7 +477,11 @@ export function SchoolDashboard({ school, onBackToPicker, onSchoolUpdated }: Sch
 
             {school.subscriptionExpiresAt && (
               <p className="px-1 text-xs text-muted">
-                Abonnement actif jusqu&apos;au {fmtDateShort(school.subscriptionExpiresAt)}
+                {school.trialEndsAt &&
+                new Date(school.subscriptionExpiresAt).getTime() ===
+                  new Date(school.trialEndsAt).getTime()
+                  ? <>Essai gratuit jusqu&apos;au {fmtDateShort(school.subscriptionExpiresAt)}</>
+                  : <>Abonnement actif jusqu&apos;au {fmtDateShort(school.subscriptionExpiresAt)}</>}
               </p>
             )}
             <VisibilityCard school={school} onSchoolUpdated={onSchoolUpdated} />

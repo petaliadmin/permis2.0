@@ -84,6 +84,12 @@ export class SchoolService {
     return phone.replace(/\D/g, '').replace(/^221/, '');
   }
 
+  private addMonths(date: Date, months: number): Date {
+    const d = new Date(date);
+    d.setMonth(d.getMonth() + months);
+    return d;
+  }
+
   async listActive(filters: {
     city?: string;
     category?: string;
@@ -221,6 +227,12 @@ export class SchoolService {
 
   async create(userId: string, dto: CreateSchoolDto) {
     const base = slugify(dto.name) || 'ecole';
+    // 3-month free trial from account creation — trialEndsAt is set once and
+    // never touched again (see SchoolService.update / ShopService.markPaid,
+    // which only ever move subscriptionExpiresAt forward), so the frontend
+    // can later tell "still on the original trial" (subscriptionExpiresAt
+    // === trialEndsAt) apart from "a subscription has extended past it".
+    const trialEndsAt = this.addMonths(new Date(), 3);
     // Retry on the rare slug collision instead of pre-checking existence.
     // Each attempt gets its OWN transaction: once a query inside a Postgres
     // transaction errors, that transaction is aborted and every later query
@@ -232,7 +244,13 @@ export class SchoolService {
       try {
         return await this.prisma.$transaction(async (tx) => {
           const school = await tx.school.create({
-            data: { ...dto, slug, status: SchoolStatus.PENDING },
+            data: {
+              ...dto,
+              slug,
+              status: SchoolStatus.PENDING,
+              subscriptionExpiresAt: trialEndsAt,
+              trialEndsAt,
+            },
           });
           await tx.schoolMembership.create({
             data: { schoolId: school.id, userId, role: SchoolMemberRole.OWNER },
