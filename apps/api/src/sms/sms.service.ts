@@ -1,16 +1,20 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 
+const API_BASE = 'https://api.dexchange-sms.com/api/v1';
+
 /**
- * Sends SMS and WhatsApp messages via Brevo (brevo.com). When BREVO_API_KEY is
- * absent (local dev), the message is logged to the console instead of hitting
- * the network. Every send is recorded in SmsLog so the admin dashboard can
- * track costs.
+ * Sends SMS and WhatsApp messages via DExchange (dexchange-sms.com), a
+ * Senegal/West-Africa SMS & WhatsApp provider. When DEXCHANGE_API_KEY is
+ * absent (local dev), the message is logged to the console instead of
+ * hitting the network. Every send is recorded in SmsLog so the admin
+ * dashboard can track costs.
  *
- * WhatsApp on Brevo requires a pre-approved message template (Campaigns >
- * WhatsApp in the Brevo dashboard) — free-text messages aren't allowed. Until
- * BREVO_WHATSAPP_TEMPLATE_ID is configured, "whatsapp" requests are sent as
- * SMS instead so delivery doesn't just silently fail.
+ * WhatsApp on DExchange is a WhatsApp-Web bridge tied to a real phone number
+ * connected once via QR code from the DExchange dashboard — not the official
+ * Meta Business API — so the session can disconnect at any time. A WhatsApp
+ * send that fails (network error or non-2xx, e.g. session not connected)
+ * falls back to SMS instead of silently failing.
  */
 @Injectable()
 export class SmsService {
@@ -19,7 +23,7 @@ export class SmsService {
   constructor(private prisma: PrismaService) {}
 
   async send(phone: string, message: string, channel: 'sms' | 'whatsapp'): Promise<void> {
-    const apiKey = process.env.BREVO_API_KEY;
+    const apiKey = process.env.DEXCHANGE_API_KEY;
 
     // Dev fallback: log to console so the developer can copy the code.
     if (!apiKey) {
@@ -28,13 +32,12 @@ export class SmsService {
       return;
     }
 
-    const templateId = process.env.BREVO_WHATSAPP_TEMPLATE_ID;
-    if (channel === 'whatsapp' && templateId) {
-      await this.sendWhatsApp(phone, message, apiKey, templateId);
-      return;
-    }
     if (channel === 'whatsapp') {
-      this.logger.warn('BREVO_WHATSAPP_TEMPLATE_ID not set — sending as SMS instead');
+      const sent = await this.sendWhatsApp(phone, message, apiKey);
+      if (sent) return;
+      this.logger.warn(
+        'DExchange WhatsApp send failed (session disconnected?) — sending as SMS instead'
+      );
     }
     await this.sendSms(phone, message, apiKey, channel);
   }
@@ -48,64 +51,57 @@ export class SmsService {
     const e164 = this.toE164Sn(phone);
 
     try {
-      const res = await fetch('https://api.brevo.com/v3/transactionalSMS/send', {
+      const res = await fetch(`${API_BASE}/send/sms`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Accept: 'application/json',
-          'api-key': apiKey,
+          'X-Api-Key': apiKey,
         },
         body: JSON.stringify({
-          sender: (process.env.BREVO_SMS_SENDER || 'PERMIS').slice(0, 11),
-          recipient: e164,
+          signature: (process.env.DEXCHANGE_SMS_SENDER || 'DEXCHANGE').slice(0, 11),
           content: message,
-          type: 'transactional',
+          number: [e164],
         }),
       });
 
       if (!res.ok) {
         const detail = await res.text().catch(() => '');
-        this.logger.error(`Brevo SMS ${res.status}: ${detail}`);
+        this.logger.error(`DExchange SMS ${res.status}: ${detail}`);
       } else {
         await this.logSend(phone, channel, false);
       }
     } catch (err) {
-      this.logger.error(`Brevo SMS unreachable: ${String(err)}`);
+      this.logger.error(`DExchange SMS unreachable: ${String(err)}`);
       // Do not throw — OTP was already stored; user can request a new one.
     }
   }
 
-  private async sendWhatsApp(
-    phone: string,
-    message: string,
-    apiKey: string,
-    templateId: string
-  ): Promise<void> {
-    const e164 = Number(this.toE164Sn(phone));
+  /** Returns whether the WhatsApp message actually went out. */
+  private async sendWhatsApp(phone: string, message: string, apiKey: string): Promise<boolean> {
+    const e164 = this.toE164Sn(phone);
 
     try {
-      const res = await fetch('https://api.brevo.com/v3/whatsapp/sendMessage', {
+      const res = await fetch(`${API_BASE}/whatsapp/send/text`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Accept: 'application/json',
-          'api-key': apiKey,
+          'X-Api-Key': apiKey,
         },
-        body: JSON.stringify({
-          templateId: Number(templateId),
-          contactNumbers: [e164],
-          senderNumber: process.env.BREVO_WHATSAPP_SENDER_NUMBER,
-        }),
+        body: JSON.stringify({ to: e164, body: message }),
       });
 
       if (!res.ok) {
         const detail = await res.text().catch(() => '');
-        this.logger.error(`Brevo WhatsApp ${res.status}: ${detail}`);
-      } else {
-        await this.logSend(phone, 'whatsapp', false);
+        this.logger.error(`DExchange WhatsApp ${res.status}: ${detail}`);
+        return false;
       }
+      await this.logSend(phone, 'whatsapp', false);
+      return true;
     } catch (err) {
-      this.logger.error(`Brevo WhatsApp unreachable: ${String(err)}`);
+      this.logger.error(`DExchange WhatsApp unreachable: ${String(err)}`);
+      return false;
     }
   }
 
@@ -118,7 +114,7 @@ export class SmsService {
     }
   }
 
-  /** Convert a 9-digit Senegalese local number to E.164 (+221XXXXXXXXX). */
+  /** Convert a 9-digit Senegalese local number to international format (221XXXXXXXXX, no leading +). */
   private toE164Sn(local: string): string {
     const digits = local.replace(/\D/g, '').replace(/^221/, '');
     return `221${digits}`;

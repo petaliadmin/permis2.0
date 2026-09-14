@@ -7,7 +7,7 @@ import { QuestionInputDto } from './dto/question-input.dto';
 import { SeriesInputDto } from './dto/series-input.dto';
 import { LessonInputDto } from './dto/lesson-input.dto';
 
-/** Estimated Brevo cost per SMS/WhatsApp message, in XOF (override via env). */
+/** Estimated DExchange cost per SMS/WhatsApp message, in XOF (override via env). */
 const SMS_COST_XOF = Number(process.env.SMS_COST_XOF || 15);
 
 @Injectable()

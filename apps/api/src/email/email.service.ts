@@ -1,10 +1,11 @@
 import { Injectable, Logger } from '@nestjs/common';
 
 /**
- * Sends transactional email via Brevo (brevo.com) — reuses BREVO_API_KEY,
- * already configured for SmsService. When the key is absent (local dev),
- * the send is logged to the console instead of hitting the network, mirroring
- * SmsService's dev fallback.
+ * Sends transactional email via Brevo (brevo.com) — SMS/WhatsApp moved to
+ * DExchange (see SmsService), but email still goes through Brevo, its own
+ * BREVO_API_KEY. When the key is absent (local dev), the send is logged to
+ * the console instead of hitting the network, mirroring SmsService's dev
+ * fallback.
  */
 @Injectable()
 export class EmailService {
