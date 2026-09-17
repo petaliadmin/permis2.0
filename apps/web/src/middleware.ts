@@ -7,8 +7,6 @@ import { spaceFromHost, ownerOf, hostForSpace } from '@/lib/space';
 // login only when a specific action requires it (saving progress, purchasing…).
 const PROTECTED_ROUTES = ['/notifications', '/admin'];
 
-const AUTH_ROUTES = ['/auth/login', '/auth/register', '/auth/forgot-password'];
-
 export function middleware(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
   // In dev `request.url` / `nextUrl.host` report the server address, not the
@@ -45,7 +43,6 @@ export function middleware(request: NextRequest) {
 
   const token = request.cookies.get('access_token')?.value;
   const isProtected = PROTECTED_ROUTES.some((route) => pathname.startsWith(route));
-  const isAuthRoute = AUTH_ROUTES.some((route) => pathname.startsWith(route));
 
   if (isProtected && !token) {
     const loginUrl = new URL('/auth/login', request.url);
@@ -53,9 +50,14 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
-  if (isAuthRoute && token) {
-    return NextResponse.redirect(new URL('/', request.url));
-  }
+  // Deliberately no "already logged in → bounce /auth/* to home" redirect:
+  // this cookie's mere presence doesn't mean the session is actually valid
+  // (expired JWT, rotated JWT_SECRET, blocked user...) — middleware can't
+  // verify that without decoding the token, so trusting presence alone
+  // previously dead-ended real users with a stale cookie: every visit to
+  // /auth/login or /auth/register bounced straight to "/" with no way back
+  // to sign in. Harmless to let a genuinely-logged-in visitor see the auth
+  // pages; the pages themselves already redirect on a *successful* login.
 
   // Expose the current space to Server Components via `headers()`.
   const requestHeaders = new Headers(request.headers);
