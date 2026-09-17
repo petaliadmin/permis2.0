@@ -282,13 +282,13 @@ async function main() {
     // access to the platform, plus an optional weekly visibility boost.
     const schoolProducts = [
       {
-        sku: 'abo_ecole_annuel',
-        title: 'Abonnement École — Annuel',
-        description: "Accès complet à l'espace de gestion (élèves, équipe, véhicules, planning, finances).",
+        sku: 'abo_ecole_mensuel',
+        title: 'Abonnement École — Mensuel',
+        description: "Accès complet à l'espace de gestion (élèves, équipe, véhicules, planning, finances). 3 mois d'essai gratuit à l'ouverture du compte.",
         kind: 'school_subscription',
-        priceXof: 12000,
+        priceXof: 5000,
         ordre: 10,
-        validityDays: 365,
+        validityDays: 30,
       },
       {
         sku: 'top20_semaine',
@@ -317,6 +317,13 @@ async function main() {
         create: { sku: product.sku, ...data },
       });
     }
+    // abo_ecole_annuel (12 000 FCFA/year) renamed+repriced to abo_ecole_mensuel
+    // (5 000 FCFA/month) before any real purchase ever happened against it —
+    // deactivate the orphaned old SKU rather than leaving it purchasable.
+    await prisma.product.updateMany({
+      where: { sku: 'abo_ecole_annuel' },
+      data: { active: false },
+    });
     console.log(`✅ Seeded ${schoolProducts.length} school-level products`);
 
     // Demo auto-écoles — see seed-schools.ts (also runnable standalone via

@@ -42,8 +42,8 @@ export function SubscriptionPaywall({ school, onRefresh }: SubscriptionPaywallPr
     fetchProducts();
   }, [fetchProducts]);
 
-  const product = products.find((p) => p.sku === 'abo_ecole_annuel');
-  const price = product?.priceXof ?? 12000;
+  const product = products.find((p) => p.sku === 'abo_ecole_mensuel');
+  const price = product?.priceXof ?? 5000;
 
   // trialEndsAt is set once at creation and never touched again — a school
   // whose subscriptionExpiresAt still equals it has never had a real paid
@@ -57,7 +57,7 @@ export function SubscriptionPaywall({ school, onRefresh }: SubscriptionPaywallPr
   const everSubscribed = !!school.trialEndsAt && !onOriginalTrial;
 
   const waLink = whatsappLink(
-    `Bonjour PERMIS 2.0 ! 👋\nJe souhaite ${everSubscribed ? 'renouveler' : 'activer'} l'abonnement annuel (${fmtXof(price)}) pour mon auto-école « ${school.name} ».\nMon compte : ${authUser?.name ?? ''}${authUser?.phone ? ` — +221 ${authUser.phone}` : ''}`
+    `Bonjour PERMIS 2.0 ! 👋\nJe souhaite ${everSubscribed ? 'renouveler' : 'activer'} l'abonnement mensuel (${fmtXof(price)}/mois) pour mon auto-école « ${school.name} ».\nMon compte : ${authUser?.name ?? ''}${authUser?.phone ? ` — +221 ${authUser.phone}` : ''}`
   );
 
   const iPaid = async () => {
@@ -91,7 +91,7 @@ export function SubscriptionPaywall({ school, onRefresh }: SubscriptionPaywallPr
           {everSubscribed
             ? `L'abonnement de « ${school.name} » est arrivé à échéance.`
             : onOriginalTrial
-              ? `Les 3 mois d'essai gratuit de « ${school.name} » sont terminés. Activez l'abonnement annuel pour continuer à accéder à l'espace de gestion.`
+              ? `Les 3 mois d'essai gratuit de « ${school.name} » sont terminés. Activez l'abonnement mensuel pour continuer à accéder à l'espace de gestion.`
               : `Activez l'abonnement de « ${school.name} » pour accéder à l'espace de gestion.`}
         </p>
 
@@ -102,7 +102,7 @@ export function SubscriptionPaywall({ school, onRefresh }: SubscriptionPaywallPr
                 <span className="font-display text-4xl font-black text-violet-600">
                   {fmtXof(price)}
                 </span>
-                <span className="mb-1.5 text-sm font-semibold text-muted">/ an</span>
+                <span className="mb-1.5 text-sm font-semibold text-muted">/ mois</span>
               </div>
               <p className="mt-1 text-xs text-violet-700/70">
                 Accès complet à l&apos;espace de gestion de votre auto-école.
