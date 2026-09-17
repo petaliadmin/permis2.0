@@ -1,5 +1,6 @@
 import {
   Injectable,
+  Logger,
   UnauthorizedException,
   ConflictException,
   BadRequestException,
@@ -18,6 +19,8 @@ const OTP_TTL_MS = 10 * 60 * 1000;
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
+
   constructor(
     private userService: UserService,
     private jwtService: JwtService,
@@ -63,11 +66,24 @@ export class AuthService {
   async verifyOtp(rawPhone: string, code: string): Promise<boolean> {
     const phone = this.normalizePhone(rawPhone);
 
-    // TEMPORARY: outside production, any code is accepted as long as a
-    // (still-valid, unused) OTP was actually requested for this phone, so
-    // testing isn't blocked on real SMS/WhatsApp delivery. Remove this
-    // bypass once DExchange delivery is confirmed working end to end.
-    const bypass = process.env.NODE_ENV !== 'production';
+    // TEMPORARY: any code is accepted as long as a (still-valid, unused)
+    // OTP was actually requested for this phone — outside production this
+    // is always on (dev/test convenience, no real SMS/WhatsApp delivery
+    // needed); OTP_BYPASS=true additionally forces it on in production,
+    // for when DExchange delivery isn't confirmed working end to end yet
+    // and real OTP would block the reset-PIN flow entirely.
+    //
+    // SECURITY: while active, this is a real account-takeover primitive —
+    // verifyOtp is what gates resetPinWithOtp, so anyone who can call
+    // POST /auth/otp/request for a phone number (no proof of ownership
+    // required) can then "verify" it without ever seeing the real code and
+    // set a new PIN for that account. Set OTP_BYPASS=false (or unset it)
+    // the moment DExchange delivery is confirmed working — do not leave
+    // this on in production longer than necessary.
+    const bypass = process.env.NODE_ENV !== 'production' || process.env.OTP_BYPASS === 'true';
+    if (bypass && process.env.NODE_ENV === 'production') {
+      this.logger.warn(`OTP_BYPASS active in production — verifyOtp bypassed for ${phone}`);
+    }
     const codeHash = crypto.createHash('sha256').update(code.trim()).digest('hex');
 
     const token = await this.prisma.otpToken.findFirst({
