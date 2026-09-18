@@ -41,15 +41,34 @@ export class AdminController {
 
   @Get('stats')
   async getStats() {
-    const [usersCount, categoriesCount, lessonsCount, questionsCount, purchasesCount, examsCount] =
-      await Promise.all([
-        this.prisma.user.count(),
-        this.prisma.category.count(),
-        this.prisma.lesson.count(),
-        this.prisma.question.count(),
-        this.prisma.purchase.count({ where: { status: 'PAID' } }),
-        this.prisma.examResult.count(),
-      ]);
+    const [
+      usersCount,
+      categoriesCount,
+      lessonsCount,
+      questionsCount,
+      purchasesCount,
+      examsCount,
+      seriesCount,
+      trafficSignsCount,
+      schoolsByStatus,
+    ] = await Promise.all([
+      this.prisma.user.count(),
+      this.prisma.category.count(),
+      this.prisma.lesson.count(),
+      this.prisma.question.count(),
+      this.prisma.purchase.count({ where: { status: 'PAID' } }),
+      this.prisma.examResult.count(),
+      this.prisma.series.count(),
+      this.prisma.trafficSign.count(),
+      this.prisma.school.groupBy({ by: ['status'], _count: true }),
+    ]);
+
+    const schoolsByStatusMap = { PENDING: 0, ACTIVE: 0, SUSPENDED: 0 };
+    let schoolsCount = 0;
+    for (const row of schoolsByStatus) {
+      schoolsByStatusMap[row.status as keyof typeof schoolsByStatusMap] = row._count;
+      schoolsCount += row._count;
+    }
 
     return {
       success: true,
@@ -60,6 +79,10 @@ export class AdminController {
         questionsCount,
         purchasesCount,
         examsCount,
+        seriesCount,
+        trafficSignsCount,
+        schoolsCount,
+        schoolsByStatus: schoolsByStatusMap,
       },
     };
   }

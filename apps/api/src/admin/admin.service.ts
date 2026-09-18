@@ -400,7 +400,10 @@ export class AdminService {
           unitXof: SMS_COST_XOF,
           totalXof: smsCostXof,
         },
-        email: { sent: 0, totalXof: 0, note: 'Aucun envoi d’e-mails configuré' },
+        // EmailService (SMTP/nodemailer) does send real email — invoices, devis —
+        // but nothing logs each send the way SmsLog does for SMS/WhatsApp, so
+        // there's no count to cost out yet. Not "unconfigured", just untracked.
+        email: { sent: 0, totalXof: 0, note: 'Envois non comptabilisés pour le moment' },
         other: { totalXof: 0 },
       },
       net: { totalXof: totalXof - smsCostXof },
