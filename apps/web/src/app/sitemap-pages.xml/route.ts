@@ -3,6 +3,12 @@ import { QUIZ_CATEGORIES } from '@/app/quizz/config';
 
 const SITE_URL = 'https://www.permis2.com';
 
+// Next.js 15 changed the default for GET Route Handlers from cached to
+// uncached — without this, the route is dynamic (served `no-store`) even
+// though it reads no request data and would otherwise be a perfect static
+// response (brief Lot 1.6).
+export const dynamic = 'force-static';
+
 // Editorial/static pages + quiz série pages — every one of these currently
 // (except /blog itself, grouped with its posts in sitemap-blog.xml instead)
 // resolves 200 on www and carries no noindex (verified against the running

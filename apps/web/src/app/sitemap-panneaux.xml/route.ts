@@ -5,6 +5,11 @@ import { CATEGORY_ORDER } from '@/lib/trafficSignCategories';
 const SITE_URL = 'https://www.permis2.com';
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
+// Next.js 15 defaults GET Route Handlers to uncached — without this the
+// route is dynamic (`no-store`) regardless of the fetch's own `revalidate`
+// (brief Lot 1.6). Matches the fetch's own cadence below.
+export const revalidate = 3600;
+
 interface ApiSign {
   name: string;
   code: string | null;

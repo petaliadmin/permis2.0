@@ -9,6 +9,10 @@ import { serializeUrlset, SITEMAP_XML_HEADERS } from '@/lib/sitemapXml';
 // production returning "0 auto-école" on the same page — that gap needs
 // resolving with the site owner before any school/city URL goes in a
 // sitemap that's supposed to only ever list real, stable content.
+//
+// Next.js 15 defaults Route Handlers to uncached — force-static here too.
+export const dynamic = 'force-static';
+
 export async function GET() {
   return new Response(serializeUrlset([]), { headers: SITEMAP_XML_HEADERS });
 }
