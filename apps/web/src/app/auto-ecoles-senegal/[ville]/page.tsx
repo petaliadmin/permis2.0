@@ -7,8 +7,9 @@ import { SiteFooter } from '@/components/SiteFooter';
 import { SchoolCard } from '@/components/SchoolCard';
 import { slugify } from '@/lib/slug';
 import { IconChevronRight } from '@tabler/icons-react';
+import { buildMetadata } from '@/lib/seo/metadata';
+import { organizationNode, websiteNode, graphScript, SITE_URL } from '@/lib/seo/jsonLd';
 
-const SITE_URL = 'https://www.permis2.com';
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
 // Brief Lot 3.2 — GARDE-FOU OBLIGATOIRE: a city page only exists with ≥3
@@ -54,6 +55,57 @@ async function resolveCity(slug: string): Promise<string | null> {
   return cities.find((c) => slugify(c) === slug) ?? null;
 }
 
+// Lot 3.4 — one real, well-established, easily-verifiable sentence per city
+// (administrative role, heritage status — never a number we can't stand
+// behind, like a population figure). Used to make each city's intro
+// genuinely unique on top of the shared real platform data below, not
+// invented facts about the city itself. Cities not listed here (any city
+// name a school owner enters — `School.city` is free text, not an enum)
+// fall back to a neutral sentence instead of a guessed one.
+const CITY_FACTS: Record<string, string> = {
+  Dakar:
+    "Dakar, capitale du Sénégal, occupe la presqu'île du Cap-Vert, le point le plus occidental du continent africain.",
+  Guédiawaye:
+    "Guédiawaye fait partie de la région de Dakar et compte parmi les communes les plus densément peuplées du pays.",
+  Pikine:
+    "Pikine fait partie de la région de Dakar et est l'une des communes les plus peuplées de l'agglomération dakaroise.",
+  Rufisque:
+    "Rufisque, dans la région de Dakar, est l'une des quatre communes historiques du Sénégal colonial, aux côtés de Dakar, Gorée et Saint-Louis.",
+  Thiès:
+    "Thiès est le chef-lieu de la région du même nom, important carrefour ferroviaire et industriel à l'entrée du pays depuis Dakar.",
+  Mbour:
+    "Mbour est une ville côtière de la Petite Côte, dans la région de Thiès, connue pour son port de pêche.",
+  'Saint-Louis':
+    "Saint-Louis, ancienne capitale de l'Afrique occidentale française, est classée au patrimoine mondial de l'UNESCO.",
+  Kaolack: 'Kaolack est le chef-lieu de la région du même nom et un carrefour commercial du centre du Sénégal.',
+  Ziguinchor: 'Ziguinchor est le chef-lieu de la région du même nom et la principale ville de la Casamance.',
+  Touba: "Touba, dans la région de Diourbel, est la ville sainte de la confrérie mouride et l'une des plus peuplées du pays.",
+};
+
+function cityIntro(city: string, schools: School[], categories: string[]): string {
+  const fact =
+    CITY_FACTS[city] ?? `${city} fait partie des villes du Sénégal où PERMIS 2.0 référence des auto-écoles partenaires.`;
+
+  const allPrices = schools.flatMap((s) =>
+    s.pricesByCategory ? Object.values(s.pricesByCategory) : s.priceXof != null ? [s.priceXof] : []
+  );
+  const priceSentence =
+    allPrices.length > 0
+      ? ` Les tarifs affichés par nos auto-écoles partenaires à ${city} vont de ${Math.min(...allPrices).toLocaleString('fr-FR')} à ${Math.max(...allPrices).toLocaleString('fr-FR')} FCFA selon la catégorie et les services inclus.`
+      : '';
+
+  return (
+    `${fact} ${schools.length} auto-école${schools.length > 1 ? 's' : ''} partenaire${schools.length > 1 ? 's' : ''} ` +
+    `${schools.length > 1 ? 'y sont référencées' : 'y est référencée'} sur PERMIS 2.0` +
+    `${categories.length > 0 ? `, couvrant les catégories de permis ${categories.join(', ')}` : ''}.` +
+    `${priceSentence} Chaque fiche présente les services proposés, les catégories de permis disponibles et, quand l'auto-école les a renseignés, ses tarifs détaillés et ses horaires. ` +
+    `Comparer plusieurs établissements avant de s'engager — sur le prix, mais aussi sur les catégories couvertes et la localisation — reste la meilleure façon de choisir une formation adaptée à votre situation à ${city}. ` +
+    "La pré-inscription en ligne est gratuite et ne vous engage à rien : elle permet simplement à l'auto-école choisie de vous recontacter pour la suite des démarches. " +
+    "Depuis l'annuaire complet, le tri « Autour de moi » permet aussi de comparer les auto-écoles les plus proches de votre position à l'intérieur de la ville. " +
+    "Chaque auto-école reste seule responsable de ses tarifs, de ses délais et de ses conditions d'admission : PERMIS 2.0 ne fixe aucun prix et ne représente pas les autorités sénégalaises compétentes en matière de permis de conduire."
+  );
+}
+
 export async function generateMetadata({
   params,
 }: {
@@ -63,16 +115,15 @@ export async function generateMetadata({
   const city = await resolveCity(ville);
   if (!city) return { title: 'Auto-écoles introuvables' };
 
-  return {
+  return buildMetadata({
     title: `Auto-écoles à ${city} — Comparer et pré-inscrire en ligne`,
     description: `Trouvez une auto-école à ${city} : services, tarifs, catégories de permis proposées, et pré-inscription en ligne gratuite.`,
-    alternates: { canonical: `/auto-ecoles-senegal/${ville}` },
-  };
+    path: `/auto-ecoles-senegal/${ville}`,
+  });
 }
 
-function jsonLd(city: string, ville: string, schools: School[]) {
+function jsonLd(city: string, ville: string, schools: School[]): string {
   const breadcrumb = {
-    '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Accueil', item: SITE_URL },
@@ -91,7 +142,6 @@ function jsonLd(city: string, ville: string, schools: School[]) {
     ],
   };
   const itemList = {
-    '@context': 'https://schema.org',
     '@type': 'ItemList',
     itemListElement: schools.map((s, i) => ({
       '@type': 'ListItem',
@@ -100,7 +150,7 @@ function jsonLd(city: string, ville: string, schools: School[]) {
       name: s.name,
     })),
   };
-  return [breadcrumb, itemList];
+  return graphScript([organizationNode(), websiteNode(), breadcrumb, itemList]);
 }
 
 export default async function VilleAutoEcolesPage({
@@ -120,15 +170,18 @@ export default async function VilleAutoEcolesPage({
 
   const categories = [...new Set(schools.flatMap((s) => s.licenseCategories ?? []))].sort();
 
+  // Lot 3.4 — "liens villes voisines": every other city that also has its
+  // own page (≥3 schools), not a geographic-adjacency guess we can't back
+  // with real data. Still does the actual SEO job (internal linking between
+  // city pages) without asserting a proximity claim we haven't verified.
+  const otherCities = (await citiesAboveThreshold()).filter((c) => c !== city).sort((a, b) => a.localeCompare(b, 'fr'));
+
   return (
     <div className="on-light min-h-screen bg-surface">
-      {jsonLd(city, ville, schools).map((schema, i) => (
-        <script
-          key={i}
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-        />
-      ))}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLd(city, ville, schools) }}
+      />
 
       <SiteHeader />
 
@@ -150,16 +203,7 @@ export default async function VilleAutoEcolesPage({
           Auto-écoles à {city}
         </h1>
         <p className="mt-3 max-w-2xl text-sm leading-relaxed text-secondary sm:text-base">
-          {schools.length} auto-école{schools.length > 1 ? 's' : ''} partenaire
-          {schools.length > 1 ? 's' : ''} {schools.length > 1 ? 'sont référencées' : 'est référencée'}{' '}
-          à {city}
-          {categories.length > 0 && (
-            <>
-              , proposant les catégories de permis{' '}
-              <strong className="text-foreground">{categories.join(', ')}</strong>
-            </>
-          )}
-          . Comparez-les et pré-inscrivez-vous en ligne, gratuitement.
+          {cityIntro(city, schools, categories)}
         </p>
 
         <div className="mt-8 grid gap-4 sm:grid-cols-2">
@@ -179,6 +223,25 @@ export default async function VilleAutoEcolesPage({
             Ouvrir l'annuaire
           </Link>
         </div>
+
+        {otherCities.length > 0 && (
+          <div className="mt-8">
+            <p className="font-display text-sm font-bold text-foreground">
+              Auto-écoles dans d&apos;autres villes
+            </p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {otherCities.map((c) => (
+                <Link
+                  key={c}
+                  href={`/auto-ecoles-senegal/${slugify(c)}`}
+                  className="rounded-full border border-token bg-surface-1 px-3.5 py-2 text-xs font-semibold text-primary-600 hover:bg-surface-2"
+                >
+                  Auto-écoles à {c}
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
 
         <p className="mt-6 text-center text-xs text-muted">
           <Link href="/auto-ecoles-senegal" className="font-semibold text-primary-600 hover:underline">
