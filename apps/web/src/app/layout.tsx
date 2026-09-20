@@ -99,7 +99,11 @@ const organizationJsonLd = {
   '@type': 'Organization',
   name: APP_NAME,
   url: SITE_URL,
-  logo: `${SITE_URL}/apple-touch-icon.png`,
+  // TODO(SEO — needs design input, see brief §0.3): apple-touch-icon.png is
+  // square (180x180) and opaque, which satisfies Google's ≥112px + opaque-background
+  // checks, but Google's Organization guidelines prefer a landscape/rectangular
+  // logo. No such asset exists in the repo — a designer needs to produce one.
+  logo: { '@type': 'ImageObject', url: `${SITE_URL}/apple-touch-icon.png`, width: 180, height: 180 },
   description: SEO_DESCRIPTION,
   areaServed: { '@type': 'Country', name: 'Sénégal' },
 };
