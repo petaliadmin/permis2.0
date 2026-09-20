@@ -16,16 +16,16 @@ export const dynamic = 'force-static';
 // 200"). /cours, /quizz, /tests, /exam, /boutique are deliberately absent:
 // still noindexed since Lot 0.4 (near-empty server HTML) — submitting a
 // noindexed URL in a sitemap is a well-known anti-pattern, not just
-// pointless. /auto-ecoles-senegal/{ville} and /ecoles/{slug} are also
-// absent for now: Lot 3.2's 3-schools-per-city guard doesn't exist yet, so
-// today's city pages don't meet the brief's own quality bar — Lot 3.5 is
-// what's supposed to wire real school/city URLs into sitemap-ecoles.xml.
+// pointless. /auto-ecoles-senegal/{ville} and /ecoles/{slug} live in
+// sitemap-ecoles.xml instead (Lot 3.5), gated by the 3-schools-per-city
+// guard (Lot 3.2).
 const STATIC_PAGES = [
   '/',
   '/ecoles',
   '/traffic-signs',
   '/code-route-senegal',
   '/permis-conduire-senegal',
+  '/prix-permis-conduire-senegal',
   '/auto-ecoles-senegal',
   '/assistance',
   '/a-propos',

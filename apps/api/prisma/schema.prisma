@@ -846,3 +846,28 @@ model SchoolPayment {
   @@index([studentId, status])
   @@map("school_payments")
 }
+
+/// Admin-editable reference price per ville × catégorie de permis, shown on
+/// /prix-permis-conduire-senegal (SEO brief Lot 4.1). Deliberately not
+/// sourced from School.priceXof/pricesByCategory (partner-specific, one
+/// price per school) — this is the *reference* table editors maintain by
+/// hand for the market-comparison page, independent of any one partner's
+/// listing. Empty until an admin fills it in; the page must never show
+/// invented figures (brief rule 1).
+model PermitPrice {
+  id       String @id @default(cuid())
+  city     String
+  /// License category code (A, B, C, D, E…) — same codes as
+  /// School.licenseCategories.
+  category String
+  priceXof Int
+  /// Optional context shown next to the price, e.g. "Code + conduite".
+  note     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([city, category])
+  @@index([city])
+  @@map("permit_prices")
+}

@@ -24,6 +24,7 @@ import { SetBlockedDto } from './dto/set-blocked.dto';
 import { QuestionInputDto } from './dto/question-input.dto';
 import { SeriesInputDto } from './dto/series-input.dto';
 import { LessonInputDto } from './dto/lesson-input.dto';
+import { PermitPriceInputDto } from './dto/permit-price-input.dto';
 import { UpdateSchoolStatusDto } from './dto/update-school-status.dto';
 
 @ApiTags('Admin')
@@ -236,5 +237,22 @@ export class AdminController {
   @Delete('lessons/:id')
   async deleteLesson(@Param('id') id: string) {
     return this.adminService.deleteLesson(id);
+  }
+
+  // ─── Permit prices (/prix-permis-conduire-senegal) ─────────────────────────────
+
+  @Post('permit-prices')
+  async createPermitPrice(@Body() dto: PermitPriceInputDto) {
+    return this.adminService.createPermitPrice(dto);
+  }
+
+  @Patch('permit-prices/:id')
+  async updatePermitPrice(@Param('id') id: string, @Body() dto: PermitPriceInputDto) {
+    return this.adminService.updatePermitPrice(id, dto);
+  }
+
+  @Delete('permit-prices/:id')
+  async deletePermitPrice(@Param('id') id: string) {
+    return this.adminService.deletePermitPrice(id);
   }
 }

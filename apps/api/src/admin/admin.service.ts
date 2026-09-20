@@ -6,6 +6,7 @@ import { SchoolStatus } from '@permis2.0/types';
 import { QuestionInputDto } from './dto/question-input.dto';
 import { SeriesInputDto } from './dto/series-input.dto';
 import { LessonInputDto } from './dto/lesson-input.dto';
+import { PermitPriceInputDto } from './dto/permit-price-input.dto';
 
 /** Estimated DExchange cost per SMS/WhatsApp message, in XOF (override via env). */
 const SMS_COST_XOF = Number(process.env.SMS_COST_XOF || 15);
@@ -337,6 +338,29 @@ export class AdminService {
     const existing = await this.prisma.lesson.findUnique({ where: { id } });
     if (!existing) throw new NotFoundException('Leçon introuvable');
     await this.prisma.lesson.delete({ where: { id } });
+    return { deleted: true };
+  }
+
+  // ─── Permit prices (/prix-permis-conduire-senegal, SEO brief Lot 4.1) ─────────
+
+  async createPermitPrice(dto: PermitPriceInputDto) {
+    const existing = await this.prisma.permitPrice.findUnique({
+      where: { city_category: { city: dto.city, category: dto.category } },
+    });
+    if (existing) throw new BadRequestException('Un tarif existe déjà pour cette ville et cette catégorie — modifiez-le plutôt.');
+    return this.prisma.permitPrice.create({ data: dto });
+  }
+
+  async updatePermitPrice(id: string, dto: PermitPriceInputDto) {
+    const existing = await this.prisma.permitPrice.findUnique({ where: { id } });
+    if (!existing) throw new NotFoundException('Tarif introuvable');
+    return this.prisma.permitPrice.update({ where: { id }, data: dto });
+  }
+
+  async deletePermitPrice(id: string) {
+    const existing = await this.prisma.permitPrice.findUnique({ where: { id } });
+    if (!existing) throw new NotFoundException('Tarif introuvable');
+    await this.prisma.permitPrice.delete({ where: { id } });
     return { deleted: true };
   }
 
