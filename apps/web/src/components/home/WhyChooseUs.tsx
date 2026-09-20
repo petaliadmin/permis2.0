@@ -101,7 +101,7 @@ export function WhyChooseUs() {
               <span className={`chip ${b.accent} flex h-11 w-11 items-center justify-center !rounded-2xl`}>
                 <b.icon className="h-5 w-5" strokeWidth={2} />
               </span>
-              <p className="mt-3 font-display text-base font-bold text-foreground">{b.title}</p>
+              <h3 className="mt-3 font-display text-base font-bold text-foreground">{b.title}</h3>
               <p className="mt-1 text-sm text-secondary">{b.description}</p>
             </motion.div>
           ))}

@@ -52,7 +52,7 @@ export function HowItWorks() {
                 </span>
                 <div className="lg:mt-3">
                   <s.icon className="mx-auto mb-1.5 hidden h-5 w-5 text-primary-600 lg:block" strokeWidth={2} />
-                  <p className="font-display text-sm font-bold text-foreground">{s.title}</p>
+                  <h3 className="font-display text-sm font-bold text-foreground">{s.title}</h3>
                   <p className="mt-1 text-xs text-secondary">{s.description}</p>
                 </div>
               </motion.div>

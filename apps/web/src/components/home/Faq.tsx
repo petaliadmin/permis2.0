@@ -33,9 +33,9 @@ export function Faq() {
                 className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left"
                 aria-expanded={isOpen}
               >
-                <span className="font-display text-sm font-bold text-foreground sm:text-base">
+                <h3 className="font-display text-sm font-bold text-foreground sm:text-base">
                   {item.question}
-                </span>
+                </h3>
                 <ChevronDown
                   className={`h-5 w-5 shrink-0 text-secondary transition-transform ${isOpen ? 'rotate-180' : ''}`}
                   strokeWidth={2}

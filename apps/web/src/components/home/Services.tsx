@@ -178,7 +178,7 @@ export function Services() {
                 </div>
 
                 <div className="flex flex-1 flex-col p-5">
-                  <p className="font-display text-xl font-extrabold text-foreground">{s.title}</p>
+                  <h3 className="font-display text-xl font-extrabold text-foreground">{s.title}</h3>
                   <p className="mt-2 text-sm text-secondary">{s.description}</p>
 
                   <div className="mt-5 flex flex-wrap gap-2">

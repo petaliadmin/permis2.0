@@ -66,7 +66,7 @@ export function ProblemSolution() {
               <p.icon className="h-5 w-5" strokeWidth={2} />
             </span>
             <div>
-              <p className="font-display text-base font-bold text-foreground">{p.title}</p>
+              <h3 className="font-display text-base font-bold text-foreground">{p.title}</h3>
               <p className="mt-1 text-sm text-secondary">{p.description}</p>
             </div>
           </motion.div>
