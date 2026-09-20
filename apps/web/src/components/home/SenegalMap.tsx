@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
-import { motion } from 'framer-motion';
+import { motion, useInView } from 'framer-motion';
 import type { School } from '@permis2.0/types';
 import { Skeleton } from '@permis2.0/ui';
 import { API_URL } from '@/lib/dataSource';
@@ -18,13 +18,22 @@ export function SenegalMap() {
   const [schools, setSchools] = useState<School[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // Lot 1.8 (SEO brief) — this section sits well below the fold; mounting
+  // SchoolsMap unconditionally fetched Leaflet's JS/CSS and tile images on
+  // every home page load regardless of whether the visitor ever scrolled
+  // this far. `mapRef`/`mapInView` delay mounting it (and therefore
+  // fetching its chunk) until the section is about to enter the viewport.
+  const mapRef = useRef(null);
+  const mapInView = useInView(mapRef, { once: true, margin: '200px' });
+
   useEffect(() => {
+    if (!mapInView) return;
     fetch(`${API_URL}/schools?take=100`)
       .then((res) => (res.ok ? res.json() : []))
       .then((data) => setSchools(Array.isArray(data) ? data : []))
       .catch(() => setSchools([]))
       .finally(() => setLoading(false));
-  }, []);
+  }, [mapInView]);
 
   return (
     <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:px-8">
@@ -46,13 +55,18 @@ export function SenegalMap() {
       </motion.div>
 
       <motion.div
+        ref={mapRef}
         initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '-60px' }}
         transition={{ duration: 0.6, delay: 0.15 }}
         className="mt-10 h-[380px] overflow-hidden rounded-3xl border border-token shadow-card-lg"
       >
-        <SchoolsMap schools={schools} />
+        {mapInView ? (
+          <SchoolsMap schools={schools} />
+        ) : (
+          <Skeleton className="h-full min-h-[360px] w-full" />
+        )}
       </motion.div>
 
       {!loading && (
