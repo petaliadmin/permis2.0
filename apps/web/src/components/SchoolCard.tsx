@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import type { School } from '@permis2.0/types';
 import { cn } from '@/lib/cn';
+import { IconMapPin } from '@tabler/icons-react';
 
 const fmtXof = (n: number) => `${String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' ')} FCFA`;
 
@@ -67,7 +68,7 @@ export function SchoolCard({ school, distanceKm, selected, onSelect, compact }: 
           </p>
           {location && (
             <p className="mt-0.5 flex items-center gap-1 text-xs text-secondary">
-              <i className="ti ti-map-pin text-sm" aria-hidden="true" />
+              <IconMapPin size="1em" className="text-sm" aria-hidden="true" />
               {location}
               {distanceKm != null && <span className="text-muted"> · {distanceKm.toFixed(1)} km</span>}
             </p>

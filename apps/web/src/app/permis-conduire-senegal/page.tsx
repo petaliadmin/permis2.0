@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { SiteHeader } from '@/components/SiteHeader';
 import { SiteFooter } from '@/components/SiteFooter';
+import { IconArrowRight, IconChevronRight } from '@tabler/icons-react';
 
 const SITE_URL = 'https://www.permis2.com';
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
@@ -102,7 +103,7 @@ export default async function PermisConduireSenegalPage() {
           <Link href="/" className="hover:text-foreground">
             Accueil
           </Link>
-          <i className="ti ti-chevron-right text-[10px]" aria-hidden="true" />
+          <IconChevronRight size="1em" className="text-[10px]" aria-hidden="true" />
           <span className="text-foreground">Permis de conduire</span>
         </nav>
 
@@ -239,7 +240,7 @@ export default async function PermisConduireSenegalPage() {
               className="mt-4 inline-flex items-center gap-1.5 text-sm font-bold text-primary-600 hover:underline"
             >
               Comparer les auto-écoles
-              <i className="ti ti-arrow-right" aria-hidden="true" />
+              <IconArrowRight size="1em" aria-hidden="true" />
             </Link>
           </section>
 

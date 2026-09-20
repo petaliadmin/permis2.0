@@ -18,6 +18,34 @@ import {
 } from 'recharts';
 import { Skeleton } from '@permis2.0/ui';
 import { adminFetch, fmtXof, ADMIN_SECTIONS, AdminPageHeader } from './adminShared';
+import {
+  IconCash,
+  IconChartBar,
+  IconChartDonut,
+  IconDots,
+  IconMail,
+  IconMessage,
+  IconReceipt2,
+  IconTrendingUp,
+  IconUsers,
+  IconBook,
+  IconHelpCircle,
+  IconListDetails,
+  IconRoadSign,
+  IconCategory,
+  IconArrowRight,
+  IconSchool,
+  IconCrown,
+  IconShoppingCart,
+  IconClipboardCheck,
+} from '@tabler/icons-react';
+
+type IconComponent = React.ComponentType<{
+  size?: string | number;
+  className?: string;
+  style?: React.CSSProperties;
+  'aria-hidden'?: boolean | 'true' | 'false';
+}>;
 
 interface AdminStats {
   usersCount: number;
@@ -85,13 +113,14 @@ function KpiCard({
   sublabel,
   delay,
 }: {
-  icon: string;
+  icon: IconComponent;
   color: string;
   label: string;
   value: number | string | undefined;
   sublabel?: string;
   delay: number;
 }) {
+  const Icon = icon;
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -103,7 +132,7 @@ function KpiCard({
         className="flex h-9 w-9 items-center justify-center rounded-xl"
         style={{ backgroundColor: color + '18' }}
       >
-        <i className={`ti ${icon} text-lg`} style={{ color }} aria-hidden="true" />
+        <Icon size="1em" className="text-lg" style={{ color }} aria-hidden="true" />
       </span>
       <p className="mt-2.5 font-display text-2xl font-black leading-none text-foreground">
         {value ?? '—'}
@@ -182,9 +211,9 @@ export default function AdminPage() {
       {/* ── Chiffres clés ── */}
       <p className="mb-3 font-display text-base font-bold text-foreground">Chiffres clés</p>
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 xl:grid-cols-6">
-        <KpiCard icon="ti-users" color="#003EA8" label="Utilisateurs" value={stats?.usersCount} delay={0} />
+        <KpiCard icon={IconUsers} color="#003EA8" label="Utilisateurs" value={stats?.usersCount} delay={0} />
         <KpiCard
-          icon="ti-school"
+          icon={IconSchool}
           color="#0D9488"
           label="Auto-écoles"
           value={stats?.schoolsCount}
@@ -192,7 +221,7 @@ export default function AdminPage() {
           delay={0.04}
         />
         <KpiCard
-          icon="ti-cash"
+          icon={IconCash}
           color="#16A34A"
           label="Chiffre d'affaires"
           value={rev ? fmtXof(rev.revenue.totalXof) : undefined}
@@ -200,21 +229,21 @@ export default function AdminPage() {
           delay={0.08}
         />
         <KpiCard
-          icon="ti-crown"
+          icon={IconCrown}
           color="#7C3AED"
           label="Abonnements actifs"
           value={rev?.revenue.activeSubscriptions}
           delay={0.12}
         />
         <KpiCard
-          icon="ti-shopping-cart"
+          icon={IconShoppingCart}
           color="#FF620E"
           label="Ventes payées"
           value={stats?.purchasesCount}
           delay={0.16}
         />
         <KpiCard
-          icon="ti-clipboard-check"
+          icon={IconClipboardCheck}
           color="#EF4444"
           label="Examens passés"
           value={stats?.examsCount}
@@ -231,7 +260,7 @@ export default function AdminPage() {
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="rounded-2xl bg-gradient-to-br from-success-500 to-success-700 p-5 text-white shadow-card">
               <p className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-white/80">
-                <i className="ti ti-cash" aria-hidden="true" />
+                <IconCash size="1em" aria-hidden="true" />
                 CA brut
               </p>
               <p className="mt-1 font-display text-2xl font-black">{fmtXof(rev.revenue.totalXof)}</p>
@@ -243,7 +272,7 @@ export default function AdminPage() {
             </div>
             <div className="rounded-2xl border border-token bg-surface-1 p-5 shadow-soft">
               <p className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-muted">
-                <i className="ti ti-trending-up" aria-hidden="true" />
+                <IconTrendingUp size="1em" aria-hidden="true" />
                 Net estimé
               </p>
               <p className="mt-1 font-display text-2xl font-black text-foreground">
@@ -257,7 +286,7 @@ export default function AdminPage() {
             {/* Revenue by month — bar chart */}
             <div className="rounded-2xl border border-token bg-surface-1 p-5 shadow-soft">
               <p className="mb-3 flex items-center gap-1.5 text-xs font-bold uppercase tracking-wide text-muted">
-                <i className="ti ti-chart-bar" aria-hidden="true" />
+                <IconChartBar size="1em" aria-hidden="true" />
                 Recettes par mois
               </p>
               {monthChartData.length === 0 ? (
@@ -296,7 +325,7 @@ export default function AdminPage() {
             {/* Revenue by product — donut chart */}
             <div className="rounded-2xl border border-token bg-surface-1 p-5 shadow-soft">
               <p className="mb-3 flex items-center gap-1.5 text-xs font-bold uppercase tracking-wide text-muted">
-                <i className="ti ti-chart-donut" aria-hidden="true" />
+                <IconChartDonut size="1em" aria-hidden="true" />
                 Recettes par produit
               </p>
               {productChartData.length === 0 ? (
@@ -340,12 +369,12 @@ export default function AdminPage() {
           {/* Costs */}
           <div className="rounded-2xl border border-token bg-surface-1 p-5 shadow-soft">
             <p className="mb-2 flex items-center gap-1.5 text-xs font-bold uppercase tracking-wide text-muted">
-              <i className="ti ti-receipt-2" aria-hidden="true" />
+              <IconReceipt2 size="1em" aria-hidden="true" />
               Coûts
             </p>
             <div className="flex items-center justify-between border-b border-token py-2 text-sm">
               <span className="text-foreground">
-                <i className="ti ti-message mr-1.5 text-secondary" aria-hidden="true" />
+                <IconMessage size="1em" className="mr-1.5 text-secondary" aria-hidden="true" />
                 SMS / WhatsApp ({rev.costs.sms.sent} envoyés
                 {rev.costs.sms.simulated > 0 ? ` · ${rev.costs.sms.simulated} simulés` : ''})
               </span>
@@ -353,14 +382,14 @@ export default function AdminPage() {
             </div>
             <div className="flex items-center justify-between border-b border-token py-2 text-sm">
               <span className="text-foreground">
-                <i className="ti ti-mail mr-1.5 text-secondary" aria-hidden="true" />
+                <IconMail size="1em" className="mr-1.5 text-secondary" aria-hidden="true" />
                 E-mails <span className="text-xs text-muted">({rev.costs.email.note})</span>
               </span>
               <span className="font-bold text-secondary">{fmtXof(rev.costs.email.totalXof)}</span>
             </div>
             <div className="flex items-center justify-between py-2 text-sm">
               <span className="text-foreground">
-                <i className="ti ti-dots mr-1.5 text-secondary" aria-hidden="true" />
+                <IconDots size="1em" className="mr-1.5 text-secondary" aria-hidden="true" />
                 Autres
               </span>
               <span className="font-bold text-secondary">{fmtXof(rev.costs.other.totalXof)}</span>
@@ -388,11 +417,11 @@ export default function AdminPage() {
       {/* ── Contenu / ressources ── */}
       <p className="mb-3 mt-9 font-display text-base font-bold text-foreground">Contenu &amp; ressources</p>
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 xl:grid-cols-5">
-        <KpiCard icon="ti-book" color="#0284C7" label="Leçons" value={stats?.lessonsCount} delay={0} />
-        <KpiCard icon="ti-help-circle" color="#7C3AED" label="Questions" value={stats?.questionsCount} delay={0.04} />
-        <KpiCard icon="ti-list-details" color="#FF620E" label="Séries" value={stats?.seriesCount} delay={0.08} />
-        <KpiCard icon="ti-road-sign" color="#EF4444" label="Panneaux" value={stats?.trafficSignsCount} delay={0.12} />
-        <KpiCard icon="ti-category" color="#64748B" label="Catégories" value={stats?.categoriesCount} delay={0.16} />
+        <KpiCard icon={IconBook} color="#0284C7" label="Leçons" value={stats?.lessonsCount} delay={0} />
+        <KpiCard icon={IconHelpCircle} color="#7C3AED" label="Questions" value={stats?.questionsCount} delay={0.04} />
+        <KpiCard icon={IconListDetails} color="#FF620E" label="Séries" value={stats?.seriesCount} delay={0.08} />
+        <KpiCard icon={IconRoadSign} color="#EF4444" label="Panneaux" value={stats?.trafficSignsCount} delay={0.12} />
+        <KpiCard icon={IconCategory} color="#64748B" label="Catégories" value={stats?.categoriesCount} delay={0.16} />
       </div>
 
       {/* ── Gestion ── */}
@@ -413,14 +442,15 @@ export default function AdminPage() {
                 className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl"
                 style={{ backgroundColor: s.color + '18' }}
               >
-                <i className={`ti ${s.icon} text-xl`} style={{ color: s.color }} aria-hidden="true" />
+                <s.icon size="1em" className="text-xl" style={{ color: s.color }} aria-hidden="true" />
               </div>
               <div className="min-w-0 flex-1">
                 <p className="font-display text-sm font-bold text-foreground">{s.label}</p>
                 <p className="mt-0.5 text-xs text-secondary">{s.desc}</p>
               </div>
-              <i
-                className="ti ti-arrow-right text-base text-slate-300 transition-transform group-hover:translate-x-1 group-hover:text-violet-500"
+              <IconArrowRight
+                size="1em"
+                className="text-base text-slate-300 transition-transform group-hover:translate-x-1 group-hover:text-violet-500"
                 aria-hidden="true"
               />
             </Link>

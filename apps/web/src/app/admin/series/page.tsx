@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Sheet, Skeleton } from '@permis2.0/ui';
 import { adminFetch, Toast, useToast, AdminPageHeader } from '../adminShared';
+import { IconPlus } from '@tabler/icons-react';
 
 interface Serie {
   id: string;
@@ -80,7 +81,7 @@ export default function AdminSeriesPage() {
         subtitle={`${series.length} séries d'entraînement`}
         actions={
           <button onClick={() => setForm(EMPTY)} className="btn-orange px-5 py-2.5 text-sm">
-            <i className="ti ti-plus" aria-hidden="true" /> Nouvelle série
+            <IconPlus size="1em" aria-hidden="true" /> Nouvelle série
           </button>
         }
       />

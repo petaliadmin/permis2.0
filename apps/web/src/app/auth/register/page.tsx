@@ -9,6 +9,7 @@ import { PhoneInput } from '@/components/PhoneInput';
 import { useSpace } from '@/components/SpaceProvider';
 import { gotoSpace, spaceForProfile, type Space } from '@/lib/space';
 import { getIntendedProfile, markOnboardingDone } from '@/lib/onboarding';
+import { IconCheck, IconChevronLeft, IconLock, IconUser } from '@tabler/icons-react';
 
 const STEPS = [
   { key: 'name', label: 'Nom' },
@@ -117,7 +118,7 @@ export default function RegisterPage() {
                     state === 'upcoming' ? 'bg-surface-3 text-muted' : 'bg-primary-600 text-white'
                   }`}
                 >
-                  {state === 'done' ? <i className="ti ti-check" aria-hidden="true" /> : n}
+                  {state === 'done' ? <IconCheck size="1em" aria-hidden="true" /> : n}
                 </span>
                 <span
                   className={`hidden text-xs font-semibold sm:inline ${
@@ -196,7 +197,7 @@ export default function RegisterPage() {
 
               <label className="mt-5 block text-sm font-medium text-foreground">Nom</label>
               <div className="mt-1.5 flex items-center gap-2 rounded-2xl border border-token bg-surface-2 px-4">
-                <i className="ti ti-user text-secondary" aria-hidden="true" />
+                <IconUser size="1em" className="text-secondary" aria-hidden="true" />
                 <input
                   value={name}
                   onChange={(e) => setName(e.target.value)}
@@ -230,7 +231,7 @@ export default function RegisterPage() {
                 onClick={() => setStep(1)}
                 className="mb-3 flex items-center gap-1 text-sm font-semibold text-primary-600"
               >
-                <i className="ti ti-chevron-left" aria-hidden="true" /> Modifier le nom
+                <IconChevronLeft size="1em" aria-hidden="true" /> Modifier le nom
               </button>
               <h2 className="font-display text-lg font-extrabold text-foreground">
                 Quel est ton numéro ?
@@ -267,7 +268,7 @@ export default function RegisterPage() {
                 onClick={() => setStep(2)}
                 className="mb-3 flex items-center gap-1 text-sm font-semibold text-primary-600"
               >
-                <i className="ti ti-chevron-left" aria-hidden="true" /> Modifier le numéro
+                <IconChevronLeft size="1em" aria-hidden="true" /> Modifier le numéro
               </button>
               <h2 className="font-display text-lg font-extrabold text-foreground">
                 Choisis ton code de sécurité
@@ -298,7 +299,7 @@ export default function RegisterPage() {
                 {isLoading ? 'Création…' : 'Créer mon compte'}
               </button>
               <p className="mt-3 flex items-center justify-center gap-1.5 text-xs text-muted">
-                <i className="ti ti-lock" aria-hidden="true" /> Ta session reste ouverte, pas besoin
+                <IconLock size="1em" aria-hidden="true" /> Ta session reste ouverte, pas besoin
                 de te reconnecter.
               </p>
             </motion.div>

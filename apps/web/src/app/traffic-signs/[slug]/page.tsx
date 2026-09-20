@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { AppShell, PageHeader } from '@/components/AppShell';
 import { slugify } from '@/lib/slug';
+import { IconArrowRight, IconBulb, IconChevronRight, IconRoadSign } from '@tabler/icons-react';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 const SITE_URL = 'https://www.permis2.com';
@@ -107,11 +108,11 @@ export default async function SignDetailPage({
             <Link href="/" className="hover:text-foreground">
               Accueil
             </Link>
-            <i className="ti ti-chevron-right text-[10px]" aria-hidden="true" />
+            <IconChevronRight size="1em" className="text-[10px]" aria-hidden="true" />
             <Link href="/traffic-signs" className="hover:text-foreground">
               Panneaux
             </Link>
-            <i className="ti ti-chevron-right text-[10px]" aria-hidden="true" />
+            <IconChevronRight size="1em" className="text-[10px]" aria-hidden="true" />
             <span className="truncate text-foreground">{sign.name}</span>
           </nav>
 
@@ -127,7 +128,7 @@ export default async function SignDetailPage({
                   className="h-full w-full object-contain"
                 />
               ) : (
-                <i className="ti ti-road-sign text-3xl text-slate-400" aria-hidden="true" />
+                <IconRoadSign size="1em" className="text-3xl text-slate-400" aria-hidden="true" />
               )}
             </div>
             <div>
@@ -176,7 +177,7 @@ export default async function SignDetailPage({
               <ul className="space-y-1.5">
                 {sign.advice.map((tip, i) => (
                   <li key={i} className="flex gap-2 text-sm leading-relaxed text-secondary">
-                    <i className="ti ti-bulb mt-0.5 shrink-0 text-amber-500" aria-hidden="true" />
+                    <IconBulb size="1em" className="mt-0.5 shrink-0 text-amber-500" aria-hidden="true" />
                     {tip}
                   </li>
                 ))}
@@ -208,7 +209,7 @@ export default async function SignDetailPage({
             className="btn-primary mt-8 flex w-full items-center justify-center gap-2 !py-3 text-sm"
           >
             S'entraîner sur les panneaux
-            <i className="ti ti-arrow-right" aria-hidden="true" />
+            <IconArrowRight size="1em" aria-hidden="true" />
           </Link>
 
           <Link

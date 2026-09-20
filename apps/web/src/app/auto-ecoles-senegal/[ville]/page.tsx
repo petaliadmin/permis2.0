@@ -6,6 +6,7 @@ import { SiteHeader } from '@/components/SiteHeader';
 import { SiteFooter } from '@/components/SiteFooter';
 import { SchoolCard } from '@/components/SchoolCard';
 import { slugify } from '@/lib/slug';
+import { IconChevronRight } from '@tabler/icons-react';
 
 const SITE_URL = 'https://www.permis2.com';
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
@@ -113,11 +114,11 @@ export default async function VilleAutoEcolesPage({
           <Link href="/" className="hover:text-foreground">
             Accueil
           </Link>
-          <i className="ti ti-chevron-right text-[10px]" aria-hidden="true" />
+          <IconChevronRight size="1em" className="text-[10px]" aria-hidden="true" />
           <Link href="/auto-ecoles-senegal" className="hover:text-foreground">
             Auto-écoles
           </Link>
-          <i className="ti ti-chevron-right text-[10px]" aria-hidden="true" />
+          <IconChevronRight size="1em" className="text-[10px]" aria-hidden="true" />
           <span className="text-foreground">{city}</span>
         </nav>
 

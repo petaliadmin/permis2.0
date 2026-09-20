@@ -7,6 +7,23 @@ import { AppShell, PageHeader } from '@/components/AppShell';
 import { Skeleton } from '@permis2.0/ui';
 import { useWolofAudio } from '@/hooks/useWolofAudio';
 import { fetchWithCache } from '@/lib/offlineCache';
+import {
+  IconBookOff,
+  IconKey,
+  IconGavel,
+  IconAlertTriangle,
+  IconInfoCircle,
+  IconPlayerStopFilled,
+  IconLanguage,
+  IconVolume,
+} from '@tabler/icons-react';
+
+type IconComponent = React.ComponentType<{
+  size?: string | number;
+  className?: string;
+  style?: React.CSSProperties;
+  'aria-hidden'?: boolean | 'true' | 'false';
+}>;
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -41,7 +58,7 @@ function Section({
   tone,
 }: {
   title: string;
-  icon: string;
+  icon: IconComponent;
   items: string[];
   tone: 'primary' | 'success' | 'danger' | 'amber';
 }) {
@@ -52,10 +69,11 @@ function Section({
     danger: { bg: 'bg-red-50', text: 'text-red-700', icon: 'text-red-500' },
     amber: { bg: 'bg-amber-50', text: 'text-amber-700', icon: 'text-amber-600' },
   }[tone];
+  const Icon = icon;
   return (
     <div className="mt-5">
       <p className="mb-2 flex items-center gap-2 font-display text-sm font-bold text-foreground">
-        <i className={`ti ${icon} ${tones.icon}`} aria-hidden="true" /> {title}
+        <Icon size="1em" className={tones.icon} aria-hidden="true" /> {title}
       </p>
       <div className="space-y-2">
         {items.map((item, i) => (
@@ -119,10 +137,11 @@ export default function CoursDetailPage() {
                 className="flex h-9 items-center justify-center gap-1 rounded-full bg-white/15 px-3 text-xs font-bold"
                 aria-label="Écouter en wolof"
               >
-                <i
-                  className={`ti ${wolof.playing ? 'ti-player-stop-filled' : 'ti-language'} text-base`}
-                  aria-hidden="true"
-                />
+                {wolof.playing ? (
+                  <IconPlayerStopFilled size="1em" className="text-base" aria-hidden="true" />
+                ) : (
+                  <IconLanguage size="1em" className="text-base" aria-hidden="true" />
+                )}
                 Wolof
               </button>
             )}
@@ -131,10 +150,11 @@ export default function CoursDetailPage() {
               className="flex h-9 w-9 items-center justify-center rounded-full bg-white/15"
               aria-label={speaking ? 'Arrêter la lecture' : 'Écouter la leçon'}
             >
-              <i
-                className={`ti ${speaking ? 'ti-player-stop-filled' : 'ti-volume'} text-lg`}
-                aria-hidden="true"
-              />
+              {speaking ? (
+                <IconPlayerStopFilled size="1em" className="text-lg" aria-hidden="true" />
+              ) : (
+                <IconVolume size="1em" className="text-lg" aria-hidden="true" />
+              )}
             </button>
           </>
         }
@@ -151,7 +171,7 @@ export default function CoursDetailPage() {
 
         {!loading && (error || !lesson) && (
           <div className="mt-10 text-center">
-            <i className="ti ti-book-off text-4xl text-slate-300" aria-hidden="true" />
+            <IconBookOff size="1em" className="text-4xl text-slate-300" aria-hidden="true" />
             <p className="mt-3 text-sm text-secondary">Leçon introuvable ou connexion perdue.</p>
           </div>
         )}
@@ -191,22 +211,22 @@ export default function CoursDetailPage() {
               })}
             </div>
 
-            <Section title="Points clés" icon="ti-key" items={lesson.points_cles} tone="primary" />
+            <Section title="Points clés" icon={IconKey} items={lesson.points_cles} tone="primary" />
             <Section
               title="Règles à retenir"
-              icon="ti-gavel"
+              icon={IconGavel}
               items={lesson.regles}
               tone="success"
             />
             <Section
               title="Erreurs fréquentes"
-              icon="ti-alert-triangle"
+              icon={IconAlertTriangle}
               items={lesson.erreurs_frequentes}
               tone="danger"
             />
             <Section
               title="Exceptions"
-              icon="ti-info-circle"
+              icon={IconInfoCircle}
               items={lesson.exceptions}
               tone="amber"
             />

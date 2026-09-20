@@ -6,6 +6,7 @@ import { SchoolMemberRole, SessionStatus, SessionType } from '@permis2.0/types';
 import { EmptyState, Sheet, Skeleton } from '@permis2.0/ui';
 import { cn } from '@/lib/cn';
 import { whatsappLinkTo } from '@/lib/contact';
+import { IconBrandWhatsapp, IconCalendar, IconCalendarEvent, IconCar, IconCategory, IconPlus, IconSteeringWheel } from '@tabler/icons-react';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -237,14 +238,14 @@ export const SessionsPanel = forwardRef<SessionsPanelHandle, SessionsPanelProps>
           ))}
         </div>
         <button onClick={() => setCreateOpen(true)} className="btn-ghost !px-4 !py-2 text-xs">
-          <i className="ti ti-plus" aria-hidden="true" />
+          <IconPlus size="1em" aria-hidden="true" />
           Ajouter une séance
         </button>
       </div>
 
       {filtered.length === 0 ? (
         <EmptyState
-          icon={<i className="ti ti-calendar-event" aria-hidden="true" />}
+          icon={<IconCalendarEvent size="1em" aria-hidden="true" />}
           title="Aucune séance"
           description="Planifiez des séances théoriques ou pratiques pour vos élèves."
         />
@@ -278,21 +279,21 @@ export const SessionsPanel = forwardRef<SessionsPanelHandle, SessionsPanelProps>
 
             <div className="mt-4 space-y-1.5 text-sm text-secondary">
               <p className="flex items-center gap-2">
-                <i className="ti ti-category" aria-hidden="true" /> {TYPE_LABEL[open.type]}
+                <IconCategory size="1em" aria-hidden="true" /> {TYPE_LABEL[open.type]}
               </p>
               <p className="flex items-center gap-2">
-                <i className="ti ti-calendar" aria-hidden="true" /> {fmtDateTime(open.startsAt)} —{' '}
+                <IconCalendar size="1em" aria-hidden="true" /> {fmtDateTime(open.startsAt)} —{' '}
                 {fmtDateTime(open.endsAt)}
               </p>
               {open.instructor && (
                 <p className="flex items-center gap-2">
-                  <i className="ti ti-steering-wheel" aria-hidden="true" />{' '}
+                  <IconSteeringWheel size="1em" aria-hidden="true" />{' '}
                   {open.instructor.user?.name ?? open.instructor.guestName}
                 </p>
               )}
               {open.vehicle && (
                 <p className="flex items-center gap-2">
-                  <i className="ti ti-car" aria-hidden="true" /> {open.vehicle.plate}
+                  <IconCar size="1em" aria-hidden="true" /> {open.vehicle.plate}
                 </p>
               )}
             </div>
@@ -305,7 +306,7 @@ export const SessionsPanel = forwardRef<SessionsPanelHandle, SessionsPanelProps>
                   rel="noopener noreferrer"
                   className="btn-ghost flex-1 !py-2 text-xs"
                 >
-                  <i className="ti ti-brand-whatsapp" aria-hidden="true" />
+                  <IconBrandWhatsapp size="1em" aria-hidden="true" />
                   Notifier l&apos;élève
                 </a>
               )}
@@ -316,7 +317,7 @@ export const SessionsPanel = forwardRef<SessionsPanelHandle, SessionsPanelProps>
                   rel="noopener noreferrer"
                   className="btn-ghost flex-1 !py-2 text-xs"
                 >
-                  <i className="ti ti-brand-whatsapp" aria-hidden="true" />
+                  <IconBrandWhatsapp size="1em" aria-hidden="true" />
                   Notifier le moniteur
                 </a>
               )}

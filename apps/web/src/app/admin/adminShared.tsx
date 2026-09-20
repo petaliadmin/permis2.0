@@ -2,6 +2,15 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import {
+  IconShieldLock,
+  IconReceipt,
+  IconBuildingStore,
+  IconUsers,
+  IconHelpCircle,
+  IconClipboardCheck,
+  IconBook,
+} from '@tabler/icons-react';
 
 export const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -11,42 +20,42 @@ export const ADMIN_SECTIONS = [
     href: '/admin/demandes',
     label: 'Demandes',
     desc: 'Abonnements à activer',
-    icon: 'ti-receipt',
+    icon: IconReceipt,
     color: '#16A34A',
   },
   {
     href: '/admin/schools',
     label: 'Écoles',
     desc: 'Statut, abonnement et visibilité Top 20',
-    icon: 'ti-building-store',
+    icon: IconBuildingStore,
     color: '#0D9488',
   },
   {
     href: '/admin/users',
     label: 'Utilisateurs',
     desc: 'Bloquer, rôles, abonnements',
-    icon: 'ti-users',
+    icon: IconUsers,
     color: '#003EA8',
   },
   {
     href: '/admin/questions',
     label: 'Questions (quiz)',
     desc: 'Créer, modifier, supprimer',
-    icon: 'ti-help-circle',
+    icon: IconHelpCircle,
     color: '#7C3AED',
   },
   {
     href: '/admin/series',
     label: 'Séries (examens)',
     desc: 'Gérer les séries d’entraînement',
-    icon: 'ti-clipboard-check',
+    icon: IconClipboardCheck,
     color: '#FF620E',
   },
   {
     href: '/admin/cours',
     label: 'Cours (leçons)',
     desc: 'Rédiger et organiser les leçons',
-    icon: 'ti-book',
+    icon: IconBook,
     color: '#0EA5E9',
   },
 ] as const;
@@ -94,7 +103,7 @@ export function AccessDenied() {
   const router = useRouter();
   return (
     <div className="mt-12 px-4 text-center">
-      <i className="ti ti-shield-lock text-5xl text-slate-300" aria-hidden="true" />
+      <IconShieldLock size="1em" className="text-5xl text-slate-300" aria-hidden="true" />
       <h2 className="mt-4 font-display text-lg font-bold text-foreground">Accès réservé</h2>
       <p className="mt-2 text-sm text-secondary">Cette page est réservée aux administrateurs.</p>
       <button onClick={() => router.push('/')} className="btn-primary mt-6">

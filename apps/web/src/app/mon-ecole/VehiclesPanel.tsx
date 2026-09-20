@@ -6,6 +6,7 @@ import { VehicleStatus } from '@permis2.0/types';
 import { EmptyState, Sheet, Skeleton } from '@permis2.0/ui';
 import { cn } from '@/lib/cn';
 import { ImportSheet } from './ImportSheet';
+import { IconAlertTriangle, IconCar, IconFileSpreadsheet, IconPlus } from '@tabler/icons-react';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -161,18 +162,18 @@ export const VehiclesPanel = forwardRef<VehiclesPanelHandle, VehiclesPanelProps>
     <div>
       <div className="mb-4 flex items-center justify-end gap-2">
         <button onClick={() => setImportOpen(true)} className="btn-ghost !px-4 !py-2 text-xs">
-          <i className="ti ti-file-spreadsheet" aria-hidden="true" />
+          <IconFileSpreadsheet size="1em" aria-hidden="true" />
           Importer
         </button>
         <button onClick={openCreate} className="btn-ghost !px-4 !py-2 text-xs">
-          <i className="ti ti-plus" aria-hidden="true" />
+          <IconPlus size="1em" aria-hidden="true" />
           Ajouter un véhicule
         </button>
       </div>
 
       {vehicles.length === 0 ? (
         <EmptyState
-          icon={<i className="ti ti-car" aria-hidden="true" />}
+          icon={<IconCar size="1em" aria-hidden="true" />}
           title="Aucun véhicule"
           description="Ajoutez les véhicules de votre flotte pour suivre leurs échéances."
         />
@@ -198,7 +199,7 @@ export const VehiclesPanel = forwardRef<VehiclesPanelHandle, VehiclesPanelProps>
                 </p>
                 {(v.insuranceExpiringSoon || v.inspectionExpiringSoon) && (
                   <p className="mt-1 flex items-center gap-1 text-xs font-semibold text-danger">
-                    <i className="ti ti-alert-triangle" aria-hidden="true" />
+                    <IconAlertTriangle size="1em" aria-hidden="true" />
                     {v.insuranceExpiringSoon && v.inspectionExpiringSoon
                       ? 'Assurance et visite technique à renouveler'
                       : v.insuranceExpiringSoon

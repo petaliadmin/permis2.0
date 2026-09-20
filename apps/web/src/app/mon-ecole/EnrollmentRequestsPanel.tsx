@@ -5,6 +5,7 @@ import type { SchoolEnrollmentRequest } from '@permis2.0/types';
 import { SchoolEnrollmentStatus } from '@permis2.0/types';
 import { EmptyState, Sheet, Skeleton } from '@permis2.0/ui';
 import { cn } from '@/lib/cn';
+import { IconBrandWhatsapp, IconInbox, IconLicense, IconMail, IconMapPin, IconPhone } from '@tabler/icons-react';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -119,7 +120,7 @@ export function EnrollmentRequestsPanel({ schoolId, requests, onChanged }: Enrol
 
       {filtered.length === 0 ? (
         <EmptyState
-          icon={<i className="ti ti-inbox" aria-hidden="true" />}
+          icon={<IconInbox size="1em" aria-hidden="true" />}
           title="Aucune demande"
           description="Les nouvelles pré-inscriptions apparaîtront ici."
         />
@@ -160,26 +161,26 @@ export function EnrollmentRequestsPanel({ schoolId, requests, onChanged }: Enrol
 
             <div className="mt-4 space-y-1.5 text-sm text-secondary">
               <p className="flex items-center gap-2">
-                <i className="ti ti-phone" aria-hidden="true" /> {open.phone}
+                <IconPhone size="1em" aria-hidden="true" /> {open.phone}
               </p>
               {open.whatsapp && (
                 <p className="flex items-center gap-2">
-                  <i className="ti ti-brand-whatsapp" aria-hidden="true" /> {open.whatsapp}
+                  <IconBrandWhatsapp size="1em" aria-hidden="true" /> {open.whatsapp}
                 </p>
               )}
               {open.email && (
                 <p className="flex items-center gap-2">
-                  <i className="ti ti-mail" aria-hidden="true" /> {open.email}
+                  <IconMail size="1em" aria-hidden="true" /> {open.email}
                 </p>
               )}
               {open.city && (
                 <p className="flex items-center gap-2">
-                  <i className="ti ti-map-pin" aria-hidden="true" /> {open.city}
+                  <IconMapPin size="1em" aria-hidden="true" /> {open.city}
                 </p>
               )}
               {open.licenseCategory && (
                 <p className="flex items-center gap-2">
-                  <i className="ti ti-license" aria-hidden="true" /> Permis {open.licenseCategory}
+                  <IconLicense size="1em" aria-hidden="true" /> Permis {open.licenseCategory}
                 </p>
               )}
               {open.message && (

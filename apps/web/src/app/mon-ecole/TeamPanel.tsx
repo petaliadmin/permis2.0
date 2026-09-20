@@ -7,6 +7,7 @@ import { EmptyState, Sheet, Skeleton } from '@permis2.0/ui';
 import { cn } from '@/lib/cn';
 import { isContactPickerSupported, pickContacts } from '@/lib/contactPicker';
 import { ImportSheet } from './ImportSheet';
+import { IconAddressBook, IconCalendar, IconFileSpreadsheet, IconMail, IconPhone, IconTrash, IconUsers } from '@tabler/icons-react';
 
 const fmtDate = (d: string | Date) =>
   new Date(d).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' });
@@ -135,7 +136,7 @@ export function TeamPanel({ schoolId, members, onChanged }: TeamPanelProps) {
         <div className="flex items-center justify-between gap-2">
           <p className="font-display text-sm font-bold text-foreground">Ajouter un membre</p>
           <button onClick={() => setImportOpen(true)} className="btn-ghost !px-3 !py-1.5 text-xs">
-            <i className="ti ti-file-spreadsheet" aria-hidden="true" />
+            <IconFileSpreadsheet size="1em" aria-hidden="true" />
             Importer
           </button>
         </div>
@@ -177,7 +178,7 @@ export function TeamPanel({ schoolId, members, onChanged }: TeamPanelProps) {
           <div className="mt-3 space-y-2">
             {isContactPickerSupported() && (
               <button onClick={importContact} className="btn-ghost w-full !py-2.5 text-sm">
-                <i className="ti ti-address-book" aria-hidden="true" />
+                <IconAddressBook size="1em" aria-hidden="true" />
                 Importer un contact du téléphone
               </button>
             )}
@@ -243,7 +244,7 @@ export function TeamPanel({ schoolId, members, onChanged }: TeamPanelProps) {
         </div>
       ) : members.length === 0 ? (
         <EmptyState
-          icon={<i className="ti ti-users" aria-hidden="true" />}
+          icon={<IconUsers size="1em" aria-hidden="true" />}
           title="Pas encore d'équipe"
           description="Ajoutez vos moniteurs, secrétaires ou comptables."
         />
@@ -283,7 +284,7 @@ export function TeamPanel({ schoolId, members, onChanged }: TeamPanelProps) {
                     )}
                     aria-label="Retirer"
                   >
-                    <i className="ti ti-trash text-sm" aria-hidden="true" />
+                    <IconTrash size="1em" className="text-sm" aria-hidden="true" />
                   </button>
                 )}
               </div>
@@ -306,15 +307,15 @@ export function TeamPanel({ schoolId, members, onChanged }: TeamPanelProps) {
 
             <div className="mt-4 space-y-1.5 text-sm text-secondary">
               <p className="flex items-center gap-2">
-                <i className="ti ti-phone" aria-hidden="true" /> {open.user?.phone ?? open.guestPhone}
+                <IconPhone size="1em" aria-hidden="true" /> {open.user?.phone ?? open.guestPhone}
               </p>
               {open.user?.email && (
                 <p className="flex items-center gap-2">
-                  <i className="ti ti-mail" aria-hidden="true" /> {open.user.email}
+                  <IconMail size="1em" aria-hidden="true" /> {open.user.email}
                 </p>
               )}
               <p className="flex items-center gap-2">
-                <i className="ti ti-calendar" aria-hidden="true" /> Membre depuis le {fmtDate(open.createdAt)}
+                <IconCalendar size="1em" aria-hidden="true" /> Membre depuis le {fmtDate(open.createdAt)}
               </p>
             </div>
 

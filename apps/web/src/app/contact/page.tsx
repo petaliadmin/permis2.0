@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { SiteHeader } from '@/components/SiteHeader';
 import { SiteFooter } from '@/components/SiteFooter';
 import { WHATSAPP_DISPLAY, whatsappLink } from '@/lib/contact';
+import { IconBrandWhatsapp, IconMapPin } from '@tabler/icons-react';
 
 export const metadata: Metadata = {
   title: 'Contact',
@@ -36,7 +37,7 @@ export default function ContactPage() {
               className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-green-50 text-2xl"
               aria-hidden="true"
             >
-              <i className="ti ti-brand-whatsapp" style={{ color: '#25D366' }} />
+              <IconBrandWhatsapp size="1em" style={{ color: '#25D366' }} />
             </span>
             <span>
               <span className="block font-display text-sm font-bold text-foreground">
@@ -51,7 +52,7 @@ export default function ContactPage() {
               className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary-50 text-2xl"
               aria-hidden="true"
             >
-              <i className="ti ti-map-pin" style={{ color: '#003ea8' }} />
+              <IconMapPin size="1em" style={{ color: '#003ea8' }} />
             </span>
             <span>
               <span className="block font-display text-sm font-bold text-foreground">

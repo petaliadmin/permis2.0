@@ -7,26 +7,52 @@ import { cn } from '@/lib/cn';
 import { useAuthStore } from '@/store/authStore';
 import { useSpace, useSpaceUrl } from '@/components/SpaceProvider';
 import type { Space } from '@/lib/space';
+import {
+  IconChevronRight,
+  IconExternalLink,
+  IconLogout,
+  IconMenu2,
+  IconX,
+  IconHome,
+  IconRoadSign,
+  IconBook2,
+  IconCards,
+  IconClipboardCheck,
+  IconCrown,
+  IconUserCheck,
+  IconBell,
+  IconHeadset,
+  IconUser,
+  IconLayoutDashboard,
+  IconSchool,
+  IconBuildingStore,
+} from '@tabler/icons-react';
 
-type MenuLink = { href: string; label: string; icon: string };
+type IconComponent = React.ComponentType<{
+  size?: string | number;
+  className?: string;
+  'aria-hidden'?: boolean | 'true' | 'false';
+}>;
+
+type MenuLink = { href: string; label: string; icon: IconComponent };
 
 const LEARN_MENU: MenuLink[] = [
-  { href: '/', label: 'Accueil', icon: 'ti-home' },
-  { href: '/traffic-signs', label: 'Panneaux', icon: 'ti-road-sign' },
-  { href: '/cours', label: 'Cours', icon: 'ti-book-2' },
-  { href: '/quizz', label: 'Quiz', icon: 'ti-cards' },
-  { href: '/exam', label: 'Examens', icon: 'ti-clipboard-check' },
-  { href: '/boutique', label: 'Abonnement', icon: 'ti-crown' },
-  { href: '/mes-auto-ecoles', label: 'Mes auto-écoles', icon: 'ti-user-check' },
-  { href: '/notifications', label: 'Notifications', icon: 'ti-bell' },
-  { href: '/assistance', label: 'Assistance', icon: 'ti-headset' },
-  { href: '/profil', label: 'Profil & réglages', icon: 'ti-user' },
+  { href: '/', label: 'Accueil', icon: IconHome },
+  { href: '/traffic-signs', label: 'Panneaux', icon: IconRoadSign },
+  { href: '/cours', label: 'Cours', icon: IconBook2 },
+  { href: '/quizz', label: 'Quiz', icon: IconCards },
+  { href: '/exam', label: 'Examens', icon: IconClipboardCheck },
+  { href: '/boutique', label: 'Abonnement', icon: IconCrown },
+  { href: '/mes-auto-ecoles', label: 'Mes auto-écoles', icon: IconUserCheck },
+  { href: '/notifications', label: 'Notifications', icon: IconBell },
+  { href: '/assistance', label: 'Assistance', icon: IconHeadset },
+  { href: '/profil', label: 'Profil & réglages', icon: IconUser },
 ];
 
 const SCHOOL_MENU: MenuLink[] = [
-  { href: '/', label: 'Tableau de bord', icon: 'ti-layout-dashboard' },
-  { href: '/assistance', label: 'Assistance', icon: 'ti-headset' },
-  { href: '/profil', label: 'Profil & réglages', icon: 'ti-user' },
+  { href: '/', label: 'Tableau de bord', icon: IconLayoutDashboard },
+  { href: '/assistance', label: 'Assistance', icon: IconHeadset },
+  { href: '/profil', label: 'Profil & réglages', icon: IconUser },
 ];
 
 export function menuForSpace(space: Space): MenuLink[] {
@@ -53,7 +79,7 @@ export function MenuButton({ className }: { className?: string }) {
       )}
       aria-label="Ouvrir le menu"
     >
-      <i className="ti ti-menu-2 text-lg" aria-hidden="true" />
+      <IconMenu2 size="1em" className="text-lg" aria-hidden="true" />
     </button>
   );
 }
@@ -105,7 +131,7 @@ function Drawer({ open, onClose }: { open: boolean; onClose: () => void }) {
                   className="flex h-8 w-8 items-center justify-center rounded-full bg-white/15"
                   aria-label="Fermer le menu"
                 >
-                  <i className="ti ti-x text-sm" aria-hidden="true" />
+                  <IconX size="1em" className="text-sm" aria-hidden="true" />
                 </button>
               </div>
               <p className="mt-3 font-display text-lg font-extrabold leading-tight">
@@ -117,7 +143,7 @@ function Drawer({ open, onClose }: { open: boolean; onClose: () => void }) {
               {isAuthenticated && user ? (
                 <button onClick={() => go('/profil')} className="mt-1 flex items-center gap-1.5">
                   <span className="text-sm text-white/85">{user.name}</span>
-                  <i className="ti ti-chevron-right text-xs text-white/60" aria-hidden="true" />
+                  <IconChevronRight size="1em" className="text-xs text-white/60" aria-hidden="true" />
                 </button>
               ) : (
                 <button
@@ -142,11 +168,9 @@ function Drawer({ open, onClose }: { open: boolean; onClose: () => void }) {
                       active ? 'bg-primary-50 text-primary-700' : 'text-foreground hover:bg-surface-2'
                     )}
                   >
-                    <i
-                      className={cn(
-                        `ti ${l.icon} text-xl`,
-                        active ? 'text-primary-600' : 'text-secondary'
-                      )}
+                    <l.icon
+                      size="1em"
+                      className={cn('text-xl', active ? 'text-primary-600' : 'text-secondary')}
                       aria-hidden="true"
                     />
                     {l.label}
@@ -159,15 +183,13 @@ function Drawer({ open, onClose }: { open: boolean; onClose: () => void }) {
                   href={crossSpaceHref}
                   className="mt-1 flex w-full items-center gap-3.5 rounded-xl px-3.5 py-3 text-left text-sm font-semibold text-secondary transition-colors hover:bg-surface-2"
                 >
-                  <i
-                    className={cn(
-                      'ti text-xl text-secondary',
-                      space === 'school' ? 'ti-school' : 'ti-building-store'
-                    )}
-                    aria-hidden="true"
-                  />
+                  {space === 'school' ? (
+                    <IconSchool size="1em" className="text-xl text-secondary" aria-hidden="true" />
+                  ) : (
+                    <IconBuildingStore size="1em" className="text-xl text-secondary" aria-hidden="true" />
+                  )}
                   {space === 'school' ? 'Espace élève' : 'Espace auto-école'}
-                  <i className="ti ti-external-link ml-auto text-sm text-muted" aria-hidden="true" />
+                  <IconExternalLink size="1em" className="ml-auto text-sm text-muted" aria-hidden="true" />
                 </a>
               )}
 
@@ -183,7 +205,7 @@ function Drawer({ open, onClose }: { open: boolean; onClose: () => void }) {
                   }}
                   className="flex w-full items-center gap-3.5 rounded-xl px-3.5 py-3 text-left text-sm font-semibold text-red-500 transition-colors hover:bg-red-50"
                 >
-                  <i className="ti ti-logout text-xl" aria-hidden="true" />
+                  <IconLogout size="1em" className="text-xl" aria-hidden="true" />
                   Se déconnecter
                 </button>
               ) : (

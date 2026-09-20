@@ -5,6 +5,7 @@ import { Skeleton } from '@permis2.0/ui';
 import type { School } from '@permis2.0/types';
 import { SchoolStatus } from '@permis2.0/types';
 import { adminFetch, AdminPageHeader, Toast, useToast } from '../adminShared';
+import { IconBuildingStore } from '@tabler/icons-react';
 
 const STATUS_LABEL: Record<string, string> = {
   PENDING: 'En attente',
@@ -93,7 +94,7 @@ export default function AdminSchoolsPage() {
 
       {!loading && schools.length === 0 && (
         <div className="flex flex-col items-center justify-center rounded-2xl border border-token bg-surface-1 py-16 text-center shadow-soft">
-          <i className="ti ti-building-store text-4xl text-slate-300" aria-hidden="true" />
+          <IconBuildingStore size="1em" className="text-4xl text-slate-300" aria-hidden="true" />
           <p className="mt-3 font-display text-base font-bold text-foreground">
             Aucune auto-école pour l&apos;instant
           </p>

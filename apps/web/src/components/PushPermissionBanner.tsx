@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePushNotifications } from '@/hooks/usePushNotifications';
 import { useAuthStore } from '@/store/authStore';
+import { IconX } from '@tabler/icons-react';
 
 const DISMISSED_KEY = 'push-banner-dismissed';
 
@@ -72,7 +73,7 @@ export function PushPermissionBanner() {
               className="text-muted hover:text-foreground"
               aria-label="Fermer"
             >
-              <i className="ti ti-x text-sm" aria-hidden="true" />
+              <IconX size="1em" className="text-sm" aria-hidden="true" />
             </button>
           </div>
         </motion.div>

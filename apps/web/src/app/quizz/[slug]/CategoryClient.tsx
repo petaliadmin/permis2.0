@@ -8,16 +8,14 @@ import { AppShell, PageHeader } from '@/components/AppShell';
 import { useAuthStore } from '@/store/authStore';
 import { usePurchasesStore } from '@/store/purchasesStore';
 import { getCategoryBySlug, FREE_SERIES_UP_TO, type SeriesProgress } from '../config';
+import { IconCircleCheckFilled, IconLock, IconProgress, IconStarFilled, IconChevronRight } from '@tabler/icons-react';
 
-const CAT_STYLE: Record<
-  string,
-  { accent: 'blue' | 'violet' | 'orange'; color: string; icon: string }
-> = {
-  panneaux: { accent: 'orange', color: '#FF620E', icon: 'ti-road-sign' },
-  priorites: { accent: 'orange', color: '#F59E0B', icon: 'ti-arrows-cross' },
-  circulation: { accent: 'blue', color: '#003EA8', icon: 'ti-car' },
-  signaux: { accent: 'blue', color: '#16A34A', icon: 'ti-traffic-lights' },
-  situations: { accent: 'orange', color: '#EF4444', icon: 'ti-alert-triangle' },
+const CAT_STYLE: Record<string, { accent: 'blue' | 'violet' | 'orange'; color: string }> = {
+  panneaux: { accent: 'orange', color: '#FF620E' },
+  priorites: { accent: 'orange', color: '#F59E0B' },
+  circulation: { accent: 'blue', color: '#003EA8' },
+  signaux: { accent: 'blue', color: '#16A34A' },
+  situations: { accent: 'orange', color: '#EF4444' },
 };
 
 function readProgress(): Record<string, SeriesProgress> {
@@ -47,9 +45,10 @@ function Stars({ count }: { count: number }) {
   return (
     <div className="flex gap-0.5" aria-label={`${count} étoile${count !== 1 ? 's' : ''} sur 3`}>
       {[1, 2, 3].map((n) => (
-        <i
+        <IconStarFilled
           key={n}
-          className={`ti ti-star-filled text-sm ${n <= count ? 'text-amber-400' : 'text-slate-200'}`}
+          size="1em"
+          className={`text-sm ${n <= count ? 'text-amber-400' : 'text-slate-200'}`}
           aria-hidden="true"
         />
       ))}
@@ -94,7 +93,6 @@ export default function CategoryPage() {
   const style = CAT_STYLE[slug] ?? {
     accent: 'violet' as const,
     color: '#7C3AED',
-    icon: 'ti-cards',
   };
   const total = category.quizzes.length;
   const done = category.quizzes.filter((qz) => progress[`${slug}_${qz.id}`]?.done).length;
@@ -161,7 +159,7 @@ export default function CategoryPage() {
                     {unlocked ? (
                       quiz.emoji
                     ) : (
-                      <i className="ti ti-lock text-xl text-slate-400" aria-hidden="true" />
+                      <IconLock size="1em" className="text-xl text-slate-400" aria-hidden="true" />
                     )}
                   </div>
 
@@ -177,13 +175,13 @@ export default function CategoryPage() {
                       )}
                       {status === 'done' && (
                         <span className="inline-flex items-center gap-1 rounded-full bg-success-50 px-2 py-0.5 text-[10px] font-bold text-success-600">
-                          <i className="ti ti-circle-check-filled text-xs" aria-hidden="true" />
+                          <IconCircleCheckFilled size="1em" className="text-xs" aria-hidden="true" />
                           Complété
                         </span>
                       )}
                       {status === 'in-progress' && (
                         <span className="inline-flex items-center gap-1 rounded-full bg-violet-50 px-2 py-0.5 text-[10px] font-bold text-violet-600">
-                          <i className="ti ti-progress text-xs" aria-hidden="true" />
+                          <IconProgress size="1em" className="text-xs" aria-hidden="true" />
                           En cours
                         </span>
                       )}
@@ -219,8 +217,9 @@ export default function CategoryPage() {
                     )}
                   </div>
 
-                  <i
-                    className="ti ti-chevron-right shrink-0 text-lg text-slate-300"
+                  <IconChevronRight
+                    size="1em"
+                    className="shrink-0 text-lg text-slate-300"
                     aria-hidden="true"
                   />
                 </button>

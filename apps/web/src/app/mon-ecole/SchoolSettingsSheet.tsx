@@ -5,6 +5,7 @@ import type { School } from '@permis2.0/types';
 import { LICENSE_CATEGORIES } from '@permis2.0/shared';
 import { Sheet } from '@permis2.0/ui';
 import { cn } from '@/lib/cn';
+import { IconCamera, IconUpload, IconX } from '@tabler/icons-react';
 
 const toPriceStrings = (prices?: Record<string, number> | null): Record<string, string> => {
   const out: Record<string, string> = {};
@@ -171,7 +172,7 @@ export function SchoolSettingsSheet({ open, onClose, school, onSaved }: SchoolSe
           aria-label="Fermer"
           className="-mr-1 -mt-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-secondary hover:bg-surface-2 lg:hidden"
         >
-          <i className="ti ti-x text-lg" aria-hidden="true" />
+          <IconX size="1em" className="text-lg" aria-hidden="true" />
         </button>
       </div>
 
@@ -189,7 +190,7 @@ export function SchoolSettingsSheet({ open, onClose, school, onSaved }: SchoolSe
             <span>🏫</span>
           )}
           <span className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
-            <i className="ti ti-camera text-xl text-white" aria-hidden="true" />
+            <IconCamera size="1em" className="text-xl text-white" aria-hidden="true" />
           </span>
         </button>
         <div className="min-w-0 flex-1">
@@ -201,7 +202,7 @@ export function SchoolSettingsSheet({ open, onClose, school, onSaved }: SchoolSe
             className="hidden"
           />
           <button onClick={() => fileInputRef.current?.click()} className="btn-ghost !px-4 !py-2 text-xs">
-            <i className="ti ti-upload" aria-hidden="true" />
+            <IconUpload size="1em" aria-hidden="true" />
             {logoUrl ? 'Changer le logo' : 'Ajouter un logo'}
           </button>
           {logoUrl && (

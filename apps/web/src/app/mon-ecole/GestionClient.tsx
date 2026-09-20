@@ -9,6 +9,7 @@ import { SchoolShell } from '@/components/SchoolShell';
 import { CreateSchoolForm } from './CreateSchoolForm';
 import { SchoolDashboard } from './SchoolDashboard';
 import { SubscriptionPaywall } from './SubscriptionPaywall';
+import { IconBuildingStore } from '@tabler/icons-react';
 
 function hasActiveSubscription(school: School): boolean {
   return !!school.subscriptionExpiresAt && new Date(school.subscriptionExpiresAt) > new Date();
@@ -22,7 +23,7 @@ function GuestPrompt() {
     <SchoolShell>
       <div className="mx-auto flex max-w-md flex-col items-center px-4 py-20 text-center">
         <span className="chip chip-primary mb-4">
-          <i className="ti ti-building-store" aria-hidden="true" />
+          <IconBuildingStore size="1em" aria-hidden="true" />
         </span>
         <h1 className="font-display text-2xl font-extrabold text-foreground">
           Gérer mon auto-école

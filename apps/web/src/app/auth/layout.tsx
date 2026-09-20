@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { IconArrowLeft, IconCheck } from '@tabler/icons-react';
 
 const VALUE_PROPS = [
   'Comparez les auto-écoles et leurs prix',
@@ -49,7 +50,7 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
               {VALUE_PROPS.map((v) => (
                 <li key={v} className="flex items-center gap-2.5 text-sm text-white/85">
                   <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-white/15">
-                    <i className="ti ti-check text-xs" aria-hidden="true" />
+                    <IconCheck size="1em" className="text-xs" aria-hidden="true" />
                   </span>
                   {v}
                 </li>
@@ -74,7 +75,7 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
             href="/"
             className="ml-auto flex items-center gap-1 text-sm font-semibold text-secondary hover:text-foreground"
           >
-            <i className="ti ti-arrow-left" aria-hidden="true" />
+            <IconArrowLeft size="1em" aria-hidden="true" />
             Retour à l&apos;accueil
           </Link>
         </div>

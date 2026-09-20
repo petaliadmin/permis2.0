@@ -13,6 +13,18 @@ import { SUBSCRIPTION_PRICE_ANNUAL } from '@permis2.0/shared';
 import { WHATSAPP_DISPLAY, whatsappLink } from '@/lib/contact';
 import { waveLink } from '@/lib/wave';
 import { trackEvent } from '@/lib/analytics';
+import {
+  IconBrandWhatsapp,
+  IconCheck,
+  IconChevronLeft,
+  IconClock,
+  IconLock,
+  IconRefresh,
+  IconCards,
+  IconClipboardCheck,
+  IconCar,
+  IconCalendar,
+} from '@tabler/icons-react';
 
 /**
  * Temporary payment mode. 'manual' (default) hides the online checkout and
@@ -25,10 +37,10 @@ const PAYMENT_MODE = process.env.NEXT_PUBLIC_PAYMENT_MODE === 'online' ? 'online
 const SUBSCRIPTION_SKU = 'abo_annuel';
 
 const BENEFITS = [
-  { icon: 'ti-cards', text: 'Toutes les séries de quiz du Code' },
-  { icon: 'ti-clipboard-check', text: 'Tous les examens blancs premium' },
-  { icon: 'ti-car', text: 'Tous les cours de conduite' },
-  { icon: 'ti-calendar', text: 'Accès illimité pendant 1 an' },
+  { icon: IconCards, text: 'Toutes les séries de quiz du Code' },
+  { icon: IconClipboardCheck, text: 'Tous les examens blancs premium' },
+  { icon: IconCar, text: 'Tous les cours de conduite' },
+  { icon: IconCalendar, text: 'Accès illimité pendant 1 an' },
 ];
 
 function formatXof(n: number) {
@@ -121,7 +133,7 @@ function BoutiqueInner() {
           className="relative mb-4 flex h-9 w-9 items-center justify-center rounded-full bg-white/15"
           aria-label="Retour"
         >
-          <i className="ti ti-chevron-left text-lg" aria-hidden="true" />
+          <IconChevronLeft size="1em" className="text-lg" aria-hidden="true" />
         </button>
         <div className="relative flex items-end justify-between">
           <div>
@@ -150,7 +162,7 @@ function BoutiqueInner() {
               rel="noopener noreferrer"
               className="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl bg-[#25D366] py-3.5 text-sm font-bold text-white shadow-md transition-transform active:scale-[0.98]"
             >
-              <i className="ti ti-brand-whatsapp text-xl" aria-hidden="true" />
+              <IconBrandWhatsapp size="1em" className="text-xl" aria-hidden="true" />
               Nous contacter sur WhatsApp · {WHATSAPP_DISPLAY}
             </a>
           </div>
@@ -180,7 +192,7 @@ function BoutiqueInner() {
                   className="flex items-center gap-3 text-sm font-medium text-foreground"
                 >
                   <span className="flex h-6 w-6 flex-none items-center justify-center rounded-full bg-orange-100">
-                    <i className={`ti ${b.icon} text-xs text-orange-600`} aria-hidden="true" />
+                    <b.icon size="1em" className="text-xs text-orange-600" aria-hidden="true" />
                   </span>
                   {b.text}
                 </li>
@@ -243,7 +255,7 @@ function BoutiqueInner() {
                             <span
                               className={`mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-black ${step.done ? 'bg-success-500 text-white' : 'bg-orange-100 text-orange-600'}`}
                             >
-                              {step.done ? <i className="ti ti-check" aria-hidden="true" /> : i + 1}
+                              {step.done ? <IconCheck size="1em" aria-hidden="true" /> : i + 1}
                             </span>
                             <span className="text-sm leading-snug text-foreground">
                               {step.text}
@@ -261,7 +273,7 @@ function BoutiqueInner() {
                         onClick={() => subscription && requestManual(subscription.id)}
                         className="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl bg-[#25D366] py-3.5 text-sm font-bold text-white shadow-md transition-transform active:scale-[0.98]"
                       >
-                        <i className="ti ti-brand-whatsapp text-xl" aria-hidden="true" />
+                        <IconBrandWhatsapp size="1em" className="text-xl" aria-hidden="true" />
                         Activer via WhatsApp · {WHATSAPP_DISPLAY}
                       </a>
                     ) : (
@@ -289,7 +301,7 @@ function BoutiqueInner() {
                       </>
                     ) : (
                       <>
-                        <i className="ti ti-refresh mr-2" aria-hidden="true" />
+                        <IconRefresh size="1em" className="mr-2" aria-hidden="true" />
                         {isActive ? 'Vérifier mon abonnement' : 'J’ai payé — vérifier l’activation'}
                       </>
                     )}
@@ -308,7 +320,7 @@ function BoutiqueInner() {
                 )}
 
                 <p className="mt-3 flex items-center justify-center gap-1.5 text-center text-xs text-muted">
-                  <i className="ti ti-clock text-xs" aria-hidden="true" />
+                  <IconClock size="1em" className="text-xs" aria-hidden="true" />
                   Activation immédiate après paiement · 7j/7 de 9h à 21h
                 </p>
               </div>
@@ -325,7 +337,7 @@ function BoutiqueInner() {
                   </button>
                 )}
                 <p className="mt-3 flex items-center justify-center gap-1.5 text-xs text-muted">
-                  <i className="ti ti-lock text-xs" aria-hidden="true" /> Paiement sécurisé · sans
+                  <IconLock size="1em" className="text-xs" aria-hidden="true" /> Paiement sécurisé · sans
                   engagement
                 </p>
               </div>
@@ -388,7 +400,7 @@ function BoutiqueInner() {
                   rel="noopener noreferrer"
                   className="mt-3 flex w-full items-center justify-center gap-2 text-xs font-semibold text-secondary hover:text-foreground"
                 >
-                  <i className="ti ti-brand-whatsapp" aria-hidden="true" /> Un souci ? Écris-nous sur WhatsApp
+                  <IconBrandWhatsapp size="1em" aria-hidden="true" /> Un souci ? Écris-nous sur WhatsApp
                 </a>
                 <button
                   type="button"

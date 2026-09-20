@@ -1,39 +1,3 @@
-@import '@tabler/icons-webfont/dist/tabler-icons.min.css';
-
-/* ── Icônes « filled » ─────────────────────────────────────────────────────────
-   La CSS filled de Tabler écrase la police de toutes les .ti (!important) :
-   on déclare donc uniquement les glyphes pleins utilisés par l'app, servis
-   par la police copiée dans /public/fonts. */
-@font-face {
-  font-family: 'tabler-icons-filled';
-  font-style: normal;
-  font-weight: 400;
-  font-display: block;
-  src: url('/fonts/tabler-icons-filled.woff2') format('woff2');
-}
-.ti-heart-filled:before,
-.ti-star-filled:before,
-.ti-circle-check-filled:before,
-.ti-circle-x-filled:before,
-.ti-player-stop-filled:before {
-  font-family: 'tabler-icons-filled' !important;
-}
-.ti-heart-filled:before {
-  content: '\f67c';
-}
-.ti-star-filled:before {
-  content: '\f6a6';
-}
-.ti-circle-check-filled:before {
-  content: '\f704';
-}
-.ti-circle-x-filled:before {
-  content: '\f739';
-}
-.ti-player-stop-filled:before {
-  content: '\f695';
-}
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

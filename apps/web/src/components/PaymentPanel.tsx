@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import qrcode from 'qrcode-generator';
+import { IconCheck, IconCopy } from '@tabler/icons-react';
 
 interface PrimaryAction {
   label: string;
@@ -81,7 +82,11 @@ export function PaymentPanel({
             Ouvrir le lien de paiement
           </a>
           <button type="button" onClick={copy} className="btn-ghost w-full !py-2.5 text-xs">
-            <i className={`ti ${copied ? 'ti-check' : 'ti-copy'}`} aria-hidden="true" />
+            {copied ? (
+              <IconCheck size="1em" aria-hidden="true" />
+            ) : (
+              <IconCopy size="1em" aria-hidden="true" />
+            )}
             {copied ? 'Lien copié' : 'Copier le lien'}
           </button>
         </div>

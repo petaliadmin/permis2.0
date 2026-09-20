@@ -6,9 +6,16 @@ import { usePathname } from 'next/navigation';
 import { useAuthStore } from '@/store/authStore';
 import { useSpaceUrl } from '@/components/SpaceProvider';
 import { useAdminGuard, AccessDenied, ADMIN_SECTIONS, adminFetch } from './adminShared';
+import {
+  IconArrowLeft,
+  IconChevronRight,
+  IconExternalLink,
+  IconShieldLock,
+  IconLayoutDashboard,
+} from '@tabler/icons-react';
 
 const NAV = [
-  { href: '/admin', label: 'Tableau de bord', icon: 'ti-layout-dashboard' },
+  { href: '/admin', label: 'Tableau de bord', icon: IconLayoutDashboard },
   ...ADMIN_SECTIONS.map((s) => ({ href: s.href, label: s.label, icon: s.icon })),
 ];
 
@@ -61,8 +68,9 @@ function Sidebar() {
                   : 'text-secondary hover:bg-surface-2 hover:text-foreground'
               }`}
             >
-              <i
-                className={`ti ${item.icon} text-lg ${active ? 'text-violet-600 dark:text-violet-300' : 'text-slate-400'}`}
+              <item.icon
+                size="1em"
+                className={`text-lg ${active ? 'text-violet-600 dark:text-violet-300' : 'text-slate-400'}`}
                 aria-hidden="true"
               />
               <span className="flex-1">{item.label}</span>
@@ -82,7 +90,7 @@ function Sidebar() {
           href={backToSiteHref ?? '/profil'}
           className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold text-secondary transition-colors hover:bg-surface-2 hover:text-foreground"
         >
-          <i className="ti ti-arrow-left text-lg text-slate-400" aria-hidden="true" />
+          <IconArrowLeft size="1em" className="text-lg text-slate-400" aria-hidden="true" />
           Retour au site
         </a>
         {user && (
@@ -110,16 +118,16 @@ function Topbar() {
   return (
     <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b border-token bg-surface-1/85 px-8 backdrop-blur-xl">
       <div className="flex items-center gap-2 text-sm font-semibold text-secondary">
-        <i className="ti ti-shield-lock text-base text-violet-500" aria-hidden="true" />
+        <IconShieldLock size="1em" className="text-base text-violet-500" aria-hidden="true" />
         <span>Admin</span>
-        <i className="ti ti-chevron-right text-xs text-slate-300" aria-hidden="true" />
+        <IconChevronRight size="1em" className="text-xs text-slate-300" aria-hidden="true" />
         <span className="text-foreground">{current}</span>
       </div>
       <a
         href={siteHref ?? '/'}
         className="flex items-center gap-1.5 rounded-full border border-token bg-surface-2 px-3.5 py-1.5 text-xs font-bold text-secondary transition-colors hover:border-violet-300 hover:text-violet-600"
       >
-        <i className="ti ti-external-link text-sm" aria-hidden="true" />
+        <IconExternalLink size="1em" className="text-sm" aria-hidden="true" />
         Voir le site
       </a>
     </header>

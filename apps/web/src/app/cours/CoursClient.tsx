@@ -6,6 +6,26 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { AppShell, PageHeader } from '@/components/AppShell';
 import { Skeleton } from '@permis2.0/ui';
 import { fetchWithCache } from '@/lib/offlineCache';
+import {
+  IconBook,
+  IconChevronLeft,
+  IconChevronRight,
+  IconSearch,
+  IconWifiOff,
+  IconX,
+  IconArrowsCross,
+  IconRoadSign,
+  IconCar,
+  IconShieldCheck,
+  IconIdBadge2,
+} from '@tabler/icons-react';
+
+type IconComponent = React.ComponentType<{
+  size?: string | number;
+  className?: string;
+  style?: React.CSSProperties;
+  'aria-hidden'?: boolean | 'true' | 'false';
+}>;
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -23,7 +43,7 @@ interface Theme {
   id: string;
   label: string;
   desc: string;
-  icon: string;
+  icon: IconComponent;
   color: string;
   /** Labels de catégories rattachées à ce thème. */
   categories: string[];
@@ -34,7 +54,7 @@ const THEMES: Theme[] = [
     id: 'priorites',
     label: 'Priorités & intersections',
     desc: 'Priorité à droite, STOP, cédez, giratoire',
-    icon: 'ti-arrows-cross',
+    icon: IconArrowsCross,
     color: '#F59E0B',
     categories: [
       'Priorité aux intersections',
@@ -48,7 +68,7 @@ const THEMES: Theme[] = [
     id: 'signalisation',
     label: 'Panneaux & signalisation',
     desc: 'Panneaux, marquage, feux, agents, chantiers',
-    icon: 'ti-road-sign',
+    icon: IconRoadSign,
     color: '#EF4444',
     categories: [
       'Panneaux de danger',
@@ -65,7 +85,7 @@ const THEMES: Theme[] = [
     id: 'circulation',
     label: 'Règles de circulation',
     desc: 'Vitesses, dépassement, stationnement, rail',
-    icon: 'ti-car',
+    icon: IconCar,
     color: '#003EA8',
     categories: [
       'Limitation de vitesse',
@@ -80,7 +100,7 @@ const THEMES: Theme[] = [
     id: 'securite',
     label: 'Sécurité & comportement',
     desc: 'Ceinture, secours, éclairage, vigilance',
-    icon: 'ti-shield-check',
+    icon: IconShieldCheck,
     color: '#16A34A',
     categories: [
       'Sécurité passive',
@@ -96,7 +116,7 @@ const THEMES: Theme[] = [
     id: 'demarches',
     label: 'Obtenir son permis',
     desc: 'Documents, dépôt du dossier, examens du code et de conduite',
-    icon: 'ti-id-badge-2',
+    icon: IconIdBadge2,
     color: '#0EA5E9',
     categories: ['Obtenir son permis de conduire'],
   },
@@ -106,7 +126,7 @@ const OTHER_THEME: Theme = {
   id: 'autres',
   label: 'Autres leçons',
   desc: 'Leçons hors thèmes principaux',
-  icon: 'ti-book',
+  icon: IconBook,
   color: '#64748B',
   categories: [],
 };
@@ -126,7 +146,7 @@ function LessonThumb({ lesson, color }: { lesson: LessonMeta; color: string }) {
         className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl"
         style={{ backgroundColor: color + '18' }}
       >
-        <i className="ti ti-book text-xl" style={{ color }} aria-hidden="true" />
+        <IconBook size="1em" className="text-xl" style={{ color }} aria-hidden="true" />
       </div>
     );
   }
@@ -153,7 +173,7 @@ function LessonCard({ lesson, color }: { lesson: LessonMeta; color: string }) {
           <p className="mt-0.5 truncate text-xs text-secondary">{lesson.category.label}</p>
         )}
       </div>
-      <i className="ti ti-chevron-right text-lg text-slate-300" aria-hidden="true" />
+      <IconChevronRight size="1em" className="text-lg text-slate-300" aria-hidden="true" />
     </Link>
   );
 }
@@ -218,7 +238,7 @@ export default function CoursClient() {
         menu={!selectedTheme}
       >
         <div className="flex items-center gap-2 rounded-2xl border border-token bg-surface-2 px-4 py-2.5">
-          <i className="ti ti-search text-secondary" aria-hidden="true" />
+          <IconSearch size="1em" className="text-secondary" aria-hidden="true" />
           <input
             value={query}
             onChange={(e) => {
@@ -230,7 +250,7 @@ export default function CoursClient() {
           />
           {query && (
             <button onClick={() => setQuery('')} aria-label="Effacer">
-              <i className="ti ti-x text-secondary" aria-hidden="true" />
+              <IconX size="1em" className="text-secondary" aria-hidden="true" />
             </button>
           )}
         </div>
@@ -247,7 +267,7 @@ export default function CoursClient() {
 
         {!loading && error && (
           <div className="mt-10 text-center">
-            <i className="ti ti-wifi-off text-4xl text-slate-300" aria-hidden="true" />
+            <IconWifiOff size="1em" className="text-4xl text-slate-300" aria-hidden="true" />
             <p className="mt-3 text-sm text-secondary">
               Impossible de charger les leçons. Vérifie ta connexion puis réessaie.
             </p>
@@ -301,8 +321,9 @@ export default function CoursClient() {
                       className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl"
                       style={{ backgroundColor: group.theme.color + '18' }}
                     >
-                      <i
-                        className={`ti ${group.theme.icon} text-2xl`}
+                      <group.theme.icon
+                        size="1em"
+                        className="text-2xl"
                         style={{ color: group.theme.color }}
                         aria-hidden="true"
                       />
@@ -319,7 +340,7 @@ export default function CoursClient() {
                         {group.lessons.length} leçon{group.lessons.length > 1 ? 's' : ''}
                       </p>
                     </div>
-                    <i className="ti ti-chevron-right text-lg text-slate-300" aria-hidden="true" />
+                    <IconChevronRight size="1em" className="text-lg text-slate-300" aria-hidden="true" />
                   </motion.button>
                 ))}
               </motion.div>
@@ -337,7 +358,7 @@ export default function CoursClient() {
                   onClick={() => setSelectedTheme(null)}
                   className="mb-4 flex items-center gap-2 text-sm font-semibold text-primary-600"
                 >
-                  <i className="ti ti-chevron-left" aria-hidden="true" /> Tous les thèmes
+                  <IconChevronLeft size="1em" aria-hidden="true" /> Tous les thèmes
                 </button>
 
                 {/* Theme header + prev/next */}
@@ -346,8 +367,9 @@ export default function CoursClient() {
                     className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
                     style={{ backgroundColor: current.theme.color + '18' }}
                   >
-                    <i
-                      className={`ti ${current.theme.icon} text-xl`}
+                    <current.theme.icon
+                      size="1em"
+                      className="text-xl"
                       style={{ color: current.theme.color }}
                       aria-hidden="true"
                     />
@@ -368,7 +390,7 @@ export default function CoursClient() {
                       aria-label="Thème précédent"
                       className="flex h-9 w-9 items-center justify-center rounded-xl border border-token bg-surface-1 text-secondary shadow-soft transition-transform active:scale-95 disabled:opacity-30"
                     >
-                      <i className="ti ti-chevron-left" aria-hidden="true" />
+                      <IconChevronLeft size="1em" aria-hidden="true" />
                     </button>
                     <button
                       onClick={() => nextTheme && goToTheme(nextTheme.id)}
@@ -376,7 +398,7 @@ export default function CoursClient() {
                       aria-label="Thème suivant"
                       className="flex h-9 w-9 items-center justify-center rounded-xl border border-token bg-surface-1 text-secondary shadow-soft transition-transform active:scale-95 disabled:opacity-30"
                     >
-                      <i className="ti ti-chevron-right" aria-hidden="true" />
+                      <IconChevronRight size="1em" aria-hidden="true" />
                     </button>
                   </div>
                 </div>
@@ -398,8 +420,9 @@ export default function CoursClient() {
                       onClick={() => goToTheme(prevTheme.id)}
                       className="flex flex-1 items-center gap-2.5 rounded-2xl border border-token bg-surface-1 px-3.5 py-3 text-left shadow-soft transition-transform active:scale-[0.98]"
                     >
-                      <i
-                        className="ti ti-chevron-left shrink-0 text-lg text-slate-400"
+                      <IconChevronLeft
+                        size="1em"
+                        className="shrink-0 text-lg text-slate-400"
                         aria-hidden="true"
                       />
                       <div className="min-w-0">
@@ -433,8 +456,9 @@ export default function CoursClient() {
                           {nextTheme.label}
                         </p>
                       </div>
-                      <i
-                        className="ti ti-chevron-right shrink-0 text-lg text-slate-400"
+                      <IconChevronRight
+                        size="1em"
+                        className="shrink-0 text-lg text-slate-400"
                         aria-hidden="true"
                       />
                     </button>

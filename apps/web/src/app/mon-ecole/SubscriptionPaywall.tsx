@@ -6,6 +6,7 @@ import { SchoolShell } from '@/components/SchoolShell';
 import { usePurchasesStore } from '@/store/purchasesStore';
 import { useAuthStore } from '@/store/authStore';
 import { whatsappLink, WHATSAPP_DISPLAY } from '@/lib/contact';
+import { IconBrandWhatsapp, IconCheck, IconClock } from '@tabler/icons-react';
 
 const fmtXof = (n: number) => `${String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' ')} FCFA`;
 
@@ -112,7 +113,7 @@ export function SubscriptionPaywall({ school, onRefresh }: SubscriptionPaywallPr
               {BENEFITS.map((text) => (
                 <li key={text} className="flex items-center gap-3 text-sm font-medium text-foreground">
                   <span className="flex h-6 w-6 flex-none items-center justify-center rounded-full bg-violet-100">
-                    <i className="ti ti-check text-xs text-violet-600" aria-hidden="true" />
+                    <IconCheck size="1em" className="text-xs text-violet-600" aria-hidden="true" />
                   </span>
                   {text}
                 </li>
@@ -125,7 +126,7 @@ export function SubscriptionPaywall({ school, onRefresh }: SubscriptionPaywallPr
                 rel="noopener noreferrer"
                 className="flex w-full items-center justify-center gap-2 rounded-2xl bg-[#25D366] py-3.5 text-sm font-bold text-white shadow-md transition-transform active:scale-[0.98]"
               >
-                <i className="ti ti-brand-whatsapp text-xl" aria-hidden="true" />
+                <IconBrandWhatsapp size="1em" className="text-xl" aria-hidden="true" />
                 Contacter l&apos;équipe · {WHATSAPP_DISPLAY}
               </a>
               <button
@@ -139,7 +140,7 @@ export function SubscriptionPaywall({ school, onRefresh }: SubscriptionPaywallPr
           </div>
         ) : (
           <div className="mt-6 rounded-3xl border border-violet-200 bg-surface-1 p-6 shadow-card">
-            <i className="ti ti-clock text-3xl text-violet-500" aria-hidden="true" />
+            <IconClock size="1em" className="text-3xl text-violet-500" aria-hidden="true" />
             <p className="mt-2 font-display text-base font-bold text-foreground">
               Activation en cours
             </p>

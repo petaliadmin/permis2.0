@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { IconCards, IconChartBar, IconCheck, IconCircleOff, IconClipboardCheck, IconParking, IconRoadSign, IconSteeringWheel, IconTriangle, IconTrophy } from '@tabler/icons-react';
 
 /**
  * Icon-composition illustrations for the onboarding slides — soft layered
@@ -30,7 +31,7 @@ export function SlideSignsIllustration() {
         variants={pop}
         className="absolute -left-2 -top-2 flex h-20 w-20 items-center justify-center rounded-3xl bg-white/15 backdrop-blur"
       >
-        <i className="ti ti-triangle text-4xl text-white" aria-hidden="true" />
+        <IconTriangle size="1em" className="text-4xl text-white" aria-hidden="true" />
       </motion.div>
       <motion.div
         custom={0.25}
@@ -39,7 +40,7 @@ export function SlideSignsIllustration() {
         variants={pop}
         className="absolute -right-4 top-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-white/15 backdrop-blur"
       >
-        <i className="ti ti-circle-off text-3xl text-white" aria-hidden="true" />
+        <IconCircleOff size="1em" className="text-3xl text-white" aria-hidden="true" />
       </motion.div>
       <motion.div
         custom={0}
@@ -48,7 +49,7 @@ export function SlideSignsIllustration() {
         variants={pop}
         className="flex h-32 w-32 items-center justify-center rounded-[2.25rem] bg-white/20 shadow-lg backdrop-blur"
       >
-        <i className="ti ti-road-sign text-6xl text-white" aria-hidden="true" />
+        <IconRoadSign size="1em" className="text-6xl text-white" aria-hidden="true" />
       </motion.div>
       <motion.div
         custom={0.35}
@@ -57,7 +58,7 @@ export function SlideSignsIllustration() {
         variants={pop}
         className="absolute -bottom-2 left-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-white/15 backdrop-blur"
       >
-        <i className="ti ti-parking text-2xl text-white" aria-hidden="true" />
+        <IconParking size="1em" className="text-2xl text-white" aria-hidden="true" />
       </motion.div>
     </div>
   );
@@ -74,7 +75,7 @@ export function SlideQuizIllustration() {
         variants={pop}
         className="absolute -left-4 top-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-white/15 backdrop-blur"
       >
-        <i className="ti ti-clipboard-check text-3xl text-white" aria-hidden="true" />
+        <IconClipboardCheck size="1em" className="text-3xl text-white" aria-hidden="true" />
       </motion.div>
       <motion.div
         custom={0}
@@ -83,7 +84,7 @@ export function SlideQuizIllustration() {
         variants={pop}
         className="flex h-32 w-32 items-center justify-center rounded-[2.25rem] bg-white/20 shadow-lg backdrop-blur"
       >
-        <i className="ti ti-cards text-6xl text-white" aria-hidden="true" />
+        <IconCards size="1em" className="text-6xl text-white" aria-hidden="true" />
       </motion.div>
       <motion.div
         custom={0.3}
@@ -92,7 +93,7 @@ export function SlideQuizIllustration() {
         variants={pop}
         className="absolute -right-2 bottom-2 flex h-16 w-16 items-center justify-center rounded-2xl bg-white/15 backdrop-blur"
       >
-        <i className="ti ti-check text-3xl text-white" aria-hidden="true" />
+        <IconCheck size="1em" className="text-3xl text-white" aria-hidden="true" />
       </motion.div>
     </div>
   );
@@ -109,7 +110,7 @@ export function SlideProgressIllustration() {
         variants={pop}
         className="absolute -right-3 -top-1 flex h-16 w-16 items-center justify-center rounded-2xl bg-white/15 backdrop-blur"
       >
-        <i className="ti ti-chart-bar text-3xl text-white" aria-hidden="true" />
+        <IconChartBar size="1em" className="text-3xl text-white" aria-hidden="true" />
       </motion.div>
       <motion.div
         custom={0}
@@ -118,7 +119,7 @@ export function SlideProgressIllustration() {
         variants={pop}
         className="flex h-32 w-32 items-center justify-center rounded-[2.25rem] bg-white/20 shadow-lg backdrop-blur"
       >
-        <i className="ti ti-trophy text-6xl text-white" aria-hidden="true" />
+        <IconTrophy size="1em" className="text-6xl text-white" aria-hidden="true" />
       </motion.div>
       <motion.div
         custom={0.35}
@@ -127,7 +128,7 @@ export function SlideProgressIllustration() {
         variants={pop}
         className="absolute -bottom-3 left-2 flex h-14 w-14 items-center justify-center rounded-2xl bg-white/15 backdrop-blur"
       >
-        <i className="ti ti-steering-wheel text-2xl text-white" aria-hidden="true" />
+        <IconSteeringWheel size="1em" className="text-2xl text-white" aria-hidden="true" />
       </motion.div>
     </div>
   );

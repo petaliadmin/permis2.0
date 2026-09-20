@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Skeleton } from '@permis2.0/ui';
 import { adminFetch, fmtXof, Toast, useToast, AdminPageHeader } from '../adminShared';
+import { IconCircleCheck, IconBrandWhatsapp } from '@tabler/icons-react';
 
 interface PendingPurchase {
   id: string;
@@ -67,7 +68,7 @@ export default function AdminDemandesPage() {
 
       {!loading && purchases.length === 0 && (
         <div className="flex flex-col items-center justify-center rounded-2xl border border-token bg-surface-1 py-16 text-center shadow-soft">
-          <i className="ti ti-circle-check text-4xl text-success-500" aria-hidden="true" />
+          <IconCircleCheck size="1em" className="text-4xl text-success-500" aria-hidden="true" />
           <p className="mt-3 font-display text-base font-bold text-foreground">
             Tout est à jour
           </p>
@@ -107,8 +108,9 @@ export default function AdminDemandesPage() {
                   <td className="px-4 py-3 text-secondary">
                     {p.product.title}
                     {p.method === 'whatsapp' && (
-                      <i
-                        className="ti ti-brand-whatsapp ml-1.5 text-[#25D366]"
+                      <IconBrandWhatsapp
+                        size="1em"
+                        className="ml-1.5 text-[#25D366]"
                         aria-hidden="true"
                         title="Demande via WhatsApp"
                       />

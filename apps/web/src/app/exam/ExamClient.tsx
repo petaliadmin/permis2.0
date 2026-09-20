@@ -8,6 +8,7 @@ import { Skeleton } from '@permis2.0/ui';
 import { useAuthStore } from '@/store/authStore';
 import { usePurchasesStore } from '@/store/purchasesStore';
 import { loadData } from '@/lib/dataSource';
+import { IconChevronRight, IconClock, IconListNumbers, IconLock, IconLockOpen } from '@tabler/icons-react';
 
 interface DiapoMeta {
   id: number;
@@ -100,12 +101,12 @@ export default function ExamClient() {
             onClick={() => router.push(isAuthenticated ? '/boutique' : '/auth/login')}
             className="mb-5 flex w-full items-center gap-3 rounded-2xl bg-gradient-to-r from-orange-500 to-orange-600 px-4 py-3 text-left text-white shadow-md transition-transform active:scale-[0.98]"
           >
-            <i className="ti ti-lock-open text-2xl" aria-hidden="true" />
+            <IconLockOpen size="1em" className="text-2xl" aria-hidden="true" />
             <div className="flex-1">
               <p className="text-sm font-extrabold">Débloquer toutes les séries</p>
               <p className="text-xs opacity-85">Pack Examens — Orange Money / Wave</p>
             </div>
-            <i className="ti ti-chevron-right text-lg" aria-hidden="true" />
+            <IconChevronRight size="1em" className="text-lg" aria-hidden="true" />
           </button>
         )}
 
@@ -139,7 +140,7 @@ export default function ExamClient() {
                     {unlocked ? (
                       <span className="font-display text-2xl font-black text-white">{exam.id}</span>
                     ) : (
-                      <i className="ti ti-lock text-2xl text-white" aria-hidden="true" />
+                      <IconLock size="1em" className="text-2xl text-white" aria-hidden="true" />
                     )}
                   </div>
                   <div className="min-w-0 flex-1">
@@ -148,11 +149,11 @@ export default function ExamClient() {
                     </p>
                     <div className="mt-1.5 flex items-center gap-2 text-xs text-secondary">
                       <span className="flex items-center gap-1">
-                        <i className="ti ti-list-numbers" aria-hidden="true" />
+                        <IconListNumbers size="1em" aria-hidden="true" />
                         {n} q
                       </span>
                       <span className="flex items-center gap-1">
-                        <i className="ti ti-clock" aria-hidden="true" />~{dur} min
+                        <IconClock size="1em" aria-hidden="true" />~{dur} min
                       </span>
                     </div>
                     <div className="mt-2 flex items-center gap-2">
@@ -165,7 +166,7 @@ export default function ExamClient() {
                       )}
                     </div>
                   </div>
-                  <i className="ti ti-chevron-right text-lg text-slate-300" aria-hidden="true" />
+                  <IconChevronRight size="1em" className="text-lg text-slate-300" aria-hidden="true" />
                 </motion.button>
               );
             })}

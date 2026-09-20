@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { Sheet, Skeleton } from '@permis2.0/ui';
 import { useAuthStore } from '@/store/authStore';
 import { adminFetch, Toast, useToast, fmtXof, AdminPageHeader } from '../adminShared';
+import { IconBan, IconChevronLeft, IconChevronRight, IconCrown, IconLockOpen, IconSearch, IconShieldLock, IconTrash } from '@tabler/icons-react';
 
 const PAGE_SIZE = 10;
 
@@ -135,7 +136,7 @@ export default function AdminUsersPage() {
     <>
       <AdminPageHeader title="Utilisateurs" subtitle={`${total} comptes`}>
         <div className="flex max-w-md items-center gap-2 rounded-xl border border-token bg-surface-1 px-3.5 py-2.5 shadow-soft">
-          <i className="ti ti-search text-sm text-muted" aria-hidden="true" />
+          <IconSearch size="1em" className="text-sm text-muted" aria-hidden="true" />
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
@@ -185,7 +186,7 @@ export default function AdminUsersPage() {
                             className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-black ${u.blocked ? 'bg-red-100 text-red-600' : 'bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-300'}`}
                           >
                             {u.blocked ? (
-                              <i className="ti ti-ban" aria-hidden="true" />
+                              <IconBan size="1em" aria-hidden="true" />
                             ) : (
                               u.name?.charAt(0).toUpperCase() || '?'
                             )}
@@ -227,10 +228,11 @@ export default function AdminUsersPage() {
                               title={u.blocked ? 'Débloquer' : 'Bloquer'}
                               className={`flex h-8 w-8 items-center justify-center rounded-lg transition-colors disabled:opacity-40 ${u.blocked ? 'bg-success-50 text-success-700 hover:bg-success-100' : 'bg-surface-2 text-secondary hover:bg-amber-50 hover:text-amber-700'}`}
                             >
-                              <i
-                                className={`ti ${u.blocked ? 'ti-lock-open' : 'ti-ban'} text-sm`}
-                                aria-hidden="true"
-                              />
+                              {u.blocked ? (
+                                <IconLockOpen size="1em" className="text-sm" aria-hidden="true" />
+                              ) : (
+                                <IconBan size="1em" className="text-sm" aria-hidden="true" />
+                              )}
                             </button>
                             <button
                               onClick={() => toggleRole(u)}
@@ -238,7 +240,7 @@ export default function AdminUsersPage() {
                               title={u.role === 'ADMIN' ? 'Retirer admin' : 'Promouvoir admin'}
                               className="flex h-8 w-8 items-center justify-center rounded-lg bg-surface-2 text-secondary transition-colors hover:bg-violet-50 hover:text-violet-700 disabled:opacity-40"
                             >
-                              <i className="ti ti-shield-lock text-sm" aria-hidden="true" />
+                              <IconShieldLock size="1em" className="text-sm" aria-hidden="true" />
                             </button>
                             <button
                               onClick={() => setConfirmDelete(u)}
@@ -246,7 +248,7 @@ export default function AdminUsersPage() {
                               title="Supprimer"
                               className="flex h-8 w-8 items-center justify-center rounded-lg bg-red-50 text-red-600 transition-colors hover:bg-red-100 disabled:opacity-40"
                             >
-                              <i className="ti ti-trash text-sm" aria-hidden="true" />
+                              <IconTrash size="1em" className="text-sm" aria-hidden="true" />
                             </button>
                           </div>
                         )}
@@ -266,7 +268,7 @@ export default function AdminUsersPage() {
                   className="flex h-9 w-9 items-center justify-center rounded-xl border border-token bg-surface-1 text-secondary disabled:opacity-30"
                   aria-label="Page précédente"
                 >
-                  <i className="ti ti-chevron-left" aria-hidden="true" />
+                  <IconChevronLeft size="1em" aria-hidden="true" />
                 </button>
                 <span className="text-xs font-bold text-secondary">
                   {page + 1} / {pages}
@@ -277,7 +279,7 @@ export default function AdminUsersPage() {
                   className="flex h-9 w-9 items-center justify-center rounded-xl border border-token bg-surface-1 text-secondary disabled:opacity-30"
                   aria-label="Page suivante"
                 >
-                  <i className="ti ti-chevron-right" aria-hidden="true" />
+                  <IconChevronRight size="1em" aria-hidden="true" />
                 </button>
               </div>
             )}
@@ -369,7 +371,7 @@ export default function AdminUsersPage() {
                 disabled={busy === details.user.id}
                 className="flex-1 rounded-xl bg-success-50 py-2.5 text-xs font-bold text-success-700 transition-colors hover:bg-success-100 disabled:opacity-40"
               >
-                <i className="ti ti-crown mr-1" aria-hidden="true" />
+                <IconCrown size="1em" className="mr-1" aria-hidden="true" />
                 {details.entitlements.some((e) => e.key === 'premium_all')
                   ? 'Prolonger 1 an'
                   : 'Activer l’abonnement'}

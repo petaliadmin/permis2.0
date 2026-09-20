@@ -9,14 +9,16 @@ import { useAuthStore } from '@/store/authStore';
 import { usePurchasesStore } from '@/store/purchasesStore';
 import { QUIZ_CATEGORIES, TOTAL_QUIZZES, FREE_SERIES_UP_TO, type SeriesProgress } from './config';
 import { countErrors } from '@/lib/errorBank';
+import { IconChevronRight, IconCircleCheckFilled, IconLock, IconProgress, IconStarFilled, IconTargetArrow } from '@tabler/icons-react';
 
 function Stars({ count }: { count: number }) {
   return (
     <div className="flex gap-0.5" aria-label={`${count} étoile${count !== 1 ? 's' : ''} sur 3`}>
       {[1, 2, 3].map((n) => (
-        <i
+        <IconStarFilled
           key={n}
-          className={`ti ti-star-filled text-sm ${n <= count ? 'text-amber-400' : 'text-slate-200 dark:text-slate-700'}`}
+          size="1em"
+          className={`text-sm ${n <= count ? 'text-amber-400' : 'text-slate-200 dark:text-slate-700'}`}
           aria-hidden="true"
         />
       ))}
@@ -81,7 +83,7 @@ export default function QuizzClient() {
         menu
         actions={
           <div className="chip chip-xp gap-1.5 px-3 py-1.5">
-            <i className="ti ti-star-filled text-sm" aria-hidden="true" />
+            <IconStarFilled size="1em" className="text-sm" aria-hidden="true" />
             <span className="text-sm font-black">{completed * 10}</span>
           </div>
         }
@@ -133,7 +135,7 @@ export default function QuizzClient() {
               className="mb-6 flex items-center gap-4 rounded-2xl bg-gradient-to-r from-red-500 to-rose-500 p-4 text-white shadow-card transition-transform active:scale-[0.98]"
             >
               <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white/20">
-                <i className="ti ti-target-arrow text-2xl" aria-hidden="true" />
+                <IconTargetArrow size="1em" className="text-2xl" aria-hidden="true" />
               </div>
               <div className="min-w-0 flex-1">
                 <p className="font-display text-sm font-bold">Revoir mes erreurs</p>
@@ -141,7 +143,7 @@ export default function QuizzClient() {
                   {errorCount} question{errorCount > 1 ? 's' : ''} à retravailler
                 </p>
               </div>
-              <i className="ti ti-chevron-right text-lg text-white/80" aria-hidden="true" />
+              <IconChevronRight size="1em" className="text-lg text-white/80" aria-hidden="true" />
             </Link>
           </motion.div>
         )}
@@ -172,7 +174,7 @@ export default function QuizzClient() {
                   className="flex w-full items-center gap-4 rounded-2xl border border-token bg-surface-1 p-4 text-left shadow-soft transition-transform active:scale-[0.98]"
                 >
                   <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-surface-2 text-2xl">
-                    {unlocked ? quiz.emoji : <i className="ti ti-lock text-xl text-slate-400" aria-hidden="true" />}
+                    {unlocked ? quiz.emoji : <IconLock size="1em" className="text-xl text-slate-400" aria-hidden="true" />}
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-1.5">
@@ -181,13 +183,13 @@ export default function QuizzClient() {
                       </p>
                       {status === 'done' && (
                         <span className="inline-flex items-center gap-1 rounded-full bg-success-50 px-2 py-0.5 text-[10px] font-bold text-success-600">
-                          <i className="ti ti-circle-check-filled text-xs" aria-hidden="true" />
+                          <IconCircleCheckFilled size="1em" className="text-xs" aria-hidden="true" />
                           Complété
                         </span>
                       )}
                       {status === 'in-progress' && (
                         <span className="inline-flex items-center gap-1 rounded-full bg-violet-50 px-2 py-0.5 text-[10px] font-bold text-violet-600 dark:bg-violet-900/30 dark:text-violet-300">
-                          <i className="ti ti-progress text-xs" aria-hidden="true" />
+                          <IconProgress size="1em" className="text-xs" aria-hidden="true" />
                           En cours
                         </span>
                       )}
@@ -218,7 +220,7 @@ export default function QuizzClient() {
                       </div>
                     )}
                   </div>
-                  <i className="ti ti-chevron-right text-lg text-slate-300" aria-hidden="true" />
+                  <IconChevronRight size="1em" className="text-lg text-slate-300" aria-hidden="true" />
                 </button>
               </motion.div>
             );

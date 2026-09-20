@@ -23,6 +23,15 @@ import { loadData } from '@/lib/dataSource';
 import { playSuccessSound, playFailureSound } from '@/lib/feedbackSound';
 import { postWithSync } from '@/lib/syncQueue';
 import { trackEvent } from '@/lib/analytics';
+import {
+  IconCircleCheckFilled,
+  IconCircleXFilled,
+  IconPhotoQuestion,
+  IconTag,
+  IconX,
+  IconCheck,
+  IconHeartFilled,
+} from '@tabler/icons-react';
 
 interface Question {
   id: string;
@@ -251,7 +260,7 @@ function PaywallScreen({ quizTitle, ctaHref }: { quizTitle: string; ctaHref: str
             'Mode examen officiel inclus',
           ].map((b) => (
             <div key={b} className="flex items-center gap-2.5">
-              <i className="ti ti-circle-check-filled text-success-500" aria-hidden="true" />
+              <IconCircleCheckFilled size="1em" className="text-success-500" aria-hidden="true" />
               <p className="text-sm text-secondary">{b}</p>
             </div>
           ))}
@@ -294,10 +303,11 @@ function FeedbackSheet({
           <div
             className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${correct ? 'bg-success-500' : 'bg-danger-500'}`}
           >
-            <i
-              className={`ti ${correct ? 'ti-check' : 'ti-x'} text-lg text-white`}
-              aria-hidden="true"
-            />
+            {correct ? (
+              <IconCheck size="1em" className="text-lg text-white" aria-hidden="true" />
+            ) : (
+              <IconX size="1em" className="text-lg text-white" aria-hidden="true" />
+            )}
           </div>
           <div className="flex-1">
             <p
@@ -538,7 +548,7 @@ export default function QuizPlayerPage() {
             className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-surface-2 text-secondary"
             aria-label="Fermer"
           >
-            <i className="ti ti-x text-lg" aria-hidden="true" />
+            <IconX size="1em" className="text-lg" aria-hidden="true" />
           </Link>
           <span className="shrink-0 text-xs font-bold text-secondary tabular-nums">
             {index + 1} / {displayTotal}
@@ -552,9 +562,10 @@ export default function QuizPlayerPage() {
           </div>
           <div className="flex shrink-0 gap-0.5">
             {Array.from({ length: HEARTS_MAX }).map((_, i) => (
-              <i
+              <IconHeartFilled
                 key={i}
-                className={`ti ti-heart-filled text-sm ${i < hearts ? 'text-danger-500' : 'text-slate-300'}`}
+                size="1em"
+                className={`text-sm ${i < hearts ? 'text-danger-500' : 'text-slate-300'}`}
                 aria-hidden="true"
               />
             ))}
@@ -592,7 +603,7 @@ export default function QuizPlayerPage() {
                 signage isn't just implied by the question text with nothing to look at */}
             {(!q.image || imgError) && q.signalisation_visible && (
               <div className="mb-6 flex items-center gap-3 rounded-2xl border border-token bg-surface-1 p-4">
-                <i className="ti ti-photo-question text-2xl text-violet-500" aria-hidden="true" />
+                <IconPhotoQuestion size="1em" className="text-2xl text-violet-500" aria-hidden="true" />
                 <p className="text-sm font-medium text-secondary">{q.signalisation_visible}</p>
               </div>
             )}
@@ -601,7 +612,7 @@ export default function QuizPlayerPage() {
             {quizConfig.categoryKeys.length > 1 && (
               <div className="mb-3">
                 <span className="inline-flex items-center gap-1 rounded-full bg-violet-100 px-2.5 py-0.5 text-[11px] font-bold text-violet-700">
-                  <i className="ti ti-tag text-[10px]" aria-hidden="true" />
+                  <IconTag size="1em" className="text-[10px]" aria-hidden="true" />
                   {q.categorie}
                 </span>
               </div>
@@ -645,16 +656,17 @@ export default function QuizPlayerPage() {
                     </span>
                     <span className="flex-1">{opt}</span>
                     {isCorrectOpt && (
-                      <i
-                        className="ti ti-circle-check-filled text-success-600"
+                      <IconCircleCheckFilled
+                        size="1em"
+                        className="text-success-600"
                         aria-hidden="true"
                       />
                     )}
                     {isWrongOpt && (
-                      <i className="ti ti-circle-x-filled text-danger-500" aria-hidden="true" />
+                      <IconCircleXFilled size="1em" className="text-danger-500" aria-hidden="true" />
                     )}
                     {isSel && !confirmed && (
-                      <i className="ti ti-circle-check-filled text-violet-600" aria-hidden="true" />
+                      <IconCircleCheckFilled size="1em" className="text-violet-600" aria-hidden="true" />
                     )}
                   </motion.button>
                 );

@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import type { ContentBlock } from '@/content/blog';
+import { IconArrowRight } from '@tabler/icons-react';
 
 const CALLOUT_STYLES: Record<string, { bg: string; title: string; text: string }> = {
   info: { bg: 'bg-primary-50', title: 'text-primary-700', text: 'text-primary-900' },
@@ -61,7 +62,7 @@ export function ArticleBlocks({ blocks }: { blocks: ContentBlock[] }) {
                     className="inline-flex items-center gap-1.5 rounded-full border border-token bg-surface-1 px-3.5 py-2 text-xs font-semibold text-primary-600 hover:bg-surface-2"
                   >
                     {link.label}
-                    <i className="ti ti-arrow-right text-[11px]" aria-hidden="true" />
+                    <IconArrowRight size="1em" className="text-[11px]" aria-hidden="true" />
                   </Link>
                 ))}
               </div>

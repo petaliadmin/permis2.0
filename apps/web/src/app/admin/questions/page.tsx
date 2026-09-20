@@ -10,6 +10,14 @@ import {
   arrayToLines,
   AdminPageHeader,
 } from '../adminShared';
+import {
+  IconChevronLeft,
+  IconChevronRight,
+  IconPlus,
+  IconSearch,
+  IconCircleCheckFilled,
+  IconCircle,
+} from '@tabler/icons-react';
 
 const PAGE_SIZE = 8;
 
@@ -188,13 +196,13 @@ export default function AdminQuestionsPage() {
         subtitle={`${total} questions de quiz`}
         actions={
           <button onClick={() => setForm(blank())} className="btn-violet px-5 py-2.5 text-sm">
-            <i className="ti ti-plus" aria-hidden="true" /> Nouvelle question
+            <IconPlus size="1em" aria-hidden="true" /> Nouvelle question
           </button>
         }
       >
         <div className="flex gap-2.5">
           <div className="flex flex-1 max-w-md items-center gap-2 rounded-xl border border-token bg-surface-1 px-3.5 py-2.5 shadow-soft">
-            <i className="ti ti-search text-sm text-muted" aria-hidden="true" />
+            <IconSearch size="1em" className="text-sm text-muted" aria-hidden="true" />
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
@@ -272,7 +280,7 @@ export default function AdminQuestionsPage() {
                 className="flex h-9 w-9 items-center justify-center rounded-xl border border-token bg-surface-1 text-secondary disabled:opacity-30"
                 aria-label="Page précédente"
               >
-                <i className="ti ti-chevron-left" aria-hidden="true" />
+                <IconChevronLeft size="1em" aria-hidden="true" />
               </button>
               <span className="text-xs font-bold text-secondary">
                 {page + 1} / {pages}
@@ -283,7 +291,7 @@ export default function AdminQuestionsPage() {
                 className="flex h-9 w-9 items-center justify-center rounded-xl border border-token bg-surface-1 text-secondary disabled:opacity-30"
                 aria-label="Page suivante"
               >
-                <i className="ti ti-chevron-right" aria-hidden="true" />
+                <IconChevronRight size="1em" aria-hidden="true" />
               </button>
             </div>
           )}
@@ -383,10 +391,11 @@ export default function AdminQuestionsPage() {
                       onClick={() => setForm({ ...form, correct: c })}
                       className={`flex w-full items-center gap-2 rounded-xl border-2 px-3 py-2 text-left text-sm font-medium ${form.correct === c ? 'border-success-500 bg-success-50 text-success-700' : 'border-token bg-surface-1 text-foreground'}`}
                     >
-                      <i
-                        className={`ti ${form.correct === c ? 'ti-circle-check-filled text-success-600' : 'ti-circle'}`}
-                        aria-hidden="true"
-                      />
+                      {form.correct === c ? (
+                        <IconCircleCheckFilled size="1em" className="text-success-600" aria-hidden="true" />
+                      ) : (
+                        <IconCircle size="1em" aria-hidden="true" />
+                      )}
                       {c}
                     </button>
                   ))}

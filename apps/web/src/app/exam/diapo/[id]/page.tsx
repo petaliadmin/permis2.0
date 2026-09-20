@@ -11,6 +11,7 @@ import { useSettingsStore } from '@/store/settingsStore';
 import { loadData } from '@/lib/dataSource';
 import { playSuccessSound, playFailureSound } from '@/lib/feedbackSound';
 import { trackEvent } from '@/lib/analytics';
+import { IconCheck, IconChevronLeft, IconClock, IconMedal, IconMoodSad, IconX } from '@tabler/icons-react';
 
 const FREE_UP_TO = 2;
 
@@ -101,7 +102,7 @@ export default function DiapoExamPage({ params }: { params: Promise<{ id: string
     return (
       <AppShell>
         <div className="flex flex-col items-center gap-4 py-24 text-center">
-          <i className="ti ti-mood-sad text-4xl text-slate-400" aria-hidden="true" />
+          <IconMoodSad size="1em" className="text-4xl text-slate-400" aria-hidden="true" />
           <p className="font-bold text-foreground">Examen introuvable</p>
           <button onClick={() => router.push('/exam')} className="btn-orange">
             Retour aux examens
@@ -198,7 +199,7 @@ export default function DiapoExamPage({ params }: { params: Promise<{ id: string
               <div
                 className={`flex h-16 w-16 items-center justify-center rounded-full ${passed ? 'bg-orange-500' : 'bg-danger-500'} shadow-lg`}
               >
-                <i className="ti ti-medal text-3xl text-white" aria-hidden="true" />
+                <IconMedal size="1em" className="text-3xl text-white" aria-hidden="true" />
               </div>
               <p className="mt-2 font-display text-2xl font-black text-white">
                 {score}/{total}
@@ -286,11 +287,11 @@ export default function DiapoExamPage({ params }: { params: Promise<{ id: string
               className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-surface-2 text-secondary"
               aria-label="Quitter"
             >
-              <i className="ti ti-x text-lg" aria-hidden="true" />
+              <IconX size="1em" className="text-lg" aria-hidden="true" />
             </button>
             <p className="flex-1 truncate text-sm font-bold text-foreground">{exam.title}</p>
             <span className="flex items-center gap-1 rounded-full bg-orange-50 px-2.5 py-1 text-xs font-black text-orange-600 tabular-nums">
-              <i className="ti ti-clock" aria-hidden="true" />
+              <IconClock size="1em" aria-hidden="true" />
               {fmt(elapsed)}
             </span>
           </div>
@@ -371,10 +372,10 @@ export default function DiapoExamPage({ params }: { params: Promise<{ id: string
                     </span>
                     <span className="flex-1">{prop.texte}</span>
                     {isConfirmed && isCorrect && (
-                      <i className="ti ti-check shrink-0 text-success-600" aria-hidden="true" />
+                      <IconCheck size="1em" className="shrink-0 text-success-600" aria-hidden="true" />
                     )}
                     {isConfirmed && isSel && !isCorrect && (
-                      <i className="ti ti-x shrink-0 text-danger-500" aria-hidden="true" />
+                      <IconX size="1em" className="shrink-0 text-danger-500" aria-hidden="true" />
                     )}
                   </motion.button>
                 );
@@ -392,10 +393,11 @@ export default function DiapoExamPage({ params }: { params: Promise<{ id: string
             <div
               className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${answersMatch(selected, q.answer) ? 'bg-success-500' : 'bg-danger-500'}`}
             >
-              <i
-                className={`ti ${answersMatch(selected, q.answer) ? 'ti-check' : 'ti-x'} text-base text-white`}
-                aria-hidden="true"
-              />
+              {answersMatch(selected, q.answer) ? (
+                <IconCheck size="1em" className="text-base text-white" aria-hidden="true" />
+              ) : (
+                <IconX size="1em" className="text-base text-white" aria-hidden="true" />
+              )}
             </div>
             <div className="flex-1">
               <p
@@ -421,7 +423,7 @@ export default function DiapoExamPage({ params }: { params: Promise<{ id: string
               className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border-2 border-token text-secondary"
               aria-label="Précédent"
             >
-              <i className="ti ti-chevron-left text-lg" aria-hidden="true" />
+              <IconChevronLeft size="1em" className="text-lg" aria-hidden="true" />
             </button>
           )}
           {!isConfirmed ? (

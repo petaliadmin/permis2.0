@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { AppShell, PageHeader } from '@/components/AppShell';
 import { getErrors, removeError, type ErrorItem } from '@/lib/errorBank';
 import { shuffle } from '../config';
+import { IconPhotoQuestion } from '@tabler/icons-react';
 
 const LETTERS = ['A', 'B', 'C', 'D', 'E', 'F'];
 
@@ -158,7 +159,7 @@ export default function ErrorReviewPage() {
                 )}
                 {!q.image && q.signalisation_visible && (
                   <div className="mb-3 flex items-center gap-3 rounded-2xl border border-token bg-surface-2 p-3">
-                    <i className="ti ti-photo-question text-2xl text-violet-500" aria-hidden="true" />
+                    <IconPhotoQuestion size="1em" className="text-2xl text-violet-500" aria-hidden="true" />
                     <p className="text-sm font-medium text-secondary">{q.signalisation_visible}</p>
                   </div>
                 )}

@@ -10,6 +10,7 @@ import {
   arrayToLines,
   AdminPageHeader,
 } from '../adminShared';
+import { IconPlus } from '@tabler/icons-react';
 
 interface Lesson {
   id: string;
@@ -139,7 +140,7 @@ export default function AdminCoursPage() {
         subtitle={`${lessons.length} leçons publiées`}
         actions={
           <button onClick={() => setForm(blank())} className="btn-primary px-5 py-2.5 text-sm">
-            <i className="ti ti-plus" aria-hidden="true" /> Nouvelle leçon
+            <IconPlus size="1em" aria-hidden="true" /> Nouvelle leçon
           </button>
         }
       />

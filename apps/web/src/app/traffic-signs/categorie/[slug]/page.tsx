@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { AppShell, PageHeader } from '@/components/AppShell';
 import { slugify } from '@/lib/slug';
 import { CATEGORY_ORDER, categoryMeta } from '@/lib/trafficSignCategories';
+import { IconChevronRight } from '@tabler/icons-react';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 const SITE_URL = 'https://www.permis2.com';
@@ -149,11 +150,11 @@ export default async function CategoryPage({
             <Link href="/" className="hover:text-foreground">
               Accueil
             </Link>
-            <i className="ti ti-chevron-right text-[10px]" aria-hidden="true" />
+            <IconChevronRight size="1em" className="text-[10px]" aria-hidden="true" />
             <Link href="/traffic-signs" className="hover:text-foreground">
               Panneaux
             </Link>
-            <i className="ti ti-chevron-right text-[10px]" aria-hidden="true" />
+            <IconChevronRight size="1em" className="text-[10px]" aria-hidden="true" />
             <span className="truncate text-foreground">{meta.label}</span>
           </nav>
 

@@ -8,6 +8,7 @@ import { useAuthStore, isValidSnPhone, formatPhone, type OtpChannel } from '@/st
 import { CodeInput } from '@/components/CodeInput';
 import { useWebOtpAutofill } from '@/hooks/useWebOtpAutofill';
 import { useCountdown } from '@/hooks/useCountdown';
+import { IconBrandWhatsapp, IconChevronLeft, IconMessage } from '@tabler/icons-react';
 
 const RESEND_COOLDOWN_S = 30;
 
@@ -129,14 +130,14 @@ export default function ResetPinPage() {
                   onClick={() => setChannel('whatsapp')}
                   className={`flex items-center justify-center gap-2 rounded-2xl border-2 py-3 text-sm font-bold transition-colors ${channel === 'whatsapp' ? 'border-success-500 bg-success-50 text-success-700' : 'border-token text-secondary'}`}
                 >
-                  <i className="ti ti-brand-whatsapp text-lg" aria-hidden="true" /> WhatsApp
+                  <IconBrandWhatsapp size="1em" className="text-lg" aria-hidden="true" /> WhatsApp
                 </button>
                 <button
                   type="button"
                   onClick={() => setChannel('sms')}
                   className={`flex items-center justify-center gap-2 rounded-2xl border-2 py-3 text-sm font-bold transition-colors ${channel === 'sms' ? 'border-primary-500 bg-primary-50 text-primary-700' : 'border-token text-secondary'}`}
                 >
-                  <i className="ti ti-message text-lg" aria-hidden="true" /> SMS
+                  <IconMessage size="1em" className="text-lg" aria-hidden="true" /> SMS
                 </button>
               </div>
 
@@ -168,7 +169,7 @@ export default function ResetPinPage() {
                 onClick={() => setStep(0)}
                 className="mb-3 flex items-center gap-1 text-sm font-semibold text-primary-600"
               >
-                <i className="ti ti-chevron-left" aria-hidden="true" /> Modifier le numéro
+                <IconChevronLeft size="1em" aria-hidden="true" /> Modifier le numéro
               </button>
               <h2 className="font-display text-lg font-extrabold text-foreground">
                 Vérifie ton numéro

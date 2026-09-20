@@ -9,6 +9,21 @@ import { PageTransition } from '@/components/PageTransition';
 import { useSpace } from '@/components/SpaceProvider';
 import { SideMenuProvider, MenuButton, useSideMenu } from '@/components/SideMenu';
 import type { Space } from '@/lib/space';
+import {
+  IconChevronLeft,
+  IconWifiOff,
+  IconHome,
+  IconRoadSign,
+  IconCards,
+  IconClipboardCheck,
+  IconUser,
+} from '@tabler/icons-react';
+
+type IconComponent = React.ComponentType<{
+  size?: string | number;
+  className?: string;
+  'aria-hidden'?: boolean | 'true' | 'false';
+}>;
 
 export { MenuButton, useSideMenu };
 
@@ -39,7 +54,7 @@ function OfflineBanner() {
           role="status"
         >
           <div className="flex items-center justify-center gap-2 bg-slate-800 px-4 py-2 pt-[calc(env(safe-area-inset-top)+8px)] text-xs font-semibold text-white">
-            <i className="ti ti-wifi-off" aria-hidden="true" />
+            <IconWifiOff size="1em" aria-hidden="true" />
             Tu es hors ligne — ta progression locale est conservée
           </div>
         </motion.div>
@@ -73,14 +88,14 @@ const ACCENT: Record<Accent, { grad: string; text: string; solid: string; soft: 
 };
 
 /* ─── Navigation ─────────────────────────────────────────────────────────────── */
-type TabLink = { href: string; label: string; icon: string; accent: Accent };
+type TabLink = { href: string; label: string; icon: IconComponent; accent: Accent };
 
 const LEARN_TABS: TabLink[] = [
-  { href: '/', label: 'Accueil', icon: 'ti-home', accent: 'blue' },
-  { href: '/traffic-signs', label: 'Panneaux', icon: 'ti-road-sign', accent: 'blue' },
-  { href: '/quizz', label: "Je m'entraine", icon: 'ti-cards', accent: 'violet' },
-  { href: '/exam', label: 'Examens', icon: 'ti-clipboard-check', accent: 'orange' },
-  { href: '/profil', label: 'Profil', icon: 'ti-user', accent: 'violet' },
+  { href: '/', label: 'Accueil', icon: IconHome, accent: 'blue' },
+  { href: '/traffic-signs', label: 'Panneaux', icon: IconRoadSign, accent: 'blue' },
+  { href: '/quizz', label: "Je m'entraine", icon: IconCards, accent: 'violet' },
+  { href: '/exam', label: 'Examens', icon: IconClipboardCheck, accent: 'orange' },
+  { href: '/profil', label: 'Profil', icon: IconUser, accent: 'violet' },
 ];
 
 /** Bottom tabs only make sense in the student (learn) space. */
@@ -144,14 +159,16 @@ export function AppShell({ children, hideNav = false, padded = false }: AppShell
                         transition={{ type: 'spring', stiffness: 500, damping: 35 }}
                       />
                     )}
-                    <motion.i
-                      whileTap={{ scale: 0.82 }}
-                      className={cn(
-                        `ti ${tab.icon} text-[22px] transition-colors`,
-                        active ? a.text : 'text-slate-400 group-hover:text-slate-500'
-                      )}
-                      aria-hidden="true"
-                    />
+                    <motion.span whileTap={{ scale: 0.82 }} className="inline-flex">
+                      <tab.icon
+                        size="1em"
+                        className={cn(
+                          'text-[22px] transition-colors',
+                          active ? a.text : 'text-slate-400 group-hover:text-slate-500'
+                        )}
+                        aria-hidden="true"
+                      />
+                    </motion.span>
                     <span
                       className={cn(
                         'text-[10px] font-bold tracking-wide transition-colors',
@@ -222,7 +239,7 @@ export function PageHeader({
               className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-surface-2 text-secondary transition-colors hover:bg-surface-3"
               aria-label="Retour"
             >
-              <i className="ti ti-chevron-left text-lg" aria-hidden="true" />
+              <IconChevronLeft size="1em" className="text-lg" aria-hidden="true" />
             </Link>
           ) : menu ? (
             <MenuButton />

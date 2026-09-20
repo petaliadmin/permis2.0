@@ -7,6 +7,7 @@ import { EmptyState, Sheet, Skeleton } from '@permis2.0/ui';
 import { cn } from '@/lib/cn';
 import { isContactPickerSupported, pickContacts } from '@/lib/contactPicker';
 import { ImportSheet } from './ImportSheet';
+import { IconAddressBook, IconCalendar, IconFileSpreadsheet, IconMail, IconPhone, IconPlus, IconUsers } from '@tabler/icons-react';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -225,11 +226,11 @@ export const StudentsPanel = forwardRef<StudentsPanelHandle, StudentsPanelProps>
         </div>
         <div className="flex gap-2">
           <button onClick={() => setImportOpen(true)} className="btn-ghost !px-4 !py-2 text-xs">
-            <i className="ti ti-file-spreadsheet" aria-hidden="true" />
+            <IconFileSpreadsheet size="1em" aria-hidden="true" />
             Importer
           </button>
           <button onClick={() => setAddOpen(true)} className="btn-ghost !px-4 !py-2 text-xs">
-            <i className="ti ti-plus" aria-hidden="true" />
+            <IconPlus size="1em" aria-hidden="true" />
             Ajouter un élève
           </button>
         </div>
@@ -237,7 +238,7 @@ export const StudentsPanel = forwardRef<StudentsPanelHandle, StudentsPanelProps>
 
       {filtered.length === 0 ? (
         <EmptyState
-          icon={<i className="ti ti-users" aria-hidden="true" />}
+          icon={<IconUsers size="1em" aria-hidden="true" />}
           title="Aucun élève"
           description="Les élèves confirmés depuis une demande, ou ajoutés manuellement, apparaîtront ici."
         />
@@ -298,15 +299,15 @@ export const StudentsPanel = forwardRef<StudentsPanelHandle, StudentsPanelProps>
 
             <div className="mt-4 space-y-1.5 text-sm text-secondary">
               <p className="flex items-center gap-2">
-                <i className="ti ti-phone" aria-hidden="true" /> {open.user?.phone ?? open.guestPhone}
+                <IconPhone size="1em" aria-hidden="true" /> {open.user?.phone ?? open.guestPhone}
               </p>
               {open.user?.email && (
                 <p className="flex items-center gap-2">
-                  <i className="ti ti-mail" aria-hidden="true" /> {open.user.email}
+                  <IconMail size="1em" aria-hidden="true" /> {open.user.email}
                 </p>
               )}
               <p className="flex items-center gap-2">
-                <i className="ti ti-calendar" aria-hidden="true" /> Inscrit le {fmtDate(open.enrolledAt)}
+                <IconCalendar size="1em" aria-hidden="true" /> Inscrit le {fmtDate(open.enrolledAt)}
               </p>
             </div>
 
@@ -435,7 +436,7 @@ export const StudentsPanel = forwardRef<StudentsPanelHandle, StudentsPanelProps>
           <div className="mt-3 space-y-3">
             {isContactPickerSupported() && (
               <button onClick={importContact} className="btn-ghost w-full !py-2.5 text-sm">
-                <i className="ti ti-address-book" aria-hidden="true" />
+                <IconAddressBook size="1em" aria-hidden="true" />
                 Importer un contact du téléphone
               </button>
             )}

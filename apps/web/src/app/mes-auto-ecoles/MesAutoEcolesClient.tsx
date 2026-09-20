@@ -13,6 +13,7 @@ import {
 import { EmptyState, Skeleton } from '@permis2.0/ui';
 import { AppShell, PageHeader } from '@/components/AppShell';
 import { useAuthStore } from '@/store/authStore';
+import { IconCar, IconSchool, IconSteeringWheel } from '@tabler/icons-react';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -128,7 +129,7 @@ export default function MesAutoEcolesClient() {
 
         {isEmpty && (
           <EmptyState
-            icon={<i className="ti ti-school" aria-hidden="true" />}
+            icon={<IconSchool size="1em" aria-hidden="true" />}
             title="Aucune auto-école pour l'instant"
             description="Trouvez une auto-école partenaire et faites votre pré-inscription en ligne."
             action={
@@ -162,13 +163,13 @@ export default function MesAutoEcolesClient() {
                     <p className="mt-0.5 text-xs text-muted">Inscrit le {fmtDate(e.enrolledAt)}</p>
                     {e.assignedInstructor?.user && (
                       <p className="mt-1 flex items-center gap-1 text-xs text-secondary">
-                        <i className="ti ti-steering-wheel" aria-hidden="true" />
+                        <IconSteeringWheel size="1em" aria-hidden="true" />
                         Moniteur : {e.assignedInstructor.user.name}
                       </p>
                     )}
                     {e.assignedVehicle && (
                       <p className="mt-0.5 flex items-center gap-1 text-xs text-secondary">
-                        <i className="ti ti-car" aria-hidden="true" />
+                        <IconCar size="1em" aria-hidden="true" />
                         Véhicule : {e.assignedVehicle.plate}
                       </p>
                     )}

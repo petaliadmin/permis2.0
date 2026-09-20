@@ -9,6 +9,7 @@ import { whatsappLinkTo } from '@/lib/contact';
 import { directionsUrl } from '@/lib/geo';
 import { trackEvent } from '@/lib/analytics';
 import { EnrollmentForm } from './EnrollmentForm';
+import { IconBrandWhatsapp, IconChevronLeft, IconMail, IconMapPin, IconPhone, IconRoute } from '@tabler/icons-react';
 
 const fmtXof = (n: number) => `${n.toLocaleString('fr-FR')} FCFA`;
 
@@ -49,7 +50,7 @@ export default function EcoleProfileClient({ school }: { school: School }) {
             <h1 className="font-display text-2xl font-extrabold sm:text-3xl">{school.name}</h1>
             {location && (
               <p className="mt-1 flex items-center gap-1 text-sm text-white/85">
-                <i className="ti ti-map-pin" aria-hidden="true" />
+                <IconMapPin size="1em" aria-hidden="true" />
                 {location}
               </p>
             )}
@@ -124,7 +125,7 @@ export default function EcoleProfileClient({ school }: { school: School }) {
                     rel="noopener noreferrer"
                     className="mt-2 inline-flex items-center gap-1 text-sm font-bold text-primary-600 hover:underline"
                   >
-                    <i className="ti ti-route" aria-hidden="true" />
+                    <IconRoute size="1em" aria-hidden="true" />
                     Itinéraire
                   </a>
                 )}
@@ -135,7 +136,7 @@ export default function EcoleProfileClient({ school }: { school: School }) {
               <p className="font-display text-sm font-bold text-foreground">Contact</p>
               {school.phone && (
                 <a href={`tel:${school.phone}`} className="flex items-center gap-2 text-sm text-secondary hover:text-foreground">
-                  <i className="ti ti-phone" aria-hidden="true" />
+                  <IconPhone size="1em" aria-hidden="true" />
                   {school.phone}
                 </a>
               )}
@@ -146,20 +147,20 @@ export default function EcoleProfileClient({ school }: { school: School }) {
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 text-sm text-secondary hover:text-foreground"
                 >
-                  <i className="ti ti-brand-whatsapp" aria-hidden="true" />
+                  <IconBrandWhatsapp size="1em" aria-hidden="true" />
                   WhatsApp
                 </a>
               )}
               {school.email && (
                 <a href={`mailto:${school.email}`} className="flex items-center gap-2 text-sm text-secondary hover:text-foreground">
-                  <i className="ti ti-mail" aria-hidden="true" />
+                  <IconMail size="1em" aria-hidden="true" />
                   {school.email}
                 </a>
               )}
             </div>
 
             <Link href="/ecoles" className="inline-flex items-center gap-1 text-sm font-semibold text-secondary hover:text-foreground">
-              <i className="ti ti-chevron-left" aria-hidden="true" />
+              <IconChevronLeft size="1em" aria-hidden="true" />
               Retour à l&apos;annuaire
             </Link>
           </div>

@@ -5,6 +5,7 @@ import { SiteHeader } from '@/components/SiteHeader';
 import { SiteFooter } from '@/components/SiteFooter';
 import { ArticleBlocks } from '@/components/blog/ArticleBlocks';
 import { getBlogPost, getBlogPostsSorted, type BlogCategory } from '@/content/blog';
+import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 
 const SITE_URL = 'https://www.permis2.com';
 
@@ -103,11 +104,11 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           <Link href="/" className="hover:text-foreground">
             Accueil
           </Link>
-          <i className="ti ti-chevron-right text-[10px]" aria-hidden="true" />
+          <IconChevronRight size="1em" className="text-[10px]" aria-hidden="true" />
           <Link href="/blog" className="hover:text-foreground">
             Blog
           </Link>
-          <i className="ti ti-chevron-right text-[10px]" aria-hidden="true" />
+          <IconChevronRight size="1em" className="text-[10px]" aria-hidden="true" />
           <span className="truncate text-foreground">{post.title}</span>
         </nav>
 
@@ -165,7 +166,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           href="/blog"
           className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-secondary hover:text-foreground"
         >
-          <i className="ti ti-chevron-left text-xs" aria-hidden="true" />
+          <IconChevronLeft size="1em" className="text-xs" aria-hidden="true" />
           Tous les articles
         </Link>
       </main>

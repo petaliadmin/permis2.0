@@ -24,6 +24,31 @@ import { VehiclesPanel, type VehiclesPanelHandle } from './VehiclesPanel';
 import { SessionsPanel, type SessionsPanelHandle } from './SessionsPanel';
 import { PaymentsPanel, type PaymentsPanelHandle } from './PaymentsPanel';
 import { SchoolSettingsSheet } from './SchoolSettingsSheet';
+import {
+  IconAlertTriangle,
+  IconBrandWhatsapp,
+  IconBuildingStore,
+  IconChevronRight,
+  IconClock,
+  IconReplace,
+  IconSettings,
+  IconHome,
+  IconInbox,
+  IconUsers,
+  IconUsersGroup,
+  IconCar,
+  IconCalendar,
+  IconReceipt,
+  IconUserPlus,
+  IconCalendarPlus,
+  IconDotsCircleHorizontal,
+} from '@tabler/icons-react';
+
+type IconComponent = React.ComponentType<{
+  size?: string | number;
+  className?: string;
+  'aria-hidden'?: boolean | 'true' | 'false';
+}>;
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -32,14 +57,14 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
  * bottom-bar/"Plus"-sheet split (only 5 slots fit a `grid-cols-5` bottom bar)
  * and the `lg:` sidebar (no slot limit, renders all 7 flat).
  */
-const TABS: { key: string; label: string; icon: string }[] = [
-  { key: 'overview', label: "Vue d'ensemble", icon: 'ti-home' },
-  { key: 'demandes', label: 'Demandes', icon: 'ti-inbox' },
-  { key: 'eleves', label: 'Élèves', icon: 'ti-users' },
-  { key: 'equipe', label: 'Équipe', icon: 'ti-users-group' },
-  { key: 'vehicules', label: 'Véhicules', icon: 'ti-car' },
-  { key: 'planning', label: 'Planning', icon: 'ti-calendar' },
-  { key: 'finances', label: 'Finances', icon: 'ti-receipt' },
+const TABS: { key: string; label: string; icon: IconComponent }[] = [
+  { key: 'overview', label: "Vue d'ensemble", icon: IconHome },
+  { key: 'demandes', label: 'Demandes', icon: IconInbox },
+  { key: 'eleves', label: 'Élèves', icon: IconUsers },
+  { key: 'equipe', label: 'Équipe', icon: IconUsersGroup },
+  { key: 'vehicules', label: 'Véhicules', icon: IconCar },
+  { key: 'planning', label: 'Planning', icon: IconCalendar },
+  { key: 'finances', label: 'Finances', icon: IconReceipt },
 ] as const;
 type TabKey = (typeof TABS)[number]['key'];
 
@@ -80,7 +105,7 @@ function OverviewTile({
   badge,
   onClick,
 }: {
-  icon: string;
+  icon: IconComponent;
   label: string;
   /** Small secondary line under the label, e.g. an amount — omitted when not meaningful (0). */
   sublabel?: string;
@@ -92,6 +117,7 @@ function OverviewTile({
   badge?: boolean;
   onClick: () => void;
 }) {
+  const Icon = icon;
   return (
     <button
       onClick={onClick}
@@ -104,7 +130,7 @@ function OverviewTile({
         <span className="absolute right-3 top-3 h-2 w-2 rounded-full bg-danger" aria-hidden="true" />
       )}
       <span className={cn('flex h-9 w-9 items-center justify-center rounded-xl text-base', accent)}>
-        <i className={`ti ${icon}`} aria-hidden="true" />
+        <Icon size="1em" aria-hidden="true" />
       </span>
       <span className="font-display text-xl font-extrabold leading-none text-foreground">{value}</span>
       <span className="text-xs font-semibold leading-snug text-secondary">{label}</span>
@@ -193,7 +219,7 @@ function VisibilityCard({
               rel="noopener noreferrer"
               className="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl bg-[#25D366] py-3.5 text-sm font-bold text-white shadow-md transition-transform active:scale-[0.98]"
             >
-              <i className="ti ti-brand-whatsapp text-xl" aria-hidden="true" />
+              <IconBrandWhatsapp size="1em" className="text-xl" aria-hidden="true" />
               Contacter l&apos;équipe · {WHATSAPP_DISPLAY}
             </a>
             <button
@@ -206,7 +232,7 @@ function VisibilityCard({
           </div>
         ) : (
           <div className="py-4 text-center">
-            <i className="ti ti-clock text-3xl text-violet-500" aria-hidden="true" />
+            <IconClock size="1em" className="text-3xl text-violet-500" aria-hidden="true" />
             <p className="mt-2 font-display text-base font-bold text-foreground">
               Activation en cours
             </p>
@@ -309,15 +335,15 @@ export function SchoolDashboard({ school, onBackToPicker, onSchoolUpdated }: Sch
   const tabBadge = (key: TabKey): number =>
     key === 'demandes' ? pendingCount : key === 'finances' ? pendingPaymentsCount : 0;
 
-  const fab: { label: string; icon: string; onClick: () => void } | null =
+  const fab: { label: string; icon: IconComponent; onClick: () => void } | null =
     tab === 'eleves'
-      ? { label: 'Ajouter un élève', icon: 'ti-user-plus', onClick: () => studentsRef.current?.openCreate() }
+      ? { label: 'Ajouter un élève', icon: IconUserPlus, onClick: () => studentsRef.current?.openCreate() }
       : tab === 'vehicules'
-        ? { label: 'Ajouter un véhicule', icon: 'ti-car', onClick: () => vehiclesRef.current?.openCreate() }
+        ? { label: 'Ajouter un véhicule', icon: IconCar, onClick: () => vehiclesRef.current?.openCreate() }
         : tab === 'planning'
-          ? { label: 'Ajouter une séance', icon: 'ti-calendar-plus', onClick: () => sessionsRef.current?.openCreate() }
+          ? { label: 'Ajouter une séance', icon: IconCalendarPlus, onClick: () => sessionsRef.current?.openCreate() }
           : tab === 'finances'
-            ? { label: 'Créer une facture', icon: 'ti-receipt', onClick: () => paymentsRef.current?.openCreate() }
+            ? { label: 'Créer une facture', icon: IconReceipt, onClick: () => paymentsRef.current?.openCreate() }
             : null;
 
   return (
@@ -352,7 +378,7 @@ export function SchoolDashboard({ school, onBackToPicker, onSchoolUpdated }: Sch
             className="flex h-9 w-9 items-center justify-center rounded-full bg-surface-2 text-secondary transition-colors hover:bg-surface-3"
             aria-label="Paramètres de l'auto-école"
           >
-            <i className="ti ti-settings text-lg" aria-hidden="true" />
+            <IconSettings size="1em" className="text-lg" aria-hidden="true" />
           </button>
           {onBackToPicker && (
             <button
@@ -399,7 +425,7 @@ export function SchoolDashboard({ school, onBackToPicker, onSchoolUpdated }: Sch
                       : 'text-secondary hover:bg-surface-2 hover:text-foreground'
                   )}
                 >
-                  <i className={`ti ${t.icon} text-lg`} aria-hidden="true" />
+                  <t.icon size="1em" className="text-lg" aria-hidden="true" />
                   <span className="flex-1">{t.label}</span>
                   {t.key === 'vehicules' && vehiclesNeedingAttention > 0 && (
                     <span className="h-2 w-2 shrink-0 rounded-full bg-danger" aria-hidden="true" />
@@ -419,7 +445,7 @@ export function SchoolDashboard({ school, onBackToPicker, onSchoolUpdated }: Sch
               onClick={() => setSettingsOpen(true)}
               className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-semibold text-secondary transition-colors hover:bg-surface-2 hover:text-foreground"
             >
-              <i className="ti ti-building-store text-lg" aria-hidden="true" />
+              <IconBuildingStore size="1em" className="text-lg" aria-hidden="true" />
               <span className="flex-1">Infos de l&apos;auto-école</span>
             </button>
             {onBackToPicker && (
@@ -427,7 +453,7 @@ export function SchoolDashboard({ school, onBackToPicker, onSchoolUpdated }: Sch
                 onClick={onBackToPicker}
                 className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-semibold text-secondary transition-colors hover:bg-surface-2 hover:text-foreground"
               >
-                <i className="ti ti-replace text-lg" aria-hidden="true" />
+                <IconReplace size="1em" className="text-lg" aria-hidden="true" />
                 <span className="flex-1">Changer d&apos;auto-école</span>
               </button>
             )}
@@ -440,7 +466,7 @@ export function SchoolDashboard({ school, onBackToPicker, onSchoolUpdated }: Sch
             {/* Needs attention — the two actionable counters, surfaced first */}
             <div className="grid grid-cols-2 gap-3">
               <OverviewTile
-                icon="ti-inbox"
+                icon={IconInbox}
                 label="Demandes en attente"
                 value={pendingCount}
                 accent="bg-orange-100 text-orange-700"
@@ -448,7 +474,7 @@ export function SchoolDashboard({ school, onBackToPicker, onSchoolUpdated }: Sch
                 onClick={() => setTab('demandes')}
               />
               <OverviewTile
-                icon="ti-receipt"
+                icon={IconReceipt}
                 label="Factures impayées"
                 sublabel={pendingPaymentsAmount > 0 ? fmtXof(pendingPaymentsAmount) : undefined}
                 value={pendingPaymentsCount}
@@ -461,21 +487,21 @@ export function SchoolDashboard({ school, onBackToPicker, onSchoolUpdated }: Sch
             {/* Fleet at a glance */}
             <div className="grid grid-cols-3 gap-3">
               <OverviewTile
-                icon="ti-users"
+                icon={IconUsers}
                 label="Élèves"
                 value={school.studentsCount ?? 0}
                 accent="bg-primary-100 text-primary-700"
                 onClick={() => setTab('eleves')}
               />
               <OverviewTile
-                icon="ti-users-group"
+                icon={IconUsersGroup}
                 label="Équipe"
                 value={members?.length ?? 0}
                 accent="bg-violet-100 text-violet-700"
                 onClick={() => setTab('equipe')}
               />
               <OverviewTile
-                icon="ti-car"
+                icon={IconCar}
                 label="Véhicules"
                 value={vehicles?.length ?? 0}
                 accent="bg-teal-100 text-teal-700"
@@ -547,13 +573,13 @@ export function SchoolDashboard({ school, onBackToPicker, onSchoolUpdated }: Sch
                 className="flex w-full items-center gap-3 rounded-2xl border border-red-200 bg-red-50 p-4 text-left"
               >
                 <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-red-100 text-danger">
-                  <i className="ti ti-alert-triangle" aria-hidden="true" />
+                  <IconAlertTriangle size="1em" aria-hidden="true" />
                 </span>
                 <span className="flex-1 text-sm font-semibold text-danger">
                   {vehiclesNeedingAttention} véhicule{vehiclesNeedingAttention > 1 ? 's' : ''} à vérifier
                   — assurance ou visite technique bientôt expirée.
                 </span>
-                <i className="ti ti-chevron-right text-danger" aria-hidden="true" />
+                <IconChevronRight size="1em" className="text-danger" aria-hidden="true" />
               </button>
             )}
           </div>
@@ -627,7 +653,7 @@ export function SchoolDashboard({ school, onBackToPicker, onSchoolUpdated }: Sch
           aria-label={fab.label}
           className="fixed bottom-[calc(84px+env(safe-area-inset-bottom))] right-4 z-30 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-primary-500 to-primary-700 text-white shadow-card transition-transform active:scale-90 sm:right-8 lg:hidden"
         >
-          <i className={`ti ${fab.icon} text-2xl`} aria-hidden="true" />
+          <fab.icon size="1em" className="text-2xl" aria-hidden="true" />
         </button>
       )}
 
@@ -650,9 +676,10 @@ export function SchoolDashboard({ school, onBackToPicker, onSchoolUpdated }: Sch
                   <span className="absolute top-0 h-1 w-9 rounded-full bg-primary-600" />
                 )}
                 <span className="relative">
-                  <i
+                  <t.icon
+                    size="1em"
                     className={cn(
-                      `ti ${t.icon} text-[22px] transition-colors`,
+                      'text-[22px] transition-colors',
                       active ? 'text-primary-600' : 'text-secondary'
                     )}
                     aria-hidden="true"
@@ -681,9 +708,10 @@ export function SchoolDashboard({ school, onBackToPicker, onSchoolUpdated }: Sch
             className="relative flex h-16 flex-col items-center justify-center gap-1"
           >
             {moreActive && <span className="absolute top-0 h-1 w-9 rounded-full bg-primary-600" />}
-            <i
+            <IconDotsCircleHorizontal
+              size="1em"
               className={cn(
-                'ti ti-dots-circle-horizontal text-[22px] transition-colors',
+                'text-[22px] transition-colors',
                 moreActive ? 'text-primary-600' : 'text-secondary'
               )}
               aria-hidden="true"
@@ -717,13 +745,13 @@ export function SchoolDashboard({ school, onBackToPicker, onSchoolUpdated }: Sch
               )}
             >
               <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-surface-2 text-primary-600">
-                <i className={`ti ${t.icon} text-lg`} aria-hidden="true" />
+                <t.icon size="1em" className="text-lg" aria-hidden="true" />
               </span>
               <span className="flex-1 font-display text-sm font-bold text-foreground">{t.label}</span>
               {t.key === 'finances' && pendingPaymentsCount > 0 && (
                 <span className="chip chip-danger">{pendingPaymentsCount}</span>
               )}
-              <i className="ti ti-chevron-right text-secondary" aria-hidden="true" />
+              <IconChevronRight size="1em" className="text-secondary" aria-hidden="true" />
             </button>
           ))}
 
@@ -735,12 +763,12 @@ export function SchoolDashboard({ school, onBackToPicker, onSchoolUpdated }: Sch
             className="flex w-full items-center gap-3 rounded-2xl border border-token bg-surface-1 p-4 text-left shadow-soft transition-colors hover:border-primary-200"
           >
             <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-surface-2 text-primary-600">
-              <i className="ti ti-building-store text-lg" aria-hidden="true" />
+              <IconBuildingStore size="1em" className="text-lg" aria-hidden="true" />
             </span>
             <span className="flex-1 font-display text-sm font-bold text-foreground">
               Infos de l&apos;auto-école
             </span>
-            <i className="ti ti-chevron-right text-secondary" aria-hidden="true" />
+            <IconChevronRight size="1em" className="text-secondary" aria-hidden="true" />
           </button>
 
           {onBackToPicker && (
@@ -752,12 +780,12 @@ export function SchoolDashboard({ school, onBackToPicker, onSchoolUpdated }: Sch
               className="flex w-full items-center gap-3 rounded-2xl border border-token bg-surface-1 p-4 text-left shadow-soft transition-colors hover:border-primary-200"
             >
               <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-surface-2 text-secondary">
-                <i className="ti ti-replace text-lg" aria-hidden="true" />
+                <IconReplace size="1em" className="text-lg" aria-hidden="true" />
               </span>
               <span className="flex-1 font-display text-sm font-bold text-foreground">
                 Changer d&apos;auto-école
               </span>
-              <i className="ti ti-chevron-right text-secondary" aria-hidden="true" />
+              <IconChevronRight size="1em" className="text-secondary" aria-hidden="true" />
             </button>
           )}
         </div>

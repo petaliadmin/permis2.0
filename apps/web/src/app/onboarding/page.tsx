@@ -11,6 +11,7 @@ import {
 import { useSpace } from '@/components/SpaceProvider';
 import { gotoSpace, spaceForProfile } from '@/lib/space';
 import { markOnboardingDone, type ProfileChoice } from '@/lib/onboarding';
+import { IconArrowRight, IconChevronRight, IconSchool, IconUser } from '@tabler/icons-react';
 
 interface Slide {
   grad: string;
@@ -98,7 +99,7 @@ export default function OnboardingPage() {
             className="flex items-center gap-4 rounded-3xl border border-token bg-surface-1 p-5 text-left shadow-card transition-colors hover:border-primary-300"
           >
             <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-primary-50 text-primary-600">
-              <i className="ti ti-user text-3xl" aria-hidden="true" />
+              <IconUser size="1em" className="text-3xl" aria-hidden="true" />
             </span>
             <span className="min-w-0 flex-1">
               <span className="block font-display text-base font-bold text-foreground">
@@ -108,7 +109,7 @@ export default function OnboardingPage() {
                 Je révise pour mon propre permis.
               </span>
             </span>
-            <i className="ti ti-chevron-right text-lg text-slate-300" aria-hidden="true" />
+            <IconChevronRight size="1em" className="text-lg text-slate-300" aria-hidden="true" />
           </motion.button>
 
           <motion.button
@@ -120,7 +121,7 @@ export default function OnboardingPage() {
             className="flex items-center gap-4 rounded-3xl border border-token bg-surface-1 p-5 text-left shadow-card transition-colors hover:border-violet-300"
           >
             <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-violet-50 text-violet-600">
-              <i className="ti ti-school text-3xl" aria-hidden="true" />
+              <IconSchool size="1em" className="text-3xl" aria-hidden="true" />
             </span>
             <span className="min-w-0 flex-1">
               <span className="block font-display text-base font-bold text-foreground">
@@ -130,7 +131,7 @@ export default function OnboardingPage() {
                 Je gère des places premium pour mes élèves.
               </span>
             </span>
-            <i className="ti ti-chevron-right text-lg text-slate-300" aria-hidden="true" />
+            <IconChevronRight size="1em" className="text-lg text-slate-300" aria-hidden="true" />
           </motion.button>
         </div>
 
@@ -202,7 +203,7 @@ export default function OnboardingPage() {
       <button onClick={() => goTo(step + 1)} className="relative mx-auto w-full max-w-md">
         <span className="flex w-full items-center justify-center gap-2 rounded-2xl bg-white py-3.5 text-sm font-bold text-foreground shadow-lg transition-transform active:scale-[0.98]">
           {step === SLIDES.length - 1 ? 'Continuer' : 'Suivant'}
-          <i className="ti ti-arrow-right text-base" aria-hidden="true" />
+          <IconArrowRight size="1em" className="text-base" aria-hidden="true" />
         </span>
       </button>
     </div>

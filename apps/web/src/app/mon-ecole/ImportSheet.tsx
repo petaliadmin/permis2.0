@@ -4,6 +4,7 @@ import { useRef, useState } from 'react';
 import * as XLSX from 'xlsx';
 import { SchoolMemberRole } from '@permis2.0/types';
 import { Sheet } from '@permis2.0/ui';
+import { IconFileSpreadsheet } from '@tabler/icons-react';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -205,7 +206,7 @@ export function ImportSheet({ schoolId, kind, open, onClose, onImported }: Impor
 
       {rows.length === 0 ? (
         <label className="mt-4 flex cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-token bg-surface-2 px-4 py-10 text-center">
-          <i className="ti ti-file-spreadsheet text-2xl text-secondary" aria-hidden="true" />
+          <IconFileSpreadsheet size="1em" className="text-2xl text-secondary" aria-hidden="true" />
           <span className="text-sm font-bold text-foreground">Choisir un fichier</span>
           <input
             ref={fileRef}

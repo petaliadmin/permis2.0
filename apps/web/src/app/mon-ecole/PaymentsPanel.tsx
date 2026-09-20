@@ -7,6 +7,7 @@ import { EmptyState, Sheet, Skeleton } from '@permis2.0/ui';
 import { cn } from '@/lib/cn';
 import { whatsappLink } from '@/lib/contact';
 import { generateInvoicePdf, invoiceFilename } from '@/lib/invoicePdf';
+import { IconBrandWhatsapp, IconCalendar, IconCircleCheck, IconCreditCard, IconDownload, IconMail, IconPlus, IconReceipt, IconTrash } from '@tabler/icons-react';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -270,14 +271,14 @@ export const PaymentsPanel = forwardRef<PaymentsPanelHandle, PaymentsPanelProps>
           ))}
         </div>
         <button onClick={() => setCreateOpen(true)} className="btn-ghost !px-4 !py-2 text-xs">
-          <i className="ti ti-plus" aria-hidden="true" />
+          <IconPlus size="1em" aria-hidden="true" />
           Devis / Facture
         </button>
       </div>
 
       {filtered.length === 0 ? (
         <EmptyState
-          icon={<i className="ti ti-receipt" aria-hidden="true" />}
+          icon={<IconReceipt size="1em" aria-hidden="true" />}
           title="Aucune facture"
           description="Créez un devis ou une facture pour suivre les échéances de vos élèves."
         />
@@ -349,18 +350,18 @@ export const PaymentsPanel = forwardRef<PaymentsPanelHandle, PaymentsPanelProps>
               </p>
               {open.dueDate && (
                 <p className="flex items-center gap-2">
-                  <i className="ti ti-calendar" aria-hidden="true" /> Échéance : {fmtDate(open.dueDate)}
+                  <IconCalendar size="1em" aria-hidden="true" /> Échéance : {fmtDate(open.dueDate)}
                 </p>
               )}
               {open.method && (
                 <p className="flex items-center gap-2">
-                  <i className="ti ti-credit-card" aria-hidden="true" /> {open.method}
+                  <IconCreditCard size="1em" aria-hidden="true" /> {open.method}
                 </p>
               )}
               {open.notes && <p className="italic text-muted">{open.notes}</p>}
               {open.paidAt && (
                 <p className="flex items-center gap-2 text-success">
-                  <i className="ti ti-circle-check" aria-hidden="true" /> Payée le {fmtDate(open.paidAt)}
+                  <IconCircleCheck size="1em" aria-hidden="true" /> Payée le {fmtDate(open.paidAt)}
                 </p>
               )}
             </div>
@@ -370,7 +371,7 @@ export const PaymentsPanel = forwardRef<PaymentsPanelHandle, PaymentsPanelProps>
               <p className="text-xs font-bold text-secondary">Partager</p>
               <div className="flex flex-wrap gap-2">
                 <button onClick={downloadPdf} className="btn-ghost !px-3 !py-2 text-xs">
-                  <i className="ti ti-download" aria-hidden="true" />
+                  <IconDownload size="1em" aria-hidden="true" />
                   PDF
                 </button>
                 <button
@@ -378,7 +379,7 @@ export const PaymentsPanel = forwardRef<PaymentsPanelHandle, PaymentsPanelProps>
                   disabled={shareBusy}
                   className="flex items-center gap-1.5 rounded-full bg-[#25D366] px-3 py-2 text-xs font-bold text-white"
                 >
-                  <i className="ti ti-brand-whatsapp" aria-hidden="true" />
+                  <IconBrandWhatsapp size="1em" aria-hidden="true" />
                   WhatsApp
                 </button>
               </div>
@@ -394,7 +395,7 @@ export const PaymentsPanel = forwardRef<PaymentsPanelHandle, PaymentsPanelProps>
                   disabled={shareBusy}
                   className="btn-ghost !px-3 !py-2 text-xs"
                 >
-                  <i className="ti ti-mail" aria-hidden="true" />
+                  <IconMail size="1em" aria-hidden="true" />
                   Email
                 </button>
               </div>
@@ -524,7 +525,7 @@ export const PaymentsPanel = forwardRef<PaymentsPanelHandle, PaymentsPanelProps>
                   className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-danger hover:bg-red-50 disabled:opacity-30"
                   aria-label="Retirer la ligne"
                 >
-                  <i className="ti ti-trash text-sm" aria-hidden="true" />
+                  <IconTrash size="1em" className="text-sm" aria-hidden="true" />
                 </button>
               </div>
             ))}

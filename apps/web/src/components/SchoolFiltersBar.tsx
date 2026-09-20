@@ -1,6 +1,7 @@
 'use client';
 
 import { cn } from '@/lib/cn';
+import { IconX, IconSearch } from '@tabler/icons-react';
 
 export interface SchoolFilters {
   city: string;
@@ -61,8 +62,9 @@ export function SchoolFiltersBar({
   return (
     <div className="space-y-3">
       <div className="relative">
-        <i
-          className="ti ti-search pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-secondary"
+        <IconSearch
+          size="1em"
+          className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-secondary"
           aria-hidden="true"
         />
         <input
@@ -123,7 +125,7 @@ export function SchoolFiltersBar({
             onClick={() => onChange(EMPTY_SCHOOL_FILTERS)}
             className="chip bg-surface-2 text-secondary hover:text-foreground"
           >
-            <i className="ti ti-x" aria-hidden="true" />
+            <IconX size="1em" aria-hidden="true" />
             Effacer
           </button>
         )}

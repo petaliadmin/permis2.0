@@ -6,6 +6,16 @@ import { motion } from 'framer-motion';
 import { AppShell, MenuButton } from '@/components/AppShell';
 import { useAuthStore } from '@/store/authStore';
 import { countErrors } from '@/lib/errorBank';
+import {
+  IconBook2,
+  IconChevronRight,
+  IconTargetArrow,
+  IconUserPlus,
+  IconRoadSign,
+  IconCards,
+  IconClipboardCheck,
+  IconCrown,
+} from '@tabler/icons-react';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -22,7 +32,7 @@ const TILES = [
     href: '/traffic-signs',
     label: 'Panneaux',
     desc: 'Tous les panneaux du code sénégalais',
-    icon: 'ti-road-sign',
+    icon: IconRoadSign,
     accent: 'chip-primary',
     ring: 'hover:border-primary-200',
   },
@@ -30,7 +40,7 @@ const TILES = [
     href: '/quizz',
     label: "Je m'entraîne",
     desc: 'Séries de quiz par thème',
-    icon: 'ti-cards',
+    icon: IconCards,
     accent: 'chip-violet',
     ring: 'hover:border-violet-200',
   },
@@ -38,7 +48,7 @@ const TILES = [
     href: '/exam',
     label: 'Examens blancs',
     desc: "Dans les conditions du jour J",
-    icon: 'ti-clipboard-check',
+    icon: IconClipboardCheck,
     accent: 'chip-orange',
     ring: 'hover:border-orange-200',
   },
@@ -46,7 +56,7 @@ const TILES = [
     href: '/boutique',
     label: 'Abonnement',
     desc: 'Débloque tout le contenu premium',
-    icon: 'ti-crown',
+    icon: IconCrown,
     accent: 'chip-xp',
     ring: 'hover:border-amber-200',
   },
@@ -153,7 +163,7 @@ export default function StudentHome() {
               className="mt-4 flex items-center gap-3 rounded-2xl border border-primary-100 bg-primary-50 p-4 transition-colors hover:border-primary-200"
             >
               <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary-600 text-white">
-                <i className="ti ti-user-plus text-lg" aria-hidden="true" />
+                <IconUserPlus size="1em" className="text-lg" aria-hidden="true" />
               </span>
               <span className="min-w-0 flex-1">
                 <span className="block font-display text-sm font-bold text-foreground">
@@ -163,7 +173,7 @@ export default function StudentHome() {
                   Pour sauvegarder ta progression et tes examens.
                 </span>
               </span>
-              <i className="ti ti-chevron-right text-lg text-primary-400" aria-hidden="true" />
+              <IconChevronRight size="1em" className="text-lg text-primary-400" aria-hidden="true" />
             </Link>
           )}
 
@@ -174,7 +184,7 @@ export default function StudentHome() {
               className="mt-3 flex items-center gap-3 rounded-2xl border border-token bg-surface-1 p-4 shadow-soft transition-transform active:scale-[0.98]"
             >
               <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-red-50 text-danger-500">
-                <i className="ti ti-target-arrow text-lg" aria-hidden="true" />
+                <IconTargetArrow size="1em" className="text-lg" aria-hidden="true" />
               </span>
               <span className="min-w-0 flex-1">
                 <span className="block font-display text-sm font-bold text-foreground">
@@ -184,7 +194,7 @@ export default function StudentHome() {
                   {errorCount} question{errorCount > 1 ? 's' : ''} à retravailler
                 </span>
               </span>
-              <i className="ti ti-chevron-right text-lg text-slate-300" aria-hidden="true" />
+              <IconChevronRight size="1em" className="text-lg text-slate-300" aria-hidden="true" />
             </Link>
           )}
 
@@ -207,7 +217,7 @@ export default function StudentHome() {
                   <span
                     className={`chip ${t.accent} flex h-10 w-10 items-center justify-center !rounded-2xl`}
                   >
-                    <i className={`ti ${t.icon} text-xl`} aria-hidden="true" />
+                    <t.icon size="1em" className="text-xl" aria-hidden="true" />
                   </span>
                   <span className="font-display text-sm font-bold text-foreground">{t.label}</span>
                   <span className="text-xs text-secondary">{t.desc}</span>
@@ -220,7 +230,7 @@ export default function StudentHome() {
             href="/cours"
             className="mt-3 flex items-center justify-center gap-2 rounded-2xl border border-token bg-surface-1 py-3.5 text-sm font-bold text-secondary shadow-soft transition-colors hover:text-foreground"
           >
-            <i className="ti ti-book-2 text-lg" aria-hidden="true" />
+            <IconBook2 size="1em" className="text-lg" aria-hidden="true" />
             Voir tous les cours
           </Link>
         </div>

@@ -10,6 +10,27 @@ import { useSettingsStore } from '@/store/settingsStore';
 import { usePurchasesStore } from '@/store/purchasesStore';
 import { useNotificationStore } from '@/store/notificationStore';
 import { SUBSCRIPTION_PRICE_ANNUAL } from '@permis2.0/shared';
+import {
+  IconAward,
+  IconBell,
+  IconChevronRight,
+  IconCrown,
+  IconPencil,
+  IconVolume,
+  IconVolumeOff,
+  IconHeadset,
+  IconShieldLock,
+  IconRefresh,
+  IconLogout,
+  IconLogin,
+  IconUserPlus,
+} from '@tabler/icons-react';
+
+type IconComponent = React.ComponentType<{
+  size?: string | number;
+  className?: string;
+  'aria-hidden'?: boolean | 'true' | 'false';
+}>;
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -39,13 +60,14 @@ function SettingRow({
   danger = false,
   chevron = true,
 }: {
-  icon: string;
+  icon: IconComponent;
   label: string;
   value?: React.ReactNode;
   onClick: () => void;
   danger?: boolean;
   chevron?: boolean;
 }) {
+  const Icon = icon;
   return (
     <button
       onClick={onClick}
@@ -54,10 +76,7 @@ function SettingRow({
       <div
         className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${danger ? 'bg-red-50' : 'bg-surface-2'}`}
       >
-        <i
-          className={`ti ${icon} text-base ${danger ? 'text-red-500' : 'text-secondary'}`}
-          aria-hidden="true"
-        />
+        <Icon size="1em" className={`text-base ${danger ? 'text-red-500' : 'text-secondary'}`} aria-hidden="true" />
       </div>
       <span
         className={`flex-1 text-left text-sm font-medium ${danger ? 'text-red-500' : 'text-foreground'}`}
@@ -66,7 +85,7 @@ function SettingRow({
       </span>
       {value !== undefined && <span className="text-xs text-muted">{value}</span>}
       {chevron && !danger && (
-        <i className="ti ti-chevron-right text-sm text-slate-300" aria-hidden="true" />
+        <IconChevronRight size="1em" className="text-sm text-slate-300" aria-hidden="true" />
       )}
     </button>
   );
@@ -227,7 +246,7 @@ export default function ProfilPage() {
             className="relative flex h-9 w-9 items-center justify-center rounded-full bg-surface-2 text-secondary transition-colors hover:bg-surface-3"
             aria-label="Notifications"
           >
-            <i className="ti ti-bell text-base" aria-hidden="true" />
+            <IconBell size="1em" className="text-base" aria-hidden="true" />
             {unreadCount > 0 && (
               <span className="absolute right-1 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-orange-500 text-[9px] font-black text-white ring-2 ring-surface-1">
                 {unreadCount > 9 ? '9+' : unreadCount}
@@ -257,7 +276,7 @@ export default function ProfilPage() {
                   className="absolute -bottom-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full border border-token bg-surface-1 shadow-sm"
                   aria-label="Modifier le nom"
                 >
-                  <i className="ti ti-pencil text-[10px] text-secondary" aria-hidden="true" />
+                  <IconPencil size="1em" className="text-[10px] text-secondary" aria-hidden="true" />
                 </button>
               )}
             </div>
@@ -271,7 +290,7 @@ export default function ProfilPage() {
               <span
                 className={`mt-1.5 inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[11px] font-bold ${levelMeta.chip}`}
               >
-                <i className="ti ti-award text-[11px]" aria-hidden="true" /> {level}
+                <IconAward size="1em" className="text-[11px]" aria-hidden="true" /> {level}
               </span>
             </div>
           </div>
@@ -298,12 +317,11 @@ export default function ProfilPage() {
           {isAuth && (
             <div className="mt-4 grid grid-cols-3 divide-x divide-token rounded-2xl bg-surface-2 py-3 text-center">
               {[
-                { label: 'Série', value: stats ? `${stats.streak} j` : '—', icon: 'ti-flame' },
-                { label: 'Quiz', value: stats ? stats.quizAnswered : '—', icon: 'ti-cards' },
+                { label: 'Série', value: stats ? `${stats.streak} j` : '—' },
+                { label: 'Quiz', value: stats ? stats.quizAnswered : '—' },
                 {
                   label: 'Précision',
                   value: stats ? `${stats.progressPct}%` : '—',
-                  icon: 'ti-target',
                 },
               ].map((s) => (
                 <div key={s.label}>
@@ -334,14 +352,14 @@ export default function ProfilPage() {
         ) : (
           <Link href="/boutique">
             <div className="mt-4 flex items-center gap-3 rounded-2xl bg-gradient-to-r from-orange-500 to-orange-600 px-4 py-4 text-white shadow-md">
-              <i className="ti ti-crown text-2xl" aria-hidden="true" />
+              <IconCrown size="1em" className="text-2xl" aria-hidden="true" />
               <div className="flex-1">
                 <p className="font-display text-sm font-bold">Passer Premium</p>
                 <p className="text-xs text-white/85">
                   Accès illimité — {SUBSCRIPTION_PRICE_ANNUAL}
                 </p>
               </div>
-              <i className="ti ti-chevron-right" aria-hidden="true" />
+              <IconChevronRight size="1em" aria-hidden="true" />
             </div>
           </Link>
         )}
@@ -349,7 +367,7 @@ export default function ProfilPage() {
         {/* ── Réglages ─── */}
         <div className="mt-6 rounded-2xl border border-token bg-surface-1 px-4 shadow-soft">
           <SettingRow
-            icon={soundEnabled ? 'ti-volume' : 'ti-volume-off'}
+            icon={soundEnabled ? IconVolume : IconVolumeOff}
             label="Sons des quiz"
             chevron={false}
             value={
@@ -366,13 +384,13 @@ export default function ProfilPage() {
             onClick={() => setSoundEnabled(!soundEnabled)}
           />
           <SettingRow
-            icon="ti-headset"
+            icon={IconHeadset}
             label="Assistance"
             onClick={() => router.push('/assistance')}
           />
           {String(authUser?.role) === 'ADMIN' && (
             <SettingRow
-              icon="ti-shield-lock"
+              icon={IconShieldLock}
               label="Administration"
               onClick={() => router.push('/admin')}
             />
@@ -384,22 +402,22 @@ export default function ProfilPage() {
           {isAuth ? (
             <>
               <SettingRow
-                icon="ti-refresh"
+                icon={IconRefresh}
                 label="Réinitialiser la progression"
                 onClick={() => setConfirmReset(true)}
                 danger
               />
-              <SettingRow icon="ti-logout" label="Se déconnecter" onClick={handleLogout} danger />
+              <SettingRow icon={IconLogout} label="Se déconnecter" onClick={handleLogout} danger />
             </>
           ) : (
             <>
               <SettingRow
-                icon="ti-login"
+                icon={IconLogin}
                 label="Se connecter"
                 onClick={() => router.push('/auth/login')}
               />
               <SettingRow
-                icon="ti-user-plus"
+                icon={IconUserPlus}
                 label="Créer un compte"
                 onClick={() => router.push('/auth/register')}
               />

@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { SiteHeader } from '@/components/SiteHeader';
 import { SiteFooter } from '@/components/SiteFooter';
 import { getBlogPostsSorted, type BlogCategory } from '@/content/blog';
+import { IconChevronRight } from '@tabler/icons-react';
 
 export const metadata: Metadata = {
   title: 'Blog — Conseils pour réussir le Code et le permis au Sénégal',
@@ -34,7 +35,7 @@ export default function BlogPage() {
           <Link href="/" className="hover:text-foreground">
             Accueil
           </Link>
-          <i className="ti ti-chevron-right text-[10px]" aria-hidden="true" />
+          <IconChevronRight size="1em" className="text-[10px]" aria-hidden="true" />
           <span className="text-foreground">Blog</span>
         </nav>
 

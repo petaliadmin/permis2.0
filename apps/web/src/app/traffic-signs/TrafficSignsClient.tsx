@@ -10,6 +10,16 @@ import { useWolofAudio } from '@/hooks/useWolofAudio';
 import { API_URL } from '@/lib/dataSource';
 import { slugify } from '@/lib/slug';
 import { categoryMeta as meta, CATEGORY_ORDER, HIDDEN_CATEGORIES } from '@/lib/trafficSignCategories';
+import {
+  IconChevronLeft,
+  IconChevronRight,
+  IconRoadSign,
+  IconSearch,
+  IconX,
+  IconBulb,
+  IconPlayerStopFilled,
+  IconLanguage,
+} from '@tabler/icons-react';
 
 /** Shape returned by GET /traffic-signs (DB) — mapped to the UI shape below. */
 interface ApiSign {
@@ -34,7 +44,7 @@ interface PanneauRaw {
 /* ─── Sign image with fallback ──────────────────────────── */
 function SignImg({ code, name, size = 40 }: { code: string; name: string; size?: number }) {
   const [err, setErr] = useState(false);
-  if (err) return <i className="ti ti-road-sign text-2xl text-slate-400" aria-hidden="true" />;
+  if (err) return <IconRoadSign size="1em" className="text-2xl text-slate-400" aria-hidden="true" />;
   return (
     <Image
       src={`/icons/panneaux/${code}.svg`}
@@ -166,7 +176,7 @@ export default function TrafficSignsClient({
         menu={!selectedCat}
       >
         <div className="flex items-center gap-2 rounded-2xl border border-token bg-surface-2 px-4 py-2.5">
-          <i className="ti ti-search text-secondary" aria-hidden="true" />
+          <IconSearch size="1em" className="text-secondary" aria-hidden="true" />
           <input
             value={query}
             onChange={(e) => {
@@ -178,7 +188,7 @@ export default function TrafficSignsClient({
           />
           {query && (
             <button onClick={() => setQuery('')} aria-label="Effacer">
-              <i className="ti ti-x text-secondary" aria-hidden="true" />
+              <IconX size="1em" className="text-secondary" aria-hidden="true" />
             </button>
           )}
         </div>
@@ -235,11 +245,7 @@ export default function TrafficSignsClient({
                       {list[0] ? (
                         <SignImg code={list[0].code} name={m.label} size={56} />
                       ) : (
-                        <i
-                          className={`ti ${m.icon} text-2xl`}
-                          style={{ color: m.color }}
-                          aria-hidden="true"
-                        />
+                        <m.icon size="1em" className="text-2xl" style={{ color: m.color }} aria-hidden="true" />
                       )}
                     </div>
                     <div className="min-w-0 flex-1">
@@ -248,7 +254,7 @@ export default function TrafficSignsClient({
                         {list.length} panneau{list.length > 1 ? 'x' : ''}
                       </p>
                     </div>
-                    <i className="ti ti-chevron-right text-lg text-slate-300" aria-hidden="true" />
+                    <IconChevronRight size="1em" className="text-lg text-slate-300" aria-hidden="true" />
                   </motion.button>
                 );
               })}
@@ -267,18 +273,24 @@ export default function TrafficSignsClient({
                 onClick={() => setSelectedCat(null)}
                 className="mb-4 flex items-center gap-2 text-sm font-semibold text-primary-600"
               >
-                <i className="ti ti-chevron-left" aria-hidden="true" /> Toutes les catégories
+                <IconChevronLeft size="1em" aria-hidden="true" /> Toutes les catégories
               </button>
               <div className="mb-4 flex items-center gap-3">
                 <div
                   className="flex h-10 w-10 items-center justify-center rounded-xl"
                   style={{ backgroundColor: meta(selectedCat).color + '18' }}
                 >
-                  <i
-                    className={`ti ${meta(selectedCat).icon} text-xl`}
-                    style={{ color: meta(selectedCat).color }}
-                    aria-hidden="true"
-                  />
+                  {(() => {
+                    const SelectedCatIcon = meta(selectedCat).icon;
+                    return (
+                      <SelectedCatIcon
+                        size="1em"
+                        className="text-xl"
+                        style={{ color: meta(selectedCat).color }}
+                        aria-hidden="true"
+                      />
+                    );
+                  })()}
                 </div>
                 <div className="min-w-0 flex-1">
                   <h2 className="font-display text-lg font-bold text-foreground">
@@ -296,7 +308,7 @@ export default function TrafficSignsClient({
                     aria-label="Catégorie précédente"
                     className="flex h-9 w-9 items-center justify-center rounded-xl border border-token bg-surface-1 text-secondary shadow-soft transition-transform active:scale-95 disabled:opacity-30"
                   >
-                    <i className="ti ti-chevron-left" aria-hidden="true" />
+                    <IconChevronLeft size="1em" aria-hidden="true" />
                   </button>
                   <button
                     onClick={() => nextCat && goToCat(nextCat)}
@@ -304,7 +316,7 @@ export default function TrafficSignsClient({
                     aria-label="Catégorie suivante"
                     className="flex h-9 w-9 items-center justify-center rounded-xl border border-token bg-surface-1 text-secondary shadow-soft transition-transform active:scale-95 disabled:opacity-30"
                   >
-                    <i className="ti ti-chevron-right" aria-hidden="true" />
+                    <IconChevronRight size="1em" aria-hidden="true" />
                   </button>
                 </div>
               </div>
@@ -321,8 +333,9 @@ export default function TrafficSignsClient({
                     onClick={() => goToCat(prevCat)}
                     className="flex flex-1 items-center gap-2.5 rounded-2xl border border-token bg-surface-1 px-3.5 py-3 text-left shadow-soft transition-transform active:scale-[0.98]"
                   >
-                    <i
-                      className="ti ti-chevron-left shrink-0 text-lg text-slate-400"
+                    <IconChevronLeft
+                      size="1em"
+                      className="shrink-0 text-lg text-slate-400"
                       aria-hidden="true"
                     />
                     <div className="min-w-0">
@@ -356,8 +369,9 @@ export default function TrafficSignsClient({
                         {meta(nextCat).label}
                       </p>
                     </div>
-                    <i
-                      className="ti ti-chevron-right shrink-0 text-lg text-slate-400"
+                    <IconChevronRight
+                      size="1em"
+                      className="shrink-0 text-lg text-slate-400"
                       aria-hidden="true"
                     />
                   </button>
@@ -374,14 +388,17 @@ export default function TrafficSignsClient({
 
       {/* ── Detail bottom-sheet ── */}
       <Sheet open={!!selectedSign} onClose={closeSheet} ariaLabel="Détail du panneau">
-        {selectedSign && (
+        {selectedSign && (() => {
+          const selMeta = meta(selectedSign.category);
+          const SelIcon = selMeta.icon;
+          return (
           <div className="flex flex-col items-center gap-4 pb-2">
             <motion.div
               initial={{ scale: 0.85, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ type: 'spring', stiffness: 260, damping: 20 }}
               className="flex h-32 w-32 items-center justify-center rounded-3xl p-3"
-              style={{ backgroundColor: meta(selectedSign.category).color + '15' }}
+              style={{ backgroundColor: selMeta.color + '15' }}
             >
               <SignImg code={selectedSign.code} name={selectedSign.name} size={96} />
             </motion.div>
@@ -389,12 +406,12 @@ export default function TrafficSignsClient({
             <span
               className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold"
               style={{
-                backgroundColor: meta(selectedSign.category).color + '18',
-                color: meta(selectedSign.category).color,
+                backgroundColor: selMeta.color + '18',
+                color: selMeta.color,
               }}
             >
-              <i className={`ti ${meta(selectedSign.category).icon}`} aria-hidden="true" />{' '}
-              {meta(selectedSign.category).label}
+              <SelIcon size="1em" aria-hidden="true" />{' '}
+              {selMeta.label}
             </span>
 
             <div className="w-full text-center">
@@ -416,11 +433,12 @@ export default function TrafficSignsClient({
                     <div
                       key={i}
                       className="flex items-start gap-2.5 rounded-xl px-3 py-2.5"
-                      style={{ backgroundColor: meta(selectedSign.category).color + '10' }}
+                      style={{ backgroundColor: selMeta.color + '10' }}
                     >
-                      <i
-                        className="ti ti-bulb mt-0.5 shrink-0"
-                        style={{ color: meta(selectedSign.category).color }}
+                      <IconBulb
+                        size="1em"
+                        className="mt-0.5 shrink-0"
+                        style={{ color: selMeta.color }}
                         aria-hidden="true"
                       />
                       <p className="text-sm leading-snug text-secondary">{tip}</p>
@@ -437,10 +455,11 @@ export default function TrafficSignsClient({
                   className="btn-primary flex-1"
                   aria-label="Écouter en wolof"
                 >
-                  <i
-                    className={`ti ${wolof.playing ? 'ti-player-stop-filled' : 'ti-language'}`}
-                    aria-hidden="true"
-                  />
+                  {wolof.playing ? (
+                    <IconPlayerStopFilled size="1em" aria-hidden="true" />
+                  ) : (
+                    <IconLanguage size="1em" aria-hidden="true" />
+                  )}
                   {wolof.playing ? 'Stop' : 'Wolof'}
                 </button>
               )}
@@ -452,7 +471,8 @@ export default function TrafficSignsClient({
               </Link>
             </div>
           </div>
-        )}
+          );
+        })()}
       </Sheet>
     </AppShell>
   );

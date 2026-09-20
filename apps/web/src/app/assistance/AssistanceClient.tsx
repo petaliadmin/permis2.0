@@ -5,31 +5,40 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { AppShell, PageHeader } from '@/components/AppShell';
 import { WHATSAPP_DISPLAY, whatsappLink } from '@/lib/contact';
 import { ASSISTANCE_FAQS as FAQ } from '@/lib/assistanceFaq';
+import {
+  IconBrandWhatsapp,
+  IconChevronRight,
+  IconChevronDown,
+  IconHeadset,
+  IconHelpCircle,
+  IconAlertTriangle,
+  IconBulb,
+} from '@tabler/icons-react';
 
 const HELP_ITEMS = [
   {
-    icon: 'ti-help-circle',
+    icon: IconHelpCircle,
     title: 'Questions fréquentes',
     desc: 'Consultez les réponses',
     color: '#7C3AED',
     soft: 'bg-violet-50',
   },
   {
-    icon: 'ti-brand-whatsapp',
+    icon: IconBrandWhatsapp,
     title: 'Nous contacter',
     desc: `WhatsApp · ${WHATSAPP_DISPLAY}`,
     color: '#25D366',
     soft: 'bg-green-50',
   },
   {
-    icon: 'ti-alert-triangle',
+    icon: IconAlertTriangle,
     title: 'Signaler un problème',
     desc: 'Aidez-nous à nous améliorer',
     color: '#F59E0B',
     soft: 'bg-amber-50',
   },
   {
-    icon: 'ti-bulb',
+    icon: IconBulb,
     title: 'Suggestions',
     desc: 'Partagez vos idées',
     color: '#16A34A',
@@ -60,7 +69,7 @@ export default function AssistanceClient() {
             </p>
           </div>
           <div className="chip chip-violet flex h-16 w-16 shrink-0 items-center justify-center !rounded-2xl">
-            <i className="ti ti-headset text-4xl" aria-hidden="true" />
+            <IconHeadset size="1em" className="text-4xl" aria-hidden="true" />
           </div>
         </div>
       </PageHeader>
@@ -79,17 +88,13 @@ export default function AssistanceClient() {
               <div
                 className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl ${item.soft}`}
               >
-                <i
-                  className={`ti ${item.icon} text-2xl`}
-                  style={{ color: item.color }}
-                  aria-hidden="true"
-                />
+                <item.icon size="1em" className="text-2xl" style={{ color: item.color }} aria-hidden="true" />
               </div>
               <div className="min-w-0 flex-1">
                 <p className="font-display text-base font-bold text-foreground">{item.title}</p>
                 <p className="mt-0.5 text-xs text-secondary">{item.desc}</p>
               </div>
-              <i className="ti ti-chevron-right text-lg text-slate-300" aria-hidden="true" />
+              <IconChevronRight size="1em" className="text-lg text-slate-300" aria-hidden="true" />
             </motion.button>
           ))}
         </div>
@@ -111,8 +116,9 @@ export default function AssistanceClient() {
                 className="flex w-full items-center gap-3 p-4 text-left"
               >
                 <span className="flex-1 text-sm font-semibold text-foreground">{f.question}</span>
-                <i
-                  className={`ti ti-chevron-down text-secondary transition-transform ${open === i ? 'rotate-180' : ''}`}
+                <IconChevronDown
+                  size="1em"
+                  className={`text-secondary transition-transform ${open === i ? 'rotate-180' : ''}`}
                   aria-hidden="true"
                 />
               </button>
@@ -134,7 +140,7 @@ export default function AssistanceClient() {
 
         {/* Contact CTA — WhatsApp */}
         <div className="mt-6 rounded-2xl bg-gradient-to-br from-[#25D366] to-[#128C7E] p-5 text-center text-white shadow-md">
-          <i className="ti ti-brand-whatsapp text-3xl" aria-hidden="true" />
+          <IconBrandWhatsapp size="1em" className="text-3xl" aria-hidden="true" />
           <p className="mt-2 font-display text-base font-bold">Toujours besoin d'aide ?</p>
           <p className="mt-1 text-xs text-white/85">
             Écrivez-nous sur WhatsApp — 7j/7 de 9h à 21h.
@@ -145,7 +151,7 @@ export default function AssistanceClient() {
             rel="noopener noreferrer"
             className="mt-4 inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-bold text-[#128C7E]"
           >
-            <i className="ti ti-brand-whatsapp" aria-hidden="true" /> {WHATSAPP_DISPLAY}
+            <IconBrandWhatsapp size="1em" aria-hidden="true" /> {WHATSAPP_DISPLAY}
           </a>
         </div>
       </div>

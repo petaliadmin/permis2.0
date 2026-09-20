@@ -134,20 +134,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       suppressHydrationWarning
     >
       <head>
-        {/* Self-hosted (was a render-blocking cdn.jsdelivr.net stylesheet) — icons are
-            used site-wide (nav, buttons) so the font is preloaded, not just linked.
-            The href must match the @font-face `src` in tabler-icons.min.css
-            (including its `?v3.44.0` query string) byte-for-byte, otherwise the
-            preload isn't reused and the font is fetched twice. */}
-        <link
-          rel="preload"
-          href="/fonts/tabler-icons/fonts/tabler-icons.woff2?v3.44.0"
-          as="font"
-          type="font/woff2"
-          crossOrigin="anonymous"
-        />
-        <link rel="stylesheet" href="/fonts/tabler-icons/tabler-icons.min.css" />
-
         {/* Basic WebSite structured data — sitelinks searchbox eligibility */}
         <script
           type="application/ld+json"

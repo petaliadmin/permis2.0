@@ -17,6 +17,7 @@ import {
   type SchoolSort,
 } from '@/components/SchoolFiltersBar';
 import { cn } from '@/lib/cn';
+import { IconMapPinOff, IconCurrentLocation, IconCurrentLocationOff } from '@tabler/icons-react';
 
 // Google Maps needs `window` — never rendered during SSR.
 const SchoolsMap = dynamic(
@@ -150,10 +151,11 @@ export default function EcolesClient() {
                 userPos ? 'btn-primary' : 'btn-ghost'
               )}
             >
-              <i
-                className={cn('ti', userPos ? 'ti-current-location-off' : 'ti-current-location')}
-                aria-hidden="true"
-              />
+              {userPos ? (
+                <IconCurrentLocationOff size="1em" aria-hidden="true" />
+              ) : (
+                <IconCurrentLocation size="1em" aria-hidden="true" />
+              )}
               {userPos ? 'Désactiver' : 'Autour de moi'}
             </button>
           </div>
@@ -188,7 +190,7 @@ export default function EcolesClient() {
             Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-32 w-full" />)
           ) : count === 0 ? (
             <EmptyState
-              icon={<i className="ti ti-map-pin-off" aria-hidden="true" />}
+              icon={<IconMapPinOff size="1em" aria-hidden="true" />}
               title={hasFilters ? 'Aucune auto-école ne correspond' : 'Aucune auto-école pour le moment'}
               description={
                 hasFilters

@@ -6,12 +6,27 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { AppShell } from '@/components/AppShell';
 import { useNotificationStore, type AppNotification } from '@/store/notificationStore';
 import { useAuthStore } from '@/store/authStore';
+import {
+  IconBellOff,
+  IconChevronLeft,
+  IconX,
+  IconCircleCheck,
+  IconInfoCircle,
+  IconAlertTriangle,
+  IconCircleX,
+} from '@tabler/icons-react';
 
-const TYPE_META: Record<AppNotification['type'], { icon: string; bg: string; text: string }> = {
-  success: { icon: 'ti-circle-check', bg: 'bg-emerald-100', text: 'text-emerald-600' },
-  info: { icon: 'ti-info-circle', bg: 'bg-sky-100', text: 'text-sky-600' },
-  warning: { icon: 'ti-alert-triangle', bg: 'bg-amber-100', text: 'text-amber-600' },
-  error: { icon: 'ti-circle-x', bg: 'bg-red-100', text: 'text-red-600' },
+type IconComponent = React.ComponentType<{
+  size?: string | number;
+  className?: string;
+  'aria-hidden'?: boolean | 'true' | 'false';
+}>;
+
+const TYPE_META: Record<AppNotification['type'], { icon: IconComponent; bg: string; text: string }> = {
+  success: { icon: IconCircleCheck, bg: 'bg-emerald-100', text: 'text-emerald-600' },
+  info: { icon: IconInfoCircle, bg: 'bg-sky-100', text: 'text-sky-600' },
+  warning: { icon: IconAlertTriangle, bg: 'bg-amber-100', text: 'text-amber-600' },
+  error: { icon: IconCircleX, bg: 'bg-red-100', text: 'text-red-600' },
 };
 
 function timeAgo(iso: string): string {
@@ -56,7 +71,7 @@ export default function NotificationsPage() {
             className="flex h-9 w-9 items-center justify-center rounded-full bg-surface-2"
             aria-label="Retour"
           >
-            <i className="ti ti-chevron-left text-lg text-foreground" aria-hidden="true" />
+            <IconChevronLeft size="1em" className="text-lg text-foreground" aria-hidden="true" />
           </button>
           <h1 className="font-display text-xl font-extrabold text-foreground">Notifications</h1>
         </div>
@@ -87,7 +102,7 @@ export default function NotificationsPage() {
         ) : items.length === 0 ? (
           <div className="flex flex-col items-center justify-center pt-16 text-center">
             <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-surface-2">
-              <i className="ti ti-bell-off text-2xl text-muted" aria-hidden="true" />
+              <IconBellOff size="1em" className="text-2xl text-muted" aria-hidden="true" />
             </div>
             <p className="font-display text-base font-bold text-foreground">Aucune notification</p>
             <p className="mt-1 text-sm text-muted">
@@ -158,7 +173,7 @@ function NotifCard({
       <span
         className={`mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${meta.bg}`}
       >
-        <i className={`ti ${meta.icon} text-base ${meta.text}`} aria-hidden="true" />
+        <meta.icon size="1em" className={`text-base ${meta.text}`} aria-hidden="true" />
       </span>
 
       {/* Content */}
@@ -189,7 +204,7 @@ function NotifCard({
         className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-muted hover:bg-surface-2 hover:text-foreground"
         aria-label="Supprimer"
       >
-        <i className="ti ti-x text-xs" aria-hidden="true" />
+        <IconX size="1em" className="text-xs" aria-hidden="true" />
       </button>
     </motion.li>
   );
