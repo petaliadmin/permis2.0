@@ -4,13 +4,13 @@ export const OG_SIZE = { width: 1200, height: 630 };
 export const OG_CONTENT_TYPE = 'image/png';
 
 /**
- * Shared branded template for dynamic opengraph-image.tsx route files —
- * every page that shared the generic homepage photo as its social preview
- * gets a title-specific card instead (see opengraph-image.tsx siblings).
+ * Shared branded card — used both by the opengraph-image.tsx route files
+ * (renderOgImage, PNG at the standard 1.91:1 social-preview ratio) and by
+ * blog/[slug]/cover.webp (renderCardImage, 16:9 WebP for BlogPosting.image —
+ * see brief Lot 2.6). Extracted so both stay visually identical.
  */
-export function renderOgImage(title: string, subtitle?: string) {
-  return new ImageResponse(
-    (
+function cardElement(title: string, subtitle?: string) {
+  return (
       <div
         style={{
           width: '100%',
@@ -64,7 +64,22 @@ export function renderOgImage(title: string, subtitle?: string) {
           )}
         </div>
       </div>
-    ),
-    { ...OG_SIZE }
   );
+}
+
+/** PNG at the standard 1.91:1 social-preview ratio — og:image/twitter:image
+ *  convention every major platform expects (see opengraph-image.tsx files). */
+export function renderOgImage(title: string, subtitle?: string) {
+  return new ImageResponse(cardElement(title, subtitle), { ...OG_SIZE });
+}
+
+/** Same card, sized 16:9 — for callers that need a specific size/aspect
+ *  ratio (blog/[slug]/cover.webp converts this to WebP for BlogPosting.image,
+ *  brief Lot 2.6) rather than the OG-convention 1.91:1. */
+export function renderCardImage(
+  title: string,
+  subtitle: string | undefined,
+  size: { width: number; height: number }
+) {
+  return new ImageResponse(cardElement(title, subtitle), { ...size });
 }

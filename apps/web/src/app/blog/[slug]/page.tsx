@@ -29,6 +29,10 @@ export async function generateMetadata({
   const post = getBlogPost(slug);
   if (!post) return { title: 'Article introuvable' };
 
+  // Lot 2.6 — one 16:9 WebP image per post, shared by og:image/twitter:image
+  // and BlogPosting.image (jsonLd() below), instead of no image at all.
+  const coverUrl = `${SITE_URL}/blog/${slug}/cover.webp`;
+
   return {
     title: post.title,
     description: post.description,
@@ -37,6 +41,11 @@ export async function generateMetadata({
       type: 'article',
       publishedTime: post.publishedAt,
       modifiedTime: post.updatedAt,
+      images: [{ url: coverUrl, width: 1200, height: 675, alt: post.title }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      images: [coverUrl],
     },
   };
 }
@@ -61,6 +70,7 @@ function jsonLd(post: NonNullable<ReturnType<typeof getBlogPost>>, slug: string)
     '@type': 'BlogPosting',
     headline: post.title,
     description: post.description,
+    image: `${SITE_URL}/blog/${slug}/cover.webp`,
     datePublished: post.publishedAt,
     dateModified: post.updatedAt,
     author: { '@type': 'Organization', name: 'PERMIS2.0' },
