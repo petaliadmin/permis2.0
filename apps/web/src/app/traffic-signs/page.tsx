@@ -1,22 +1,71 @@
 import type { Metadata } from 'next';
 import TrafficSignsClient from './TrafficSignsClient';
+import { TrafficSignsFullIndex } from './TrafficSignsFullIndex';
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
 export const metadata: Metadata = {
   title: 'Panneaux de signalisation du Sénégal',
   description:
     'Apprenez tous les panneaux de signalisation routière du code sénégalais : danger, interdiction, obligation, indication — avec explications en français et en wolof.',
-  // Lot 0.4 — server HTML is a near-empty shell (hub content loads client-side),
-  // well under the 250-word floor. Re-indexable once the hub is server-rendered
-  // (see brief Lot 1.2).
-  // canonical: null clears it rather than inheriting root layout's
-  // `alternates.canonical: '/'` (which resolves to www regardless of the
-  // actual host) — that combined with noindex was rule 4's forbidden
-  // noindex+external-canonical pairing. A real self-referent, host-aware
-  // canonical is Lot 1.1/2.1's job.
-  alternates: { canonical: null },
-  robots: { index: false, follow: true },
+  alternates: { canonical: '/traffic-signs' },
+  // Lot 1.2 — server-rendered now (real data + a full crawlable index below
+  // the picker), so the Lot 0.4 noindex (near-empty HTML shell) no longer
+  // applies.
 };
 
-export default function Page() {
-  return <TrafficSignsClient />;
+interface ApiSign {
+  code: string | null;
+  name: string;
+  category: string;
+  description: string;
+  advice: string[];
+  icone?: string | null;
+}
+
+interface PanneauRaw {
+  name: string;
+  code: string;
+  description: string;
+  category: string;
+  icon: string;
+  advice?: string[];
+}
+
+// Reference content changes rarely — revalidate daily, same as the sign
+// detail pages (app/traffic-signs/[slug]/page.tsx), rather than the fully
+// static `force-static` the brief suggests: the root layout already reads
+// `headers()` (for the www/learn/school/admin space), which makes the whole
+// render tree request-dependent — ISR is the pattern already proven to work
+// under that constraint elsewhere in this app.
+async function fetchSigns(): Promise<PanneauRaw[]> {
+  try {
+    const res = await fetch(`${API_URL}/traffic-signs?take=300`, {
+      next: { revalidate: 86400 },
+    });
+    if (!res.ok) return [];
+    const { data } = (await res.json()) as { data: ApiSign[] };
+    return data
+      .filter((s) => s.code)
+      .map((s) => ({
+        code: s.code as string,
+        name: s.name,
+        category: s.category,
+        description: s.description,
+        icon: s.icone ?? '',
+        advice: s.advice,
+      }));
+  } catch {
+    return [];
+  }
+}
+
+export default async function Page() {
+  const signs = await fetchSigns();
+  return (
+    <TrafficSignsClient
+      initialSigns={signs}
+      fullIndex={<TrafficSignsFullIndex signs={signs} />}
+    />
+  );
 }

@@ -9,6 +9,7 @@ import { Sheet } from '@permis2.0/ui';
 import { useWolofAudio } from '@/hooks/useWolofAudio';
 import { API_URL } from '@/lib/dataSource';
 import { slugify } from '@/lib/slug';
+import { categoryMeta as meta, CATEGORY_ORDER, HIDDEN_CATEGORIES } from '@/lib/trafficSignCategories';
 
 /** Shape returned by GET /traffic-signs (DB) — mapped to the UI shape below. */
 interface ApiSign {
@@ -28,28 +29,6 @@ interface PanneauRaw {
   category: string;
   icon: string;
   advice?: string[];
-}
-interface CategoryMeta {
-  label: string;
-  icon: string;
-  color: string;
-}
-
-/* ─── Category metadata (icon + road-code color) ─────────── */
-const CAT_META: Record<string, CategoryMeta> = {
-  danger: { label: 'Danger', icon: 'ti-alert-triangle', color: '#EF4444' },
-  interdiction: { label: 'Interdiction', icon: 'ti-ban', color: '#DC2626' },
-  priorité: { label: 'Priorité', icon: 'ti-square-rotated', color: '#F59E0B' },
-  obligation: { label: 'Obligation', icon: 'ti-arrow-right', color: '#2563EB' },
-  indication: { label: 'Indication', icon: 'ti-arrow-up', color: '#0000FD' },
-  temporaires: { label: 'Temporaires', icon: 'ti-traffic-cone', color: '#F97316' },
-  balises: { label: 'Balises', icon: 'ti-map-pin', color: '#64748B' },
-  marquage: { label: 'Marquage sol', icon: 'ti-road', color: '#71717A' },
-  feux: { label: 'Feux tricolores', icon: 'ti-traffic-lights', color: '#16A34A' },
-  agents: { label: 'Agents', icon: 'ti-user-shield', color: '#7C3AED' },
-};
-function meta(cat: string): CategoryMeta {
-  return CAT_META[cat] ?? { label: cat, icon: 'ti-road-sign', color: '#64748B' };
 }
 
 /* ─── Sign image with fallback ──────────────────────────── */
@@ -75,8 +54,20 @@ const rowVariants = {
 };
 
 /* ─── Page ───────────────────────────────────────────────── */
-export default function TrafficSignsClient() {
-  const [signs, setSigns] = useState<PanneauRaw[]>([]);
+export default function TrafficSignsClient({
+  initialSigns = [],
+  fullIndex,
+}: {
+  /** Server-fetched signs (app/traffic-signs/page.tsx) — seeds state so the
+   *  picker never flashes "0 panneaux" pre-hydration; the effect below still
+   *  refreshes/falls back to the offline JSON as before. */
+  initialSigns?: PanneauRaw[];
+  /** TrafficSignsFullIndex, passed in as a Server Component element by
+   *  page.tsx so it renders inside AppShell's constrained-width container
+   *  without this client component importing (and thus client-bundling) it. */
+  fullIndex?: React.ReactNode;
+}) {
+  const [signs, setSigns] = useState<PanneauRaw[]>(initialSigns);
   const [selectedCat, setSelectedCat] = useState<string | null>(null);
   const [selectedSign, setSelectedSign] = useState<PanneauRaw | null>(null);
   const [query, setQuery] = useState('');
@@ -110,12 +101,6 @@ export default function TrafficSignsClient() {
       );
   }, []);
 
-  // Ordre pédagogique : dangers → règles de priorité → interdictions → obligations,
-  // puis panneaux d'information et signalisation complémentaire.
-  const catOrder = ['danger', 'priorité', 'interdiction', 'obligation', 'indication'];
-  // Catégories retirées de la liste (trop peu de panneaux pour justifier leur propre carte).
-  const HIDDEN_CATS = ['temporaires', 'balises', 'marquage', 'feux', 'agents'];
-
   const grouped = useMemo(() => {
     const g: Record<string, PanneauRaw[]> = {};
     for (const s of signs) (g[s.category] ??= []).push(s);
@@ -123,8 +108,8 @@ export default function TrafficSignsClient() {
   }, [signs]);
 
   const allCats = [
-    ...catOrder.filter((c) => grouped[c]),
-    ...Object.keys(grouped).filter((c) => !catOrder.includes(c) && !HIDDEN_CATS.includes(c)),
+    ...CATEGORY_ORDER.filter((c) => grouped[c]),
+    ...Object.keys(grouped).filter((c) => !CATEGORY_ORDER.includes(c) && !HIDDEN_CATEGORIES.includes(c)),
   ];
 
   const searchResults = useMemo(() => {
@@ -384,6 +369,8 @@ export default function TrafficSignsClient() {
           )}
         </AnimatePresence>
       </div>
+
+      {fullIndex}
 
       {/* ── Detail bottom-sheet ── */}
       <Sheet open={!!selectedSign} onClose={closeSheet} ariaLabel="Détail du panneau">
