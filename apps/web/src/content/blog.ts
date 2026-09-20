@@ -16,7 +16,13 @@ export type ContentBlock =
   | { type: 'ul'; items: string[] }
   | { type: 'ol'; items: string[] }
   | { type: 'callout'; tone: 'info' | 'success' | 'warning'; title: string; text: string }
-  | { type: 'links'; items: { href: string; label: string }[] };
+  | {
+      type: 'links';
+      /** `external: true` opens in a new tab with rel="noopener" — for
+       *  citing a source outside permis2.com (e.g. an official government
+       *  publication) rather than linking to another page on this site. */
+      items: { href: string; label: string; external?: boolean }[];
+    };
 
 export interface BlogPost {
   slug: string;
@@ -339,6 +345,116 @@ export const BLOG_POSTS: BlogPost[] = [
         question: 'Faut-il s\'arrêter complètement à un Cédez le passage si la voie est libre ?',
         answer:
           "Non, contrairement au STOP qui impose un arrêt total dans tous les cas, le Cédez le passage impose seulement de ralentir et de céder le passage si un véhicule est présent sur la voie prioritaire.",
+      },
+    ],
+  },
+  {
+    slug: 'reforme-code-route-senegal-permis-a-points',
+    title: 'Réforme du Code de la route au Sénégal',
+    description:
+      "Permis à points, vidéo-verbalisation, paiements numériques : où en est la réforme du Code de la route sénégalais, et que dit le texte actuellement en vigueur.",
+    category: 'Code de la route',
+    publishedAt: '2026-09-20',
+    updatedAt: '2026-09-20',
+    readingMinutes: 5,
+    directAnswer:
+      "Le Code de la route actuellement en vigueur au Sénégal est la loi n°2022-04 du 15 avril 2022 (partie législative). Le gouvernement travaille depuis à une réforme de sa partie réglementaire — permis à points, vidéo-verbalisation, paiements numériques, formation obligatoire en auto-école — annoncée pour une application progressive à partir de 2026, mais dont l'entrée en vigueur définitive n'était pas confirmée à la date de publication de cet article.",
+    blocks: [
+      {
+        type: 'h2',
+        text: 'Le Code de la route actuellement en vigueur',
+      },
+      {
+        type: 'p',
+        text: "Le texte de référence est la loi n°2022-04 du 15 avril 2022 portant Code de la route (partie législative), publiée au Journal Officiel n°7520 du 27 avril 2022. C'est ce texte qui fixe aujourd'hui les règles de circulation, les catégories de permis et les sanctions applicables au Sénégal.",
+      },
+      {
+        type: 'links',
+        items: [
+          {
+            href: 'https://www.vie-publique.sn/documents/8335/loi-n-2022-04-du-15-avril-2022-portant-code-de-la-route-partie-legislative',
+            label: 'Loi n°2022-04 sur Vie-Publique.sn (plateforme officielle)',
+            external: true,
+          },
+        ],
+      },
+      {
+        type: 'h2',
+        text: 'Une réforme en cours de finalisation',
+      },
+      {
+        type: 'p',
+        text: "Depuis 2025, le gouvernement sénégalais travaille sur une réforme de la partie réglementaire du Code de la route, portée notamment par le ministère des Infrastructures et des Transports terrestres. D'après les annonces relayées par la presse économique début 2026, le chantier technique était alors évalué à environ 80 % d'avancement, avec un objectif d'application progressive avant la fin du premier semestre 2026 — sans date d'entrée en vigueur définitive confirmée à ce jour.",
+      },
+      {
+        type: 'callout',
+        tone: 'info',
+        title: 'Ce que cette page peut confirmer',
+        text: "PERMIS2.0 n'est pas une administration et ne peut pas confirmer une date d'entrée en vigueur. Cette page cite les sources disponibles à la date de publication et sera mise à jour si un texte réglementaire officiel est publié. Vérifiez toujours l'information auprès des services compétents de l'État avant toute démarche administrative.",
+      },
+      {
+        type: 'h2',
+        text: 'Les mesures annoncées',
+      },
+      {
+        type: 'ul',
+        items: [
+          "Permis à points : un système de points associé au permis de conduire, avec retrait progressif en cas d'infractions répétées.",
+          "Vidéo-verbalisation : des infractions constatées et sanctionnées à distance par caméra, sans interception systématique du véhicule.",
+          "Paiements numériques : dématérialisation du paiement des amendes et de certaines démarches liées au contrôle technique.",
+          "Formation renforcée en auto-école : un passage en auto-école rendu obligatoire pour l'obtention du permis, avec une professionnalisation accrue de la formation, en particulier pour les conducteurs de transport en commun.",
+        ],
+      },
+      {
+        type: 'p',
+        text: "Ces mesures sont celles rapportées par la presse au sujet des annonces gouvernementales — elles décrivent un projet en cours de finalisation, pas un texte déjà promulgué. Tant qu'aucun décret d'application n'est officiellement publié, le Code actuellement en vigueur reste la loi n°2022-04 citée plus haut.",
+      },
+      {
+        type: 'links',
+        items: [
+          {
+            href: 'https://www.socialnetlink.org/2026/03/11/permis-a-points-videoverbalisation-paiements-digitaux-le-senegal-accelere-la-digitalisation-du-code-de-la-route/',
+            label: 'SocialNetLink — le point sur la réforme (mars 2026)',
+            external: true,
+          },
+          {
+            href: 'https://fr.apanews.net/security/senegal-vers-une-mise-en-oeuvre-acceleree-du-nouveau-code-de-la-route/',
+            label: 'APAnews — mise en œuvre accélérée du nouveau Code',
+            external: true,
+          },
+        ],
+      },
+      {
+        type: 'h2',
+        text: "Se préparer dès maintenant, sans attendre la réforme",
+      },
+      {
+        type: 'p',
+        text: "Quelle que soit la date d'entrée en vigueur de la réforme, les bases du Code de la route — panneaux, priorités, règles de circulation — resteront le socle de l'examen. Réviser sérieusement dès aujourd'hui reste la meilleure préparation, quelle que soit la version du texte en vigueur le jour de l'examen.",
+      },
+      {
+        type: 'links',
+        items: [
+          { href: '/code-route-senegal', label: 'Le guide complet du Code de la route' },
+          { href: '/traffic-signs', label: 'Réviser les panneaux par catégorie' },
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: 'Le permis à points est-il déjà en vigueur au Sénégal ?',
+        answer:
+          "Non, pas à la date de publication de cet article. La réforme est annoncée et en cours de finalisation par le gouvernement, mais aucun texte réglementaire officiel confirmant son entrée en vigueur n'était disponible sur les sources publiques consultées.",
+      },
+      {
+        question: 'Où trouver le texte officiel du Code de la route sénégalais ?',
+        answer:
+          "La loi n°2022-04 du 15 avril 2022 portant Code de la route (partie législative) est publiée sur Vie-Publique.sn, qui diffuse les documents des institutions officielles du Sénégal.",
+      },
+      {
+        question: "Cette réforme va-t-elle changer le contenu de l'examen du Code ?",
+        answer:
+          "Le contenu précis d'un futur examen dépendra des textes d'application, non encore publiés. Les règles de circulation, priorités et panneaux qui forment le socle du Code de la route ne devraient pas être bouleversés — se préparer sur ces bases reste pertinent quelle que soit l'issue de la réforme.",
       },
     ],
   },

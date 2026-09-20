@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import type { ContentBlock } from '@/content/blog';
-import { IconArrowRight } from '@tabler/icons-react';
+import { IconArrowRight, IconExternalLink } from '@tabler/icons-react';
 
 const CALLOUT_STYLES: Record<string, { bg: string; title: string; text: string }> = {
   info: { bg: 'bg-primary-50', title: 'text-primary-700', text: 'text-primary-900' },
@@ -55,16 +55,29 @@ export function ArticleBlocks({ blocks }: { blocks: ContentBlock[] }) {
           case 'links':
             return (
               <div key={i} className="flex flex-wrap gap-2">
-                {block.items.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className="inline-flex items-center gap-1.5 rounded-full border border-token bg-surface-1 px-3.5 py-2 text-xs font-semibold text-primary-600 hover:bg-surface-2"
-                  >
-                    {link.label}
-                    <IconArrowRight size="1em" className="text-[11px]" aria-hidden="true" />
-                  </Link>
-                ))}
+                {block.items.map((link) =>
+                  link.external ? (
+                    <a
+                      key={link.href}
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 rounded-full border border-token bg-surface-1 px-3.5 py-2 text-xs font-semibold text-primary-600 hover:bg-surface-2"
+                    >
+                      {link.label}
+                      <IconExternalLink size="1em" className="text-[11px]" aria-hidden="true" />
+                    </a>
+                  ) : (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      className="inline-flex items-center gap-1.5 rounded-full border border-token bg-surface-1 px-3.5 py-2 text-xs font-semibold text-primary-600 hover:bg-surface-2"
+                    >
+                      {link.label}
+                      <IconArrowRight size="1em" className="text-[11px]" aria-hidden="true" />
+                    </Link>
+                  )
+                )}
               </div>
             );
           default:
