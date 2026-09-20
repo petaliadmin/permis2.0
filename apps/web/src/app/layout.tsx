@@ -34,8 +34,13 @@ const baloo = Baloo_2({
 });
 
 const SITE_URL = 'https://www.permis2.com';
+// Lot 2.7 — no "en français et en wolof" here: metadata (and the JSON-LD
+// below, which reuses this same constant) shouldn't promise wolof-language
+// content site-wide when only a handful of audio files exist for specific
+// signs/lessons (see hooks/useWolofAudio.ts) — a real, working, but partial
+// feature, not the blanket bilingual claim this used to make.
 const SEO_DESCRIPTION =
-  'PERMIS 2.0 : préparez votre permis et le code de la route au Sénégal — leçons, panneaux de signalisation, séries de quiz et examens blancs, en français et en wolof. Élèves et auto-écoles du Sénégal.';
+  'PERMIS 2.0 : préparez votre permis et le code de la route au Sénégal — leçons, panneaux de signalisation, séries de quiz et examens blancs. Élèves et auto-écoles du Sénégal.';
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

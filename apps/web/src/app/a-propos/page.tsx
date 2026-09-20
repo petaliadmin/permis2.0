@@ -30,10 +30,10 @@ export default function AProposPage() {
 
           <h2 className="font-display text-xl font-bold text-foreground">Notre mission</h2>
           <p>
-            Rendre la préparation au permis plus accessible partout au Sénégal, en français et en
-            wolof : réviser le code de la route à son rythme, s'entraîner avec des quiz et des
-            examens blancs, apprendre à reconnaître les panneaux de signalisation, puis se
-            pré-inscrire en ligne auprès d'une auto-école partenaire.
+            Rendre la préparation au permis plus accessible partout au Sénégal : réviser le code
+            de la route à son rythme, s'entraîner avec des quiz et des examens blancs, apprendre à
+            reconnaître les panneaux de signalisation, puis se pré-inscrire en ligne auprès d'une
+            auto-école partenaire.
           </p>
 
           <h2 className="font-display text-xl font-bold text-foreground">Ce que propose PERMIS 2.0</h2>

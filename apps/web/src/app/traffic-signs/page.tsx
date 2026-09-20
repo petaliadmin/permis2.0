@@ -6,8 +6,11 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
 export const metadata: Metadata = {
   title: 'Panneaux de signalisation du Sénégal',
+  // Lot 2.7 — dropped "en français et en wolof": no wolof content exists at
+  // hub/category level, only per-sign audio where a recording happens to
+  // exist (hooks/useWolofAudio.ts).
   description:
-    'Apprenez tous les panneaux de signalisation routière du code sénégalais : danger, interdiction, obligation, indication — avec explications en français et en wolof.',
+    'Apprenez tous les panneaux de signalisation routière du code sénégalais : danger, interdiction, obligation, indication.',
   alternates: { canonical: '/traffic-signs' },
   // Lot 1.2 — server-rendered now (real data + a full crawlable index below
   // the picker), so the Lot 0.4 noindex (near-empty HTML shell) no longer
