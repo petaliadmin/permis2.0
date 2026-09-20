@@ -5,9 +5,9 @@ import { AppShell, PageHeader } from '@/components/AppShell';
 import { slugify } from '@/lib/slug';
 import { CATEGORY_ORDER, categoryMeta } from '@/lib/trafficSignCategories';
 import { IconChevronRight } from '@tabler/icons-react';
+import { organizationNode, websiteNode, graphScript, SITE_URL } from '@/lib/seo/jsonLd';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
-const SITE_URL = 'https://www.permis2.com';
 
 // URL slug (accent-free) → the category key as stored in the DB. Built from
 // CATEGORY_ORDER + slugify so it can't drift from the picker/hub's own
@@ -83,9 +83,11 @@ export async function generateMetadata({
   };
 }
 
-function jsonLd(dbCategory: string, slug: string, label: string, signs: ApiSign[]) {
+// Lot 2.4 — one @graph (WebSite + Organization + BreadcrumbList + ItemList)
+// instead of two separate blocks; this page is in pageProvidesOwnGraph()
+// (lib/seo/jsonLd.ts) so the root layout skips its own script here.
+function categoryJsonLd(dbCategory: string, slug: string, label: string, signs: ApiSign[]): string {
   const breadcrumb = {
-    '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Accueil', item: SITE_URL },
@@ -99,7 +101,6 @@ function jsonLd(dbCategory: string, slug: string, label: string, signs: ApiSign[
     ],
   };
   const itemList = {
-    '@context': 'https://schema.org',
     '@type': 'ItemList',
     name: categoryHeading(label),
     numberOfItems: signs.length,
@@ -110,7 +111,7 @@ function jsonLd(dbCategory: string, slug: string, label: string, signs: ApiSign[
       url: `${SITE_URL}/traffic-signs/${slugify(s.name)}`,
     })),
   };
-  return [breadcrumb, itemList];
+  return graphScript([organizationNode(), websiteNode(), breadcrumb, itemList]);
 }
 
 export default async function CategoryPage({
@@ -130,13 +131,10 @@ export default async function CategoryPage({
 
   return (
     <>
-      {jsonLd(dbCategory, slug, meta.label, signs).map((block, i) => (
-        <script
-          key={i}
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(block) }}
-        />
-      ))}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: categoryJsonLd(dbCategory, slug, meta.label, signs) }}
+      />
       <AppShell>
         <PageHeader
           title={categoryHeading(meta.label)}

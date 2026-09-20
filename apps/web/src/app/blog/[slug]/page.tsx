@@ -6,8 +6,7 @@ import { SiteFooter } from '@/components/SiteFooter';
 import { ArticleBlocks } from '@/components/blog/ArticleBlocks';
 import { getBlogPost, getBlogPostsSorted, type BlogCategory } from '@/content/blog';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
-
-const SITE_URL = 'https://www.permis2.com';
+import { organizationNode, websiteNode, graphScript, ORGANIZATION_ID, SITE_URL } from '@/lib/seo/jsonLd';
 
 const CATEGORY_CHIP: Record<BlogCategory, string> = {
   'Conseils examen': 'chip-orange',
@@ -54,10 +53,19 @@ function formatDate(iso: string): string {
   return new Date(iso).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
 }
 
-function jsonLd(post: NonNullable<ReturnType<typeof getBlogPost>>, slug: string) {
+// Lot 2.4 — one @graph (WebSite + Organization + BreadcrumbList +
+// BlogPosting + optional FAQPage) instead of 2-3 separate <script> blocks,
+// each with its own redundant @context. author/publisher reference the one
+// Organization node by @id instead of re-embedding
+// `{'@type': 'Organization', name: 'PERMIS2.0'}`.
+//
+// Lot 2.5 asks for `author` with `sameAs` — omitted: these posts are
+// team-authored (not attributed to a person), and no real social profile
+// URLs exist anywhere in this codebase to point `sameAs` at (brief rule 1:
+// no invented data).
+function blogJsonLd(post: NonNullable<ReturnType<typeof getBlogPost>>, slug: string): string {
   const url = `${SITE_URL}/blog/${slug}`;
   const breadcrumb = {
-    '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Accueil', item: SITE_URL },
@@ -66,21 +74,19 @@ function jsonLd(post: NonNullable<ReturnType<typeof getBlogPost>>, slug: string)
     ],
   };
   const article = {
-    '@context': 'https://schema.org',
     '@type': 'BlogPosting',
     headline: post.title,
     description: post.description,
     image: `${SITE_URL}/blog/${slug}/cover.webp`,
     datePublished: post.publishedAt,
     dateModified: post.updatedAt,
-    author: { '@type': 'Organization', name: 'PERMIS2.0' },
-    publisher: { '@type': 'Organization', name: 'PERMIS2.0' },
+    author: { '@id': ORGANIZATION_ID },
+    publisher: { '@id': ORGANIZATION_ID },
     url,
   };
-  const schemas: object[] = [breadcrumb, article];
+  const nodes: object[] = [organizationNode(), websiteNode(), breadcrumb, article];
   if (post.faqs && post.faqs.length > 0) {
-    schemas.push({
-      '@context': 'https://schema.org',
+    nodes.push({
       '@type': 'FAQPage',
       mainEntity: post.faqs.map((f) => ({
         '@type': 'Question',
@@ -89,7 +95,7 @@ function jsonLd(post: NonNullable<ReturnType<typeof getBlogPost>>, slug: string)
       })),
     });
   }
-  return schemas;
+  return graphScript(nodes);
 }
 
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -99,13 +105,10 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
   return (
     <div className="on-light min-h-screen bg-surface">
-      {jsonLd(post, slug).map((schema, i) => (
-        <script
-          key={i}
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-        />
-      ))}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: blogJsonLd(post, slug) }}
+      />
 
       <SiteHeader />
 

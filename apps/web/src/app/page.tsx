@@ -6,16 +6,28 @@ import { HOME_FAQS } from '@/lib/homeFaq';
 import HomeClient from './HomeClient';
 import StudentHome from './learn/StudentHome';
 import GestionClient from './mon-ecole/GestionClient';
+import { organizationNode, websiteNode, graphScript } from '@/lib/seo/jsonLd';
 
-const faqJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: HOME_FAQS.map((faq) => ({
-    '@type': 'Question',
-    name: faq.question,
-    acceptedAnswer: { '@type': 'Answer', text: faq.answer },
-  })),
-};
+const SEO_DESCRIPTION =
+  "Préparez le code de la route, passez des examens blancs, et trouvez l'auto-école idéale près de chez vous. Gratuit pour commencer.";
+
+// Lot 2.4 — one @graph (WebSite + Organization + FAQPage) instead of the
+// 3 separate <script> blocks the audit measured (layout.tsx's WebSite,
+// layout.tsx's Organization, this page's own FAQPage). The root layout
+// skips its own base script here (pageProvidesOwnGraph('/') — see
+// lib/seo/jsonLd.ts) so this is the page's only JSON-LD.
+const homeJsonLd = graphScript([
+  organizationNode(),
+  websiteNode(SEO_DESCRIPTION),
+  {
+    '@type': 'FAQPage',
+    mainEntity: HOME_FAQS.map((faq) => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+    })),
+  },
+]);
 
 async function currentSpace(): Promise<Space> {
   const h = await headers();
@@ -59,8 +71,7 @@ export async function generateMetadata(): Promise<Metadata> {
     };
   return {
     title: 'PERMIS 2.0 — Réviser le code et trouver son auto-école au Sénégal',
-    description:
-      "Préparez le code de la route, passez des examens blancs, et trouvez l'auto-école idéale près de chez vous. Gratuit pour commencer.",
+    description: SEO_DESCRIPTION,
     alternates: { canonical: '/' },
   };
 }
@@ -72,10 +83,7 @@ export default async function Page() {
   if (space === 'school') return <GestionClient />;
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: homeJsonLd }} />
       <HomeClient />
     </>
   );

@@ -12,6 +12,7 @@ import { SessionSync } from '@/components/SessionSync';
 import { GoogleAnalytics } from '@/components/GoogleAnalytics';
 import { headers } from 'next/headers';
 import { spaceFromHost, type Space } from '@/lib/space';
+import { organizationNode, websiteNode, graphScript, pageProvidesOwnGraph } from '@/lib/seo/jsonLd';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -92,28 +93,10 @@ export const metadata: Metadata = {
   formatDetection: { telephone: false },
 };
 
-const websiteJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'WebSite',
-  name: APP_NAME,
-  url: SITE_URL,
-  description: SEO_DESCRIPTION,
-  inLanguage: 'fr-SN',
-};
-
-const organizationJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'Organization',
-  name: APP_NAME,
-  url: SITE_URL,
-  // TODO(SEO — needs design input, see brief §0.3): apple-touch-icon.png is
-  // square (180x180) and opaque, which satisfies Google's ≥112px + opaque-background
-  // checks, but Google's Organization guidelines prefer a landscape/rectangular
-  // logo. No such asset exists in the repo — a designer needs to produce one.
-  logo: { '@type': 'ImageObject', url: `${SITE_URL}/apple-touch-icon.png`, width: 180, height: 180 },
-  description: SEO_DESCRIPTION,
-  areaServed: { '@type': 'Country', name: 'Sénégal' },
-};
+// Lot 2.4 — merged into one @graph (graphScript below) instead of two
+// separate <script> tags. Cross-referenced by @id (WebSite.publisher →
+// Organization) rather than repeating Organization's fields inside WebSite.
+const baseJsonLd = graphScript([organizationNode(), websiteNode(SEO_DESCRIPTION)]);
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -127,6 +110,10 @@ export const viewport: Viewport = {
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const h = await headers();
   const space: Space = (h.get('x-permis-space') as Space) || spaceFromHost(h.get('host'));
+  // Lot 2.4 — pages matched by pageProvidesOwnGraph() render their own
+  // complete @graph (organizationNode()/websiteNode() + their own nodes) as
+  // their single <script>; rendering this one too would give them two.
+  const ownsGraph = pageProvidesOwnGraph(h.get('x-pathname') ?? '');
 
   return (
     // The app is light throughout (like the marketing site) — `body.on-light`
@@ -139,15 +126,13 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       suppressHydrationWarning
     >
       <head>
-        {/* Basic WebSite structured data — sitelinks searchbox eligibility */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
-        />
+        {/* Site-wide WebSite + Organization, one @graph (Lot 2.4). Pages that
+            add their own structured data (breadcrumbs, articles, FAQs...)
+            build on top of these same organizationNode()/websiteNode()
+            helpers rather than duplicating fields — see lib/seo/jsonLd.ts. */}
+        {!ownsGraph && (
+          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: baseJsonLd }} />
+        )}
       </head>
       <body className="on-light bg-surface text-foreground font-sans antialiased">
         <SpaceProvider space={space}>

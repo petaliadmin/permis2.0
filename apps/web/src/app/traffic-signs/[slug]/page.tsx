@@ -6,9 +6,9 @@ import { AppShell, PageHeader } from '@/components/AppShell';
 import { slugify } from '@/lib/slug';
 import { IconArrowRight, IconBulb, IconChevronRight, IconRoadSign } from '@tabler/icons-react';
 import { buildSignMetaDescription } from '@/lib/signDescription';
+import { organizationNode, websiteNode, graphScript, SITE_URL } from '@/lib/seo/jsonLd';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
-const SITE_URL = 'https://www.permis2.com';
 
 interface SignDetail {
   id: string;
@@ -64,9 +64,13 @@ export async function generateMetadata({
   };
 }
 
-function breadcrumbJsonLd(sign: SignDetail, slug: string) {
-  return {
-    '@context': 'https://schema.org',
+// Lot 2.4 — one @graph (WebSite + Organization + BreadcrumbList +
+// ImageObject + DefinedTerm) instead of a lone BreadcrumbList block, which
+// on its own would've lost the root layout's WebSite/Organization (this
+// page is in pageProvidesOwnGraph() — see lib/seo/jsonLd.ts — so the layout
+// skips its own script here). ImageObject/DefinedTerm are Lot 2.5.
+function signJsonLd(sign: SignDetail, slug: string): string {
+  const breadcrumb = {
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Accueil', item: SITE_URL },
@@ -79,6 +83,22 @@ function breadcrumbJsonLd(sign: SignDetail, slug: string) {
       },
     ],
   };
+  const nodes: object[] = [organizationNode(), websiteNode(), breadcrumb];
+  if (sign.code) {
+    nodes.push({
+      '@type': 'ImageObject',
+      contentUrl: `${SITE_URL}/icons/panneaux/${sign.code}.svg`,
+      name: sign.name,
+      description: sign.meaning,
+    });
+  }
+  nodes.push({
+    '@type': 'DefinedTerm',
+    name: sign.name,
+    description: sign.meaning,
+    ...(sign.code ? { termCode: sign.code } : {}),
+  });
+  return graphScript(nodes);
 }
 
 export default async function SignDetailPage({
@@ -94,7 +114,7 @@ export default async function SignDetailPage({
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd(sign, slug)) }}
+        dangerouslySetInnerHTML={{ __html: signJsonLd(sign, slug) }}
       />
       <AppShell>
         <PageHeader

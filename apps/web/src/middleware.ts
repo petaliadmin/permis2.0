@@ -67,6 +67,11 @@ export function middleware(request: NextRequest) {
   // served from www.* — only the redirect above is skipped, not the UI.
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set('x-permis-space', owner ?? space);
+  // Lot 2.4 — lets the root layout know which page is rendering, so it can
+  // skip its own WebSite/Organization <script> on pages that build their own
+  // single merged @graph (see lib/seo/jsonLd.ts) instead of emitting a
+  // second, redundant one.
+  requestHeaders.set('x-pathname', pathname);
   const response = NextResponse.next({ request: { headers: requestHeaders } });
 
   // SEO brief Lot 1.1 (Option A): www is the one indexable host. learn/
