@@ -57,6 +57,30 @@ const OWNED_PREFIXES: Record<Space, string[]> = {
   admin: ['/admin'],
 };
 
+/**
+ * `learn`-owned prefixes that are also served directly on every host,
+ * `www` included — no cross-space redirect. These are the site's actual
+ * organic-search content (panneaux, cours, quiz, examens, boutique): forcing
+ * them onto `learn.permis2.com` split their SEO signal across two hosts and
+ * put every www link to them one redirect hop from a 404-adjacent crawl
+ * budget sink (see SEO brief, Lot 1.1). The learn-space chrome (bottom tabs,
+ * menu) still renders wherever they're reached from — `middleware.ts`
+ * resolves `x-permis-space` from `ownerOf()` first, the request host second,
+ * so this is a routing/indexing change only, not a visual one.
+ */
+export const PUBLIC_ON_ANY_HOST: string[] = [
+  '/traffic-signs',
+  '/cours',
+  '/quizz',
+  '/tests',
+  '/exam',
+  '/boutique',
+];
+
+export function isPublicOnAnyHost(pathname: string): boolean {
+  return PUBLIC_ON_ANY_HOST.some((p) => pathname === p || pathname.startsWith(p + '/'));
+}
+
 export function spaceFromHost(host?: string | null): Space {
   const hostname = (host ?? '').split(':')[0].toLowerCase();
   for (const [prefix, space] of Object.entries(SUBDOMAIN_PREFIXES)) {

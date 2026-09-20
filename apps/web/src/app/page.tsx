@@ -29,19 +29,34 @@ export async function generateMetadata(): Promise<Metadata> {
       title: 'Mon espace — réviser le code de la route',
       description:
         'Panneaux, cours, séries de quiz et examens blancs du code de la route sénégalais.',
-      alternates: { canonical: '/' },
-      robots: { index: false, follow: false },
+      // Lot 1.1 — canonical: null clears it rather than inheriting the root
+      // layout's `alternates.canonical: '/'` (resolves to the www home
+      // regardless of host). StudentHome is a personalized dashboard with no
+      // www equivalent to point to, and a canonical to an unrelated page
+      // combined with noindex is exactly what brief rule 4 forbids. `index:
+      // false` stays (learn.* is fully noindexed under Option A — see
+      // robots.ts and the `X-Robots-Tag` response header); `follow: true`
+      // now, since nofollow here was also blocking link equity from ever
+      // reaching the indexable child pages this dashboard links to.
+      alternates: { canonical: null },
+      robots: { index: false, follow: true },
     };
   if (space === 'school')
     return {
       title: 'Espace auto-école — gérer mes élèves',
       description:
         'Pré-inscriptions, élèves, équipe, planning et paiements de votre auto-école, dans un seul tableau de bord.',
-      alternates: { canonical: '/' },
+      // canonical: null — same rule-4 fix as the learn root above: no www
+      // equivalent exists for this private dashboard.
+      alternates: { canonical: null },
       robots: { index: false, follow: false },
     };
   if (space === 'admin')
-    return { title: 'Administration', robots: { index: false, follow: false } };
+    return {
+      title: 'Administration',
+      alternates: { canonical: null },
+      robots: { index: false, follow: false },
+    };
   return {
     title: 'PERMIS 2.0 — Réviser le code et trouver son auto-école au Sénégal',
     description:

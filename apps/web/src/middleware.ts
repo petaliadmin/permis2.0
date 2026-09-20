@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { spaceFromHost, ownerOf, hostForSpace } from '@/lib/space';
+import { spaceFromHost, ownerOf, hostForSpace, isPublicOnAnyHost } from '@/lib/space';
 
 // Only routes that are entirely meaningless without an account.
 // Everything else is accessible as a guest; individual pages prompt for
@@ -32,9 +32,11 @@ export function middleware(request: NextRequest) {
 
   // ── Cross-space normalization ──────────────────────────────────────────────
   // A deep link to a route owned by another space is bounced to the owning
-  // host (same path). Convenience only — never a security check.
+  // host (same path). Convenience only — never a security check. Skipped for
+  // PUBLIC_ON_ANY_HOST routes (SEO brief Lot 1.1): those stay on whatever
+  // host they were requested on instead of bouncing to learn.*.
   const owner = ownerOf(pathname);
-  if (owner && owner !== space) {
+  if (owner && owner !== space && !isPublicOnAnyHost(pathname)) {
     const targetHost = hostForSpace(host, owner);
     if (targetHost !== host) {
       return NextResponse.redirect(`${proto}://${targetHost}${pathname}${search}`, 308);
@@ -59,10 +61,23 @@ export function middleware(request: NextRequest) {
   // to sign in. Harmless to let a genuinely-logged-in visitor see the auth
   // pages; the pages themselves already redirect on a *successful* login.
 
-  // Expose the current space to Server Components via `headers()`.
+  // Expose the current space to Server Components via `headers()`. The
+  // *owning* space wins over the host-derived one so PUBLIC_ON_ANY_HOST
+  // routes keep their learn-space chrome (bottom tabs, menu) even when
+  // served from www.* — only the redirect above is skipped, not the UI.
   const requestHeaders = new Headers(request.headers);
-  requestHeaders.set('x-permis-space', space);
-  return NextResponse.next({ request: { headers: requestHeaders } });
+  requestHeaders.set('x-permis-space', owner ?? space);
+  const response = NextResponse.next({ request: { headers: requestHeaders } });
+
+  // SEO brief Lot 1.1 (Option A): www is the one indexable host. learn/
+  // school/admin serve real content but must never rank on their own — the
+  // header is what actually governs indexing (unlike robots.txt, it also
+  // covers URLs Google already has), so it's based on the real request host,
+  // not the page-chrome `space` above.
+  if (space !== 'www') {
+    response.headers.set('X-Robots-Tag', 'noindex');
+  }
+  return response;
 }
 
 export const config = {
