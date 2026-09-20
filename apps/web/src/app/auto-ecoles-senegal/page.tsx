@@ -4,17 +4,18 @@ import { SiteHeader } from '@/components/SiteHeader';
 import { SiteFooter } from '@/components/SiteFooter';
 import { slugify } from '@/lib/slug';
 import { IconChevronRight } from '@tabler/icons-react';
+import { buildMetadata } from '@/lib/seo/metadata';
+import { organizationNode, websiteNode, graphScript, SITE_URL } from '@/lib/seo/jsonLd';
 
-const SITE_URL = 'https://www.permis2.com';
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildMetadata({
   title: 'Auto-écoles au Sénégal — Comparer et choisir',
   // Lot 2.1 — was 184 chars (well over the 140-160 target).
   description:
     "Trouvez une auto-école au Sénégal : villes couvertes, services proposés, critères pour bien choisir, et pré-inscription en ligne gratuite dès aujourd'hui.",
-  alternates: { canonical: '/auto-ecoles-senegal' },
-};
+  path: '/auto-ecoles-senegal',
+});
 
 interface DirectoryStats {
   cities: string[];
@@ -59,9 +60,8 @@ const FAQS = [
   },
 ];
 
-function jsonLd() {
+function jsonLd(): string {
   const breadcrumb = {
-    '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Accueil', item: SITE_URL },
@@ -74,7 +74,6 @@ function jsonLd() {
     ],
   };
   const faqPage = {
-    '@context': 'https://schema.org',
     '@type': 'FAQPage',
     mainEntity: FAQS.map((f) => ({
       '@type': 'Question',
@@ -82,7 +81,7 @@ function jsonLd() {
       acceptedAnswer: { '@type': 'Answer', text: f.answer },
     })),
   };
-  return [breadcrumb, faqPage];
+  return graphScript([organizationNode(), websiteNode(), breadcrumb, faqPage]);
 }
 
 export default async function AutoEcolesSenegalPage() {
@@ -90,13 +89,7 @@ export default async function AutoEcolesSenegalPage() {
 
   return (
     <div className="on-light min-h-screen bg-surface">
-      {jsonLd().map((schema, i) => (
-        <script
-          key={i}
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-        />
-      ))}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd() }} />
 
       <SiteHeader />
 

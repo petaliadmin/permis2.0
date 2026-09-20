@@ -54,6 +54,12 @@ const OWN_GRAPH_PATTERNS: RegExp[] = [
   /^\/traffic-signs\/categorie\/[^/]+$/,
   /^\/traffic-signs\/(?!categorie$)[^/]+$/,
   /^\/prix-permis-conduire-senegal$/,
+  /^\/assistance$/,
+  /^\/auto-ecoles-senegal$/,
+  /^\/auto-ecoles-senegal\/[^/]+$/,
+  /^\/code-route-senegal$/,
+  /^\/ecoles\/[^/]+$/,
+  /^\/permis-conduire-senegal$/,
 ];
 
 export function pageProvidesOwnGraph(pathname: string): boolean {

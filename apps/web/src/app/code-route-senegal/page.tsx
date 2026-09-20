@@ -4,8 +4,8 @@ import { SiteHeader } from '@/components/SiteHeader';
 import { SiteFooter } from '@/components/SiteFooter';
 import { IconArrowRight, IconChevronRight } from '@tabler/icons-react';
 import { buildMetadata } from '@/lib/seo/metadata';
+import { organizationNode, websiteNode, graphScript, ORGANIZATION_ID, SITE_URL } from '@/lib/seo/jsonLd';
 
-const SITE_URL = 'https://www.permis2.com';
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
 // Lot 2.1 — was 71 chars rendered (59 raw + suffix); migrated to the shared
@@ -73,9 +73,8 @@ const FAQS = [
   },
 ];
 
-function jsonLd(total: number) {
+function jsonLd(total: number): string {
   const breadcrumb = {
-    '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Accueil', item: SITE_URL },
@@ -88,7 +87,6 @@ function jsonLd(total: number) {
     ],
   };
   const faqPage = {
-    '@context': 'https://schema.org',
     '@type': 'FAQPage',
     mainEntity: FAQS.map((f) => ({
       '@type': 'Question',
@@ -97,14 +95,13 @@ function jsonLd(total: number) {
     })),
   };
   const course = {
-    '@context': 'https://schema.org',
     '@type': 'Course',
     name: 'Code de la route Sénégal — PERMIS 2.0',
     description: `Leçons thématiques, ${total || 155} panneaux de signalisation détaillés et quiz corrigés pour préparer le Code de la route au Sénégal.`,
-    provider: { '@type': 'Organization', name: 'PERMIS2.0', sameAs: SITE_URL },
+    provider: { '@id': ORGANIZATION_ID },
     url: `${SITE_URL}/code-route-senegal`,
   };
-  return [breadcrumb, faqPage, course];
+  return graphScript([organizationNode(), websiteNode(), breadcrumb, faqPage, course]);
 }
 
 export default async function CodeRouteSenegalPage() {
@@ -113,13 +110,7 @@ export default async function CodeRouteSenegalPage() {
 
   return (
     <div className="on-light min-h-screen bg-surface">
-      {jsonLd(signCount).map((schema, i) => (
-        <script
-          key={i}
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-        />
-      ))}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(signCount) }} />
 
       <SiteHeader />
 
