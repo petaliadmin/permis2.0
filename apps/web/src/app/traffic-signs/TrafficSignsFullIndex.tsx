@@ -1,5 +1,10 @@
 import Link from 'next/link';
-import { categoryMeta, groupAllByCategory, type MinimalSign } from '@/lib/trafficSignCategories';
+import {
+  categoryMeta,
+  groupAllByCategory,
+  CATEGORY_ORDER,
+  type MinimalSign,
+} from '@/lib/trafficSignCategories';
 import { slugify } from '@/lib/slug';
 
 /**
@@ -32,6 +37,14 @@ export function TrafficSignsFullIndex({ signs }: { signs: MinimalSign[] }) {
               <summary className="cursor-pointer list-none font-display text-sm font-bold text-foreground">
                 {m.label} ({catSigns.length})
               </summary>
+              {CATEGORY_ORDER.includes(category) && (
+                <Link
+                  href={`/traffic-signs/categorie/${slugify(category)}`}
+                  className="mt-2 inline-block text-xs font-semibold text-primary-600 hover:underline"
+                >
+                  Voir la page dédiée à cette catégorie →
+                </Link>
+              )}
               <ul className="mt-3 grid grid-cols-2 gap-x-3 gap-y-1.5 sm:grid-cols-3">
                 {catSigns.map((sign) => (
                   <li key={sign.name}>
