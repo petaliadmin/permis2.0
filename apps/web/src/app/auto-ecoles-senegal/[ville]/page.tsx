@@ -11,6 +11,14 @@ import { IconChevronRight } from '@tabler/icons-react';
 const SITE_URL = 'https://www.permis2.com';
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
+// Brief Lot 3.2 — GARDE-FOU OBLIGATOIRE: a city page only exists with ≥3
+// real schools. Enforced in generateStaticParams (below), in the runtime
+// notFound() guard (so a direct request for a sub-threshold city 404s even
+// if it slipped into static params on a stale build), and in
+// sitemap-ecoles.xml once that's wired up (Lot 3.5) — not just in what's
+// visually displayed.
+const MIN_SCHOOLS_PER_CITY = 3;
+
 // School.city is free text (see mon-ecole/CreateSchoolForm.tsx) — not a fixed
 // enum — so valid city slugs are resolved from what's actually in the
 // directory right now, same source as the parent page's "Villes couvertes".
@@ -25,9 +33,24 @@ async function fetchAllSchools(): Promise<School[]> {
   }
 }
 
-async function resolveCity(slug: string): Promise<string | null> {
+/** Cities with enough real schools to deserve their own page. */
+async function citiesAboveThreshold(): Promise<string[]> {
   const schools = await fetchAllSchools();
-  const cities = [...new Set(schools.map((s) => s.city).filter((c): c is string => !!c))];
+  const counts = new Map<string, number>();
+  for (const s of schools) {
+    if (!s.city) continue;
+    counts.set(s.city, (counts.get(s.city) ?? 0) + 1);
+  }
+  return [...counts.entries()].filter(([, count]) => count >= MIN_SCHOOLS_PER_CITY).map(([city]) => city);
+}
+
+export async function generateStaticParams() {
+  const cities = await citiesAboveThreshold();
+  return cities.map((city) => ({ ville: slugify(city) }));
+}
+
+async function resolveCity(slug: string): Promise<string | null> {
+  const cities = await citiesAboveThreshold();
   return cities.find((c) => slugify(c) === slug) ?? null;
 }
 
@@ -93,7 +116,7 @@ export default async function VilleAutoEcolesPage({
   if (!city) notFound();
 
   const schools = allSchools.filter((s) => s.city === city);
-  if (schools.length === 0) notFound();
+  if (schools.length < MIN_SCHOOLS_PER_CITY) notFound();
 
   const categories = [...new Set(schools.flatMap((s) => s.licenseCategories ?? []))].sort();
 
