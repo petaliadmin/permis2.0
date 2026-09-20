@@ -10,11 +10,31 @@
 
 {
 	email admin@permis2.com
+
+	# Lot 1.6 (SEO brief) — loads the cache-handler (Souin) module built into
+	# this Caddy image (see ../Dockerfile.caddy). Whether a given response is
+	# actually cached is decided by the origin's OWN Cache-Control header
+	# (souin is RFC 7234 compliant) — nothing below picks routes by hand.
+	# `default_cache_control "no-store"` is the safety net for every route
+	# that sends no Cache-Control at all (everything behind auth, everything
+	# with live per-request data — i.e. most of the app): souin's own
+	# default treats a missing header as cacheable, which would be wrong
+	# here. Only the routes apps/web/next.config.ts explicitly marks
+	# `public, s-maxage=3600, stale-while-revalidate=86400` (editorial
+	# pages, traffic signs, blog) opt in.
+	cache {
+		default_cache_control "no-store"
+	}
 }
 
 # ── Front hosts — all proxy to the same Next.js container ──────────────────────
 www.permis2.com, learn.permis2.com, school.permis2.com, admin.permis2.com {
 	encode zstd gzip
+	# Cache key includes the Host header by default (souin), so sharing this
+	# one `cache` across all four spaces is safe: a cached www editorial page
+	# never gets served to learn/school/admin, and their own routes stay
+	# uncached anyway (none of them send a public Cache-Control header).
+	cache
 	reverse_proxy web:3000 {
 		header_up X-Forwarded-For {http.request.remote.host}
 	}

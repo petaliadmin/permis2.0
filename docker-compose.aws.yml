@@ -127,8 +127,12 @@ services:
   # obtains and renews Let's Encrypt certs automatically. The only entry
   # point into web/api; both are otherwise unreachable from outside the
   # Docker network (see their `expose` lines above).
+  #
+  # Custom-built (not the stock caddy:2-alpine) to add the cache-handler
+  # module (Lot 1.6 — see Dockerfile.caddy + Caddyfile), pushed to Docker Hub
+  # by .github/workflows/deploy.yml the same way api/web already are.
   caddy:
-    image: caddy:2-alpine
+    image: ${IMAGE_NAMESPACE}/permis2-0-caddy:${IMAGE_TAG:-latest}
     container_name: permis2-0-caddy-prod
     ports:
       - "80:80"

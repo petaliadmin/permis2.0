@@ -1,0 +1,21 @@
+# Custom Caddy build adding the cache-handler (Souin) module — Lot 1.6 (SEO
+# brief: "route caching is blocked"). Stock caddy:2-alpine has no response
+# cache; without one, every request re-runs the full Next.js render even for
+# pages whose HTML is identical for every visitor, because the root layout's
+# headers() call (apps/web/src/app/layout.tsx, needed for www/learn/school/
+# admin space detection) forces the whole render tree dynamic, no-store, at
+# the Next.js level. Restructuring that is a bigger, riskier change (or
+# enabling experimental PPR); caching in front of it at the reverse proxy —
+# which already sits between every visitor and the app — gets the same
+# result without touching app rendering at all.
+#
+# This build only ADDS the module. Whether anything actually gets cached is
+# decided per-response by the origin's own Cache-Control header (RFC 7234)
+# — see ../Caddyfile and apps/web/next.config.ts's CACHEABLE_CONTENT_ROUTES.
+FROM caddy:2-builder-alpine AS builder
+
+RUN xcaddy build --with github.com/caddyserver/cache-handler
+
+FROM caddy:2-alpine
+
+COPY --from=builder /usr/bin/caddy /usr/bin/caddy

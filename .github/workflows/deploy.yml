@@ -59,6 +59,17 @@ jobs:
           docker push "$IMAGE_NAMESPACE/$PROJECT_NAME-web:$TAG"
           docker push "$IMAGE_NAMESPACE/$PROJECT_NAME-web:latest"
 
+      - name: Build & push Caddy image
+        env:
+          TAG: ${{ github.sha }}
+        run: |
+          docker build -f Dockerfile.caddy \
+            -t "$IMAGE_NAMESPACE/$PROJECT_NAME-caddy:$TAG" \
+            -t "$IMAGE_NAMESPACE/$PROJECT_NAME-caddy:latest" \
+            .
+          docker push "$IMAGE_NAMESPACE/$PROJECT_NAME-caddy:$TAG"
+          docker push "$IMAGE_NAMESPACE/$PROJECT_NAME-caddy:latest"
+
       - name: Configure AWS credentials (OIDC — no stored keys)
         uses: aws-actions/configure-aws-credentials@v4
         with:
