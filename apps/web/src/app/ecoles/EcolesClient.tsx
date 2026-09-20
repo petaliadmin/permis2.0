@@ -121,10 +121,34 @@ export default function EcolesClient() {
           <h1 className="mt-3 font-display text-2xl font-extrabold text-foreground sm:text-3xl">
             Trouver une auto-école au Sénégal
           </h1>
-          <p className="mt-2 max-w-2xl text-sm text-secondary">
-            Comparez les auto-écoles partenaires par ville, catégorie de permis et budget,
-            localisez-les sur la carte et envoyez votre pré-inscription en ligne — gratuitement.
-          </p>
+          <div className="mt-2 max-w-2xl space-y-3 text-sm text-secondary">
+            <p>
+              Comparez les auto-écoles partenaires par ville, catégorie de permis et budget,
+              localisez-les sur la carte et envoyez votre pré-inscription en ligne — gratuitement.
+            </p>
+            <p>
+              Chaque fiche auto-école regroupe les informations utiles pour décider sans vous
+              déplacer : adresse et quartier, catégories de permis proposées (A, B, C, D, E),
+              services inclus (code en salle ou en ligne, simulateur, conduite), tarif affiché, et
+              coordonnées directes (téléphone, WhatsApp) pour poser vos questions avant de vous
+              engager.
+            </p>
+            <p>
+              Les filtres ci-dessous permettent de croiser plusieurs critères à la fois : ville,
+              catégorie de permis, budget maximum, et tri par proximité si vous autorisez la
+              localisation. Utilisez la carte pour visualiser en un coup d'œil les auto-écoles les
+              plus proches de chez vous ou de votre lieu de travail, un critère qui pèse sur le
+              temps et le coût des déplacements pendant toute la durée de la formation.
+            </p>
+            <p>
+              Une fois une auto-école repérée, sa fiche complète détaille ses services et permet
+              d'envoyer une pré-inscription en ligne : l'auto-école reçoit votre demande et vous
+              recontacte pour finaliser les modalités (dossier, planning, paiement). Cette
+              pré-inscription ne vous engage à rien — elle sert à obtenir des informations
+              précises avant de valider votre inscription définitive directement auprès de
+              l'auto-école choisie.
+            </p>
+          </div>
 
           <p className="mt-4 text-sm font-semibold text-foreground" aria-live="polite">
             {loading

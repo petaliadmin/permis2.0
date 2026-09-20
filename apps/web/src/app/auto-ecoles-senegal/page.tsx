@@ -118,7 +118,10 @@ export default async function AutoEcolesSenegalPage() {
           <p>
             PERMIS 2.0 référence des auto-écoles partenaires dans plusieurs villes du Sénégal,
             avec leurs services, leurs tarifs et les catégories de permis proposées. Comparez-les
-            et pré-inscrivez-vous en ligne, gratuitement.
+            et pré-inscrivez-vous en ligne, gratuitement. Choisir la bonne auto-école a un effet
+            direct sur la suite de votre formation : encadrement des moniteurs, disponibilité des
+            véhicules et proximité géographique jouent tous sur le temps que vous mettrez à
+            obtenir votre permis.
           </p>
 
           <section>
@@ -137,12 +140,42 @@ export default async function AutoEcolesSenegalPage() {
                 >
                   catégories de permis
                 </Link>{' '}
-                proposées (A, B, C, D, E).
+                proposées (A, B, C, D, E) — toutes les auto-écoles ne préparent pas à toutes les
+                catégories, en particulier pour les poids lourds (catégories C et D).
               </li>
-              <li>Les services inclus (code en salle ou en ligne, simulateur, conduite…).</li>
-              <li>La localisation, pour limiter les déplacements.</li>
-              <li>Le tarif affiché, à budget égal entre plusieurs auto-écoles.</li>
+              <li>
+                Les services inclus : code en salle ou en ligne, simulateur de conduite, leçons de
+                conduite, accompagnement pour le dossier administratif.
+              </li>
+              <li>
+                La localisation par rapport à votre domicile ou votre lieu de travail — des leçons
+                proches limitent le temps et le coût des déplacements sur toute la durée de la
+                formation.
+              </li>
+              <li>
+                Le tarif affiché, à comparer à budget et catégorie de permis égaux entre plusieurs
+                auto-écoles plutôt qu'en valeur absolue.
+              </li>
             </ul>
+          </section>
+
+          <section>
+            <h2 className="font-display text-xl font-bold text-foreground">
+              Comment fonctionne la pré-inscription en ligne ?
+            </h2>
+            <p className="mt-3">
+              Sur la fiche de chaque auto-école partenaire, un formulaire de pré-inscription vous
+              permet d'envoyer directement vos coordonnées et la catégorie de permis visée, sans
+              avoir à vous déplacer pour un premier contact. L'auto-école reçoit votre demande dans
+              son propre tableau de bord et peut vous répondre par téléphone, WhatsApp ou email
+              pour préciser tarifs, disponibilités et documents à fournir.
+            </p>
+            <p className="mt-3">
+              Cette étape ne vous engage à rien : elle sert à obtenir des informations précises
+              avant de valider votre inscription définitive directement auprès de l'auto-école.
+              Une fois connecté, le suivi de vos demandes reste accessible depuis votre compte,
+              dans l'espace « Mes auto-écoles ».
+            </p>
           </section>
 
           {cities.length > 0 && (
@@ -182,7 +215,7 @@ export default async function AutoEcolesSenegalPage() {
             <div className="mt-4 space-y-4">
               {FAQS.map((f) => (
                 <div key={f.question}>
-                  <p className="font-display text-sm font-bold text-foreground">{f.question}</p>
+                  <h3 className="font-display text-sm font-bold text-foreground">{f.question}</h3>
                   <p className="mt-1.5 text-sm text-secondary">{f.answer}</p>
                 </div>
               ))}
