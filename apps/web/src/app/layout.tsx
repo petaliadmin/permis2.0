@@ -44,11 +44,13 @@ export const metadata: Metadata = {
   applicationName: APP_NAME,
   manifest: '/manifest.json',
   alternates: { canonical: '/' },
+  // Lot 0.6 — only the property we actually monitor gets an active
+  // verification tag (see README § Google Search Console). The other token
+  // ('ezrE2BeEk3wnpihGaujlfiR3WE2OAkjc9mFEosmwTCo') was added later with no
+  // record of which property it verifies; kept here as a comment rather than
+  // deleted in case it turns out to guard a property still in use.
   verification: {
-    google: [
-      'dmRztJ-JkfX2AjwBovRsv6s56g7GlanGMCi69guMWSs',
-      'ezrE2BeEk3wnpihGaujlfiR3WE2OAkjc9mFEosmwTCo',
-    ],
+    google: 'dmRztJ-JkfX2AjwBovRsv6s56g7GlanGMCi69guMWSs',
   },
   robots: {
     index: true,

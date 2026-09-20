@@ -257,6 +257,24 @@ docker build -f Dockerfile.api -t permis2.0-api:latest .
 docker build -f Dockerfile.web -t permis2.0-web:latest .
 ```
 
+## 🔎 SEO
+
+### Google Search Console
+
+`apps/web/src/app/layout.tsx` declares one active `verification.google` tag:
+`dmRztJ-JkfX2AjwBovRsv6s56g7GlanGMCi69guMWSs`. This is the property actually
+monitored in Search Console — confirmed 2026-09-20.
+
+A second token, `ezrE2BeEk3wnpihGaujlfiR3WE2OAkjc9mFEosmwTCo`, was added later
+(commit `e2d9541`, bundled into an unrelated perf commit) with no record of
+which property it verifies. It's kept as a comment next to the active tag
+rather than deleted, in case it turns out to still guard a property in use —
+if you confirm it's dead, remove the comment entirely.
+
+`public/google345d9acf5ee8f0e9.html` is the HTML-file verification method for
+the same active property (added alongside the meta tag in commit `fb4af76`);
+keep it in sync with the active token above if it's ever rotated.
+
 ## 📚 API Documentation
 
 API documentation is available at `/api/docs` when the backend is running.
