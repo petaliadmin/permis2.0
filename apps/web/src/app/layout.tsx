@@ -143,10 +143,13 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     >
       <head>
         {/* Self-hosted (was a render-blocking cdn.jsdelivr.net stylesheet) — icons are
-            used site-wide (nav, buttons) so the font is preloaded, not just linked. */}
+            used site-wide (nav, buttons) so the font is preloaded, not just linked.
+            The href must match the @font-face `src` in tabler-icons.min.css
+            (including its `?v3.44.0` query string) byte-for-byte, otherwise the
+            preload isn't reused and the font is fetched twice. */}
         <link
           rel="preload"
-          href="/fonts/tabler-icons/fonts/tabler-icons.woff2"
+          href="/fonts/tabler-icons/fonts/tabler-icons.woff2?v3.44.0"
           as="font"
           type="font/woff2"
           crossOrigin="anonymous"
