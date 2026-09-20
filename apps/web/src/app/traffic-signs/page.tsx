@@ -9,8 +9,10 @@ export const metadata: Metadata = {
   // Lot 2.7 — dropped "en français et en wolof": no wolof content exists at
   // hub/category level, only per-sign audio where a recording happens to
   // exist (hooks/useWolofAudio.ts).
+  // Lot 2.1 — was 119 chars (under the 140-160 target); the wolof mention
+  // dropped in Lot 2.7 left room to describe the content more usefully.
   description:
-    'Apprenez tous les panneaux de signalisation routière du code sénégalais : danger, interdiction, obligation, indication.',
+    'Apprenez tous les panneaux de signalisation routière du code sénégalais : danger, interdiction, obligation, indication — avec fiches détaillées et quiz.',
   alternates: { canonical: '/traffic-signs' },
   // Lot 1.2 — server-rendered now (real data + a full crawlable index below
   // the picker), so the Lot 0.4 noindex (near-empty HTML shell) no longer

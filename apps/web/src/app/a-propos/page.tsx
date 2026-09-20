@@ -5,8 +5,9 @@ import { SiteFooter } from '@/components/SiteFooter';
 
 export const metadata: Metadata = {
   title: 'À propos',
+  // Lot 2.1 — was 166 chars (over the 140-160 target).
   description:
-    "PERMIS 2.0 est une plateforme numérique sénégalaise de préparation au permis de conduire : code de la route, panneaux, quiz, examens blancs et annuaire d'auto-écoles.",
+    "PERMIS 2.0 est une plateforme sénégalaise de préparation au permis : code de la route, panneaux, quiz, examens blancs et annuaire d'auto-écoles.",
   alternates: { canonical: '/a-propos' },
 };
 

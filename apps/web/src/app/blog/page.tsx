@@ -6,7 +6,9 @@ import { getBlogPostsSorted, type BlogCategory } from '@/content/blog';
 import { IconChevronRight } from '@tabler/icons-react';
 
 export const metadata: Metadata = {
-  title: 'Blog — Conseils pour réussir le Code et le permis au Sénégal',
+  // Lot 2.1 — was 72 chars rendered (60 raw + the " · PERMIS2.0" template
+  // suffix).
+  title: 'Blog — Conseils Code de la route et permis',
   description:
     "Guides et conseils pour préparer le Code de la route et le permis de conduire au Sénégal : méthode de révision, erreurs à éviter, priorités de circulation.",
   alternates: { canonical: '/blog' },

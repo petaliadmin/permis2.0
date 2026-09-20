@@ -8,9 +8,12 @@ const SITE_URL = 'https://www.permis2.com';
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
 export const metadata: Metadata = {
-  title: 'Permis de conduire au Sénégal — Catégories, préparation, auto-écoles',
+  // Lot 2.1 — was 80 chars once the " · PERMIS2.0" template suffix is
+  // counted (the brief's own measurement, truncated in SERPs); title budget
+  // is really ~48 raw chars to land at ≤60 rendered.
+  title: 'Permis de conduire au Sénégal — Guide complet',
   description:
-    'Catégories de permis (A à E), étapes de préparation, Code de la route et examen : tout savoir pour préparer son permis de conduire au Sénégal et trouver son auto-école.',
+    'Catégories de permis (A à E), étapes de préparation, Code de la route et examen — pour préparer son permis au Sénégal et trouver son auto-école.',
   alternates: { canonical: '/permis-conduire-senegal' },
 };
 

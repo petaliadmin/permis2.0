@@ -8,9 +8,10 @@ const SITE_URL = 'https://www.permis2.com';
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
 export const metadata: Metadata = {
-  title: 'Code de la route Sénégal — Cours, panneaux et quiz gratuits',
+  // Lot 2.1 — was 71 chars rendered (59 raw + suffix).
+  title: 'Code de la route Sénégal — Cours, panneaux, quiz',
   description:
-    "Apprenez le Code de la route sénégalais : panneaux de signalisation, priorités, leçons thématiques et quiz corrigés pour préparer votre examen, gratuitement sur PERMIS 2.0.",
+    'Apprenez le Code de la route sénégalais : panneaux, priorités, leçons thématiques et quiz corrigés pour préparer votre examen, gratuitement.',
   alternates: { canonical: '/code-route-senegal' },
 };
 

@@ -10,8 +10,9 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
 export const metadata: Metadata = {
   title: 'Auto-écoles au Sénégal — Comparer et choisir',
+  // Lot 2.1 — was 184 chars (well over the 140-160 target).
   description:
-    "Trouvez une auto-école au Sénégal : villes couvertes, services proposés (code en ligne, conduite, permis accéléré...), critères pour bien choisir, et pré-inscription en ligne gratuite.",
+    "Trouvez une auto-école au Sénégal : villes couvertes, services proposés, critères pour bien choisir, et pré-inscription en ligne gratuite dès aujourd'hui.",
   alternates: { canonical: '/auto-ecoles-senegal' },
 };
 
