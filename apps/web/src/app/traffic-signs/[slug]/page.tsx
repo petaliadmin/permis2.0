@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import { AppShell, PageHeader } from '@/components/AppShell';
 import { slugify } from '@/lib/slug';
 import { IconArrowRight, IconBulb, IconChevronRight, IconRoadSign } from '@tabler/icons-react';
+import { buildSignMetaDescription } from '@/lib/signDescription';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 const SITE_URL = 'https://www.permis2.com';
@@ -58,7 +59,7 @@ export async function generateMetadata({
 
   return {
     title: `Panneau ${sign.name} — Signification`,
-    description: `${sign.meaning} ${sign.description}`.slice(0, 155),
+    description: buildSignMetaDescription(sign),
     alternates: { canonical: `/traffic-signs/${slug}` },
   };
 }
