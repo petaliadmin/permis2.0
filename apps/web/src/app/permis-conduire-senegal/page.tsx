@@ -3,19 +3,20 @@ import Link from 'next/link';
 import { SiteHeader } from '@/components/SiteHeader';
 import { SiteFooter } from '@/components/SiteFooter';
 import { IconArrowRight, IconChevronRight } from '@tabler/icons-react';
+import { buildMetadata } from '@/lib/seo/metadata';
 
 const SITE_URL = 'https://www.permis2.com';
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
-export const metadata: Metadata = {
-  // Lot 2.1 — was 80 chars once the " · PERMIS2.0" template suffix is
-  // counted (the brief's own measurement, truncated in SERPs); title budget
-  // is really ~48 raw chars to land at ≤60 rendered.
+// Lot 2.1 — was 80 chars once the " · PERMIS2.0" template suffix is
+// counted (the brief's own measurement, truncated in SERPs); migrated to
+// the shared helper.
+export const metadata: Metadata = buildMetadata({
   title: 'Permis de conduire au Sénégal — Guide complet',
   description:
     'Catégories de permis (A à E), étapes de préparation, Code de la route et examen — pour préparer son permis au Sénégal et trouver son auto-école.',
-  alternates: { canonical: '/permis-conduire-senegal' },
-};
+  path: '/permis-conduire-senegal',
+});
 
 const CATEGORIES = [
   { code: 'A', label: 'Motos et scooters' },

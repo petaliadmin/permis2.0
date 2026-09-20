@@ -3,17 +3,19 @@ import Link from 'next/link';
 import { SiteHeader } from '@/components/SiteHeader';
 import { SiteFooter } from '@/components/SiteFooter';
 import { IconArrowRight, IconChevronRight } from '@tabler/icons-react';
+import { buildMetadata } from '@/lib/seo/metadata';
 
 const SITE_URL = 'https://www.permis2.com';
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
-export const metadata: Metadata = {
-  // Lot 2.1 — was 71 chars rendered (59 raw + suffix).
+// Lot 2.1 — was 71 chars rendered (59 raw + suffix); migrated to the shared
+// helper.
+export const metadata: Metadata = buildMetadata({
   title: 'Code de la route Sénégal — Cours, panneaux, quiz',
   description:
     'Apprenez le Code de la route sénégalais : panneaux, priorités, leçons thématiques et quiz corrigés pour préparer votre examen, gratuitement.',
-  alternates: { canonical: '/code-route-senegal' },
-};
+  path: '/code-route-senegal',
+});
 
 const CAT_LABELS: Record<string, string> = {
   danger: 'Panneaux de danger',
