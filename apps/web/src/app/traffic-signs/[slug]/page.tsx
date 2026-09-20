@@ -7,6 +7,7 @@ import { slugify } from '@/lib/slug';
 import { IconArrowRight, IconBulb, IconChevronRight, IconRoadSign } from '@tabler/icons-react';
 import { buildSignMetaDescription } from '@/lib/signDescription';
 import { organizationNode, websiteNode, graphScript, SITE_URL } from '@/lib/seo/jsonLd';
+import { buildMetadata } from '@/lib/seo/metadata';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -57,11 +58,11 @@ export async function generateMetadata({
   const sign = await fetchSign(slug);
   if (!sign) return { title: 'Panneau introuvable' };
 
-  return {
+  return buildMetadata({
     title: `Panneau ${sign.name} — Signification`,
     description: buildSignMetaDescription(sign),
-    alternates: { canonical: `/traffic-signs/${slug}` },
-  };
+    path: `/traffic-signs/${slug}`,
+  });
 }
 
 // Lot 2.4 — one @graph (WebSite + Organization + BreadcrumbList +

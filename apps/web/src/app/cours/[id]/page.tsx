@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import CoursDetailClient from './CoursDetailClient';
+import { buildMetadata } from '@/lib/seo/metadata';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -30,11 +31,11 @@ export async function generateMetadata({
   if (!lesson) return { title: 'Leçon introuvable' };
 
   const description = lesson.contenu.replace(/\s+/g, ' ').trim().slice(0, 155);
-  return {
+  return buildMetadata({
     title: lesson.category ? `${lesson.titre} — ${lesson.category.label}` : lesson.titre,
     description,
-    alternates: { canonical: `/cours/${id}` },
-  };
+    path: `/cours/${id}`,
+  });
 }
 
 export default function Page() {

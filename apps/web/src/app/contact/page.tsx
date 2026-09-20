@@ -4,13 +4,14 @@ import { SiteHeader } from '@/components/SiteHeader';
 import { SiteFooter } from '@/components/SiteFooter';
 import { WHATSAPP_DISPLAY, whatsappLink } from '@/lib/contact';
 import { IconBrandWhatsapp, IconMapPin } from '@tabler/icons-react';
+import { buildMetadata } from '@/lib/seo/metadata';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildMetadata({
   title: 'Contact',
   description:
     "Contactez l'équipe PERMIS 2.0 par WhatsApp pour toute question sur la préparation au permis, un abonnement ou votre auto-école.",
-  alternates: { canonical: '/contact' },
-};
+  path: '/contact',
+});
 
 export default function ContactPage() {
   return (

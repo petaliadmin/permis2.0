@@ -2,13 +2,14 @@ import type { Metadata } from 'next';
 import { SiteHeader } from '@/components/SiteHeader';
 import { SiteFooter } from '@/components/SiteFooter';
 import { WHATSAPP_DISPLAY } from '@/lib/contact';
+import { buildMetadata } from '@/lib/seo/metadata';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildMetadata({
   title: 'Politique de confidentialité',
   description:
     'Comment PERMIS 2.0 collecte, utilise et protège vos données personnelles, conformément à la loi sénégalaise sur la protection des données.',
-  alternates: { canonical: '/politique-confidentialite' },
-};
+  path: '/politique-confidentialite',
+});
 
 export default function PolitiqueConfidentialitePage() {
   return (

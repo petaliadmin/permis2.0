@@ -7,6 +7,7 @@ import { ArticleBlocks } from '@/components/blog/ArticleBlocks';
 import { getBlogPost, getBlogPostsSorted, type BlogCategory } from '@/content/blog';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 import { organizationNode, websiteNode, graphScript, ORGANIZATION_ID, SITE_URL } from '@/lib/seo/jsonLd';
+import { buildMetadata } from '@/lib/seo/metadata';
 
 const CATEGORY_CHIP: Record<BlogCategory, string> = {
   'Conseils examen': 'chip-orange',
@@ -32,21 +33,14 @@ export async function generateMetadata({
   // and BlogPosting.image (jsonLd() below), instead of no image at all.
   const coverUrl = `${SITE_URL}/blog/${slug}/cover.webp`;
 
-  return {
+  return buildMetadata({
     title: post.title,
     description: post.description,
-    alternates: { canonical: `/blog/${slug}` },
-    openGraph: {
-      type: 'article',
-      publishedTime: post.publishedAt,
-      modifiedTime: post.updatedAt,
-      images: [{ url: coverUrl, width: 1200, height: 675, alt: post.title }],
-    },
-    twitter: {
-      card: 'summary_large_image',
-      images: [coverUrl],
-    },
-  };
+    path: `/blog/${slug}`,
+    type: 'article',
+    image: { url: coverUrl, width: 1200, height: 675, alt: post.title },
+    article: { publishedTime: post.publishedAt, modifiedTime: post.updatedAt },
+  });
 }
 
 function formatDate(iso: string): string {

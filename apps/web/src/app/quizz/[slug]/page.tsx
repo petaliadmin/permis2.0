@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { getCategoryBySlug } from '../config';
 import CategoryClient from './CategoryClient';
+import { buildMetadata } from '@/lib/seo/metadata';
 
 export async function generateMetadata({
   params,
@@ -11,11 +12,11 @@ export async function generateMetadata({
   const category = getCategoryBySlug(slug);
   if (!category) return { title: 'Catégorie introuvable' };
 
-  return {
+  return buildMetadata({
     title: `${category.title} — Quiz code de la route`,
     description: category.description,
-    alternates: { canonical: `/quizz/${slug}` },
-  };
+    path: `/quizz/${slug}`,
+  });
 }
 
 export default function Page() {

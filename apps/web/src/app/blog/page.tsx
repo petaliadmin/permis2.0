@@ -4,15 +4,16 @@ import { SiteHeader } from '@/components/SiteHeader';
 import { SiteFooter } from '@/components/SiteFooter';
 import { getBlogPostsSorted, type BlogCategory } from '@/content/blog';
 import { IconChevronRight } from '@tabler/icons-react';
+import { buildMetadata } from '@/lib/seo/metadata';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildMetadata({
   // Lot 2.1 — was 72 chars rendered (60 raw + the " · PERMIS2.0" template
   // suffix).
   title: 'Blog — Conseils Code de la route et permis',
   description:
     "Guides et conseils pour préparer le Code de la route et le permis de conduire au Sénégal : méthode de révision, erreurs à éviter, priorités de circulation.",
-  alternates: { canonical: '/blog' },
-};
+  path: '/blog',
+});
 
 const CATEGORY_CHIP: Record<BlogCategory, string> = {
   'Conseils examen': 'chip-orange',

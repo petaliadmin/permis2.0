@@ -2,13 +2,14 @@ import type { Metadata } from 'next';
 import { SiteHeader } from '@/components/SiteHeader';
 import { SiteFooter } from '@/components/SiteFooter';
 import { WHATSAPP_DISPLAY } from '@/lib/contact';
+import { buildMetadata } from '@/lib/seo/metadata';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildMetadata({
   title: 'Mentions légales',
   description: 'Mentions légales de la plateforme PERMIS 2.0.',
-  alternates: { canonical: '/mentions-legales' },
+  path: '/mentions-legales',
   robots: { index: true, follow: true },
-};
+});
 
 /**
  * Version "startup en démarrage" : pas de raison sociale/RCCM/NINEA affichés

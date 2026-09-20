@@ -2,14 +2,15 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { SiteHeader } from '@/components/SiteHeader';
 import { SiteFooter } from '@/components/SiteFooter';
+import { buildMetadata } from '@/lib/seo/metadata';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildMetadata({
   title: 'À propos',
   // Lot 2.1 — was 166 chars (over the 140-160 target).
   description:
     "PERMIS 2.0 est une plateforme sénégalaise de préparation au permis : code de la route, panneaux, quiz, examens blancs et annuaire d'auto-écoles.",
-  alternates: { canonical: '/a-propos' },
-};
+  path: '/a-propos',
+});
 
 export default function AProposPage() {
   return (

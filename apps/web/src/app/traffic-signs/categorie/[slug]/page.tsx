@@ -6,6 +6,7 @@ import { slugify } from '@/lib/slug';
 import { CATEGORY_ORDER, categoryMeta } from '@/lib/trafficSignCategories';
 import { IconChevronRight } from '@tabler/icons-react';
 import { organizationNode, websiteNode, graphScript, SITE_URL } from '@/lib/seo/jsonLd';
+import { buildMetadata } from '@/lib/seo/metadata';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -76,11 +77,11 @@ export async function generateMetadata({
   if (!dbCategory) return { title: 'Catégorie introuvable' };
   const label = categoryMeta(dbCategory).label;
 
-  return {
+  return buildMetadata({
     title: `${categoryHeading(label)} — Code de la route Sénégal`,
     description: `${categoryHeading(label)} du code de la route sénégalais : signification, contexte d'usage et erreurs fréquentes à l'examen.`,
-    alternates: { canonical: `/traffic-signs/categorie/${slug}` },
-  };
+    path: `/traffic-signs/categorie/${slug}`,
+  });
 }
 
 // Lot 2.4 — one @graph (WebSite + Organization + BreadcrumbList + ItemList)
