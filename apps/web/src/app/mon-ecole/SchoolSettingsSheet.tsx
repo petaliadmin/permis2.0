@@ -56,6 +56,7 @@ export function SchoolSettingsSheet({ open, onClose, school, onSaved }: SchoolSe
     city: school.city ?? '',
     district: school.district ?? '',
     address: school.address ?? '',
+    description: school.description ?? '',
     phone: school.phone ?? '',
     whatsapp: school.whatsapp ?? '',
     email: school.email ?? '',
@@ -79,6 +80,7 @@ export function SchoolSettingsSheet({ open, onClose, school, onSaved }: SchoolSe
       city: school.city ?? '',
       district: school.district ?? '',
       address: school.address ?? '',
+      description: school.description ?? '',
       phone: school.phone ?? '',
       whatsapp: school.whatsapp ?? '',
       email: school.email ?? '',
@@ -135,6 +137,7 @@ export function SchoolSettingsSheet({ open, onClose, school, onSaved }: SchoolSe
           city: form.city.trim() || undefined,
           district: form.district.trim() || undefined,
           address: form.address.trim() || undefined,
+          description: form.description.trim() || undefined,
           phone: form.phone.trim() || undefined,
           whatsapp: form.whatsapp.trim() || undefined,
           email: form.email.trim() || undefined,
@@ -271,6 +274,24 @@ export function SchoolSettingsSheet({ open, onClose, school, onSaved }: SchoolSe
               className="w-full rounded-xl border border-token bg-surface-2 px-3.5 py-2.5 text-sm focus:border-primary-400 focus:outline-none"
             />
           </div>
+        </div>
+        <div>
+          <label className="mb-1 block text-xs font-bold text-secondary">
+            Présentation de l&apos;auto-école
+          </label>
+          <p className="mb-1 text-xs text-secondary">
+            Ce texte apparaît sur votre fiche publique — parlez de votre équipe, votre expérience,
+            ce qui vous distingue.
+          </p>
+          <textarea
+            value={form.description}
+            onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
+            maxLength={800}
+            rows={4}
+            placeholder="Depuis 20XX, notre équipe accompagne les élèves de..."
+            className="w-full rounded-xl border border-token bg-surface-2 px-3.5 py-2.5 text-sm focus:border-primary-400 focus:outline-none"
+          />
+          <p className="mt-1 text-right text-[11px] text-muted">{form.description.length}/800</p>
         </div>
         <div>
           <label className="mb-1 block text-xs font-bold text-secondary">Email</label>

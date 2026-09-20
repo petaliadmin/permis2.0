@@ -36,6 +36,12 @@ export class UpdateSchoolDto {
   @IsString()
   address?: string;
 
+  @ApiProperty({ required: false, description: 'Free-form paragraph shown on the public fiche' })
+  @IsOptional()
+  @IsString()
+  @Length(0, 800)
+  description?: string;
+
   @ApiProperty({ required: false })
   @IsOptional()
   @IsString()

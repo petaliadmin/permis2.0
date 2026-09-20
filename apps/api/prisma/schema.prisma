@@ -613,6 +613,11 @@ model School {
   city              String?
   district          String?
   address           String?
+  /// Free-form paragraph the school writes about itself (SEO brief Lot
+  /// 3.3 — "paragraphe descriptif unique"), shown on its public fiche and
+  /// fed into DrivingSchool.description. Owner-editable, same trust model
+  /// as every other field here — never auto-generated or templated.
+  description       String?
   phone             String?
   whatsapp          String?
   email             String?

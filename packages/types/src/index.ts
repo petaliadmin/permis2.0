@@ -461,6 +461,8 @@ export interface School {
   city?: string | null;
   district?: string | null;
   address?: string | null;
+  /** Free-form paragraph the school writes about itself, shown on its public fiche. */
+  description?: string | null;
   phone?: string | null;
   whatsapp?: string | null;
   email?: string | null;

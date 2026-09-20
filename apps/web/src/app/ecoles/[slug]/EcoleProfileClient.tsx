@@ -64,6 +64,15 @@ export default function EcoleProfileClient({ school }: { school: School }) {
       <main className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="grid gap-8 lg:grid-cols-[1fr_360px]">
           <div className="space-y-6">
+            {school.description && (
+              <div className="card">
+                <p className="font-display text-sm font-bold text-foreground">À propos</p>
+                <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-secondary">
+                  {school.description}
+                </p>
+              </div>
+            )}
+
             {(school.services.length > 0 || school.licenseCategories.length > 0) && (
               <div className="card">
                 <p className="font-display text-sm font-bold text-foreground">Services & permis</p>
