@@ -4,8 +4,8 @@ import { SiteHeader } from '@/components/SiteHeader';
 import { SiteFooter } from '@/components/SiteFooter';
 import { IconArrowRight, IconChevronRight } from '@tabler/icons-react';
 import { buildMetadata } from '@/lib/seo/metadata';
+import { organizationNode, websiteNode, graphScript, SITE_URL } from '@/lib/seo/jsonLd';
 
-const SITE_URL = 'https://www.permis2.com';
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
 // Lot 2.1 — was 80 chars once the " · PERMIS2.0" template suffix is
@@ -61,9 +61,8 @@ const FAQS = [
   },
 ];
 
-function jsonLd() {
+function jsonLd(): string {
   const breadcrumb = {
-    '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Accueil', item: SITE_URL },
@@ -76,7 +75,6 @@ function jsonLd() {
     ],
   };
   const faqPage = {
-    '@context': 'https://schema.org',
     '@type': 'FAQPage',
     mainEntity: FAQS.map((f) => ({
       '@type': 'Question',
@@ -84,7 +82,43 @@ function jsonLd() {
       acceptedAnswer: { '@type': 'Answer', text: f.answer },
     })),
   };
-  return [breadcrumb, faqPage];
+  // Lot 2.5 — HowTo mirroring the "Les étapes pour préparer son permis"
+  // section below verbatim (same 4 steps, same order) rather than a
+  // separately-maintained copy that could drift from the visible content.
+  const howTo = {
+    '@type': 'HowTo',
+    name: 'Les étapes pour préparer son permis au Sénégal',
+    step: [
+      {
+        '@type': 'HowToStep',
+        position: 1,
+        name: 'Choisissez une auto-école',
+        text: "Choisissez une auto-école dans l'annuaire d'auto-écoles et pré-inscrivez-vous en ligne.",
+        url: `${SITE_URL}/auto-ecoles-senegal`,
+      },
+      {
+        '@type': 'HowToStep',
+        position: 2,
+        name: 'Préparez le Code de la route',
+        text: "Préparez le Code de la route avec les leçons et l'annuaire des panneaux.",
+        url: `${SITE_URL}/code-route-senegal`,
+      },
+      {
+        '@type': 'HowToStep',
+        position: 3,
+        name: 'Entraînez-vous',
+        text: "Entraînez-vous avec des quiz puis un examen blanc dans les conditions du jour J.",
+        url: `${SITE_URL}/exam`,
+      },
+      {
+        '@type': 'HowToStep',
+        position: 4,
+        name: "Passez l'examen",
+        text: "Passez l'examen du Code puis l'épreuve pratique de conduite avec votre auto-école.",
+      },
+    ],
+  };
+  return graphScript([organizationNode(), websiteNode(), breadcrumb, howTo, faqPage]);
 }
 
 export default async function PermisConduireSenegalPage() {
@@ -92,13 +126,7 @@ export default async function PermisConduireSenegalPage() {
 
   return (
     <div className="on-light min-h-screen bg-surface">
-      {jsonLd().map((schema, i) => (
-        <script
-          key={i}
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-        />
-      ))}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd() }} />
 
       <SiteHeader />
 
