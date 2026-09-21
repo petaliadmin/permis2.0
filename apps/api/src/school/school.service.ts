@@ -12,6 +12,7 @@ import {
 } from '@permis2.0/types';
 import { CreateSchoolDto } from './dto/create-school.dto';
 import { UpdateSchoolDto } from './dto/update-school.dto';
+import { UpsertSchoolReviewDto } from './dto/upsert-school-review.dto';
 import { AddSchoolMemberDto } from './dto/add-school-member.dto';
 import { CreateEnrollmentRequestDto } from './dto/create-enrollment-request.dto';
 import { UpdateEnrollmentStatusDto } from './dto/update-enrollment-status.dto';
@@ -823,6 +824,53 @@ export class SchoolService {
       },
       include: SchoolService.PAYMENT_INCLUDE,
     });
+  }
+
+  // ─── Avis (Lot 5 — SEO brief) ────────────────────────────────────────────────
+
+  /** Public: the review list (newest first) + the real aggregate — never a
+   *  placeholder, and only present when at least one review exists. */
+  async listReviews(schoolId: string) {
+    const [reviews, aggregate] = await Promise.all([
+      this.prisma.schoolReview.findMany({
+        where: { schoolId },
+        include: { user: { select: { id: true, name: true } } },
+        orderBy: { createdAt: 'desc' },
+      }),
+      this.prisma.schoolReview.aggregate({
+        where: { schoolId },
+        _avg: { rating: true },
+        _count: true,
+      }),
+    ]);
+    return {
+      reviews,
+      averageRating: aggregate._avg.rating,
+      reviewCount: aggregate._count,
+    };
+  }
+
+  /** One review per (school, user) — a second submission updates the
+   *  existing row rather than creating a duplicate. */
+  async upsertReview(schoolId: string, userId: string, dto: UpsertSchoolReviewDto) {
+    const school = await this.prisma.school.findUnique({ where: { id: schoolId } });
+    if (!school) throw new NotFoundException('École introuvable');
+
+    return this.prisma.schoolReview.upsert({
+      where: { schoolId_userId: { schoolId, userId } },
+      create: { schoolId, userId, rating: dto.rating, comment: dto.comment },
+      update: { rating: dto.rating, comment: dto.comment },
+      include: { user: { select: { id: true, name: true } } },
+    });
+  }
+
+  async deleteReview(schoolId: string, userId: string) {
+    const review = await this.prisma.schoolReview.findUnique({
+      where: { schoolId_userId: { schoolId, userId } },
+    });
+    if (!review) throw new NotFoundException('Avis introuvable');
+    await this.prisma.schoolReview.delete({ where: { id: review.id } });
+    return { success: true };
   }
 
   // ─── Superadmin (délégué depuis AdminController) ────────────────────────────

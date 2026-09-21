@@ -117,6 +117,7 @@ model User {
   schoolStudentLinks          SchoolStudent[]
   schoolEnrollmentRequests    SchoolEnrollmentRequest[] @relation("SchoolEnrollmentRequestStudent")
   respondedEnrollmentRequests SchoolEnrollmentRequest[] @relation("SchoolEnrollmentRequestResponder")
+  schoolReviews               SchoolReview[]
 
   @@map("users")
 }
@@ -662,10 +663,34 @@ model School {
   sessions           Session[]
   payments           SchoolPayment[]
   purchases          Purchase[]
+  reviews            SchoolReview[]
 
   @@index([status])
   @@index([city])
   @@map("schools")
+}
+
+/// Public review — Lot 5 (SEO brief). Any authenticated PERMIS2.0 user may
+/// leave one review per school (unique constraint below), published
+/// immediately, no moderation queue — a deliberate product choice, not an
+/// oversight (see SEO brief follow-up). One row per (school, user) — a
+/// second POST updates the existing review rather than creating a
+/// duplicate, so a rating can't be inflated by resubmitting.
+model SchoolReview {
+  id        String   @id @default(cuid())
+  schoolId  String
+  userId    String
+  rating    Int
+  comment   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  school School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([schoolId, userId])
+  @@index([schoolId])
+  @@map("school_reviews")
 }
 
 /// Staff rattachement to a school with a scoped role (RBAC tenant axis).

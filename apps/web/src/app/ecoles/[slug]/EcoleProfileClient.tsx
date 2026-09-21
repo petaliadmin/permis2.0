@@ -2,18 +2,24 @@
 
 import { useEffect } from 'react';
 import Link from 'next/link';
-import type { School } from '@permis2.0/types';
+import type { School, SchoolReviewsResponse } from '@permis2.0/types';
 import { SiteHeader } from '@/components/SiteHeader';
 import { SiteFooter } from '@/components/SiteFooter';
 import { whatsappLinkTo } from '@/lib/contact';
 import { directionsUrl } from '@/lib/geo';
 import { trackEvent } from '@/lib/analytics';
 import { EnrollmentForm } from './EnrollmentForm';
+import { SchoolReviews } from './SchoolReviews';
 import { IconBrandWhatsapp, IconChevronLeft, IconMail, IconMapPin, IconPhone, IconRoute } from '@tabler/icons-react';
 
 const fmtXof = (n: number) => `${n.toLocaleString('fr-FR')} FCFA`;
 
-export default function EcoleProfileClient({ school }: { school: School }) {
+interface EcoleProfileClientProps {
+  school: School;
+  reviews: SchoolReviewsResponse;
+}
+
+export default function EcoleProfileClient({ school, reviews }: EcoleProfileClientProps) {
   useEffect(() => {
     trackEvent('school_viewed', { school_id: school.id, school_name: school.name });
   }, [school.id, school.name]);
@@ -167,6 +173,8 @@ export default function EcoleProfileClient({ school }: { school: School }) {
                 </a>
               )}
             </div>
+
+            <SchoolReviews schoolId={school.id} initialData={reviews} />
 
             <Link href="/ecoles" className="inline-flex items-center gap-1 text-sm font-semibold text-secondary hover:text-foreground">
               <IconChevronLeft size="1em" aria-hidden="true" />

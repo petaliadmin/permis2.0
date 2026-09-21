@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import type { School } from '@permis2.0/types';
+import type { School, SchoolReviewsResponse } from '@permis2.0/types';
 import EcoleProfileClient from './EcoleProfileClient';
 import { buildMetadata } from '@/lib/seo/metadata';
 import { organizationNode, websiteNode, graphScript, SITE_URL } from '@/lib/seo/jsonLd';
@@ -34,7 +34,7 @@ function parseHourRange(range: string): { opens: string; closes: string } | null
   return { opens: pad(m[1], m[2]), closes: pad(m[3], m[4]) };
 }
 
-function schoolJsonLd(school: School): string {
+function schoolJsonLd(school: School, reviews: SchoolReviewsResponse | null): string {
   const streetAddress = [school.district, school.address].filter(Boolean).join(', ');
 
   const openingHoursSpecification = school.openingHours
@@ -90,6 +90,17 @@ function schoolJsonLd(school: School): string {
         }
       : {}),
     ...(openingHoursSpecification.length > 0 ? { openingHoursSpecification } : {}),
+    // Real aggregate only, and only once at least one review exists (Lot 5)
+    // — never a placeholder rating.
+    ...(reviews && reviews.reviewCount > 0
+      ? {
+          aggregateRating: {
+            '@type': 'AggregateRating',
+            ratingValue: reviews.averageRating,
+            reviewCount: reviews.reviewCount,
+          },
+        }
+      : {}),
     // Real per-category prices when the school has entered them (Lot 3.3 —
     // "tarifs par catégorie"); falls back to the single priceRange summary
     // otherwise. Never both — one school-entered number shouldn't imply
@@ -120,6 +131,16 @@ async function fetchSchool(slug: string): Promise<School | null> {
   }
 }
 
+async function fetchReviews(schoolId: string): Promise<SchoolReviewsResponse | null> {
+  try {
+    const res = await fetch(`${API_URL}/schools/${schoolId}/reviews`, { next: { revalidate: 300 } });
+    if (!res.ok) return null;
+    return res.json();
+  } catch {
+    return null;
+  }
+}
+
 export async function generateMetadata({
   params,
 }: {
@@ -141,14 +162,18 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const { slug } = await params;
   const school = await fetchSchool(slug);
   if (!school) notFound();
+  const reviews = await fetchReviews(school.id);
 
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: schoolJsonLd(school) }}
+        dangerouslySetInnerHTML={{ __html: schoolJsonLd(school, reviews) }}
       />
-      <EcoleProfileClient school={school} />
+      <EcoleProfileClient
+        school={school}
+        reviews={reviews ?? { reviews: [], averageRating: null, reviewCount: 0 }}
+      />
     </>
   );
 }

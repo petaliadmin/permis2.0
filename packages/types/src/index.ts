@@ -491,6 +491,25 @@ export interface School {
   studentsCount?: number;
 }
 
+/** GET /schools/:id/reviews (Lot 5). */
+export interface SchoolReview {
+  id: string;
+  schoolId: string;
+  userId: string;
+  rating: number;
+  comment?: string | null;
+  createdAt: string;
+  updatedAt: string;
+  user: { id: string; name: string };
+}
+
+export interface SchoolReviewsResponse {
+  reviews: SchoolReview[];
+  /** null while no review exists yet — never a placeholder. */
+  averageRating: number | null;
+  reviewCount: number;
+}
+
 export interface SchoolMembership {
   id: string;
   schoolId: string;

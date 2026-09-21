@@ -28,6 +28,7 @@ import { BulkAddStudentsDto } from './dto/bulk-add-students.dto';
 import { BulkAddMembersDto } from './dto/bulk-add-members.dto';
 import { BulkCreateVehiclesDto } from './dto/bulk-create-vehicles.dto';
 import { SendPaymentEmailDto } from './dto/send-payment-email.dto';
+import { UpsertSchoolReviewDto } from './dto/upsert-school-review.dto';
 
 const STAFF_ROLES = [SchoolMemberRole.OWNER, SchoolMemberRole.MANAGER, SchoolMemberRole.SECRETARY];
 const STUDENTS_VIEW_ROLES = [...STAFF_ROLES, SchoolMemberRole.INSTRUCTOR, SchoolMemberRole.COACH];
@@ -221,6 +222,34 @@ export class SchoolController {
     @Body() dto: UpdateEnrollmentStatusDto
   ) {
     return this.schoolService.updateEnrollmentStatus(schoolId, id, req.user.userId, dto);
+  }
+
+  // ─── Avis (Lot 5) ────────────────────────────────────────────────────────────
+
+  @Get(':schoolId/reviews')
+  @ApiResponse({ status: 200, description: 'Public reviews + real aggregate for this school' })
+  async listReviews(@Param('schoolId') schoolId: string) {
+    return this.schoolService.listReviews(schoolId);
+  }
+
+  @Post(':schoolId/reviews')
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
+  @ApiResponse({ status: 201, description: 'Review created or updated (one per user per school)' })
+  async upsertReview(
+    @Request() req,
+    @Param('schoolId') schoolId: string,
+    @Body() dto: UpsertSchoolReviewDto
+  ) {
+    return this.schoolService.upsertReview(schoolId, req.user.userId, dto);
+  }
+
+  @Delete(':schoolId/reviews')
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
+  @ApiResponse({ status: 200, description: "The caller's own review removed" })
+  async deleteReview(@Request() req, @Param('schoolId') schoolId: string) {
+    return this.schoolService.deleteReview(schoolId, req.user.userId);
   }
 
   // ─── Élèves (SchoolStudent) ──────────────────────────────────────────────────
