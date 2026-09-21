@@ -57,6 +57,9 @@ services:
       DATABASE_URL: postgresql://${DB_USER}:${DB_PASSWORD}@postgres:5432/${DB_NAME}?connection_limit=10&pool_timeout=20
       JWT_SECRET: ${JWT_SECRET}
       JWT_EXPIRATION: ${JWT_EXPIRATION:-24h}
+      # Keep false — see apps/api/.env.example. Only a stopgap while DExchange
+      # SMS/WhatsApp delivery isn't confirmed working end to end.
+      OTP_BYPASS: ${OTP_BYPASS:-false}
       FRONTEND_URL: ${FRONTEND_URL}
       WEB_URL: ${WEB_URL:-${FRONTEND_URL}}
       DEXCHANGE_API_KEY: ${DEXCHANGE_API_KEY}
