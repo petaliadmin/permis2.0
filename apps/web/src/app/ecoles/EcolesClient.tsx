@@ -25,7 +25,7 @@ const SchoolsMap = dynamic(
   { ssr: false, loading: () => <Skeleton className="h-full min-h-[320px] w-full" /> }
 );
 
-export default function EcolesClient() {
+export default function EcolesClient({ initialSchools }: { initialSchools: School[] }) {
   // Deep-link support (e.g. /ecoles?city=Dakar from the /auto-ecoles-senegal city pages).
   const searchParams = useSearchParams();
   const cityParam = searchParams.get('city') ?? '';
@@ -34,19 +34,30 @@ export default function EcolesClient() {
     city: cityParam,
   });
   const [sort, setSort] = useState<SchoolSort>('recent');
-  const [schools, setSchools] = useState<School[]>([]);
-  const [loading, setLoading] = useState(true);
+  // Seeded from the server fetch (page.tsx already fetched this exact
+  // `city` filter) — real content from the first paint, not an empty list
+  // waiting on a client-only fetch.
+  const [schools, setSchools] = useState<School[]>(initialSchools);
+  const [loading, setLoading] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [userPos, setUserPos] = useState<LatLng | null>(null);
   const [geoError, setGeoError] = useState<string | null>(null);
   const [mobileTab, setMobileTab] = useState<'list' | 'map'>('list');
   const debounceRef = useRef<ReturnType<typeof setTimeout>>();
   const cardRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  // Skips the effect's very first run — the server already fetched schools
+  // matching the initial filters, so refetching immediately on mount would
+  // just flash a loading state over data we already have.
+  const isFirstRun = useRef(true);
 
   const hasFilters =
     filters.city !== '' || filters.category !== '' || filters.q !== '' || filters.maxPriceXof !== '';
 
   useEffect(() => {
+    if (isFirstRun.current) {
+      isFirstRun.current = false;
+      return;
+    }
     clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => {
       setLoading(true);
