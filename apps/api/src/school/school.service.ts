@@ -119,7 +119,7 @@ export class SchoolService {
   async listSlugsForSitemap() {
     return this.prisma.school.findMany({
       where: { status: SchoolStatus.ACTIVE },
-      select: { slug: true, updatedAt: true, city: true },
+      select: { slug: true, updatedAt: true, city: true, licenseCategories: true },
     });
   }
 

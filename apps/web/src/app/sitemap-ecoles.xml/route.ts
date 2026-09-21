@@ -13,6 +13,7 @@ interface SchoolSitemapEntry {
   slug: string;
   updatedAt: string;
   city: string | null;
+  licenseCategories: string[];
 }
 
 // Same cadence as sitemap-panneaux.xml (Lot 1.6).
@@ -54,7 +55,23 @@ export async function GET() {
     .filter(([, count]) => count >= MIN_SCHOOLS_PER_CITY)
     .map(([city]) => ({ url: `${SITE_URL}/auto-ecoles-senegal/${slugify(city)}` }));
 
-  return new Response(serializeUrlset([...schoolEntries, ...cityEntries]), {
+  // Lot 5 — same ≥3-per-combo bar as auto-ecoles-senegal/[ville]/[categorie].
+  const comboCounts = new Map<string, number>();
+  for (const s of schools) {
+    if (!s.city) continue;
+    for (const code of s.licenseCategories ?? []) {
+      const key = `${s.city}\u0000${code}`;
+      comboCounts.set(key, (comboCounts.get(key) ?? 0) + 1);
+    }
+  }
+  const comboEntries: SitemapEntry[] = [...comboCounts.entries()]
+    .filter(([, count]) => count >= MIN_SCHOOLS_PER_CITY)
+    .map(([key]) => {
+      const [city, code] = key.split('\u0000');
+      return { url: `${SITE_URL}/auto-ecoles-senegal/${slugify(city)}/permis-${code.toLowerCase()}` };
+    });
+
+  return new Response(serializeUrlset([...schoolEntries, ...cityEntries, ...comboEntries]), {
     headers: SITEMAP_XML_HEADERS,
   });
 }

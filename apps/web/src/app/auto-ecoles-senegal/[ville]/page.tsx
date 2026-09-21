@@ -170,6 +170,16 @@ export default async function VilleAutoEcolesPage({
 
   const categories = [...new Set(schools.flatMap((s) => s.licenseCategories ?? []))].sort();
 
+  // Lot 5 — links to /auto-ecoles-senegal/{ville}/permis-{code} sub-pages,
+  // only for categories that clear the same ≥3-school bar as this page
+  // itself (see [categorie]/page.tsx) — never linking to a combo that
+  // would 404.
+  const categoryPageCounts = new Map<string, number>();
+  for (const s of schools) {
+    for (const c of s.licenseCategories ?? []) categoryPageCounts.set(c, (categoryPageCounts.get(c) ?? 0) + 1);
+  }
+  const qualifyingCategories = categories.filter((c) => (categoryPageCounts.get(c) ?? 0) >= MIN_SCHOOLS_PER_CITY);
+
   // Lot 3.4 — "liens villes voisines": every other city that also has its
   // own page (≥3 schools), not a geographic-adjacency guess we can't back
   // with real data. Still does the actual SEO job (internal linking between
@@ -223,6 +233,23 @@ export default async function VilleAutoEcolesPage({
             Ouvrir l'annuaire
           </Link>
         </div>
+
+        {qualifyingCategories.length > 0 && (
+          <div className="mt-8">
+            <p className="font-display text-sm font-bold text-foreground">Voir par catégorie de permis</p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {qualifyingCategories.map((c) => (
+                <Link
+                  key={c}
+                  href={`/auto-ecoles-senegal/${ville}/permis-${c.toLowerCase()}`}
+                  className="rounded-full border border-token bg-surface-1 px-3.5 py-2 text-xs font-semibold text-primary-600 hover:bg-surface-2"
+                >
+                  Permis {c} à {city}
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
 
         {otherCities.length > 0 && (
           <div className="mt-8">
