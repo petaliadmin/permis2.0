@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { SiteHeader } from '@/components/SiteHeader';
 import { SiteFooter } from '@/components/SiteFooter';
 import { IconArrowRight, IconChevronRight } from '@tabler/icons-react';
+import { SUBSCRIPTION_PRICE_XOF } from '@permis2.0/shared';
 import { buildMetadata } from '@/lib/seo/metadata';
 import { organizationNode, websiteNode, graphScript, ORGANIZATION_ID, SITE_URL } from '@/lib/seo/jsonLd';
 
@@ -94,12 +95,28 @@ function jsonLd(total: number): string {
       acceptedAnswer: { '@type': 'Answer', text: f.answer },
     })),
   };
+  // SEO audit finding (Étape 5) — hasCourseInstance/offers were missing
+  // (required for the Course rich result). offers.price is the real
+  // subscription price (SUBSCRIPTION_PRICE_XOF, apps/web uses the same
+  // constant on /boutique) — this is a freemium product (free account,
+  // paid unlimited access), never "free" as a generic placeholder would
+  // have implied.
   const course = {
     '@type': 'Course',
     name: 'Code de la route Sénégal — PERMIS 2.0',
     description: `Leçons thématiques, ${total || 155} panneaux de signalisation détaillés et quiz corrigés pour préparer le Code de la route au Sénégal.`,
     provider: { '@id': ORGANIZATION_ID },
     url: `${SITE_URL}/code-route-senegal`,
+    hasCourseInstance: {
+      '@type': 'CourseInstance',
+      courseMode: 'online',
+    },
+    offers: {
+      '@type': 'Offer',
+      category: 'Subscription',
+      priceCurrency: 'XOF',
+      price: SUBSCRIPTION_PRICE_XOF,
+    },
   };
   return graphScript([organizationNode(), websiteNode(), breadcrumb, faqPage, course]);
 }

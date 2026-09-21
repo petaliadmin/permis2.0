@@ -59,6 +59,7 @@ const OWN_GRAPH_PATTERNS: RegExp[] = [
   /^\/auto-ecoles-senegal\/[^/]+$/,
   /^\/auto-ecoles-senegal\/[^/]+\/permis-[a-e]$/,
   /^\/code-route-senegal$/,
+  /^\/ecoles$/,
   /^\/ecoles\/[^/]+$/,
   /^\/permis-conduire-senegal$/,
 ];

@@ -3,6 +3,7 @@ import { Suspense } from 'react';
 import type { School } from '@permis2.0/types';
 import EcolesClient from './EcolesClient';
 import { buildMetadata } from '@/lib/seo/metadata';
+import { organizationNode, websiteNode, graphScript, SITE_URL } from '@/lib/seo/jsonLd';
 
 // dataSource.ts is a 'use client' module — unusable from this Server
 // Component (see ecoles/[slug]/page.tsx for the same note).
@@ -28,6 +29,35 @@ async function fetchInitialSchools(city?: string): Promise<School[]> {
   }
 }
 
+// SEO audit finding (Étape 5) — /ecoles had no structured data of its own
+// (just the root layout's bare Organization/WebSite). A Service node with
+// real `areaServed` — never a hardcoded city list — is the correct schema
+// for a 300-item directory: one LocalBusiness per row on a single page is
+// a spam signal, not a rich-result opportunity.
+function jsonLd(allSchools: School[]): string {
+  const cities = [...new Set(allSchools.map((s) => s.city).filter((c): c is string => !!c))].sort(
+    (a, b) => a.localeCompare(b, 'fr')
+  );
+  const service = {
+    '@type': 'Service',
+    serviceType: 'Mise en relation avec des auto-écoles',
+    provider: { '@id': `${SITE_URL}/#organization` },
+    ...(cities.length > 0
+      ? { areaServed: cities.map((name) => ({ '@type': 'City', name })) }
+      : {}),
+  };
+  const itemList = {
+    '@type': 'ItemList',
+    itemListElement: allSchools.map((s, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      url: `${SITE_URL}/ecoles/${s.slug}`,
+      name: s.name,
+    })),
+  };
+  return graphScript([organizationNode(), websiteNode(), service, itemList]);
+}
+
 // SEO audit finding (Étape 1, bloquant) — this page used to render an empty
 // client component with no server-fetched data: the raw HTML had zero
 // school names/addresses/links, just navigation chrome. Real content now
@@ -41,9 +71,16 @@ export default async function Page({
 }) {
   const { city } = await searchParams;
   const initialSchools = await fetchInitialSchools(city);
+  // JSON-LD represents the canonical (unfiltered) /ecoles page regardless
+  // of a ?city= deep link — only fetch a second time when the filter
+  // actually narrowed the visible list.
+  const allSchools = city ? await fetchInitialSchools() : initialSchools;
   return (
-    <Suspense>
-      <EcolesClient initialSchools={initialSchools} />
-    </Suspense>
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(allSchools) }} />
+      <Suspense>
+        <EcolesClient initialSchools={initialSchools} />
+      </Suspense>
+    </>
   );
 }
