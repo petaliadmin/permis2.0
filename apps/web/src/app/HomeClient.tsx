@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic';
 import type { School } from '@permis2.0/types';
 import { SiteHeader } from '@/components/SiteHeader';
 import { SiteFooter } from '@/components/SiteFooter';
-import { Hero } from '@/components/home/Hero';
+import { Hero, type PlatformStats } from '@/components/home/Hero';
 
 // Below-the-fold sections: code-split into their own chunks so the browser
 // isn't parsing one large bundle before Hero (the LCP element) is interactive.
@@ -41,11 +41,16 @@ const Testimonials = dynamic(() =>
 const Faq = dynamic(() => import('@/components/home/Faq').then((m) => m.Faq));
 const FinalCta = dynamic(() => import('@/components/home/FinalCta').then((m) => m.FinalCta));
 
-export default function HomeClient({ top20Schools }: { top20Schools: School[] }) {
+interface HomeClientProps {
+  top20Schools: School[];
+  stats: PlatformStats;
+}
+
+export default function HomeClient({ top20Schools, stats }: HomeClientProps) {
   return (
     <div className="on-light min-h-screen bg-surface">
       <SiteHeader />
-      <Hero />
+      <Hero stats={stats} />
       <ProblemSolution />
       <Services />
       <HowItWorks />
@@ -54,7 +59,7 @@ export default function HomeClient({ top20Schools }: { top20Schools: School[] })
       <ForSchools />
       <SenegalMap />
       <PartnerSchools initialSchools={top20Schools} />
-      <StatsCounter />
+      <StatsCounter stats={stats} />
       <Testimonials />
       <Faq />
       <FinalCta />

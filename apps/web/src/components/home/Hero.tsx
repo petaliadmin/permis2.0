@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { Star, School, Users, Trophy, type LucideIcon } from 'lucide-react';
+import { Star, School, Users, MapPin, type LucideIcon } from 'lucide-react';
 
 interface Stat {
   icon: LucideIcon;
@@ -10,14 +10,38 @@ interface Stat {
   sub: string;
 }
 
-const STATS: Stat[] = [
-  { icon: Star, label: '4.9/5', sub: 'Note moyenne' },
-  { icon: School, label: '+300', sub: 'Auto-écoles' },
-  { icon: Users, label: '+20 000', sub: 'Élèves' },
-  { icon: Trophy, label: '95%', sub: 'Réussite' },
-];
+export interface PlatformStats {
+  schoolsCount: number;
+  studentsCount: number;
+  citiesCount: number;
+  averageRating: number | null;
+  reviewCount: number;
+}
 
-export function Hero() {
+// SEO audit finding (Étape 3/6) — these badges used to be hardcoded
+// marketing copy (+300, +20 000, 4.9/5, 95%) with no real data behind any
+// of them. Built from `stats` (fetched server-side, see app/page.tsx) —
+// a metric with nothing real to show is left out entirely rather than
+// filled with a placeholder.
+function buildStats(stats: PlatformStats): Stat[] {
+  const items: Stat[] = [];
+  if (stats.reviewCount > 0 && stats.averageRating != null) {
+    items.push({ icon: Star, label: `${stats.averageRating.toFixed(1)}/5`, sub: 'Note moyenne' });
+  }
+  if (stats.schoolsCount > 0) {
+    items.push({ icon: School, label: `${stats.schoolsCount}+`, sub: 'Auto-écoles' });
+  }
+  if (stats.studentsCount > 0) {
+    items.push({ icon: Users, label: `${stats.studentsCount}+`, sub: 'Élèves' });
+  }
+  if (stats.citiesCount > 0) {
+    items.push({ icon: MapPin, label: `${stats.citiesCount}`, sub: 'Villes couvertes' });
+  }
+  return items;
+}
+
+export function Hero({ stats }: { stats: PlatformStats }) {
+  const STATS = buildStats(stats);
   return (
     <section className="relative isolate flex min-h-[640px] items-center overflow-hidden px-4 py-20 text-white sm:min-h-[720px] sm:py-28">
       <Image

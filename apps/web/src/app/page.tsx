@@ -5,6 +5,7 @@ import type { School } from '@permis2.0/types';
 import { spaceFromHost, type Space } from '@/lib/space';
 import { HOME_FAQS } from '@/lib/homeFaq';
 import HomeClient from './HomeClient';
+import type { PlatformStats } from '@/components/home/Hero';
 import StudentHome from './learn/StudentHome';
 import GestionClient from './mon-ecole/GestionClient';
 import { organizationNode, websiteNode, graphScript } from '@/lib/seo/jsonLd';
@@ -21,6 +22,24 @@ async function fetchTop20Schools(): Promise<School[]> {
     return Array.isArray(schools) ? schools : [];
   } catch {
     return [];
+  }
+}
+
+const EMPTY_STATS: PlatformStats = {
+  schoolsCount: 0,
+  studentsCount: 0,
+  citiesCount: 0,
+  averageRating: null,
+  reviewCount: 0,
+};
+
+async function fetchPlatformStats(): Promise<PlatformStats> {
+  try {
+    const res = await fetch(`${API_URL}/stats/platform`, { next: { revalidate: 300 } });
+    if (!res.ok) return EMPTY_STATS;
+    return res.json();
+  } catch {
+    return EMPTY_STATS;
   }
 }
 
@@ -97,11 +116,11 @@ export default async function Page() {
   if (space === 'admin') redirect('/admin');
   if (space === 'learn') return <StudentHome />;
   if (space === 'school') return <GestionClient />;
-  const top20Schools = await fetchTop20Schools();
+  const [top20Schools, stats] = await Promise.all([fetchTop20Schools(), fetchPlatformStats()]);
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: homeJsonLd }} />
-      <HomeClient top20Schools={top20Schools} />
+      <HomeClient top20Schools={top20Schools} stats={stats} />
     </>
   );
 }

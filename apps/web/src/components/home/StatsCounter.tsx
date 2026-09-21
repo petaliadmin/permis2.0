@@ -2,7 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { School, Users, Smile, MapPin, type LucideIcon } from 'lucide-react';
+import { School, Users, Star, MapPin, type LucideIcon } from 'lucide-react';
+import type { PlatformStats } from './Hero';
 
 interface StatDef {
   icon: LucideIcon;
@@ -11,17 +12,41 @@ interface StatDef {
   label: string;
 }
 
-const STATS: StatDef[] = [
-  { icon: School, value: 300, suffix: '+', label: 'Auto-écoles' },
-  { icon: Users, value: 20000, suffix: '+', label: 'Élèves' },
-  { icon: Smile, value: 95, suffix: '%', label: 'Satisfaction' },
-  { icon: MapPin, value: 150, suffix: '+', label: 'Villes couvertes' },
-];
+// SEO audit finding (Étape 3/6, "compteurs qui s'animent depuis 0") — two
+// bugs, not one: the values were hardcoded marketing copy, AND the counter
+// always started its React state at 0 regardless of the value passed in,
+// so even a real number would have rendered as "0" in the server HTML
+// until client-side animation ran. Fixed by seeding `display` with the
+// real `value` (below) instead of 0 — the count-up is a client-only
+// enhancement layered on top of an already-correct server render, not the
+// only way the number ever appears.
+function buildStats(stats: PlatformStats): StatDef[] {
+  const items: StatDef[] = [];
+  if (stats.schoolsCount > 0) {
+    items.push({ icon: School, value: stats.schoolsCount, suffix: '+', label: 'Auto-écoles' });
+  }
+  if (stats.studentsCount > 0) {
+    items.push({ icon: Users, value: stats.studentsCount, suffix: '+', label: 'Élèves' });
+  }
+  if (stats.reviewCount > 0 && stats.averageRating != null) {
+    items.push({
+      icon: Star,
+      value: Math.round(stats.averageRating * 10) / 10,
+      suffix: '/5',
+      label: `Note moyenne (${stats.reviewCount} avis)`,
+    });
+  }
+  if (stats.citiesCount > 0) {
+    items.push({ icon: MapPin, value: stats.citiesCount, suffix: '', label: 'Villes couvertes' });
+  }
+  return items;
+}
 
 function Counter({ value, suffix }: { value: number; suffix: string }) {
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true, margin: '-40px' });
-  const [display, setDisplay] = useState(0);
+  // Seeded with the real value, not 0 — see the note above buildStats().
+  const [display, setDisplay] = useState(value);
 
   useEffect(() => {
     if (!inView) return;
@@ -32,7 +57,7 @@ function Counter({ value, suffix }: { value: number; suffix: string }) {
     const tick = (now: number) => {
       const progress = Math.min((now - start) / duration, 1);
       const eased = 1 - Math.pow(1 - progress, 3);
-      setDisplay(Math.round(value * eased));
+      setDisplay(Math.round(value * eased * 10) / 10);
       if (progress < 1) frame = requestAnimationFrame(tick);
     };
     frame = requestAnimationFrame(tick);
@@ -47,7 +72,9 @@ function Counter({ value, suffix }: { value: number; suffix: string }) {
   );
 }
 
-export function StatsCounter() {
+export function StatsCounter({ stats }: { stats: PlatformStats }) {
+  const STATS = buildStats(stats);
+  if (STATS.length === 0) return null;
   return (
     <section className="bg-gradient-to-b from-primary-50 to-white py-20">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">

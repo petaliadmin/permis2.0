@@ -23,6 +23,7 @@ import { ShopModule } from './shop/shop.module';
 import { EntitlementModule } from './entitlement/entitlement.module';
 import { SchoolModule } from './school/school.module';
 import { PermitPriceModule } from './permit-price/permit-price.module';
+import { PlatformStatsModule } from './platform-stats/platform-stats.module';
 
 @Module({
   imports: [
@@ -63,6 +64,7 @@ import { PermitPriceModule } from './permit-price/permit-price.module';
     EntitlementModule,
     SchoolModule,
     PermitPriceModule,
+    PlatformStatsModule,
   ],
   controllers: [AppController],
   providers: [
