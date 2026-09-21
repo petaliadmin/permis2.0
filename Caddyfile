@@ -29,9 +29,14 @@
 
 # ── Front hosts — all proxy to the same Next.js container ──────────────────────
 www.permis2.com, learn.permis2.com, school.permis2.com, admin.permis2.com {
-	# br (Brotli) — audit finding (Étape 7). Built into stock Caddy, no
-	# module needed. Listed by preference: zstd > br > gzip.
-	encode zstd br gzip
+	# zstd/gzip are built into stock Caddy; br (Brotli) is NOT — it needs its
+	# own xcaddy plugin (e.g. github.com/dunglas/caddy-cbrotli), which this
+	# image doesn't build yet (only cache-handler, for the `cache` directive
+	# below). Adding `br` here without that plugin crash-loops Caddy
+	# ("module not registered: http.encoders.br") and takes the whole site
+	# down — confirmed 2026-09-21. Re-add br only once the plugin is actually
+	# in Dockerfile.caddy's xcaddy build.
+	encode zstd gzip
 	# Cache key includes the Host header by default (souin), so sharing this
 	# one `cache` across all four spaces is safe: a cached www editorial page
 	# never gets served to learn/school/admin, and their own routes stay
@@ -47,7 +52,7 @@ permis2.com {
 }
 
 api.permis2.com {
-	encode zstd br gzip
+	encode zstd gzip
 	reverse_proxy api:3001 {
 		# Overwrite rather than append — a client sending its own
 		# X-Forwarded-For header must not be able to spoof the IP that

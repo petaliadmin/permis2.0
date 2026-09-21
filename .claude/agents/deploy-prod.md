@@ -10,18 +10,26 @@ You deploy c:\Development\permis2.0 to its AWS production stack. This is a real 
 ## Fixed identifiers (don't re-derive these — they don't change)
 
 ```
-AWS_PROFILE=permis2-new
+AWS_ACCOUNT=852845753361
 AWS_REGION=eu-west-3
-INSTANCE_ID=i-006bf9064ec2f66d7
-BACKUPS_BUCKET=permis2-0-backups-222795300809
+INSTANCE_ID=i-0d40c2b4d46bf2359
+INSTANCE_IP=51.45.50.189
+BACKUPS_BUCKET=permis2-0-backups-852845753361
 SSM_PREFIX=/permis2-0/prod
 PROJECT_NAME=permis2-0
 IMAGE_NAMESPACE=petalia2o26
 ```
 
-Domains: `www.permis2.com` (web), `api.permis2.com` (api), bare `permis2.com` redirects to www. Elastic IP is stable across restarts — don't re-derive it either unless something looks wrong.
+Domains: `www.permis2.com`, `learn.permis2.com`, `school.permis2.com`, `admin.permis2.com` (web, all 4 spaces of the one Next.js app), `api.permis2.com` (api), bare `permis2.com` redirects to www. Elastic IP is stable across restarts — don't re-derive it either unless something looks wrong.
 
-Always `export AWS_PROFILE=permis2-new AWS_REGION=eu-west-3` before any `aws` call. Credentials live in a dedicated `[permis2-new]` profile in `~/.aws/credentials` — never touch `[default]`.
+There is no named AWS CLI profile for this project — do not use `AWS_PROFILE`, and do not assume a `[permis2-new]` or any other named profile is valid (an earlier version of this file referenced one from a since-rebuilt AWS account; it's gone). Credentials live in **`.env.deploy`** at repo root (git-ignored, two lines: `AWS_ACCESS_KEY_ID`/`AWS_SECRET_ACCESS_KEY`). Before any `aws`/`docker` call, export them directly:
+```
+export AWS_ACCESS_KEY_ID=$(grep '^AWS_ACCESS_KEY_ID=' .env.deploy | cut -d= -f2-)
+export AWS_SECRET_ACCESS_KEY=$(grep '^AWS_SECRET_ACCESS_KEY=' .env.deploy | cut -d= -f2-)
+export AWS_REGION=eu-west-3 AWS_DEFAULT_REGION=eu-west-3
+unset AWS_PROFILE
+```
+If any identifier above ever looks wrong (auth failure, instance not found), the account/instance really did change — verify against `.env.deploy`'s working credentials and DNS resolution (`nslookup www.permis2.com 8.8.8.8`) rather than trusting a stale copy of this file, and then **update this file** so the next run doesn't hit the same dead end.
 
 ## Standard deploy procedure
 
@@ -128,4 +136,4 @@ Quote SQL string literals carefully in the outer shell (nested single-quote esca
 
 ## First-time / infra-level changes (Terraform)
 
-Only relevant if actually resizing the instance, changing security groups, or otherwise touching `infra/aws/*.tf` — not part of a normal app deploy. `cd infra/aws && AWS_PROFILE=permis2-new AWS_REGION=eu-west-3 terraform plan -out=x.tfplan`, review the diff carefully (an IAM policy document depending on the resource you're changing will show as "will be read during apply" — that's normal, not a red flag, as long as the underlying resource ID isn't actually changing), then `terraform apply x.tfplan`. Delete the `.tfplan` file after. If `terraform plan/apply` errors with a `dial tcp: lookup registry.terraform.io: no such host`-type DNS failure, it's transient — just retry.
+Only relevant if actually resizing the instance, changing security groups, or otherwise touching `infra/aws/*.tf` — not part of a normal app deploy. Export the same `.env.deploy` credentials as above, then `cd infra/aws && AWS_REGION=eu-west-3 terraform plan -out=x.tfplan`, review the diff carefully (an IAM policy document depending on the resource you're changing will show as "will be read during apply" — that's normal, not a red flag, as long as the underlying resource ID isn't actually changing), then `terraform apply x.tfplan`. Delete the `.tfplan` file after. If `terraform plan/apply` errors with a `dial tcp: lookup registry.terraform.io: no such host`-type DNS failure, it's transient — just retry.
