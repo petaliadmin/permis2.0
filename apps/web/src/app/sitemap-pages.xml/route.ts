@@ -27,6 +27,7 @@ const STATIC_PAGES = [
   '/permis-conduire-senegal',
   '/prix-permis-conduire-senegal',
   '/auto-ecoles-senegal',
+  '/logiciel-gestion-auto-ecole',
   '/assistance',
   '/a-propos',
   '/contact',
