@@ -30,8 +30,11 @@ async function fetchSigns(): Promise<ApiSign[]> {
 export async function GET() {
   const signs = await fetchSigns();
 
+  // Audit finding — `/traffic-signs` itself was listed here AND in
+  // sitemap-pages.xml's STATIC_PAGES (which already covers it, with a real
+  // <lastmod>) — the same URL appeared in two sitemap files. This file now
+  // starts at the category pages; the hub stays sitemap-pages.xml's job.
   const entries: SitemapEntry[] = [
-    { url: `${SITE_URL}/traffic-signs` },
     ...CATEGORY_ORDER.map((cat) => ({ url: `${SITE_URL}/traffic-signs/categorie/${slugify(cat)}` })),
     ...signs.map((s) => ({
       url: `${SITE_URL}/traffic-signs/${slugify(s.name)}`,
