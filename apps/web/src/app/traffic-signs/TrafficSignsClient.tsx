@@ -111,15 +111,26 @@ export default function TrafficSignsClient({
       );
   }, []);
 
+  // Audit finding — the header subtitle quotes `signs.length` (the full,
+  // real total) while HIDDEN_CATEGORIES silently dropped ~21 signs
+  // (temporaires, balises, marquage, feux, agents) from every tile: readers
+  // and crawlers saw "155 panneaux" above tiles that only summed to 134.
+  // Bucketed under one "autres" tile instead of dropped, so the displayed
+  // total always matches what's actually browsable — same fix already
+  // applied to /code-route-senegal's category breakdown.
   const grouped = useMemo(() => {
     const g: Record<string, PanneauRaw[]> = {};
-    for (const s of signs) (g[s.category] ??= []).push(s);
+    for (const s of signs) {
+      const key = HIDDEN_CATEGORIES.includes(s.category) ? 'autres' : s.category;
+      (g[key] ??= []).push(s);
+    }
     return g;
   }, [signs]);
 
   const allCats = [
     ...CATEGORY_ORDER.filter((c) => grouped[c]),
-    ...Object.keys(grouped).filter((c) => !CATEGORY_ORDER.includes(c) && !HIDDEN_CATEGORIES.includes(c)),
+    ...Object.keys(grouped).filter((c) => c !== 'autres' && !CATEGORY_ORDER.includes(c)),
+    ...(grouped.autres ? ['autres'] : []),
   ];
 
   const searchResults = useMemo(() => {

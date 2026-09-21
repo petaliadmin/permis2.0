@@ -24,10 +24,18 @@ function cookieDomain(): string {
 }
 
 function writeCookie(name: string, value: string) {
+  // Bug fix — 'use client' only controls bundling; App Router still renders
+  // this component tree once on the server first. RegisterPage calls
+  // getIntendedProfile() directly in its render body (not inside an effect),
+  // so an unguarded `document` reference here crashed every server render of
+  // /auth/register with a 500 ("document is not defined"). No-op on the
+  // server: nothing to persist there, the client render sets it once hydrated.
+  if (typeof document === 'undefined') return;
   document.cookie = `${name}=${value}; path=/; max-age=${ONE_YEAR}; domain=${cookieDomain()}; samesite=lax`;
 }
 
 function readCookie(name: string): string | null {
+  if (typeof document === 'undefined') return null;
   const m = document.cookie.match(new RegExp(`(?:^|;\\s*)${name}=([^;]+)`));
   return m ? decodeURIComponent(m[1]) : null;
 }

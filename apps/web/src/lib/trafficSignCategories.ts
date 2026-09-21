@@ -43,6 +43,11 @@ export const CAT_META: Record<string, CategoryMeta> = {
   marquage: { label: 'Marquage sol', icon: IconRoad, color: '#71717A' },
   feux: { label: 'Feux tricolores', icon: IconTrafficLights, color: '#16A34A' },
   agents: { label: 'Agents', icon: IconUserShield, color: '#7C3AED' },
+  // Audit finding — synthetic bucket for the picker (TrafficSignsClient),
+  // not a real DB category: aggregates HIDDEN_CATEGORIES so the picker's
+  // own "N panneaux · M catégories" subtitle stays honest instead of
+  // quoting the full sign count while only showing 5 of 10 categories.
+  autres: { label: 'Autres', icon: IconRoadSign, color: '#64748B' },
 };
 
 export function categoryMeta(cat: string): CategoryMeta {
