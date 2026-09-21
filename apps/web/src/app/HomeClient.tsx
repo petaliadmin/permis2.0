@@ -35,9 +35,6 @@ const PartnerSchools = dynamic(() =>
 const StatsCounter = dynamic(() =>
   import('@/components/home/StatsCounter').then((m) => m.StatsCounter)
 );
-const Testimonials = dynamic(() =>
-  import('@/components/home/Testimonials').then((m) => m.Testimonials)
-);
 const Faq = dynamic(() => import('@/components/home/Faq').then((m) => m.Faq));
 const FinalCta = dynamic(() => import('@/components/home/FinalCta').then((m) => m.FinalCta));
 
@@ -60,7 +57,12 @@ export default function HomeClient({ top20Schools, stats }: HomeClientProps) {
       <SenegalMap />
       <PartnerSchools initialSchools={top20Schools} />
       <StatsCounter stats={stats} />
-      <Testimonials />
+      {/* Audit finding — Testimonials was 4 hardcoded quotes/names/avatars
+          with no real review data behind them (no Review model exists yet;
+          reviewCount/averageRating above are always 0/null in production).
+          Falsifiable given the directory itself currently lists 0 schools.
+          Removed rather than fabricated; components/home/Testimonials.tsx
+          stays in the repo, unused, to wire up once real reviews exist. */}
       <Faq />
       <FinalCta />
       <SiteFooter />

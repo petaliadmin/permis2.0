@@ -23,6 +23,19 @@ export function organizationNode() {
     // No such asset exists in the repo; needs design input.
     logo: { '@type': 'ImageObject', url: `${SITE_URL}/apple-touch-icon.png`, width: 180, height: 180 },
     areaServed: { '@type': 'Country', name: 'Sénégal' },
+    // Audit finding — no contactPoint existed anywhere in the graph. This is
+    // the site's one real, live support channel (lib/contact.ts
+    // WHATSAPP_DISPLAY/WHATSAPP_INTL, used throughout /assistance,
+    // /contact, /mentions-legales). No `sameAs` added here — no social
+    // profile URLs were found to actually exist for this brand; adding
+    // placeholder ones would be a fabricated claim, not a fix.
+    contactPoint: {
+      '@type': 'ContactPoint',
+      contactType: 'customer service',
+      telephone: '+221-76-905-58-52',
+      areaServed: 'SN',
+      availableLanguage: ['French'],
+    },
   };
 }
 

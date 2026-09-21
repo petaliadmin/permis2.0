@@ -24,10 +24,17 @@ const CAT_LABELS: Record<string, string> = {
   interdiction: "Panneaux d'interdiction",
   obligation: "Panneaux d'obligation",
   indication: "Panneaux d'indication",
+  autres: 'Autres panneaux (feux, marquage, balises…)',
 };
-// Display order + the 5 families shown in the app's own /traffic-signs listing
-// (a handful of minor categories — temporaires, balises… — are grouped elsewhere in-app).
-const CAT_ORDER = ['danger', 'priorité', 'interdiction', 'obligation', 'indication'];
+// Display order — the 5 main families, in the app's own /traffic-signs
+// picker order, plus one "autres" bucket for the rest (temporaires, balises,
+// marquage, feux, agents — each too small for its own card, see
+// lib/trafficSignCategories.ts HIDDEN_CATEGORIES for the same curation on
+// the picker). Audit finding — this page used to show only the 5 main tiles
+// while the intro sentence quoted the *total* sign count, so the tiles'
+// sum (128) silently fell short of the number the reader was just given
+// (149): every sign is now accounted for in one tile or another.
+const CAT_ORDER = ['danger', 'priorité', 'interdiction', 'obligation', 'indication', 'autres'];
 
 interface SignCategoryCount {
   category: string;
@@ -41,10 +48,12 @@ async function fetchCategoryCounts(): Promise<{ total: number; byCategory: SignC
     const { data } = (await res.json()) as { data: { category: string }[] };
     const counts = new Map<string, number>();
     for (const s of data) counts.set(s.category, (counts.get(s.category) ?? 0) + 1);
-    const byCategory = CAT_ORDER.filter((c) => counts.has(c)).map((category) => ({
-      category,
-      count: counts.get(category) ?? 0,
-    }));
+    const mainCategories = CAT_ORDER.filter((c) => c !== 'autres');
+    const byCategory = mainCategories
+      .filter((c) => counts.has(c))
+      .map((category) => ({ category, count: counts.get(category) ?? 0 }));
+    const autresCount = data.length - byCategory.reduce((sum, c) => sum + c.count, 0);
+    if (autresCount > 0) byCategory.push({ category: 'autres', count: autresCount });
     return { total: data.length, byCategory };
   } catch {
     return { total: 0, byCategory: [] };

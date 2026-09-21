@@ -35,10 +35,23 @@ const STATIC_PAGES = [
   '/politique-confidentialite',
 ];
 
+// Audit finding — every entry here had no <lastmod> at all, unlike
+// sitemap-blog.xml and sitemap-panneaux.xml. There's no per-page "last
+// edited" date tracked (no CMS/git-blame wiring) to give a real editorial
+// timestamp, so — same rule as everywhere else in this file: a real signal
+// or none — this uses the build timestamp shared by every entry (`route`
+// is `force-static`, so this evaluates once at build time, not per request).
+// Honest about what it is: "known current as of this deploy", not a claim
+// about when the content itself last changed.
+const BUILD_TIME = new Date();
+
 export async function GET() {
   const entries: SitemapEntry[] = [
-    ...STATIC_PAGES.map((path) => ({ url: `${SITE_URL}${path}` })),
-    ...QUIZ_CATEGORIES.map(({ slug }) => ({ url: `${SITE_URL}/quizz/${slug}` })),
+    ...STATIC_PAGES.map((path) => ({ url: `${SITE_URL}${path}`, lastModified: BUILD_TIME })),
+    ...QUIZ_CATEGORIES.map(({ slug }) => ({
+      url: `${SITE_URL}/quizz/${slug}`,
+      lastModified: BUILD_TIME,
+    })),
   ];
 
   return new Response(serializeUrlset(entries), { headers: SITEMAP_XML_HEADERS });

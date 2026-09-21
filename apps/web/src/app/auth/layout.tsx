@@ -1,7 +1,18 @@
+import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { IconArrowLeft, IconCheck } from '@tabler/icons-react';
+
+// Audit finding — every /auth/* page (login, register, reset-pin,
+// forgot/reset-password) is robots.txt-disallowed but had no <meta
+// robots> override, so it inherited the root layout's index:true,follow:true
+// default: a crawler that can't fetch the page (robots.txt) but sees
+// index:true in a link's rel/og data has no clean "drop it" signal.
+// Same noindex,nofollow pattern already used by /onboarding and /mon-ecole.
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+};
 
 const VALUE_PROPS = [
   'Comparez les auto-écoles et leurs prix',

@@ -82,43 +82,11 @@ function jsonLd(): string {
       acceptedAnswer: { '@type': 'Answer', text: f.answer },
     })),
   };
-  // Lot 2.5 — HowTo mirroring the "Les étapes pour préparer son permis"
-  // section below verbatim (same 4 steps, same order) rather than a
-  // separately-maintained copy that could drift from the visible content.
-  const howTo = {
-    '@type': 'HowTo',
-    name: 'Les étapes pour préparer son permis au Sénégal',
-    step: [
-      {
-        '@type': 'HowToStep',
-        position: 1,
-        name: 'Choisissez une auto-école',
-        text: "Choisissez une auto-école dans l'annuaire d'auto-écoles et pré-inscrivez-vous en ligne.",
-        url: `${SITE_URL}/auto-ecoles-senegal`,
-      },
-      {
-        '@type': 'HowToStep',
-        position: 2,
-        name: 'Préparez le Code de la route',
-        text: "Préparez le Code de la route avec les leçons et l'annuaire des panneaux.",
-        url: `${SITE_URL}/code-route-senegal`,
-      },
-      {
-        '@type': 'HowToStep',
-        position: 3,
-        name: 'Entraînez-vous',
-        text: "Entraînez-vous avec des quiz puis un examen blanc dans les conditions du jour J.",
-        url: `${SITE_URL}/exam`,
-      },
-      {
-        '@type': 'HowToStep',
-        position: 4,
-        name: "Passez l'examen",
-        text: "Passez l'examen du Code puis l'épreuve pratique de conduite avec votre auto-école.",
-      },
-    ],
-  };
-  return graphScript([organizationNode(), websiteNode(), breadcrumb, howTo, faqPage]);
+  // Audit finding — HowTo rich results were retired by Google in Sept 2023;
+  // this node had zero SERP benefit and is on this skill's do-not-use list.
+  // The 4-step content stays as plain HTML below (see "Les étapes pour
+  // préparer son permis"), just no longer duplicated into structured data.
+  return graphScript([organizationNode(), websiteNode(), breadcrumb, faqPage]);
 }
 
 export default async function PermisConduireSenegalPage() {

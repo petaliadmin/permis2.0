@@ -58,8 +58,13 @@ export function Hero({ stats }: { stats: PlatformStats }) {
 
       <div className="relative mx-auto w-full max-w-6xl">
         <div className="max-w-xl animate-fade-in [animation-duration:0.6s]">
+          {/* Audit finding — "plateforme n°1" was an unsubstantiated
+              superiority claim (no ranking, survey or usage data backs it),
+              made worse by sitting next to a directory that currently has
+              no schools. Same "real data or nothing" rule as buildStats()
+              above: a factual, always-true descriptor instead. */}
           <span className="chip bg-white/15 text-white backdrop-blur">
-            🇸🇳 La plateforme n°1 du permis au Sénégal
+            🇸🇳 Conçu pour le permis au Sénégal
           </span>
           <h1 className="mt-5 font-display text-4xl font-extrabold leading-[1.08] sm:text-5xl lg:text-6xl">
             Votre permis de conduire, en toute confiance
