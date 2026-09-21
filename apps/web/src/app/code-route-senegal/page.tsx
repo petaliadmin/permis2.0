@@ -51,28 +51,35 @@ async function fetchCategoryCounts(): Promise<{ total: number; byCategory: SignC
   }
 }
 
-const FAQS = [
-  {
-    question: 'Le Code de la route sénégalais est-il différent des autres pays ?',
-    answer:
-      "Le Sénégal applique son propre Code de la route, mais sa signalisation suit les principes internationaux de la Convention de Vienne — un conducteur habitué aux panneaux d'autres pays francophones reconnaîtra donc l'essentiel des formes et couleurs, avec quelques panneaux et règles spécifiques au contexte sénégalais.",
-  },
-  {
-    question: 'Réviser le Code de la route est-il gratuit sur PERMIS2.0 ?',
-    answer:
-      "Oui. La création de compte, les leçons, l'annuaire des panneaux et une partie des quiz sont gratuits. Les examens blancs complets et certaines séries avancées font partie de l'offre premium.",
-  },
-  {
-    question: 'Combien de panneaux faut-il connaître pour l’examen ?',
-    answer:
-      "Notre base recense 155 panneaux répartis en plusieurs catégories (danger, priorité, interdiction, obligation, indication). Les réviser par catégorie, plutôt que tous en même temps, facilite la mémorisation.",
-  },
-  {
-    question: 'Comment savoir si je suis prêt pour l’examen du Code ?',
-    answer:
-      "Un examen blanc dans les conditions réelles (temps limité, questions mélangées) est le meilleur indicateur : un score régulièrement au-dessus de 80 % sur plusieurs séries est un bon signe avant de se présenter à l'examen officiel.",
-  },
-];
+// Étape 6 (audit) — "Combien de panneaux ?" used to hardcode 155, which
+// would silently go stale the next time the real corpus changes (as it
+// just did: 155 → 149 after removing 6 signs imported from France that
+// don't apply to Senegal — snow chains, tramway). Built from the same
+// `signCount` the JSON-LD Course node already uses, so there's one real
+// number, not two that can drift apart.
+function buildFaqs(signCount: number) {
+  return [
+    {
+      question: 'Le Code de la route sénégalais est-il différent des autres pays ?',
+      answer:
+        "Le Sénégal applique son propre Code de la route, mais sa signalisation suit les principes internationaux de la Convention de Vienne — un conducteur habitué aux panneaux d'autres pays francophones reconnaîtra donc l'essentiel des formes et couleurs, avec quelques panneaux et règles spécifiques au contexte sénégalais.",
+    },
+    {
+      question: 'Réviser le Code de la route est-il gratuit sur PERMIS2.0 ?',
+      answer:
+        "Oui. La création de compte, les leçons, l'annuaire des panneaux et une partie des quiz sont gratuits. Les examens blancs complets et certaines séries avancées font partie de l'offre premium.",
+    },
+    {
+      question: 'Combien de panneaux faut-il connaître pour l’examen ?',
+      answer: `Notre base recense ${signCount} panneaux répartis en plusieurs catégories (danger, priorité, interdiction, obligation, indication). Les réviser par catégorie, plutôt que tous en même temps, facilite la mémorisation.`,
+    },
+    {
+      question: 'Comment savoir si je suis prêt pour l’examen du Code ?',
+      answer:
+        "Un examen blanc dans les conditions réelles (temps limité, questions mélangées) est le meilleur indicateur : un score régulièrement au-dessus de 80 % sur plusieurs séries est un bon signe avant de se présenter à l'examen officiel.",
+    },
+  ];
+}
 
 function jsonLd(total: number): string {
   const breadcrumb = {
@@ -89,7 +96,7 @@ function jsonLd(total: number): string {
   };
   const faqPage = {
     '@type': 'FAQPage',
-    mainEntity: FAQS.map((f) => ({
+    mainEntity: buildFaqs(total).map((f) => ({
       '@type': 'Question',
       name: f.question,
       acceptedAnswer: { '@type': 'Answer', text: f.answer },
@@ -104,7 +111,7 @@ function jsonLd(total: number): string {
   const course = {
     '@type': 'Course',
     name: 'Code de la route Sénégal — PERMIS 2.0',
-    description: `Leçons thématiques, ${total || 155} panneaux de signalisation détaillés et quiz corrigés pour préparer le Code de la route au Sénégal.`,
+    description: `Leçons thématiques, ${total || 149} panneaux de signalisation détaillés et quiz corrigés pour préparer le Code de la route au Sénégal.`,
     provider: { '@id': ORGANIZATION_ID },
     url: `${SITE_URL}/code-route-senegal`,
     hasCourseInstance: {
@@ -123,7 +130,7 @@ function jsonLd(total: number): string {
 
 export default async function CodeRouteSenegalPage() {
   const { total, byCategory } = await fetchCategoryCounts();
-  const signCount = total || 155;
+  const signCount = total || 149;
 
   return (
     <div className="on-light min-h-screen bg-surface">
@@ -302,7 +309,7 @@ export default async function CodeRouteSenegalPage() {
           <section>
             <h2 className="font-display text-xl font-bold text-foreground">Questions fréquentes</h2>
             <div className="mt-4 space-y-4">
-              {FAQS.map((f) => (
+              {buildFaqs(signCount).map((f) => (
                 <div key={f.question}>
                   <p className="font-display text-sm font-bold text-foreground">{f.question}</p>
                   <p className="mt-1.5 text-sm text-secondary">{f.answer}</p>

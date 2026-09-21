@@ -264,18 +264,6 @@
     ]
   },
   {
-    "code": "A9b",
-    "name": "Attention au tramway",
-    "category": "danger",
-    "icon": "⚠️",
-    "description": "Traversée d'une ligne de tramway ou de train urbain (TER) à proximité. Le convoi est toujours prioritaire.",
-    "advice": [
-      "Ralentir",
-      "Céder le passage au convoi",
-      "Ne jamais s'engager sur la voie s'il approche"
-    ]
-  },
-  {
     "code": "A12",
     "name": "Passage piétons",
     "category": "danger",
@@ -988,30 +976,6 @@
     ]
   },
   {
-    "code": "B26",
-    "name": "Chaînes à neige obligatoires",
-    "category": "obligation",
-    "icon": "🔵",
-    "description": "L'équipement de chaînes à neige (ou pneus hiver équivalents) sur au moins deux roues motrices est obligatoire pour circuler.",
-    "advice": [
-      "Chaînes ou pneus hiver requis",
-      "Au moins deux roues motrices équipées",
-      "Vérifier avant de s'engager"
-    ]
-  },
-  {
-    "code": "B44",
-    "name": "Fin de chaînes à neige obligatoires",
-    "category": "obligation",
-    "icon": "🔵",
-    "description": "Signale la fin de la zone où les chaînes à neige étaient obligatoires.",
-    "advice": [
-      "Fin de l'obligation",
-      "Chaînes ne sont plus requises",
-      "Adapter la conduite aux conditions restantes"
-    ]
-  },
-  {
     "code": "B27a",
     "name": "Voie réservée aux bus",
     "category": "obligation",
@@ -1029,30 +993,6 @@
     "category": "obligation",
     "icon": "🔵",
     "description": "Signale la fin de la voie réservée aux autobus et autocars des services réguliers.",
-    "advice": [
-      "Fin de la voie réservée",
-      "Circulation générale possible",
-      "Vigilance à la réintégration"
-    ]
-  },
-  {
-    "code": "B27b",
-    "name": "Voie réservée aux tramways",
-    "category": "obligation",
-    "icon": "🔵",
-    "description": "Voie réservée exclusivement aux tramways. Les autres véhicules ne peuvent pas l'emprunter.",
-    "advice": [
-      "Réservée aux tramways",
-      "Ne jamais s'y engager",
-      "Danger en cas de circulation d'un tramway"
-    ]
-  },
-  {
-    "code": "B45b",
-    "name": "Fin de voie réservée aux tramways",
-    "category": "obligation",
-    "icon": "🔵",
-    "description": "Signale la fin de la voie réservée aux tramways.",
     "advice": [
       "Fin de la voie réservée",
       "Circulation générale possible",
@@ -1369,18 +1309,6 @@
       "Céder le passage aux piétons",
       "Ralentir à l'approche",
       "S'arrêter si un piéton s'engage"
-    ]
-  },
-  {
-    "code": "C20c",
-    "name": "Traversée de tramway",
-    "category": "indication",
-    "icon": "ℹ️",
-    "description": "La chaussée croise une voie de tramway. Le tramway est toujours prioritaire.",
-    "advice": [
-      "Céder le passage au tramway",
-      "Ne jamais s'engager si le tramway approche",
-      "Vérifier des deux côtés"
     ]
   },
   {
