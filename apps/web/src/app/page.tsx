@@ -1,12 +1,28 @@
 import type { Metadata } from 'next';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
+import type { School } from '@permis2.0/types';
 import { spaceFromHost, type Space } from '@/lib/space';
 import { HOME_FAQS } from '@/lib/homeFaq';
 import HomeClient from './HomeClient';
 import StudentHome from './learn/StudentHome';
 import GestionClient from './mon-ecole/GestionClient';
 import { organizationNode, websiteNode, graphScript } from '@/lib/seo/jsonLd';
+
+// dataSource.ts is a 'use client' module — unusable from this Server
+// Component (see ecoles/[slug]/page.tsx for the same note).
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+
+async function fetchTop20Schools(): Promise<School[]> {
+  try {
+    const res = await fetch(`${API_URL}/schools/top20`, { cache: 'no-store' });
+    if (!res.ok) return [];
+    const schools = await res.json();
+    return Array.isArray(schools) ? schools : [];
+  } catch {
+    return [];
+  }
+}
 
 const SEO_DESCRIPTION =
   "Préparez le code de la route, passez des examens blancs, et trouvez l'auto-école idéale près de chez vous. Gratuit pour commencer.";
@@ -81,10 +97,11 @@ export default async function Page() {
   if (space === 'admin') redirect('/admin');
   if (space === 'learn') return <StudentHome />;
   if (space === 'school') return <GestionClient />;
+  const top20Schools = await fetchTop20Schools();
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: homeJsonLd }} />
-      <HomeClient />
+      <HomeClient top20Schools={top20Schools} />
     </>
   );
 }

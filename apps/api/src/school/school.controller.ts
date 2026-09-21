@@ -60,6 +60,15 @@ export class SchoolController {
     });
   }
 
+  @Get('top20')
+  @ApiResponse({
+    status: 200,
+    description: 'Homepage "Top 20": paid/featured schools first, remaining slots filled randomly',
+  })
+  async top20() {
+    return this.schoolService.listTop20();
+  }
+
   @Get('mine')
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth()

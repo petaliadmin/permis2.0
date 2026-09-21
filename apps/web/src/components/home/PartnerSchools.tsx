@@ -1,28 +1,22 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import type { School } from '@permis2.0/types';
-import { Skeleton } from '@permis2.0/ui';
-import { API_URL } from '@/lib/dataSource';
 import { SchoolCard } from '@/components/SchoolCard';
 
-export function PartnerSchools() {
-  const [schools, setSchools] = useState<School[]>([]);
-  const [loading, setLoading] = useState(true);
+interface PartnerSchoolsProps {
+  /** Fetched server-side (app/page.tsx) so the real school names/links are
+   *  in the initial server HTML — a client-only fetch would leave this
+   *  section's content (and its links to /ecoles/[slug]) invisible without
+   *  JS. Paid/featured schools first (server-ordered), remaining slots
+   *  filled randomly. */
+  initialSchools: School[];
+}
 
-  useEffect(() => {
-    fetch(`${API_URL}/schools?featured=true&take=20`)
-      .then((res) => (res.ok ? res.json() : []))
-      .then((data) => setSchools(Array.isArray(data) ? data : []))
-      .catch(() => setSchools([]))
-      .finally(() => setLoading(false));
-  }, []);
-
-  // Purely a paid-visibility feature — no featured school yet means nothing to show,
-  // rather than falling back to an arbitrary/unpaid list under a "Top 20" banner.
-  if (!loading && schools.length === 0) return null;
+export function PartnerSchools({ initialSchools }: PartnerSchoolsProps) {
+  // Only empty when there are no active schools at all yet.
+  if (initialSchools.length === 0) return null;
 
   return (
     <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:px-8">
@@ -41,9 +35,9 @@ export function PartnerSchools() {
         </Link>
       </motion.div>
       <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {loading
-          ? Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-32 w-full" />)
-          : schools.map((s) => <SchoolCard key={s.id} school={s} compact />)}
+        {initialSchools.map((s) => (
+          <SchoolCard key={s.id} school={s} compact />
+        ))}
       </div>
     </section>
   );

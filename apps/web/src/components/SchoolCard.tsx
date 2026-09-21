@@ -37,15 +37,14 @@ export function SchoolCard({ school, distanceKm, selected, onSelect, compact }: 
   const location = [school.district, school.city].filter(Boolean).join(', ');
   const { initial, accent } = avatarFor(school.name);
 
-  return (
-    <div
-      onClick={onSelect}
-      className={cn(
-        'rounded-2xl border bg-surface-1 p-4 shadow-soft transition-colors',
-        onSelect && 'cursor-pointer',
-        selected ? 'border-primary-400 ring-2 ring-primary-100' : 'border-token hover:border-primary-200'
-      )}
-    >
+  const className = cn(
+    'block rounded-2xl border bg-surface-1 p-4 shadow-soft transition-colors',
+    (onSelect || compact) && 'cursor-pointer',
+    selected ? 'border-primary-400 ring-2 ring-primary-100' : 'border-token hover:border-primary-200'
+  );
+
+  const content = (
+    <>
       <div className="flex items-start gap-3">
         <span
           className={cn(
@@ -118,6 +117,24 @@ export function SchoolCard({ school, distanceKm, selected, onSelect, compact }: 
           </Link>
         </div>
       )}
+    </>
+  );
+
+  // compact (homepage Top 20) is never combined with onSelect (the /ecoles
+  // picker's own selection interaction) — compact cards link straight to
+  // the school's profile instead, so the section is real internal linking,
+  // not a dead-end card.
+  if (compact) {
+    return (
+      <Link href={`/ecoles/${school.slug}`} className={className}>
+        {content}
+      </Link>
+    );
+  }
+
+  return (
+    <div onClick={onSelect} className={className}>
+      {content}
     </div>
   );
 }

@@ -97,7 +97,7 @@ export class SchoolService {
     maxPriceXof?: number;
     q?: string;
     take?: number;
-    /** Homepage "Top 20": only schools with a currently-active featured_placement. */
+    /** Only schools with a currently-active featured_placement (paid). */
     featured?: boolean;
   }) {
     const take = Math.min(filters.take ?? 20, filters.featured ? 20 : 50);
@@ -114,6 +114,37 @@ export class SchoolService {
       orderBy: filters.featured ? { featuredUntil: 'desc' } : { createdAt: 'desc' },
       take,
     }).then((schools) => schools.map(withStudentsCount));
+  }
+
+  /** Homepage "Top 20": paid/featured schools first (most-recently-featured
+   *  first, same as before), then the remaining slots filled with a random
+   *  selection of other active schools — never hidden just because nobody
+   *  has paid yet, and never a fabricated ranking for the unpaid slots. */
+  async listTop20() {
+    const TAKE = 20;
+    const featured = await this.prisma.school.findMany({
+      where: { status: SchoolStatus.ACTIVE, featuredUntil: { gt: new Date() } },
+      include: { _count: { select: ACTIVE_STUDENTS_COUNT } },
+      orderBy: { featuredUntil: 'desc' },
+      take: TAKE,
+    });
+
+    const remaining = TAKE - featured.length;
+    if (remaining <= 0) return featured.map(withStudentsCount);
+
+    const pool = await this.prisma.school.findMany({
+      where: { status: SchoolStatus.ACTIVE, id: { notIn: featured.map((s) => s.id) } },
+      include: { _count: { select: ACTIVE_STUDENTS_COUNT } },
+    });
+    // Fisher-Yates — an unbiased shuffle, not `Math.random()`-sorted (which
+    // skews toward whatever V8's sort implementation does with a
+    // non-transitive comparator).
+    for (let i = pool.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [pool[i], pool[j]] = [pool[j], pool[i]];
+    }
+
+    return [...featured, ...pool.slice(0, remaining)].map(withStudentsCount);
   }
 
   /** Lean, unbounded list for sitemap generation — active schools only. */

@@ -1,6 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
+import type { School } from '@permis2.0/types';
 import { SiteHeader } from '@/components/SiteHeader';
 import { SiteFooter } from '@/components/SiteFooter';
 import { Hero } from '@/components/home/Hero';
@@ -40,7 +41,7 @@ const Testimonials = dynamic(() =>
 const Faq = dynamic(() => import('@/components/home/Faq').then((m) => m.Faq));
 const FinalCta = dynamic(() => import('@/components/home/FinalCta').then((m) => m.FinalCta));
 
-export default function HomeClient() {
+export default function HomeClient({ top20Schools }: { top20Schools: School[] }) {
   return (
     <div className="on-light min-h-screen bg-surface">
       <SiteHeader />
@@ -52,7 +53,7 @@ export default function HomeClient() {
       <ForStudents />
       <ForSchools />
       <SenegalMap />
-      <PartnerSchools />
+      <PartnerSchools initialSchools={top20Schools} />
       <StatsCounter />
       <Testimonials />
       <Faq />
