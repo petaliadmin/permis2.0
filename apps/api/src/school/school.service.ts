@@ -13,6 +13,7 @@ import {
 import { CreateSchoolDto } from './dto/create-school.dto';
 import { UpdateSchoolDto } from './dto/update-school.dto';
 import { UpsertSchoolReviewDto } from './dto/upsert-school-review.dto';
+import { pingIndexNow } from '../lib/indexnow';
 import { AddSchoolMemberDto } from './dto/add-school-member.dto';
 import { CreateEnrollmentRequestDto } from './dto/create-enrollment-request.dto';
 import { UpdateEnrollmentStatusDto } from './dto/update-enrollment-status.dto';
@@ -913,6 +914,14 @@ export class SchoolService {
   async updateStatus(schoolId: string, status: SchoolStatus) {
     const school = await this.prisma.school.findUnique({ where: { id: schoolId } });
     if (!school) throw new NotFoundException('École introuvable');
-    return this.prisma.school.update({ where: { id: schoolId }, data: { status } });
+    const updated = await this.prisma.school.update({ where: { id: schoolId }, data: { status } });
+    // A school going PENDING/SUSPENDED → ACTIVE is exactly "content just
+    // became newly indexable" — its fiche URL starts resolving 200 instead
+    // of 404/redirecting. Only ping on that specific transition, not every
+    // status change.
+    if (status === SchoolStatus.ACTIVE && school.status !== SchoolStatus.ACTIVE) {
+      pingIndexNow([`/ecoles/${updated.slug}`]);
+    }
+    return updated;
   }
 }

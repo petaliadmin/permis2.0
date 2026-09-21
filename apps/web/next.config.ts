@@ -27,6 +27,13 @@ const nextConfig: NextConfig = {
     // on the hero image, the page's LCP element. These are static assets
     // under public/ that only change on redeploy, so cache them for a year.
     minimumCacheTTL: 31536000,
+    // Étape 7 (audit) — Next's default deviceSizes tops out at 3840w; a
+    // cache-miss on that size measured 29s to generate. This app targets
+    // low-end mobile on constrained Senegalese networks (brief rule 6) —
+    // nothing here needs a 4K/ultra-wide variant. 1920w covers real desktop
+    // viewports; dropping the largest two tiers also means fewer sizes to
+    // pre-warm after a deploy.
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920],
   },
   async headers() {
     // Lot 1.6 (SEO brief) — these routes read no per-visitor state (no auth,
@@ -51,12 +58,25 @@ const nextConfig: NextConfig = {
       '/a-propos',
       '/code-route-senegal',
       '/permis-conduire-senegal',
+      '/prix-permis-conduire-senegal',
+      '/logiciel-gestion-auto-ecole',
       '/auto-ecoles-senegal',
+      '/auto-ecoles-senegal/:path*',
+      '/ecoles',
       '/mentions-legales',
       '/politique-confidentialite',
       '/assistance',
       '/contact',
     ];
+    // `/` is deliberately NOT here despite the audit flagging it: this path
+    // is shared across all four hosts (www/learn/school/admin — see
+    // middleware.ts), and unlike the routes above, learn's and school's `/`
+    // render each viewer's OWN dashboard (StudentHome / GestionClient),
+    // not identical content. A path-only Cache-Control match here would
+    // apply to every host and risk one school's/student's dashboard being
+    // served from cache to a different viewer. www's `/` would need a
+    // space-aware matcher (or its own route) to cache safely — out of
+    // scope for this pass.
     return [
       ...CACHEABLE_CONTENT_ROUTES.map((source) => ({
         source,
@@ -83,6 +103,37 @@ const nextConfig: NextConfig = {
             key: 'Permissions-Policy',
             value: 'camera=(), microphone=(), geolocation=(self)',
           },
+          // Étape 7 (audit) — every external origin here is real and
+          // currently loaded, checked against the source, not guessed:
+          // googletagmanager.com (GoogleAnalytics.tsx), google-analytics.com
+          // (the gtag beacon), tile.openstreetmap.org (SchoolsMap.tsx's
+          // Leaflet TileLayer), and the API's own origin (NEXT_PUBLIC_API_URL
+          // — a different subdomain in prod, api.permis2.com). `unsafe-inline`
+          // on script/style is required by Next's own hydration scripts and
+          // Tailwind's inline styles — removing it needs a nonce-based setup,
+          // a bigger change than this pass. Only applied in production:
+          // Next's dev-mode HMR needs `unsafe-eval`, which this deliberately
+          // doesn't grant.
+          ...(process.env.NODE_ENV === 'production'
+            ? [
+                {
+                  key: 'Content-Security-Policy',
+                  value: [
+                    "default-src 'self'",
+                    "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com",
+                    "style-src 'self' 'unsafe-inline'",
+                    "img-src 'self' data: blob: https://*.tile.openstreetmap.org",
+                    "font-src 'self' data:",
+                    `connect-src 'self' https://www.google-analytics.com https://analytics.google.com ${
+                      process.env.NEXT_PUBLIC_API_URL || 'https://api.permis2.com'
+                    }`,
+                    "frame-ancestors 'self'",
+                    "base-uri 'self'",
+                    "form-action 'self'",
+                  ].join('; '),
+                },
+              ]
+            : []),
         ],
       },
     ];

@@ -29,7 +29,9 @@
 
 # ── Front hosts — all proxy to the same Next.js container ──────────────────────
 www.permis2.com, learn.permis2.com, school.permis2.com, admin.permis2.com {
-	encode zstd gzip
+	# br (Brotli) — audit finding (Étape 7). Built into stock Caddy, no
+	# module needed. Listed by preference: zstd > br > gzip.
+	encode zstd br gzip
 	# Cache key includes the Host header by default (souin), so sharing this
 	# one `cache` across all four spaces is safe: a cached www editorial page
 	# never gets served to learn/school/admin, and their own routes stay
@@ -45,7 +47,7 @@ permis2.com {
 }
 
 api.permis2.com {
-	encode zstd gzip
+	encode zstd br gzip
 	reverse_proxy api:3001 {
 		# Overwrite rather than append — a client sending its own
 		# X-Forwarded-For header must not be able to spoof the IP that
