@@ -37,17 +37,17 @@ function Sidebar() {
     href === '/admin' ? pathname === '/admin' : pathname.startsWith(href);
 
   return (
-    <aside className="fixed inset-y-0 left-0 z-30 flex w-[268px] flex-col border-r border-token bg-surface-1">
+    <aside className="fixed inset-y-0 left-0 z-30 flex w-[268px] flex-col border-r border-white/10 bg-[#00235E]">
       {/* Brand */}
       <div className="flex items-center gap-3 px-6 pb-5 pt-7">
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500 to-violet-700 text-base font-black text-white shadow-glow-violet">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-white/10 text-base font-black text-white">
           P
         </div>
         <div className="min-w-0">
-          <p className="font-display text-sm font-extrabold leading-tight text-foreground">
-            PERMIS<span className="text-violet-600">2.0</span>
+          <p className="font-display text-sm font-extrabold leading-tight text-white">
+            PERMIS<span className="text-white/70">2.0</span>
           </p>
-          <p className="text-[11px] font-semibold uppercase tracking-wide text-muted">
+          <p className="text-[11px] font-semibold uppercase tracking-wide text-white/60">
             Administration
           </p>
         </div>
@@ -62,17 +62,11 @@ function Sidebar() {
               key={item.href}
               href={item.href}
               aria-current={active ? 'page' : undefined}
-              className={`flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-semibold transition-colors ${
-                active
-                  ? 'bg-violet-50 text-violet-700 dark:bg-violet-900/25 dark:text-violet-300'
-                  : 'text-secondary hover:bg-surface-2 hover:text-foreground'
+              className={`flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-semibold text-white transition-colors ${
+                active ? 'bg-white/15' : 'hover:bg-white/10'
               }`}
             >
-              <item.icon
-                size="1em"
-                className={`text-lg ${active ? 'text-violet-600 dark:text-violet-300' : 'text-slate-400'}`}
-                aria-hidden="true"
-              />
+              <item.icon size="1em" className="text-lg text-white" aria-hidden="true" />
               <span className="flex-1">{item.label}</span>
               {item.href === '/admin/demandes' && pendingCount > 0 && (
                 <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-success-500 px-1.5 text-[10px] font-black text-white">
@@ -85,20 +79,20 @@ function Sidebar() {
       </nav>
 
       {/* Footer */}
-      <div className="border-t border-token px-3.5 py-3.5">
+      <div className="border-t border-white/10 px-3.5 py-3.5">
         <a
           href={backToSiteHref ?? '/profil'}
-          className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold text-secondary transition-colors hover:bg-surface-2 hover:text-foreground"
+          className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-white/10"
         >
-          <IconArrowLeft size="1em" className="text-lg text-slate-400" aria-hidden="true" />
+          <IconArrowLeft size="1em" className="text-lg text-white" aria-hidden="true" />
           Retour au site
         </a>
         {user && (
           <div className="mt-2 flex items-center gap-2.5 rounded-xl px-3 py-2">
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-violet-100 text-xs font-black text-violet-700 dark:bg-violet-900/40 dark:text-violet-300">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white text-xs font-black text-[#00235E]">
               {user.name?.charAt(0).toUpperCase() || '?'}
             </div>
-            <p className="min-w-0 truncate text-xs font-semibold text-secondary">{user.name}</p>
+            <p className="min-w-0 truncate text-xs font-semibold text-white">{user.name}</p>
           </div>
         )}
       </div>

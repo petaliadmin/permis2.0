@@ -96,7 +96,7 @@ export default function AdminDemandesPage() {
                 <tr key={p.id} className="hover:bg-surface-2/50">
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-3">
-                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-success-50 text-sm font-black text-success-700 dark:bg-success-900/20 dark:text-success-400">
+                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#00235E] text-sm font-black text-white">
                         {p.user.name?.charAt(0).toUpperCase() || '?'}
                       </div>
                       <span className="font-bold text-foreground">{p.user.name}</span>
