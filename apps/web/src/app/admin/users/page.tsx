@@ -5,7 +5,19 @@ import { motion } from 'framer-motion';
 import { Sheet, Skeleton } from '@permis2.0/ui';
 import { useAuthStore } from '@/store/authStore';
 import { adminFetch, Toast, useToast, fmtXof, AdminPageHeader } from '../adminShared';
-import { IconBan, IconChevronLeft, IconChevronRight, IconCrown, IconLockOpen, IconSearch, IconShieldLock, IconTrash } from '@tabler/icons-react';
+import {
+  IconBan,
+  IconChevronLeft,
+  IconChevronRight,
+  IconCrown,
+  IconEdit,
+  IconLockOpen,
+  IconPlayerPause,
+  IconPlayerPlay,
+  IconSearch,
+  IconShieldLock,
+  IconTrash,
+} from '@tabler/icons-react';
 
 const PAGE_SIZE = 10;
 
@@ -18,8 +30,12 @@ interface AdminUser {
   level: string;
   role: 'USER' | 'ADMIN';
   blocked?: boolean;
+  suspendedUntil?: string | null;
   createdAt: string;
 }
+
+const isSuspended = (u: AdminUser) =>
+  !u.blocked && !!u.suspendedUntil && new Date(u.suspendedUntil) > new Date();
 
 interface UserDetails {
   user: AdminUser & { blocked: boolean };
@@ -49,32 +65,55 @@ export default function AdminUsersPage() {
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(0);
   const [query, setQuery] = useState('');
+  const [roleFilter, setRoleFilter] = useState<'' | 'USER' | 'ADMIN'>('');
+  const [statusFilter, setStatusFilter] = useState<'' | 'active' | 'suspended' | 'blocked'>('');
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState<string | null>(null);
   const [details, setDetails] = useState<UserDetails | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<AdminUser | null>(null);
+  const [suspendTarget, setSuspendTarget] = useState<AdminUser | null>(null);
+  const [editTarget, setEditTarget] = useState<AdminUser | null>(null);
+  const [editForm, setEditForm] = useState({ name: '', phone: '', email: '', role: 'USER' as 'USER' | 'ADMIN' });
+  const [saving, setSaving] = useState(false);
 
-  const load = useCallback((p: number, q: string) => {
-    setLoading(true);
-    const params = new URLSearchParams({ skip: String(p * PAGE_SIZE), take: String(PAGE_SIZE) });
-    if (q.trim()) params.set('q', q.trim());
-    adminFetch<{ data: AdminUser[]; total: number }>(`/users?${params}`)
-      .then((d) => {
-        setUsers(d.data ?? []);
-        setTotal(d.total ?? 0);
-      })
-      .catch(() => {})
-      .finally(() => setLoading(false));
-  }, []);
+  const load = useCallback(
+    (
+      p: number,
+      q: string,
+      role: '' | 'USER' | 'ADMIN',
+      status: '' | 'active' | 'suspended' | 'blocked'
+    ) => {
+      setLoading(true);
+      const params = new URLSearchParams({ skip: String(p * PAGE_SIZE), take: String(PAGE_SIZE) });
+      if (q.trim()) params.set('q', q.trim());
+      if (role) params.set('role', role);
+      if (status) params.set('status', status);
+      adminFetch<{ data: AdminUser[]; total: number }>(`/users?${params}`)
+        .then((d) => {
+          setUsers(d.data ?? []);
+          setTotal(d.total ?? 0);
+        })
+        .catch(() => {})
+        .finally(() => setLoading(false));
+    },
+    []
+  );
 
   useEffect(() => {
-    load(page, query);
+    load(page, query, roleFilter, statusFilter);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
   const searchNow = () => {
     setPage(0);
-    load(0, query);
+    load(0, query, roleFilter, statusFilter);
+  };
+
+  const applyFilters = (role: '' | 'USER' | 'ADMIN', status: '' | 'active' | 'suspended' | 'blocked') => {
+    setRoleFilter(role);
+    setStatusFilter(status);
+    setPage(0);
+    load(0, query, role, status);
   };
 
   const openDetails = async (u: AdminUser) => {
@@ -90,7 +129,7 @@ export default function AdminUsersPage() {
     try {
       await fn();
       flash(okMsg);
-      load(page, query);
+      load(page, query, roleFilter, statusFilter);
       // refresh open sheet
       if (details?.user.id === id) {
         setDetails(await adminFetch<UserDetails>(`/admin/users/${id}/details`));
@@ -130,21 +169,93 @@ export default function AdminUsersPage() {
     );
   };
 
+  const suspendUser = (u: AdminUser, days: number) => {
+    setSuspendTarget(null);
+    return act(
+      u.id,
+      () => adminFetch(`/admin/users/${u.id}/suspend`, { method: 'PATCH', json: { days } }),
+      `${u.name} est suspendu pour ${days} jour${days > 1 ? 's' : ''}.`
+    );
+  };
+
+  const unsuspendUser = (u: AdminUser) =>
+    act(
+      u.id,
+      () => adminFetch(`/admin/users/${u.id}/suspend`, { method: 'DELETE' }),
+      `Suspension de ${u.name} levée.`
+    );
+
+  const openEdit = (u: AdminUser) => {
+    setEditForm({
+      name: u.name ?? '',
+      phone: u.phone ?? '',
+      email: u.email ?? '',
+      role: u.role,
+    });
+    setEditTarget(u);
+  };
+
+  const saveEdit = async () => {
+    if (!editTarget) return;
+    setSaving(true);
+    try {
+      await adminFetch(`/admin/users/${editTarget.id}`, {
+        method: 'PATCH',
+        json: {
+          name: editForm.name.trim(),
+          phone: editForm.phone.trim() || undefined,
+          email: editForm.email.trim() || undefined,
+          role: editForm.role,
+        },
+      });
+      flash(`${editForm.name} mis à jour.`);
+      setEditTarget(null);
+      load(page, query, roleFilter, statusFilter);
+    } catch (e: any) {
+      flash(e.message || 'Modification impossible.');
+    } finally {
+      setSaving(false);
+    }
+  };
+
   const pages = Math.max(1, Math.ceil(total / PAGE_SIZE));
 
   return (
     <>
       <AdminPageHeader title="Utilisateurs" subtitle={`${total} comptes`}>
-        <div className="flex max-w-md items-center gap-2 rounded-xl border border-token bg-surface-1 px-3.5 py-2.5 shadow-soft">
-          <IconSearch size="1em" className="text-sm text-muted" aria-hidden="true" />
-          <input
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && searchNow()}
-            onBlur={searchNow}
-            placeholder="Rechercher par nom, téléphone, e-mail…"
-            className="w-full bg-transparent text-sm text-foreground placeholder-muted focus:outline-none"
-          />
+        <div className="flex w-full min-w-[720px] max-w-5xl flex-wrap items-center gap-2">
+          <div className="flex min-w-[480px] flex-1 items-center gap-2 rounded-xl border border-token bg-surface-1 px-3.5 py-2.5 shadow-soft">
+            <IconSearch size="1em" className="text-sm text-muted" aria-hidden="true" />
+            <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && searchNow()}
+              onBlur={searchNow}
+              placeholder="Rechercher par nom, téléphone, e-mail…"
+              className="w-full bg-transparent text-sm text-foreground placeholder-muted focus:outline-none"
+            />
+          </div>
+          <select
+            value={roleFilter}
+            onChange={(e) => applyFilters(e.target.value as '' | 'USER' | 'ADMIN', statusFilter)}
+            className="shrink-0 rounded-xl border border-token bg-surface-1 px-3.5 py-2.5 text-sm font-semibold text-foreground shadow-soft focus:outline-none"
+          >
+            <option value="">Tous les rôles</option>
+            <option value="ADMIN">Admin</option>
+            <option value="USER">Utilisateur</option>
+          </select>
+          <select
+            value={statusFilter}
+            onChange={(e) =>
+              applyFilters(roleFilter, e.target.value as '' | 'active' | 'suspended' | 'blocked')
+            }
+            className="shrink-0 rounded-xl border border-token bg-surface-1 px-3.5 py-2.5 text-sm font-semibold text-foreground shadow-soft focus:outline-none"
+          >
+            <option value="">Tous les statuts</option>
+            <option value="active">Actif</option>
+            <option value="suspended">Suspendu</option>
+            <option value="blocked">Bloqué</option>
+          </select>
         </div>
       </AdminPageHeader>
 
@@ -183,7 +294,7 @@ export default function AdminUsersPage() {
                           onClick={() => openDetails(u)}
                         >
                           <div
-                            className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-black ${u.blocked ? 'bg-red-100 text-red-600' : 'bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-300'}`}
+                            className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-black ${u.blocked ? 'bg-red-100 text-red-600' : 'bg-[#00235E] text-white'}`}
                           >
                             {u.blocked ? (
                               <IconBan size="1em" aria-hidden="true" />
@@ -208,7 +319,7 @@ export default function AdminUsersPage() {
                       <td className="px-4 py-3">
                         <div className="flex gap-1.5">
                           {u.role === 'ADMIN' && (
-                            <span className="rounded-full bg-violet-100 px-2 py-0.5 text-[9px] font-black uppercase text-violet-700 dark:bg-violet-900/30 dark:text-violet-300">
+                            <span className="rounded-full bg-[#00235E] px-2 py-0.5 text-[9px] font-black uppercase text-white">
                               Admin
                             </span>
                           )}
@@ -217,11 +328,41 @@ export default function AdminUsersPage() {
                               Bloqué
                             </span>
                           )}
+                          {isSuspended(u) && (
+                            <span
+                              className="rounded-full bg-amber-100 px-2 py-0.5 text-[9px] font-black uppercase text-amber-700"
+                              title={`Jusqu'au ${fmtDate(u.suspendedUntil!)}`}
+                            >
+                              Suspendu
+                            </span>
+                          )}
                         </div>
                       </td>
                       <td className="px-4 py-3">
                         {!isSelf && (
                           <div className="flex justify-end gap-1.5">
+                            <button
+                              onClick={() => openEdit(u)}
+                              disabled={busy === u.id}
+                              title="Modifier"
+                              className="flex h-8 w-8 items-center justify-center rounded-lg bg-surface-2 text-secondary transition-colors hover:bg-violet-50 hover:text-violet-700 disabled:opacity-40"
+                            >
+                              <IconEdit size="1em" className="text-sm" aria-hidden="true" />
+                            </button>
+                            <button
+                              onClick={() =>
+                                isSuspended(u) ? unsuspendUser(u) : setSuspendTarget(u)
+                              }
+                              disabled={busy === u.id}
+                              title={isSuspended(u) ? 'Lever la suspension' : 'Suspendre'}
+                              className={`flex h-8 w-8 items-center justify-center rounded-lg transition-colors disabled:opacity-40 ${isSuspended(u) ? 'bg-success-50 text-success-700 hover:bg-success-100' : 'bg-surface-2 text-secondary hover:bg-caution-500/10 hover:text-caution-600'}`}
+                            >
+                              {isSuspended(u) ? (
+                                <IconPlayerPlay size="1em" className="text-sm" aria-hidden="true" />
+                              ) : (
+                                <IconPlayerPause size="1em" className="text-sm" aria-hidden="true" />
+                              )}
+                            </button>
                             <button
                               onClick={() => toggleBlock(u, !u.blocked)}
                               disabled={busy === u.id}
@@ -296,7 +437,7 @@ export default function AdminUsersPage() {
         {details && (
           <div className="pb-4">
             <div className="flex items-center gap-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-violet-100 text-lg font-black text-violet-700">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#00235E] text-lg font-black text-white">
                 {details.user.name.charAt(0).toUpperCase()}
               </div>
               <div className="min-w-0 flex-1">
@@ -461,6 +602,113 @@ export default function AdminUsersPage() {
                 className="flex-1 rounded-2xl bg-red-500 py-3 text-sm font-bold text-white transition-transform active:scale-[0.98]"
               >
                 Supprimer
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      )}
+
+      {/* ── Suspend duration picker ── */}
+      {suspendTarget && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4"
+          onClick={() => setSuspendTarget(null)}
+        >
+          <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            className="w-full max-w-sm rounded-3xl bg-surface-1 p-6 shadow-card-lg"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3 className="font-display text-lg font-bold text-foreground">Suspendre ce compte ?</h3>
+            <p className="mt-2 text-sm text-secondary">
+              <span className="font-bold">{suspendTarget.name}</span> ne pourra plus se connecter
+              pendant la durée choisie. La suspension est levée automatiquement à l'échéance.
+            </p>
+            <div className="mt-5 grid grid-cols-3 gap-2">
+              {[
+                { label: '1 jour', days: 1 },
+                { label: '7 jours', days: 7 },
+                { label: '30 jours', days: 30 },
+              ].map((opt) => (
+                <button
+                  key={opt.days}
+                  onClick={() => suspendUser(suspendTarget, opt.days)}
+                  className="rounded-xl bg-caution-500/10 py-2.5 text-sm font-bold text-caution-600 transition-colors hover:bg-caution-500/20"
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+            <button onClick={() => setSuspendTarget(null)} className="btn-ghost mt-3 w-full">
+              Annuler
+            </button>
+          </motion.div>
+        </div>
+      )}
+
+      {/* ── Edit user ── */}
+      {editTarget && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4"
+          onClick={() => setEditTarget(null)}
+        >
+          <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            className="w-full max-w-sm rounded-3xl bg-surface-1 p-6 shadow-card-lg"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3 className="font-display text-lg font-bold text-foreground">Modifier l'utilisateur</h3>
+            <div className="mt-4 space-y-3">
+              <div>
+                <label className="mb-1 block text-xs font-bold text-muted">Nom</label>
+                <input
+                  value={editForm.name}
+                  onChange={(e) => setEditForm((f) => ({ ...f, name: e.target.value }))}
+                  className="w-full rounded-xl border border-token bg-surface-2 px-3 py-2.5 text-sm text-foreground focus:outline-none"
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-xs font-bold text-muted">Téléphone</label>
+                <input
+                  value={editForm.phone}
+                  onChange={(e) => setEditForm((f) => ({ ...f, phone: e.target.value }))}
+                  className="w-full rounded-xl border border-token bg-surface-2 px-3 py-2.5 text-sm text-foreground focus:outline-none"
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-xs font-bold text-muted">E-mail</label>
+                <input
+                  value={editForm.email}
+                  onChange={(e) => setEditForm((f) => ({ ...f, email: e.target.value }))}
+                  className="w-full rounded-xl border border-token bg-surface-2 px-3 py-2.5 text-sm text-foreground focus:outline-none"
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-xs font-bold text-muted">Rôle</label>
+                <select
+                  value={editForm.role}
+                  onChange={(e) =>
+                    setEditForm((f) => ({ ...f, role: e.target.value as 'USER' | 'ADMIN' }))
+                  }
+                  className="w-full rounded-xl border border-token bg-surface-2 px-3 py-2.5 text-sm text-foreground focus:outline-none"
+                >
+                  <option value="USER">Utilisateur</option>
+                  <option value="ADMIN">Admin</option>
+                </select>
+              </div>
+            </div>
+            <div className="mt-5 flex gap-3">
+              <button onClick={() => setEditTarget(null)} className="btn-ghost flex-1">
+                Annuler
+              </button>
+              <button
+                onClick={saveEdit}
+                disabled={saving || !editForm.name.trim()}
+                className="flex-1 rounded-2xl bg-[#00235E] py-3 text-sm font-bold text-white transition-transform active:scale-[0.98] disabled:opacity-40"
+              >
+                {saving ? 'Enregistrement…' : 'Enregistrer'}
               </button>
             </div>
           </motion.div>

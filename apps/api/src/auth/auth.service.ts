@@ -121,6 +121,11 @@ export class AuthService {
     if (user.blocked) {
       throw new UnauthorizedException('Ce compte a été bloqué. Contactez le support.');
     }
+    if (user.suspendedUntil && user.suspendedUntil > new Date()) {
+      throw new UnauthorizedException(
+        `Ce compte est suspendu jusqu'au ${user.suspendedUntil.toLocaleDateString('fr-FR')}.`
+      );
+    }
 
     return { accessToken: this.generateAccessToken(user), user: this.sanitizeUser(user) };
   }
@@ -219,6 +224,11 @@ export class AuthService {
     if (user.blocked) {
       throw new UnauthorizedException('Ce compte a été bloqué. Contactez le support.');
     }
+    if (user.suspendedUntil && user.suspendedUntil > new Date()) {
+      throw new UnauthorizedException(
+        `Ce compte est suspendu jusqu'au ${user.suspendedUntil.toLocaleDateString('fr-FR')}.`
+      );
+    }
 
     return { accessToken: this.generateAccessToken(user), user: this.sanitizeUser(user) };
   }
@@ -230,6 +240,11 @@ export class AuthService {
     }
     if (user.blocked) {
       throw new UnauthorizedException('Ce compte a été bloqué. Contactez le support.');
+    }
+    if (user.suspendedUntil && user.suspendedUntil > new Date()) {
+      throw new UnauthorizedException(
+        `Ce compte est suspendu jusqu'au ${user.suspendedUntil.toLocaleDateString('fr-FR')}.`
+      );
     }
     return this.sanitizeUser(user);
   }

@@ -33,6 +33,55 @@ export class AdminService {
     });
   }
 
+  async suspendUser(id: string, days: number) {
+    const user = await this.prisma.user.findUnique({ where: { id } });
+    if (!user) throw new NotFoundException('User not found');
+    const suspendedUntil = new Date(Date.now() + days * 24 * 60 * 60 * 1000);
+    return this.prisma.user.update({
+      where: { id },
+      data: { suspendedUntil },
+      select: { id: true, name: true, phone: true, role: true, suspendedUntil: true },
+    });
+  }
+
+  async unsuspendUser(id: string) {
+    const user = await this.prisma.user.findUnique({ where: { id } });
+    if (!user) throw new NotFoundException('User not found');
+    return this.prisma.user.update({
+      where: { id },
+      data: { suspendedUntil: null },
+      select: { id: true, name: true, phone: true, role: true, suspendedUntil: true },
+    });
+  }
+
+  async updateUser(id: string, dto: { name?: string; phone?: string; email?: string; role?: 'USER' | 'ADMIN' }) {
+    const user = await this.prisma.user.findUnique({ where: { id } });
+    if (!user) throw new NotFoundException('User not found');
+
+    if (dto.phone && dto.phone !== user.phone) {
+      const existing = await this.prisma.user.findUnique({ where: { phone: dto.phone } });
+      if (existing) throw new BadRequestException('Ce numéro est déjà utilisé par un autre compte');
+    }
+    if (dto.email && dto.email !== user.email) {
+      const existing = await this.prisma.user.findUnique({ where: { email: dto.email } });
+      if (existing) throw new BadRequestException('Cet e-mail est déjà utilisé par un autre compte');
+    }
+
+    return this.prisma.user.update({
+      where: { id },
+      data: dto,
+      select: {
+        id: true,
+        name: true,
+        phone: true,
+        email: true,
+        role: true,
+        blocked: true,
+        suspendedUntil: true,
+      },
+    });
+  }
+
   /**
    * Manual subscription activation (temporary WhatsApp payment flow).
    * Grants the product's entitlement keys and records a PAID purchase with
@@ -135,6 +184,10 @@ export class AdminService {
     return this.schoolService.updateStatus(id, status);
   }
 
+  async deleteSchool(id: string) {
+    return this.schoolService.delete(id);
+  }
+
   /** Full profile for the admin drawer: subscription, purchases, activity. */
   async getUserDetails(id: string) {
     const user = await this.prisma.user.findUnique({
@@ -148,6 +201,7 @@ export class AdminService {
         level: true,
         role: true,
         blocked: true,
+        suspendedUntil: true,
         createdAt: true,
       },
     });

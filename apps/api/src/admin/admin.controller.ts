@@ -21,6 +21,8 @@ import { PrismaService } from '../prisma/prisma.service';
 import { AdminService } from './admin.service';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { SetBlockedDto } from './dto/set-blocked.dto';
+import { SuspendUserDto } from './dto/suspend-user.dto';
+import { AdminUpdateUserDto } from './dto/admin-update-user.dto';
 import { QuestionInputDto } from './dto/question-input.dto';
 import { SeriesInputDto } from './dto/series-input.dto';
 import { LessonInputDto } from './dto/lesson-input.dto';
@@ -128,6 +130,27 @@ export class AdminController {
     return this.adminService.setBlocked(id, dto.blocked);
   }
 
+  @Patch('users/:id/suspend')
+  @ApiResponse({ status: 403, description: 'Cannot suspend yourself' })
+  async suspendUser(@Param('id') id: string, @Body() dto: SuspendUserDto, @Request() req) {
+    if (req.user.userId === id) {
+      throw new ForbiddenException('Impossible de suspendre son propre compte');
+    }
+    return this.adminService.suspendUser(id, dto.days);
+  }
+
+  @Delete('users/:id/suspend')
+  @ApiResponse({ status: 200, description: 'Suspension lifted' })
+  async unsuspendUser(@Param('id') id: string) {
+    return this.adminService.unsuspendUser(id);
+  }
+
+  @Patch('users/:id')
+  @ApiResponse({ status: 200, description: 'User profile updated by an admin' })
+  async updateUser(@Param('id') id: string, @Body() dto: AdminUpdateUserDto) {
+    return this.adminService.updateUser(id, dto);
+  }
+
   // Manual subscription activation (temporary WhatsApp payment flow)
   @Post('users/:id/subscription')
   @ApiResponse({ status: 201, description: 'Subscription granted manually' })
@@ -167,6 +190,12 @@ export class AdminController {
   @ApiResponse({ status: 200, description: 'School status updated (PENDING/ACTIVE/SUSPENDED)' })
   async updateSchoolStatus(@Param('id') id: string, @Body() dto: UpdateSchoolStatusDto) {
     return this.adminService.updateSchoolStatus(id, dto.status);
+  }
+
+  @Delete('schools/:id')
+  @ApiResponse({ status: 200, description: 'School permanently deleted' })
+  async deleteSchool(@Param('id') id: string) {
+    return this.adminService.deleteSchool(id);
   }
 
   // ─── Questions (quiz) ────────────────────────────────────────────────────────

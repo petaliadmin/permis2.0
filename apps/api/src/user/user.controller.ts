@@ -29,8 +29,20 @@ export class UserController {
   @ApiResponse({ status: 200, description: 'List of users' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async findAll(@Query('skip') skip = '0', @Query('take') take = '10', @Query('q') q?: string) {
-    return this.userService.findAll(parseInt(String(skip), 10), parseInt(String(take), 10), q);
+  async findAll(
+    @Query('skip') skip = '0',
+    @Query('take') take = '10',
+    @Query('q') q?: string,
+    @Query('role') role?: 'USER' | 'ADMIN',
+    @Query('status') status?: 'active' | 'suspended' | 'blocked'
+  ) {
+    return this.userService.findAll(
+      parseInt(String(skip), 10),
+      parseInt(String(take), 10),
+      q,
+      role,
+      status
+    );
   }
 
   @Get('profile')

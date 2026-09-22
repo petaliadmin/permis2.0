@@ -26,16 +26,39 @@ export class UserService {
     return this.prisma.user.findUnique({ where: { phone } });
   }
 
-  async findAll(skip = 0, take = 10, q?: string) {
-    const where = q
-      ? {
-          OR: [
-            { name: { contains: q, mode: 'insensitive' as const } },
-            { phone: { contains: q, mode: 'insensitive' as const } },
-            { email: { contains: q, mode: 'insensitive' as const } },
-          ],
-        }
-      : {};
+  async findAll(
+    skip = 0,
+    take = 10,
+    q?: string,
+    role?: 'USER' | 'ADMIN',
+    status?: 'active' | 'suspended' | 'blocked'
+  ) {
+    const now = new Date();
+    const statusWhere =
+      status === 'blocked'
+        ? { blocked: true }
+        : status === 'suspended'
+          ? { blocked: false, suspendedUntil: { gt: now } }
+          : status === 'active'
+            ? { blocked: false, OR: [{ suspendedUntil: null }, { suspendedUntil: { lte: now } }] }
+            : {};
+    const where = {
+      ...(role ? { role } : {}),
+      ...statusWhere,
+      ...(q
+        ? {
+            AND: [
+              {
+                OR: [
+                  { name: { contains: q, mode: 'insensitive' as const } },
+                  { phone: { contains: q, mode: 'insensitive' as const } },
+                  { email: { contains: q, mode: 'insensitive' as const } },
+                ],
+              },
+            ],
+          }
+        : {}),
+    };
     const [users, total] = await Promise.all([
       this.prisma.user.findMany({
         where,
@@ -50,6 +73,8 @@ export class UserService {
           xp: true,
           level: true,
           role: true,
+          blocked: true,
+          suspendedUntil: true,
           createdAt: true,
         },
       }),

@@ -924,4 +924,17 @@ export class SchoolService {
     }
     return updated;
   }
+
+  /**
+   * Permanently deletes a school and everything scoped to it (members,
+   * students, vehicles, sessions, payments, reviews, enrollment requests —
+   * all `onDelete: Cascade` in the schema). Purchases tied to the school
+   * are kept for revenue history, just detached (`onDelete: SetNull`).
+   */
+  async delete(schoolId: string) {
+    const school = await this.prisma.school.findUnique({ where: { id: schoolId } });
+    if (!school) throw new NotFoundException('École introuvable');
+    await this.prisma.school.delete({ where: { id: schoolId } });
+    return { success: true };
+  }
 }
