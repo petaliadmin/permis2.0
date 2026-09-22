@@ -289,6 +289,24 @@ export default async function PermisConduireSenegalPage() {
               >
                 Examen blanc : comment s'entraîner efficacement
               </Link>
+              <Link
+                href="/blog/nouvelle-demande-permis-conduire-apres-examen-senegal"
+                className="rounded-full border border-token bg-surface-1 px-3.5 py-2 text-xs font-semibold text-primary-600 hover:bg-surface-2"
+              >
+                Après l'examen : comment obtenir son permis
+              </Link>
+              <Link
+                href="/blog/duplicata-permis-conduire-perdu-vole-senegal"
+                className="rounded-full border border-token bg-surface-1 px-3.5 py-2 text-xs font-semibold text-primary-600 hover:bg-surface-2"
+              >
+                Permis perdu ou volé : obtenir un duplicata
+              </Link>
+              <Link
+                href="/blog/remplacement-ancien-permis-biometrique-senegal"
+                className="rounded-full border border-token bg-surface-1 px-3.5 py-2 text-xs font-semibold text-primary-600 hover:bg-surface-2"
+              >
+                Remplacer son ancien permis « rose »
+              </Link>
             </div>
           </section>
 

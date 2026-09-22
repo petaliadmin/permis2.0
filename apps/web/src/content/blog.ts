@@ -458,6 +458,292 @@ export const BLOG_POSTS: BlogPost[] = [
       },
     ],
   },
+  {
+    slug: 'nouvelle-demande-permis-conduire-apres-examen-senegal',
+    title: 'Après l\'examen : comment obtenir son permis de conduire au Sénégal',
+    description:
+      "Réussir le Code et la conduite n'est que la première étape. Voici comment se déroule ensuite la demande officielle du permis biométrique auprès de Capp Karangë.",
+    category: 'Permis de conduire',
+    publishedAt: '2026-09-22',
+    updatedAt: '2026-09-22',
+    readingMinutes: 6,
+    directAnswer:
+      "Une fois le Code de la route et l'épreuve pratique réussis en auto-école, l'obtention du permis biométrique passe par une « nouvelle demande » déposée auprès de Capp Karangë, l'organisme chargé de la production des permis de conduire au Sénégal — notamment à la Direction des Transports Routiers de Hann à Dakar. Le dossier est ensuite instruit, et le permis doit être retiré en personne une fois prêt. La liste exacte des pièces à fournir et les délais doivent être vérifiés directement auprès de Capp Karangë ou de votre auto-école, ces informations pouvant évoluer.",
+    blocks: [
+      {
+        type: 'h2',
+        text: "Réussir l'examen n'est que la première étape",
+      },
+      {
+        type: 'p',
+        text: "Obtenir son permis de conduire au Sénégal suit un parcours en plusieurs temps : formation en auto-école, réussite de l'examen du Code, puis de l'épreuve pratique de conduite. Mais réussir ces épreuves ne délivre pas automatiquement le titre physique — il reste une démarche administrative à accomplir pour obtenir le permis biométrique lui-même, celle-ci étant gérée par un organisme distinct de l'auto-école.",
+      },
+      {
+        type: 'links',
+        items: [{ href: '/permis-conduire-senegal', label: 'Revoir les étapes pour préparer son permis' }],
+      },
+      {
+        type: 'h2',
+        text: 'La « nouvelle demande » auprès de Capp Karangë',
+      },
+      {
+        type: 'p',
+        text: "Au Sénégal, la production des permis de conduire biométriques est assurée par Capp Karangë, un projet de modernisation et de numérisation des titres de transport. Sur son site, l'opération correspondant à un premier permis s'appelle « nouvelle demande d'obtention du permis de conduire », et se distingue des demandes de remplacement (ancien permis) ou de duplicata (permis perdu ou volé). D'après les informations publiées par Capp Karangë, le site de la Direction des Transports Routiers, à Hann (route de front de terre, ex TP Som) à Dakar, est le point de dépôt indiqué pour ce type de demande — d'autres sites régionaux existent en dehors de Dakar.",
+      },
+      {
+        type: 'callout',
+        tone: 'info',
+        title: 'PERMIS 2.0 ne gère pas cette démarche',
+        text: "PERMIS 2.0 prépare à l'examen du Code de la route et met en relation avec des auto-écoles partenaires — la délivrance du titre officiel dépend uniquement de Capp Karangë et des services compétents de l'État. Cette page explique le principe de la démarche, pas la liste exacte des pièces à fournir : vérifiez-la directement auprès de Capp Karangë ou de votre auto-école avant de vous déplacer.",
+      },
+      {
+        type: 'h2',
+        text: 'Ce que votre auto-école transmet, ce que vous apportez vous-même',
+      },
+      {
+        type: 'p',
+        text: "Dans la pratique, une partie du dossier (résultats d'examen, attestations de formation) transite via l'auto-école où vous vous êtes formé, tandis que d'autres pièces (état civil, justificatifs personnels) restent à votre charge. Le partage exact des responsabilités peut varier — demandez à votre auto-école, au moment de votre inscription, ce qu'elle prend en charge une fois l'examen réussi et ce qui reste de votre ressort.",
+      },
+      {
+        type: 'links',
+        items: [{ href: '/auto-ecoles-senegal', label: 'Comparer les auto-écoles partenaires' }],
+      },
+      {
+        type: 'h2',
+        text: 'Suivre l\'avancement de son dossier',
+      },
+      {
+        type: 'p',
+        text: "Capp Karangë propose un outil de suivi de dossier en ligne, utile pour savoir où en est le traitement de sa demande sans avoir à se déplacer ou à appeler. C'est le réflexe à avoir avant de retourner sur place, plutôt que de se présenter au site de dépôt sans visibilité sur l'état du dossier.",
+      },
+      {
+        type: 'links',
+        items: [
+          {
+            href: 'https://cappkarange.sn/suivi/',
+            label: 'Suivre son dossier sur cappkarange.sn',
+            external: true,
+          },
+          {
+            href: 'https://cappkarange.sn/nouvelle-demande-dobtention-du-permis-de-conduire/',
+            label: 'Page officielle « Nouvelle demande » — cappkarange.sn',
+            external: true,
+          },
+        ],
+      },
+      {
+        type: 'h2',
+        text: 'Le retrait du permis : une étape en personne',
+      },
+      {
+        type: 'p',
+        text: "Une fois le titre prêt, le retrait du permis biométrique se fait en personne : une tierce personne — même un proche muni d'une procuration informelle — ne peut pas retirer le titre à votre place. C'est un point qui surprend souvent les candidats pressés ou éloignés du site de dépôt ; mieux vaut l'anticiper dans son organisation plutôt que de le découvrir sur place.",
+      },
+      {
+        type: 'callout',
+        tone: 'warning',
+        title: 'À anticiper',
+        text: "Prévoyez de vous déplacer vous-même le jour du retrait. Si un empêchement sérieux vous en empêche, seul Capp Karangë peut indiquer la marche à suivre applicable à votre situation.",
+      },
+    ],
+    faqs: [
+      {
+        question: 'Mon auto-école dépose-t-elle la demande à ma place après mon examen ?',
+        answer:
+          "Le partage exact des tâches entre l'auto-école et le candidat peut varier. Dans la plupart des cas, une partie du dossier passe par l'auto-école mais le dépôt final et le retrait du titre restent à la charge du candidat — à confirmer avec votre auto-école.",
+      },
+      {
+        question: 'Où déposer sa demande en dehors de Dakar ?',
+        answer:
+          "Capp Karangë indique disposer de sites régionaux en plus des sites principaux de Dakar. Le site officiel cappkarange.sn ou le contact indiqué sur ses pages permettent de connaître le site le plus proche de chez vous.",
+      },
+      {
+        question: 'Puis-je me faire représenter pour retirer mon permis une fois prêt ?',
+        answer:
+          "Non — d'après les informations publiées par Capp Karangë, le retrait se fait en personne et une tierce personne ne peut pas retirer le titre à votre place.",
+      },
+    ],
+  },
+  {
+    slug: 'duplicata-permis-conduire-perdu-vole-senegal',
+    title: 'Permis de conduire perdu ou volé au Sénégal : comment obtenir un duplicata',
+    description:
+      "Permis perdu, volé ou détérioré : la marche à suivre pour obtenir un duplicata de son permis de conduire auprès de Capp Karangë, sans repartir de zéro.",
+    category: 'Permis de conduire',
+    publishedAt: '2026-09-22',
+    updatedAt: '2026-09-22',
+    readingMinutes: 5,
+    directAnswer:
+      "En cas de perte, de vol ou de détérioration de son permis de conduire au Sénégal, il faut déposer une demande de duplicata auprès de Capp Karangë, l'organisme chargé de la production des permis biométriques — c'est une opération distincte d'une nouvelle demande, puisque le permis existe déjà administrativement. La liste précise des pièces à fournir (dont, selon les cas, une déclaration de perte ou de vol) et les délais doivent être vérifiés directement auprès de Capp Karangë, ces informations pouvant évoluer.",
+    blocks: [
+      {
+        type: 'h2',
+        text: "Perte ou vol : la première chose à faire",
+      },
+      {
+        type: 'p',
+        text: "Avant toute démarche auprès de Capp Karangë, un permis volé — ou perdu dans des circonstances qui le justifient — fait généralement l'objet d'une déclaration auprès des services de police ou de gendarmerie. Cette déclaration fait partie des pièces que l'on peut vous demander pour constituer un dossier de duplicata ; gardez-en une copie.",
+      },
+      {
+        type: 'h2',
+        text: 'La demande de duplicata, une opération à part',
+      },
+      {
+        type: 'p',
+        text: "Sur le site de Capp Karangë, la demande de duplicata est une opération distincte de la « nouvelle demande » (premier permis) et du « remplacement » (mise à jour de l'ancien format vers le nouveau permis biométrique). Le duplicata reprend en principe les informations de votre permis existant — catégories obtenues, date d'obtention — sans repasser les épreuves. Le détail exact du dossier à constituer doit être confirmé sur place ou via le site officiel, car il peut varier selon que le permis a été perdu, volé ou détérioré.",
+      },
+      {
+        type: 'links',
+        items: [
+          {
+            href: 'https://cappkarange.sn/demande-de-duplicata-de-permis-de-conduire/',
+            label: 'Page officielle « Demande de duplicata » — cappkarange.sn',
+            external: true,
+          },
+        ],
+      },
+      {
+        type: 'h2',
+        text: "Un changement d'adresse en même temps ? Le certificat de résidence",
+      },
+      {
+        type: 'p',
+        text: "Si votre adresse a changé depuis l'émission de votre permis d'origine et que vous souhaitez la mettre à jour à l'occasion du duplicata, un certificat de résidence peut vous être demandé. Ce n'est pas systématique — uniquement si vous demandez explicitement la mise à jour de votre adresse sur le nouveau titre.",
+      },
+      {
+        type: 'callout',
+        tone: 'warning',
+        title: 'Le retrait se fait en personne',
+        text: "Comme pour toute demande auprès de Capp Karangë, le duplicata doit être retiré par le titulaire lui-même — une tierce personne ne peut pas venir le chercher à votre place, même avec une autorisation écrite.",
+      },
+      {
+        type: 'h2',
+        text: 'Suivre sa demande et vérifier les informations à jour',
+      },
+      {
+        type: 'p',
+        text: "Le suivi de dossier en ligne de Capp Karangë permet de vérifier l'avancement de sa demande de duplicata sans se déplacer. Les tarifs, délais et pièces exactes évoluant, il vaut mieux les confirmer sur le site officiel ou par téléphone juste avant de se déplacer plutôt que de se fier à une information ancienne.",
+      },
+      {
+        type: 'links',
+        items: [
+          {
+            href: 'https://cappkarange.sn/suivi/',
+            label: 'Suivre son dossier sur cappkarange.sn',
+            external: true,
+          },
+          { href: '/permis-conduire-senegal', label: 'Le guide complet du permis au Sénégal' },
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: 'Dois-je repasser un examen pour obtenir un duplicata ?',
+        answer:
+          "Non, le duplicata reprend en principe les catégories et informations de votre permis existant — c'est une réédition du titre, pas une nouvelle obtention.",
+      },
+      {
+        question: 'Puis-je envoyer quelqu\'un retirer mon duplicata à ma place ?',
+        answer:
+          "Non, d'après les informations publiées par Capp Karangë, le retrait d'un titre se fait en personne, y compris pour un duplicata.",
+      },
+      {
+        question: 'Que faire si mon adresse a changé depuis mon premier permis ?',
+        answer:
+          "Vous pouvez en principe la mettre à jour à l'occasion de votre duplicata, généralement en fournissant un certificat de résidence — à confirmer selon votre situation auprès de Capp Karangë.",
+      },
+    ],
+  },
+  {
+    slug: 'remplacement-ancien-permis-biometrique-senegal',
+    title: "Remplacer son ancien permis « rose » par le nouveau permis biométrique",
+    description:
+      "De nombreux conducteurs sénégalais détiennent encore l'ancien permis au format carnet. Voici le principe du remplacement par le nouveau titre biométrique.",
+    category: 'Permis de conduire',
+    publishedAt: '2026-09-22',
+    updatedAt: '2026-09-22',
+    readingMinutes: 5,
+    directAnswer:
+      "Le Sénégal a modernisé ses titres de transport avec un permis de conduire biométrique sécurisé, qui remplace progressivement l'ancien format « carnet rose ». Les détenteurs de l'ancien permis peuvent demander son remplacement auprès de Capp Karangë, l'organisme chargé de cette production — une opération distincte d'un duplicata (permis perdu) ou d'une nouvelle demande (premier permis). Les pièces exactes à fournir doivent être vérifiées directement auprès de Capp Karangë.",
+    blocks: [
+      {
+        type: 'h2',
+        text: 'Pourquoi un nouveau format de permis',
+      },
+      {
+        type: 'p',
+        text: "Capp Karangë se présente comme un projet de modernisation et de numérisation des titres de transport sénégalais, reposant sur des supports sécurisés et infalsifiables — par opposition à l'ancien permis au format carnet, communément appelé « permis rose », plus facilement falsifiable. Le remplacement permet à un détenteur de l'ancien format d'obtenir le nouveau titre biométrique sans repasser d'examen.",
+      },
+      {
+        type: 'h2',
+        text: 'Des pièces qui peuvent varier selon votre situation',
+      },
+      {
+        type: 'p',
+        text: "D'après les informations publiées par Capp Karangë, certains cas particuliers demandent des pièces supplémentaires au dossier de remplacement standard — notamment si votre permis a été perdu ou volé entretemps (ce qui relève alors d'une demande de duplicata), ou si vous souhaitez mettre à jour votre adresse sur le nouveau titre, auquel cas un certificat de résidence est demandé.",
+      },
+      {
+        type: 'callout',
+        tone: 'info',
+        title: 'Le groupe sanguin, une information demandée sur le nouveau permis',
+        text: "Le nouveau permis biométrique sénégalais comporte le groupe sanguin de son titulaire. D'après Capp Karangë, cette recherche peut être nécessaire en amont si vous ne connaissez pas déjà votre groupe sanguin — mieux vaut vous renseigner sur la marche à suivre avant de déposer votre dossier de remplacement.",
+      },
+      {
+        type: 'h2',
+        text: 'Où faire sa demande',
+      },
+      {
+        type: 'p',
+        text: "Le site de CICES – Foire de Dakar est indiqué par Capp Karangë comme site pour les demandes de remplacement de permis de conduire à Dakar. Des sites régionaux existent également en dehors de la capitale — le site officiel ou le numéro d'information de Capp Karangë permettent de trouver le point le plus proche de chez vous.",
+      },
+      {
+        type: 'links',
+        items: [
+          {
+            href: 'https://cappkarange.sn/remplacement-permis/',
+            label: 'Page officielle « Remplacement Permis » — cappkarange.sn',
+            external: true,
+          },
+        ],
+      },
+      {
+        type: 'h2',
+        text: 'Le retrait, comme pour toute demande, se fait en personne',
+      },
+      {
+        type: 'p',
+        text: "Une fois le nouveau permis biométrique prêt, il doit être retiré par son titulaire en personne — une tierce personne, même un proche, ne peut pas le retirer à votre place. Anticipez cette contrainte dans votre organisation, surtout si le site de dépôt n'est pas proche de votre lieu de résidence habituel.",
+      },
+      {
+        type: 'links',
+        items: [
+          {
+            href: 'https://cappkarange.sn/suivi/',
+            label: 'Suivre son dossier sur cappkarange.sn',
+            external: true,
+          },
+          { href: '/permis-conduire-senegal', label: 'Le guide complet du permis au Sénégal' },
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: 'Le remplacement change-t-il mes catégories de permis ?',
+        answer:
+          "Non a priori — le remplacement reprend les catégories et informations de votre permis existant sur le nouveau format biométrique, sans repasser d'examen.",
+      },
+      {
+        question: 'Le groupe sanguin est-il vraiment obligatoire sur le nouveau permis ?',
+        answer:
+          "D'après les informations publiées par Capp Karangë, le nouveau permis biométrique comporte cette information — renseignez-vous en amont sur la marche à suivre si vous ne connaissez pas déjà votre groupe sanguin.",
+      },
+      {
+        question: 'Combien de temps faut-il pour recevoir son nouveau permis ?',
+        answer:
+          "Le délai varie et n'est pas garanti à l'avance. Le suivi de dossier en ligne de Capp Karangë permet de vérifier l'état d'avancement sans avoir à se déplacer.",
+      },
+    ],
+  },
 ];
 
 export function getBlogPost(slug: string): BlogPost | undefined {
