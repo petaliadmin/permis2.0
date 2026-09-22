@@ -1,6 +1,6 @@
 import sharp from 'sharp';
 import { renderCardImage } from '@/lib/ogImage';
-import { getBlogPost } from '@/content/blog';
+import { getBlogPost } from '@/lib/articles';
 
 // 16:9, ≥1200px wide, WebP — brief Lot 2.6 (BlogPosting.image + og:image
 // share this one file, rather than the 1.91:1 PNG the other opengraph-image.tsx
@@ -10,7 +10,7 @@ const SIZE = { width: 1200, height: 675 };
 
 export async function GET(_req: Request, { params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const post = getBlogPost(slug);
+  const post = await getBlogPost(slug);
 
   const png = renderCardImage(post?.title ?? 'Blog PERMIS 2.0', post?.category, SIZE);
   const pngBuffer = Buffer.from(await png.arrayBuffer());

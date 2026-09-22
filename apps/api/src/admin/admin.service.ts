@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { ShopService } from '../shop/shop.service';
 import { SchoolService } from '../school/school.service';
@@ -6,6 +7,7 @@ import { SchoolStatus } from '@permis2.0/types';
 import { QuestionInputDto } from './dto/question-input.dto';
 import { SeriesInputDto } from './dto/series-input.dto';
 import { LessonInputDto } from './dto/lesson-input.dto';
+import { ArticleInputDto } from './dto/article-input.dto';
 import { PermitPriceInputDto } from './dto/permit-price-input.dto';
 
 /** Estimated DExchange cost per SMS/WhatsApp message, in XOF (override via env). */
@@ -338,6 +340,54 @@ export class AdminService {
     const existing = await this.prisma.lesson.findUnique({ where: { id } });
     if (!existing) throw new NotFoundException('Leçon introuvable');
     await this.prisma.lesson.delete({ where: { id } });
+    return { deleted: true };
+  }
+
+  // ─── Articles (blog) CRUD ──────────────────────────────────────────────────────
+
+  async listArticles() {
+    return this.prisma.article.findMany({ orderBy: { updatedAt: 'desc' } });
+  }
+
+  async createArticle(dto: ArticleInputDto) {
+    const dup = await this.prisma.article.findUnique({ where: { slug: dto.slug } });
+    if (dup) throw new BadRequestException(`Le slug « ${dto.slug} » est déjà utilisé`);
+    const { published, blocks, faqs, ...rest } = dto;
+    return this.prisma.article.create({
+      data: {
+        ...rest,
+        published: !!published,
+        publishedAt: published ? new Date() : null,
+        blocks: blocks as Prisma.InputJsonValue,
+        faqs: faqs as Prisma.InputJsonValue,
+      },
+    });
+  }
+
+  async updateArticle(id: string, dto: ArticleInputDto) {
+    const existing = await this.prisma.article.findUnique({ where: { id } });
+    if (!existing) throw new NotFoundException('Article introuvable');
+    const dup = await this.prisma.article.findUnique({ where: { slug: dto.slug } });
+    if (dup && dup.id !== id)
+      throw new BadRequestException(`Le slug « ${dto.slug} » est déjà utilisé`);
+    const { published, blocks, faqs, ...rest } = dto;
+    const publishedAt = published ? (existing.publishedAt ?? new Date()) : existing.publishedAt;
+    return this.prisma.article.update({
+      where: { id },
+      data: {
+        ...rest,
+        published: !!published,
+        publishedAt,
+        blocks: blocks as Prisma.InputJsonValue,
+        faqs: faqs as Prisma.InputJsonValue,
+      },
+    });
+  }
+
+  async deleteArticle(id: string) {
+    const existing = await this.prisma.article.findUnique({ where: { id } });
+    if (!existing) throw new NotFoundException('Article introuvable');
+    await this.prisma.article.delete({ where: { id } });
     return { deleted: true };
   }
 

@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { CategoryModule } from './category/category.module';
 import { LessonModule } from './lesson/lesson.module';
+import { ArticleModule } from './article/article.module';
 import { SeriesModule } from './series/series.module';
 import { QuestionModule } from './question/question.module';
 import { ExamModule } from './exam/exam.module';
@@ -51,6 +52,7 @@ import { PlatformStatsModule } from './platform-stats/platform-stats.module';
     UserModule,
     CategoryModule,
     LessonModule,
+    ArticleModule,
     SeriesModule,
     QuestionModule,
     ExamModule,

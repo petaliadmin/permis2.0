@@ -24,6 +24,7 @@ import { SetBlockedDto } from './dto/set-blocked.dto';
 import { QuestionInputDto } from './dto/question-input.dto';
 import { SeriesInputDto } from './dto/series-input.dto';
 import { LessonInputDto } from './dto/lesson-input.dto';
+import { ArticleInputDto } from './dto/article-input.dto';
 import { PermitPriceInputDto } from './dto/permit-price-input.dto';
 import { UpdateSchoolStatusDto } from './dto/update-school-status.dto';
 
@@ -237,6 +238,28 @@ export class AdminController {
   @Delete('lessons/:id')
   async deleteLesson(@Param('id') id: string) {
     return this.adminService.deleteLesson(id);
+  }
+
+  // ─── Articles (blog) ─────────────────────────────────────────────────────────
+
+  @Get('articles')
+  async listArticles() {
+    return this.adminService.listArticles();
+  }
+
+  @Post('articles')
+  async createArticle(@Body() dto: ArticleInputDto) {
+    return this.adminService.createArticle(dto);
+  }
+
+  @Patch('articles/:id')
+  async updateArticle(@Param('id') id: string, @Body() dto: ArticleInputDto) {
+    return this.adminService.updateArticle(id, dto);
+  }
+
+  @Delete('articles/:id')
+  async deleteArticle(@Param('id') id: string) {
+    return this.adminService.deleteArticle(id);
   }
 
   // ─── Permit prices (/prix-permis-conduire-senegal) ─────────────────────────────

@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { SiteHeader } from '@/components/SiteHeader';
 import { SiteFooter } from '@/components/SiteFooter';
-import { getBlogPostsSorted, type BlogCategory } from '@/content/blog';
+import { getBlogPostsSorted, type BlogCategory } from '@/lib/articles';
 import { IconChevronRight } from '@tabler/icons-react';
 import { buildMetadata } from '@/lib/seo/metadata';
 
@@ -26,8 +26,8 @@ function formatDate(iso: string): string {
   return new Date(iso).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
 }
 
-export default function BlogPage() {
-  const posts = getBlogPostsSorted();
+export default async function BlogPage() {
+  const posts = await getBlogPostsSorted();
 
   return (
     <div className="on-light min-h-screen bg-surface">

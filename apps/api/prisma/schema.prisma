@@ -95,6 +95,7 @@ model User {
   role         Role        @default(USER)
   profileType  ProfileType @default(PARTICULIER)
   blocked      Boolean     @default(false)
+  suspendedUntil DateTime?
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
 
@@ -158,6 +159,25 @@ model Lesson {
 
   @@index([categoryId])
   @@map("lessons")
+}
+
+model Article {
+  id             String    @id @default(cuid())
+  slug           String    @unique
+  title          String
+  description    String
+  category       String
+  published      Boolean   @default(false)
+  publishedAt    DateTime?
+  readingMinutes Int       @default(5)
+  directAnswer   String
+  blocks         Json
+  faqs           Json?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@index([published, publishedAt])
+  @@map("articles")
 }
 
 model Series {

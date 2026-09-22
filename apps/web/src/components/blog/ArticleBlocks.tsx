@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import type { ContentBlock } from '@/content/blog';
+import type { ContentBlock } from '@/lib/articles';
 import { IconArrowRight, IconExternalLink } from '@tabler/icons-react';
 
 const CALLOUT_STYLES: Record<string, { bg: string; title: string; text: string }> = {

@@ -23,6 +23,7 @@
     "prisma:seed": "ts-node -r tsconfig-paths/register prisma/seed.ts",
     "prisma:seed:schools": "ts-node -r tsconfig-paths/register prisma/seed-schools.ts",
     "prisma:seed:dakar": "ts-node -r tsconfig-paths/register prisma/seed-auto-ecoles-dakar.ts",
+    "prisma:seed:articles": "ts-node -r tsconfig-paths/register prisma/seed-articles.ts",
     "sync:content": "ts-node -r tsconfig-paths/register prisma/sync-content.ts",
     "enrich:lessons": "ts-node -r tsconfig-paths/register prisma/enrich-lessons.ts",
     "prisma:backfill-trial": "ts-node -r tsconfig-paths/register prisma/backfill-trial.ts"

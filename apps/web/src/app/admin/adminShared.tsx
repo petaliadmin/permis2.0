@@ -11,6 +11,7 @@ import {
   IconClipboardCheck,
   IconBook,
   IconCash,
+  IconArticle,
 } from '@tabler/icons-react';
 
 export const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
@@ -58,6 +59,13 @@ export const ADMIN_SECTIONS = [
     desc: 'Rédiger et organiser les leçons',
     icon: IconBook,
     color: '#0EA5E9',
+  },
+  {
+    href: '/admin/articles',
+    label: 'Articles',
+    desc: 'Rédiger et publier les articles du blog',
+    icon: IconArticle,
+    color: '#DB2777',
   },
   {
     href: '/admin/prix',

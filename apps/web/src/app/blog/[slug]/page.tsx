@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import { SiteHeader } from '@/components/SiteHeader';
 import { SiteFooter } from '@/components/SiteFooter';
 import { ArticleBlocks } from '@/components/blog/ArticleBlocks';
-import { getBlogPost, getBlogPostsSorted, type BlogCategory } from '@/content/blog';
+import { getBlogPost, type BlogCategory } from '@/lib/articles';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 import { organizationNode, websiteNode, graphScript, ORGANIZATION_ID, SITE_URL } from '@/lib/seo/jsonLd';
 import { buildMetadata } from '@/lib/seo/metadata';
@@ -16,17 +16,13 @@ const CATEGORY_CHIP: Record<BlogCategory, string> = {
   'Auto-écoles': 'chip-success',
 };
 
-export function generateStaticParams() {
-  return getBlogPostsSorted().map((post) => ({ slug: post.slug }));
-}
-
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const post = getBlogPost(slug);
+  const post = await getBlogPost(slug);
   if (!post) return { title: 'Article introuvable' };
 
   // Lot 2.6 — one 16:9 WebP image per post, shared by og:image/twitter:image
@@ -57,7 +53,7 @@ function formatDate(iso: string): string {
 // team-authored (not attributed to a person), and no real social profile
 // URLs exist anywhere in this codebase to point `sameAs` at (brief rule 1:
 // no invented data).
-function blogJsonLd(post: NonNullable<ReturnType<typeof getBlogPost>>, slug: string): string {
+function blogJsonLd(post: NonNullable<Awaited<ReturnType<typeof getBlogPost>>>, slug: string): string {
   const url = `${SITE_URL}/blog/${slug}`;
   const breadcrumb = {
     '@type': 'BreadcrumbList',
@@ -94,7 +90,7 @@ function blogJsonLd(post: NonNullable<ReturnType<typeof getBlogPost>>, slug: str
 
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const post = getBlogPost(slug);
+  const post = await getBlogPost(slug);
   if (!post) notFound();
 
   return (
