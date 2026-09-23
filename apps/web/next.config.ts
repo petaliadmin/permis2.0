@@ -5,6 +5,16 @@ const withBundleAnalyzer = bundleAnalyzer({ enabled: process.env.ANALYZE === 'tr
 
 const nextConfig: NextConfig = {
   output: 'standalone',
+  // Audit sécurité (2026-09-23) — `X-Powered-By: Next.js` is on by default
+  // and only tells an attacker which framework/version-family to target.
+  poweredByHeader: false,
+  experimental: {
+    // Audit sécurité (2026-09-23) — signs every Next-emitted <script> with a
+    // build-time integrity hash so a compromised CDN/edge can't silently
+    // swap the JS payload; the browser refuses a modified file. Native to
+    // Next 15.5+, so no manual hash generation/maintenance on each deploy.
+    sri: { algorithm: 'sha384' },
+  },
   // react-leaflet's MapContainer creates its Leaflet map instance imperatively
   // in a ref callback that isn't idempotent under React 18 Strict Mode's
   // dev-only double-invoke of effects — it throws "Map container is already
