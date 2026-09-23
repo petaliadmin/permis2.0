@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { WHATSAPP_DISPLAY } from '@/lib/contact';
+import { WHATSAPP_DISPLAY, CONTACT_EMAIL } from '@/lib/contact';
 
 /** Shared footer for full-width marketing pages — outside AppShell. */
 export function SiteFooter() {
@@ -67,6 +67,11 @@ export function SiteFooter() {
                 </Link>
               </li>
               <li className="text-secondary">WhatsApp · {WHATSAPP_DISPLAY}</li>
+              <li>
+                <a href={`mailto:${CONTACT_EMAIL}`} className="text-secondary hover:text-foreground">
+                  {CONTACT_EMAIL}
+                </a>
+              </li>
             </ul>
           </div>
 

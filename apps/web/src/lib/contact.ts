@@ -1,6 +1,7 @@
-/** Contact support — tout passe par WhatsApp. */
+/** Contact support — WhatsApp pour les réponses rapides, email pour le reste (demandes formelles, droits RGPD-like, mentions légales). */
 export const WHATSAPP_DISPLAY = '76 905 58 52';
 export const WHATSAPP_INTL = '221769055852';
+export const CONTACT_EMAIL = 'contact@permis2.com';
 
 export function whatsappLink(message: string): string {
   return `https://wa.me/${WHATSAPP_INTL}?text=${encodeURIComponent(message)}`;

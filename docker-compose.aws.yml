@@ -71,6 +71,7 @@ services:
       SMTP_PASSWORD: ${SMTP_PASSWORD:-}
       SMTP_FROM_EMAIL: ${SMTP_FROM_EMAIL:-no-reply@permis2.com}
       SMTP_FROM_NAME: ${SMTP_FROM_NAME:-PERMIS 2.0}
+      SMTP_REPLY_TO: ${SMTP_REPLY_TO:-contact@permis2.com}
       VAPID_PUBLIC_KEY: ${VAPID_PUBLIC_KEY:-}
       VAPID_PRIVATE_KEY: ${VAPID_PRIVATE_KEY:-}
       VAPID_EMAIL: ${VAPID_EMAIL:-mailto:admin@permis2.com}

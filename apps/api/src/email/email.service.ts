@@ -48,6 +48,7 @@ export class EmailService {
           name: process.env.SMTP_FROM_NAME || 'PERMIS 2.0',
           address: process.env.SMTP_FROM_EMAIL || 'no-reply@permis2.com',
         },
+        replyTo: process.env.SMTP_REPLY_TO || 'contact@permis2.com',
         to,
         subject: opts.subject,
         text: opts.text,

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { SiteHeader } from '@/components/SiteHeader';
 import { SiteFooter } from '@/components/SiteFooter';
-import { WHATSAPP_DISPLAY } from '@/lib/contact';
+import { WHATSAPP_DISPLAY, CONTACT_EMAIL } from '@/lib/contact';
 import { buildMetadata } from '@/lib/seo/metadata';
 
 export const metadata: Metadata = buildMetadata({
@@ -48,8 +48,11 @@ export default function MentionsLegalesPage() {
           <section>
             <h2 className="font-display text-lg font-bold text-foreground">Contact</h2>
             <p className="mt-2">
-              Pour toute question relative à ces mentions légales, contactez-nous sur WhatsApp au{' '}
-              {WHATSAPP_DISPLAY} ou via notre page{' '}
+              Pour toute question relative à ces mentions légales, contactez-nous par email à{' '}
+              <a href={`mailto:${CONTACT_EMAIL}`} className="font-semibold text-primary-600 hover:underline">
+                {CONTACT_EMAIL}
+              </a>
+              , sur WhatsApp au {WHATSAPP_DISPLAY}, ou via notre page{' '}
               <a href="/contact" className="font-semibold text-primary-600 hover:underline">
                 Contact
               </a>

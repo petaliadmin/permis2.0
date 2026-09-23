@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { SiteHeader } from '@/components/SiteHeader';
 import { SiteFooter } from '@/components/SiteFooter';
-import { WHATSAPP_DISPLAY } from '@/lib/contact';
+import { WHATSAPP_DISPLAY, CONTACT_EMAIL } from '@/lib/contact';
 import { buildMetadata } from '@/lib/seo/metadata';
 
 export const metadata: Metadata = buildMetadata({
@@ -63,9 +63,13 @@ export default function PolitiqueConfidentialitePage() {
               Conformément à la loi sénégalaise n° 2008-12 du 25 janvier 2008 portant sur la
               protection des données à caractère personnel, vous disposez d'un droit d'accès, de
               rectification, d'opposition et de suppression de vos données personnelles. Pour
-              exercer ces droits, contactez-nous sur WhatsApp au {WHATSAPP_DISPLAY}. Vous pouvez
-              également adresser une réclamation à la Commission de protection des données
-              personnelles (CDP) du Sénégal.
+              exercer ces droits, contactez-nous par email à{' '}
+              <a href={`mailto:${CONTACT_EMAIL}`} className="font-semibold text-primary-600 hover:underline">
+                {CONTACT_EMAIL}
+              </a>{' '}
+              ou sur WhatsApp au {WHATSAPP_DISPLAY}. Vous pouvez également adresser une
+              réclamation à la Commission de protection des données personnelles (CDP) du
+              Sénégal.
             </p>
           </section>
 
