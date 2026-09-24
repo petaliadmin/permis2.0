@@ -42,7 +42,7 @@ const LEARN_MENU: MenuLink[] = [
   { href: '/cours', label: 'Cours', icon: IconBook2 },
   { href: '/quizz', label: 'Quiz', icon: IconCards },
   { href: '/exam', label: 'Examens', icon: IconClipboardCheck },
-  { href: '/boutique', label: 'Abonnement', icon: IconCrown },
+  { href: '/abonnement', label: 'Abonnement', icon: IconCrown },
   { href: '/mes-auto-ecoles', label: 'Mes auto-écoles', icon: IconUserCheck },
   { href: '/notifications', label: 'Notifications', icon: IconBell },
   { href: '/assistance', label: 'Assistance', icon: IconHeadset },

@@ -53,8 +53,8 @@ export class SchoolRolesGuard implements CanActivate {
     });
     if (!membership) throw new ForbiddenException('Accès non autorisé pour cette auto-école');
 
-    // Platform access gate: the school management space requires a PAID
-    // school_subscription. 402 (not 403) so the frontend can distinguish
+    // Platform access gate: the school management space requires an ACTIVE
+    // SCHOOL subscription. 402 (not 403) so the frontend can distinguish
     // "wrong role" from "pay to unlock" and show the subscribe screen.
     const subscriptionExpiresAt = membership.school.subscriptionExpiresAt;
     if (!subscriptionExpiresAt || subscriptionExpiresAt <= new Date()) {

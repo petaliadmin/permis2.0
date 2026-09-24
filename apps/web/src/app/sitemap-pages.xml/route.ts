@@ -13,7 +13,7 @@ export const dynamic = 'force-static';
 // (except /blog itself, grouped with its posts in sitemap-blog.xml instead)
 // resolves 200 on www and carries no noindex (verified against the running
 // app, brief Lot 1.4 rule: "ne lister QUE des URLs canoniques répondant
-// 200"). /cours, /quizz, /tests, /exam, /boutique are deliberately absent:
+// 200"). /cours, /quizz, /tests, /exam, /abonnement are deliberately absent:
 // still noindexed since Lot 0.4 (near-empty server HTML) — submitting a
 // noindexed URL in a sitemap is a well-known anti-pattern, not just
 // pointless. /auto-ecoles-senegal/{ville} and /ecoles/{slug} live in
@@ -25,7 +25,6 @@ const STATIC_PAGES = [
   '/traffic-signs',
   '/code-route-senegal',
   '/permis-conduire-senegal',
-  '/prix-permis-conduire-senegal',
   '/auto-ecoles-senegal',
   '/logiciel-gestion-auto-ecole',
   '/assistance',

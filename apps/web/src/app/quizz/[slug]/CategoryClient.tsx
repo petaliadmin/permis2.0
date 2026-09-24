@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { AppShell, PageHeader } from '@/components/AppShell';
 import { useAuthStore } from '@/store/authStore';
-import { usePurchasesStore } from '@/store/purchasesStore';
+import { useSubscriptionStore } from '@/store/subscriptionStore';
 import { getCategoryBySlug, FREE_SERIES_UP_TO, type SeriesProgress } from '../config';
 import { IconCircleCheckFilled, IconLock, IconProgress, IconStarFilled, IconChevronRight } from '@tabler/icons-react';
 
@@ -62,7 +62,7 @@ export default function CategoryPage() {
   const category = getCategoryBySlug(slug);
   const [progress, setProgress] = useState<Record<string, SeriesProgress>>({});
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
-  const isPremium = usePurchasesStore((s) => s.hasKey('premium_all'));
+  const isPremium = useSubscriptionStore((s) => s.hasKey('premium_all'));
 
   useEffect(() => {
     setProgress(readProgress());
@@ -71,7 +71,7 @@ export default function CategoryPage() {
   const handleStart = (quizId: string) => {
     const unlocked = Number(quizId) <= FREE_SERIES_UP_TO || isPremium;
     if (!unlocked) {
-      router.push(isAuthenticated ? '/boutique' : '/auth/login');
+      router.push(isAuthenticated ? '/abonnement' : '/auth/login');
       return;
     }
     router.push(`/quizz/${slug}/${quizId}`);

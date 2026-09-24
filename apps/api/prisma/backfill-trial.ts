@@ -1,6 +1,6 @@
 /**
  * One-time backfill: grants the 3-month free trial (introduced alongside the
- * school_subscription paywall) retroactively to every School that doesn't
+ * SCHOOL subscription paywall) retroactively to every School that doesn't
  * have one yet — i.e. every school created before this feature existed,
  * which would otherwise stay blocked by SchoolRolesGuard forever with no
  * grace period. Trial is computed from the school's own `createdAt`, not
@@ -9,7 +9,7 @@
  *
  * Idempotent: only touches rows where subscriptionExpiresAt IS NULL, so
  * schools that already have a trial (new create() path) or a real paid
- * subscription (extended past the trial by ShopService.markPaid) are left
+ * subscription (extended past the trial by SubscriptionService.confirmSubscription) are left
  * untouched. Safe to re-run, and safe to run against production — unlike
  * seed.ts, this doesn't insert demo data.
  *

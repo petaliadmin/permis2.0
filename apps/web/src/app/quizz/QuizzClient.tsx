@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { AppShell, PageHeader } from '@/components/AppShell';
 import { useAuthStore } from '@/store/authStore';
-import { usePurchasesStore } from '@/store/purchasesStore';
+import { useSubscriptionStore } from '@/store/subscriptionStore';
 import { QUIZ_CATEGORIES, TOTAL_QUIZZES, FREE_SERIES_UP_TO, type SeriesProgress } from './config';
 import { countErrors } from '@/lib/errorBank';
 import { IconChevronRight, IconCircleCheckFilled, IconLock, IconProgress, IconStarFilled, IconTargetArrow } from '@tabler/icons-react';
@@ -54,7 +54,7 @@ export default function QuizzClient() {
   const router = useRouter();
   const user = useAuthStore((s) => s.user);
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
-  const isPremium = usePurchasesStore((s) => s.hasKey('premium_all'));
+  const isPremium = useSubscriptionStore((s) => s.hasKey('premium_all'));
   const currentStreak = user?.currentStreak ?? 0;
   const progress = useProgress();
   const category = QUIZ_CATEGORIES[0];
@@ -62,7 +62,7 @@ export default function QuizzClient() {
   const handleStart = (quizId: string) => {
     const unlocked = Number(quizId) <= FREE_SERIES_UP_TO || isPremium;
     if (!unlocked) {
-      router.push(isAuthenticated ? '/boutique' : '/auth/login');
+      router.push(isAuthenticated ? '/abonnement' : '/auth/login');
       return;
     }
     router.push(`/quizz/${category.slug}/${quizId}`);

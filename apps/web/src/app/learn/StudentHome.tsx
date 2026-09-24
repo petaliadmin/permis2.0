@@ -53,7 +53,7 @@ const TILES = [
     ring: 'hover:border-orange-200',
   },
   {
-    href: '/boutique',
+    href: '/abonnement',
     label: 'Abonnement',
     desc: 'Débloque tout le contenu premium',
     icon: IconCrown,

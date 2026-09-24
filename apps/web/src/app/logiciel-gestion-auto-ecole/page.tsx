@@ -56,20 +56,22 @@ const FAQS = [
   },
 ];
 
-interface Product {
-  sku: string;
+interface SubscriptionPlan {
+  id: string;
   title: string;
   priceXof: number;
-  kind: string;
+  type: string;
   active: boolean;
 }
 
 async function fetchSubscriptionPrice(): Promise<number | null> {
   try {
-    const res = await fetch(`${API_URL}/shop/products`, { next: { revalidate: 3600 } });
+    const res = await fetch(`${API_URL}/subscriptions/plans?type=SCHOOL`, {
+      next: { revalidate: 3600 },
+    });
     if (!res.ok) return null;
-    const products: Product[] = await res.json();
-    const sub = products.find((p) => p.kind === 'school_subscription' && p.active);
+    const plans: SubscriptionPlan[] = await res.json();
+    const sub = plans.find((p) => p.active);
     return sub?.priceXof ?? null;
   } catch {
     return null;

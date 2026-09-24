@@ -114,7 +114,7 @@ function jsonLd(total: number): string {
   // SEO audit finding (Étape 5) — hasCourseInstance/offers were missing
   // (required for the Course rich result). offers.price is the real
   // subscription price (SUBSCRIPTION_PRICE_XOF, apps/web uses the same
-  // constant on /boutique) — this is a freemium product (free account,
+  // constant on /abonnement) — this is a freemium product (free account,
   // paid unlimited access), never "free" as a generic placeholder would
   // have implied.
   const course = {

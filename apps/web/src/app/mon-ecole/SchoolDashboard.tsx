@@ -14,7 +14,7 @@ import { SchoolEnrollmentStatus, SchoolPaymentStatus, SchoolStatus } from '@perm
 import { Sheet } from '@permis2.0/ui';
 import { cn } from '@/lib/cn';
 import { useAuthStore } from '@/store/authStore';
-import { usePurchasesStore } from '@/store/purchasesStore';
+import { useSubscriptionStore } from '@/store/subscriptionStore';
 import { whatsappLink, WHATSAPP_DISPLAY } from '@/lib/contact';
 import { SideMenuProvider, MenuButton } from '@/components/SideMenu';
 import { EnrollmentRequestsPanel } from './EnrollmentRequestsPanel';
@@ -153,9 +153,9 @@ function VisibilityCard({
   onSchoolUpdated: () => void;
 }) {
   const authUser = useAuthStore((s) => s.user);
-  const products = usePurchasesStore((s) => s.products);
-  const fetchProducts = usePurchasesStore((s) => s.fetchProducts);
-  const requestManual = usePurchasesStore((s) => s.requestManual);
+  const products = useSubscriptionStore((s) => s.products);
+  const fetchProducts = useSubscriptionStore((s) => s.fetchProducts);
+  const requestManual = useSubscriptionStore((s) => s.requestManual);
   const [open, setOpen] = useState(false);
   const [stage, setStage] = useState<'pay' | 'requested'>('pay');
   const [submitting, setSubmitting] = useState(false);
@@ -164,8 +164,10 @@ function VisibilityCard({
     fetchProducts();
   }, [fetchProducts]);
 
-  const product = products.find((p) => p.sku === 'top20_semaine');
-  const price = product?.priceXof ?? 5000;
+  const plan = products
+    .filter((p) => p.type === 'SCHOOL_FEATURED' && p.active)
+    .sort((a, b) => a.ordre - b.ordre)[0];
+  const price = plan?.priceXof ?? 5000;
   const featuredUntil = school.featuredUntil ? new Date(school.featuredUntil) : null;
   const isFeatured = !!featuredUntil && featuredUntil > new Date();
 
@@ -179,9 +181,9 @@ function VisibilityCard({
   };
 
   const iPaid = async () => {
-    if (!product) return;
+    if (!plan) return;
     setSubmitting(true);
-    await requestManual(product.id, school.id);
+    await requestManual(plan.id, school.id);
     setSubmitting(false);
     setStage('requested');
   };
@@ -224,7 +226,7 @@ function VisibilityCard({
             </a>
             <button
               onClick={iPaid}
-              disabled={!product || submitting}
+              disabled={!plan || submitting}
               className="btn-primary mt-2 w-full disabled:opacity-60"
             >
               {submitting ? 'Enregistrement…' : "J'ai payé"}

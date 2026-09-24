@@ -27,8 +27,9 @@ import { QuestionInputDto } from './dto/question-input.dto';
 import { SeriesInputDto } from './dto/series-input.dto';
 import { LessonInputDto } from './dto/lesson-input.dto';
 import { ArticleInputDto } from './dto/article-input.dto';
-import { PermitPriceInputDto } from './dto/permit-price-input.dto';
+import { SubscriptionPlanInputDto } from '../subscription/dto/subscription-plan-input.dto';
 import { UpdateSchoolStatusDto } from './dto/update-school-status.dto';
+import type { SubscriptionType } from '@prisma/client';
 
 @ApiTags('Admin')
 @ApiBearerAuth()
@@ -60,7 +61,7 @@ export class AdminController {
       this.prisma.category.count(),
       this.prisma.lesson.count(),
       this.prisma.question.count(),
-      this.prisma.purchase.count({ where: { status: 'PAID' } }),
+      this.prisma.subscription.count({ where: { status: 'ACTIVE' } }),
       this.prisma.examResult.count(),
       this.prisma.series.count(),
       this.prisma.trafficSign.count(),
@@ -154,28 +155,31 @@ export class AdminController {
   // Manual subscription activation (temporary WhatsApp payment flow)
   @Post('users/:id/subscription')
   @ApiResponse({ status: 201, description: 'Subscription granted manually' })
-  async grantSubscription(@Param('id') id: string, @Query('sku') sku?: string) {
-    return this.adminService.grantSubscription(id, sku || 'abo_annuel');
+  async grantSubscription(@Param('id') id: string, @Query('planId') planId?: string) {
+    return this.adminService.grantSubscription(id, planId);
   }
 
   @Delete('users/:id/subscription')
   @ApiResponse({ status: 200, description: 'Subscription revoked' })
-  async revokeSubscription(@Param('id') id: string, @Query('sku') sku?: string) {
-    return this.adminService.revokeSubscription(id, sku || 'abo_annuel');
+  async revokeSubscription(@Param('id') id: string) {
+    return this.adminService.revokeSubscription(id);
   }
 
-  // ─── Purchase requests ───────────────────────────────────────────────────────
+  // ─── Subscription requests ────────────────────────────────────────────────────
 
-  @Get('purchases')
-  @ApiResponse({ status: 200, description: 'Purchases, optionally filtered by status' })
-  async listPurchases(@Query('status') status?: string) {
-    return this.adminService.listPurchases(status);
+  @Get('subscriptions')
+  @ApiResponse({ status: 200, description: 'Subscriptions, optionally filtered by status/type' })
+  async listSubscriptions(
+    @Query('status') status?: string,
+    @Query('type') type?: SubscriptionType
+  ) {
+    return this.adminService.listSubscriptions(status, type);
   }
 
-  @Post('purchases/:id/confirm')
-  @ApiResponse({ status: 201, description: 'Purchase confirmed and entitlement granted' })
-  async confirmPurchase(@Param('id') id: string) {
-    return this.adminService.confirmPurchase(id);
+  @Post('subscriptions/:id/confirm')
+  @ApiResponse({ status: 201, description: 'Subscription confirmed and activated' })
+  async confirmSubscription(@Param('id') id: string) {
+    return this.adminService.confirmSubscription(id);
   }
 
   // ─── Schools (multi-tenant, Phase 0) ─────────────────────────────────────────
@@ -291,20 +295,25 @@ export class AdminController {
     return this.adminService.deleteArticle(id);
   }
 
-  // ─── Permit prices (/prix-permis-conduire-senegal) ─────────────────────────────
+  // ─── Subscription plan pricing (élève / école / mise en avant) ───────────────
 
-  @Post('permit-prices')
-  async createPermitPrice(@Body() dto: PermitPriceInputDto) {
-    return this.adminService.createPermitPrice(dto);
+  @Get('subscription-plans')
+  async listSubscriptionPlans() {
+    return this.adminService.listSubscriptionPlans();
   }
 
-  @Patch('permit-prices/:id')
-  async updatePermitPrice(@Param('id') id: string, @Body() dto: PermitPriceInputDto) {
-    return this.adminService.updatePermitPrice(id, dto);
+  @Post('subscription-plans')
+  async createSubscriptionPlan(@Body() dto: SubscriptionPlanInputDto) {
+    return this.adminService.createSubscriptionPlan(dto);
   }
 
-  @Delete('permit-prices/:id')
-  async deletePermitPrice(@Param('id') id: string) {
-    return this.adminService.deletePermitPrice(id);
+  @Patch('subscription-plans/:id')
+  async updateSubscriptionPlan(@Param('id') id: string, @Body() dto: SubscriptionPlanInputDto) {
+    return this.adminService.updateSubscriptionPlan(id, dto);
+  }
+
+  @Delete('subscription-plans/:id')
+  async deleteSubscriptionPlan(@Param('id') id: string) {
+    return this.adminService.deleteSubscriptionPlan(id);
   }
 }

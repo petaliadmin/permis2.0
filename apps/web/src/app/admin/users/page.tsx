@@ -39,15 +39,15 @@ const isSuspended = (u: AdminUser) =>
 
 interface UserDetails {
   user: AdminUser & { blocked: boolean };
-  entitlements: { key: string; source: string; expiresAt: string | null; createdAt: string }[];
-  purchases: {
+  subscriptions: {
     id: string;
     amountXof: number;
-    status: string;
-    provider: string;
-    method?: string | null;
+    status: 'PENDING' | 'ACTIVE' | 'REJECTED' | 'CANCELLED';
+    paymentMethod: string;
+    startDate: string | null;
+    endDate: string | null;
     createdAt: string;
-    product: { title: string };
+    plan: { title: string; type: string };
   }[];
   examCount: number;
   streak: { currentStreak: number; longestStreak: number } | null;
@@ -467,103 +467,98 @@ export default function AdminUsersPage() {
             </div>
 
             {/* Subscription */}
-            <p className="mb-2 mt-4 text-xs font-bold uppercase tracking-wide text-muted">
-              Abonnements & accès
-            </p>
-            {details.entitlements.length === 0 ? (
-              <p className="rounded-xl bg-surface-2 px-3 py-2.5 text-sm text-secondary">
-                Aucun abonnement — compte gratuit.
-              </p>
-            ) : (
-              <div className="space-y-1.5">
-                {details.entitlements.map((e) => {
-                  const expired = e.expiresAt && new Date(e.expiresAt) < new Date();
-                  return (
-                    <div
-                      key={e.key}
-                      className="flex items-center justify-between rounded-xl bg-surface-2 px-3 py-2.5 text-sm"
-                    >
-                      <span className="font-semibold text-foreground">{e.key}</span>
-                      <span className={`text-xs ${expired ? 'text-red-500' : 'text-success-600'}`}>
-                        {e.expiresAt
-                          ? `${expired ? 'Expiré' : 'Expire'} le ${fmtDate(e.expiresAt)}`
-                          : 'À vie'}
+            {(() => {
+              const activeStudent = details.subscriptions.find(
+                (s) => s.status === 'ACTIVE' && s.plan.type === 'STUDENT' && s.endDate && new Date(s.endDate) > new Date()
+              );
+              return (
+                <>
+                  <p className="mb-2 mt-4 text-xs font-bold uppercase tracking-wide text-muted">
+                    Abonnements & accès
+                  </p>
+                  {!activeStudent ? (
+                    <p className="rounded-xl bg-surface-2 px-3 py-2.5 text-sm text-secondary">
+                      Aucun abonnement élève actif — compte gratuit.
+                    </p>
+                  ) : (
+                    <div className="flex items-center justify-between rounded-xl bg-surface-2 px-3 py-2.5 text-sm">
+                      <span className="font-semibold text-foreground">premium_all</span>
+                      <span className="text-xs text-success-600">
+                        Expire le {fmtDate(activeStudent.endDate!)}
                       </span>
                     </div>
-                  );
-                })}
-              </div>
-            )}
+                  )}
 
-            {/* Manual activation (WhatsApp payment flow) */}
-            <div className="mt-2.5 flex gap-2">
-              <button
-                onClick={() =>
-                  act(
-                    details.user.id,
-                    () =>
-                      adminFetch(`/admin/users/${details.user.id}/subscription`, {
-                        method: 'POST',
-                        json: {},
-                      }),
-                    `Abonnement activé pour ${details.user.name} (1 an).`
-                  )
-                }
-                disabled={busy === details.user.id}
-                className="flex-1 rounded-xl bg-success-50 py-2.5 text-xs font-bold text-success-700 transition-colors hover:bg-success-100 disabled:opacity-40"
-              >
-                <IconCrown size="1em" className="mr-1" aria-hidden="true" />
-                {details.entitlements.some((e) => e.key === 'premium_all')
-                  ? 'Prolonger 1 an'
-                  : 'Activer l’abonnement'}
-              </button>
-              {details.entitlements.some((e) => e.key === 'premium_all') && (
-                <button
-                  onClick={() =>
-                    act(
-                      details.user.id,
-                      () =>
-                        adminFetch(`/admin/users/${details.user.id}/subscription`, {
-                          method: 'DELETE',
-                        }),
-                      `Abonnement révoqué pour ${details.user.name}.`
-                    )
-                  }
-                  disabled={busy === details.user.id}
-                  className="flex-1 rounded-xl bg-red-50 py-2.5 text-xs font-bold text-red-600 transition-colors hover:bg-red-100 disabled:opacity-40"
-                >
-                  Révoquer
-                </button>
-              )}
-            </div>
+                  {/* Manual activation (WhatsApp payment flow) */}
+                  <div className="mt-2.5 flex gap-2">
+                    <button
+                      onClick={() =>
+                        act(
+                          details.user.id,
+                          () =>
+                            adminFetch(`/admin/users/${details.user.id}/subscription`, {
+                              method: 'POST',
+                              json: {},
+                            }),
+                          `Abonnement activé pour ${details.user.name} (1 an).`
+                        )
+                      }
+                      disabled={busy === details.user.id}
+                      className="flex-1 rounded-xl bg-success-50 py-2.5 text-xs font-bold text-success-700 transition-colors hover:bg-success-100 disabled:opacity-40"
+                    >
+                      <IconCrown size="1em" className="mr-1" aria-hidden="true" />
+                      {activeStudent ? 'Prolonger 1 an' : 'Activer l’abonnement'}
+                    </button>
+                    {activeStudent && (
+                      <button
+                        onClick={() =>
+                          act(
+                            details.user.id,
+                            () =>
+                              adminFetch(`/admin/users/${details.user.id}/subscription`, {
+                                method: 'DELETE',
+                              }),
+                            `Abonnement révoqué pour ${details.user.name}.`
+                          )
+                        }
+                        disabled={busy === details.user.id}
+                        className="flex-1 rounded-xl bg-red-50 py-2.5 text-xs font-bold text-red-600 transition-colors hover:bg-red-100 disabled:opacity-40"
+                      >
+                        Révoquer
+                      </button>
+                    )}
+                  </div>
+                </>
+              );
+            })()}
 
-            {/* Purchases */}
+            {/* Subscriptions history */}
             <p className="mb-2 mt-4 text-xs font-bold uppercase tracking-wide text-muted">
-              Achats ({fmtXof(details.totalSpentXof)} au total)
+              Abonnements ({fmtXof(details.totalSpentXof)} au total)
             </p>
-            {details.purchases.length === 0 ? (
+            {details.subscriptions.length === 0 ? (
               <p className="rounded-xl bg-surface-2 px-3 py-2.5 text-sm text-secondary">
-                Aucun achat.
+                Aucun abonnement.
               </p>
             ) : (
               <div className="space-y-1.5">
-                {details.purchases.map((p) => (
+                {details.subscriptions.map((s) => (
                   <div
-                    key={p.id}
+                    key={s.id}
                     className="flex items-center justify-between rounded-xl bg-surface-2 px-3 py-2.5 text-sm"
                   >
                     <div className="min-w-0">
-                      <p className="truncate font-semibold text-foreground">{p.product.title}</p>
+                      <p className="truncate font-semibold text-foreground">{s.plan.title}</p>
                       <p className="text-[10px] text-muted">
-                        {fmtDate(p.createdAt)} · {p.method || p.provider}
+                        {fmtDate(s.createdAt)} · {s.paymentMethod}
                       </p>
                     </div>
                     <div className="shrink-0 text-right">
-                      <p className="font-bold text-foreground">{fmtXof(p.amountXof)}</p>
+                      <p className="font-bold text-foreground">{fmtXof(s.amountXof)}</p>
                       <p
-                        className={`text-[10px] font-bold ${p.status === 'PAID' ? 'text-success-600' : p.status === 'PENDING' ? 'text-amber-600' : 'text-red-500'}`}
+                        className={`text-[10px] font-bold ${s.status === 'ACTIVE' ? 'text-success-600' : s.status === 'PENDING' ? 'text-amber-600' : 'text-red-500'}`}
                       >
-                        {p.status}
+                        {s.status}
                       </p>
                     </div>
                   </div>

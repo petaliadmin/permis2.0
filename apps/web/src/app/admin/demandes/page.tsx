@@ -5,14 +5,13 @@ import { Skeleton } from '@permis2.0/ui';
 import { adminFetch, fmtXof, Toast, useToast, AdminPageHeader } from '../adminShared';
 import { IconCircleCheck, IconBrandWhatsapp } from '@tabler/icons-react';
 
-interface PendingPurchase {
+interface PendingSubscription {
   id: string;
   amountXof: number;
-  method: string | null;
-  provider: string;
+  paymentMethod: string;
   createdAt: string;
   user: { id: string; name: string; phone: string | null; email: string | null };
-  product: { title: string; sku: string };
+  plan: { title: string; type: string };
   school: { id: string; name: string } | null;
 }
 
@@ -21,13 +20,13 @@ const fmtDate = (d: string) =>
 
 export default function AdminDemandesPage() {
   const [toast, flash] = useToast();
-  const [purchases, setPurchases] = useState<PendingPurchase[]>([]);
+  const [purchases, setPurchases] = useState<PendingSubscription[]>([]);
   const [loading, setLoading] = useState(true);
   const [confirming, setConfirming] = useState<string | null>(null);
 
   const load = useCallback(() => {
     setLoading(true);
-    adminFetch<PendingPurchase[]>('/admin/purchases?status=PENDING')
+    adminFetch<PendingSubscription[]>('/admin/subscriptions?status=PENDING')
       .then(setPurchases)
       .catch((e) => flash(e.message))
       .finally(() => setLoading(false));
@@ -38,10 +37,10 @@ export default function AdminDemandesPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const confirm = async (p: PendingPurchase) => {
+  const confirm = async (p: PendingSubscription) => {
     setConfirming(p.id);
     try {
-      await adminFetch(`/admin/purchases/${p.id}/confirm`, { method: 'POST' });
+      await adminFetch(`/admin/subscriptions/${p.id}/confirm`, { method: 'POST' });
       flash(`Abonnement activé pour ${p.user.name}.`);
       setPurchases((list) => list.filter((x) => x.id !== p.id));
     } catch (e: any) {
@@ -106,8 +105,8 @@ export default function AdminDemandesPage() {
                     {p.user.phone ? `+221 ${p.user.phone}` : (p.user.email ?? '—')}
                   </td>
                   <td className="px-4 py-3 text-secondary">
-                    {p.product.title}
-                    {p.method === 'whatsapp' && (
+                    {p.plan.title}
+                    {p.paymentMethod === 'WHATSAPP' && (
                       <IconBrandWhatsapp
                         size="1em"
                         className="ml-1.5 text-[#25D366]"

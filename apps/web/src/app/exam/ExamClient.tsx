@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import { AppShell, PageHeader } from '@/components/AppShell';
 import { Skeleton } from '@permis2.0/ui';
 import { useAuthStore } from '@/store/authStore';
-import { usePurchasesStore } from '@/store/purchasesStore';
+import { useSubscriptionStore } from '@/store/subscriptionStore';
 import { loadData } from '@/lib/dataSource';
 import { IconChevronRight, IconClock, IconListNumbers, IconLock, IconLockOpen } from '@tabler/icons-react';
 
@@ -37,9 +37,9 @@ const THUMB_GRAD = [
 export default function ExamClient() {
   const router = useRouter();
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
-  const hasKey = usePurchasesStore((s) => s.hasKey);
-  const entitlementsReady = usePurchasesStore((s) => s.entitlementsReady);
-  const fetchEntitlements = usePurchasesStore((s) => s.fetchEntitlements);
+  const hasKey = useSubscriptionStore((s) => s.hasKey);
+  const entitlementsReady = useSubscriptionStore((s) => s.entitlementsReady);
+  const fetchEntitlements = useSubscriptionStore((s) => s.fetchEntitlements);
 
   const [exams, setExams] = useState<DiapoMeta[]>([]);
   const [loading, setLoading] = useState(true);
@@ -67,7 +67,7 @@ export default function ExamClient() {
   const handleStart = (exam: DiapoMeta) => {
     const hasAccess = exam.id <= FREE_UP_TO || unlockedAll;
     if (!hasAccess) {
-      router.push(isAuthenticated ? '/boutique' : '/auth/login');
+      router.push(isAuthenticated ? '/abonnement' : '/auth/login');
       return;
     }
     router.push(`/exam/diapo/${exam.id}`);
@@ -98,7 +98,7 @@ export default function ExamClient() {
       <div className="px-5 pt-6">
         {!unlockedAll && (
           <button
-            onClick={() => router.push(isAuthenticated ? '/boutique' : '/auth/login')}
+            onClick={() => router.push(isAuthenticated ? '/abonnement' : '/auth/login')}
             className="mb-5 flex w-full items-center gap-3 rounded-2xl bg-gradient-to-r from-orange-500 to-orange-600 px-4 py-3 text-left text-white shadow-md transition-transform active:scale-[0.98]"
           >
             <IconLockOpen size="1em" className="text-2xl" aria-hidden="true" />

@@ -98,7 +98,7 @@ export class SchoolService {
     maxPriceXof?: number;
     q?: string;
     take?: number;
-    /** Only schools with a currently-active featured_placement (paid). */
+    /** Only schools with a currently-active SCHOOL_FEATURED subscription (paid). */
     featured?: boolean;
   }) {
     const take = Math.min(filters.take ?? 20, filters.featured ? 20 : 50);
@@ -261,7 +261,7 @@ export class SchoolService {
   async create(userId: string, dto: CreateSchoolDto) {
     const base = slugify(dto.name) || 'ecole';
     // 3-month free trial from account creation — trialEndsAt is set once and
-    // never touched again (see SchoolService.update / ShopService.markPaid,
+    // never touched again (see SchoolService.update / SubscriptionService.confirmSubscription,
     // which only ever move subscriptionExpiresAt forward), so the frontend
     // can later tell "still on the original trial" (subscriptionExpiresAt
     // === trialEndsAt) apart from "a subscription has extended past it".

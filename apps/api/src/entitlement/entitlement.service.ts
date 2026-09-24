@@ -2,13 +2,17 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 
 /**
- * Server-side access control for premium content (Sprint 6). The single source
- * of truth for the entitlement KEY scheme:
- *   - premium_all      → unlocks everything
+ * Server-side access control for premium content. The single source of truth
+ * for the entitlement KEY scheme:
+ *   - premium_all      → unlocks everything (granted by an ACTIVE STUDENT Subscription)
  *   - pack_quiz        → all premium Series (Code quizzes)
  *   - pack_exams       → all ExamTemplates
  *   - pack_formation   → all premium DrivingCourses (Conduite)
  *   - exam:<templateId>→ one ExamTemplate (per-unit purchase)
+ *
+ * Only `premium_all` is ever actually granted today — the standard
+ * subscription system has a single student tier. The other keys stay part of
+ * the resolution API for forward-compatibility with a future per-pack plan.
  *
  * Access is resolved "any-of": free content OR a matching key the user holds.
  * Guests (no userId) hold no keys.
@@ -20,15 +24,16 @@ export class EntitlementService {
   /** Non-expired entitlement keys for a user. Empty for guests. */
   async getKeys(userId?: string): Promise<string[]> {
     if (!userId) return [];
-    const now = new Date();
-    const rows = await this.prisma.entitlement.findMany({
+    const active = await this.prisma.subscription.findFirst({
       where: {
         userId,
-        OR: [{ expiresAt: null }, { expiresAt: { gt: now } }],
+        status: 'ACTIVE',
+        plan: { type: 'STUDENT' },
+        endDate: { gt: new Date() },
       },
-      select: { key: true },
+      select: { id: true },
     });
-    return rows.map((r) => r.key);
+    return active ? ['premium_all'] : [];
   }
 
   async has(userId: string | undefined, key: string): Promise<boolean> {

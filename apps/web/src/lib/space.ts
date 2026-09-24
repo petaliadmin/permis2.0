@@ -39,7 +39,6 @@ const OWNED_PREFIXES: Record<Space, string[]> = {
     '/politique-confidentialite',
     '/code-route-senegal',
     '/permis-conduire-senegal',
-    '/prix-permis-conduire-senegal',
     '/auto-ecoles-senegal',
     '/logiciel-gestion-auto-ecole',
     '/blog',
@@ -50,7 +49,7 @@ const OWNED_PREFIXES: Record<Space, string[]> = {
     '/quizz',
     '/tests',
     '/exam',
-    '/boutique',
+    '/abonnement',
     '/mes-auto-ecoles',
     '/notifications',
     '/profil',
@@ -62,7 +61,7 @@ const OWNED_PREFIXES: Record<Space, string[]> = {
 /**
  * `learn`-owned prefixes that are also served directly on every host,
  * `www` included — no cross-space redirect. These are the site's actual
- * organic-search content (panneaux, cours, quiz, examens, boutique): forcing
+ * organic-search content (panneaux, cours, quiz, examens, abonnement): forcing
  * them onto `learn.permis2.com` split their SEO signal across two hosts and
  * put every www link to them one redirect hop from a 404-adjacent crawl
  * budget sink (see SEO brief, Lot 1.1). The learn-space chrome (bottom tabs,
@@ -76,7 +75,7 @@ export const PUBLIC_ON_ANY_HOST: string[] = [
   '/quizz',
   '/tests',
   '/exam',
-  '/boutique',
+  '/abonnement',
 ];
 
 export function isPublicOnAnyHost(pathname: string): boolean {

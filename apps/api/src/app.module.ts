@@ -20,10 +20,9 @@ import { AiCoachModule } from './ai-coach/ai-coach.module';
 import { PrismaService } from './prisma/prisma.service';
 import { AdminModule } from './admin/admin.module';
 import { NotificationModule } from './notification/notification.module';
-import { ShopModule } from './shop/shop.module';
+import { SubscriptionModule } from './subscription/subscription.module';
 import { EntitlementModule } from './entitlement/entitlement.module';
 import { SchoolModule } from './school/school.module';
-import { PermitPriceModule } from './permit-price/permit-price.module';
 import { PlatformStatsModule } from './platform-stats/platform-stats.module';
 
 @Module({
@@ -62,10 +61,9 @@ import { PlatformStatsModule } from './platform-stats/platform-stats.module';
     AiCoachModule,
     AdminModule,
     NotificationModule,
-    ShopModule,
+    SubscriptionModule,
     EntitlementModule,
     SchoolModule,
-    PermitPriceModule,
     PlatformStatsModule,
   ],
   controllers: [AppController],

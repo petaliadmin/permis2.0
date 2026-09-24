@@ -248,83 +248,48 @@ async function main() {
 
     console.log(`✅ Created ${panneaux.length} traffic signs`);
 
-    // Seed boutique product — annual subscription
-    await prisma.product.upsert({
-      where: { sku: 'abo_annuel' },
-      update: {
-        title: 'Abonnement Annuel',
-        description:
-          'Accès illimité à toutes les séries, examens blancs et cours de conduite pendant 1 an.',
-        kind: 'subscription',
-        priceXof: 2900,
-        active: true,
-        ordre: 1,
-        grants: ['premium_all'],
-        validityDays: 365,
-      },
-      create: {
-        sku: 'abo_annuel',
-        title: 'Abonnement Annuel',
-        description:
-          'Accès illimité à toutes les séries, examens blancs et cours de conduite pendant 1 an.',
-        kind: 'subscription',
-        priceXof: 2900,
-        active: true,
-        ordre: 1,
-        grants: ['premium_all'],
-        validityDays: 365,
-      },
-    });
-    console.log('✅ Seeded product: abo_annuel');
-
-    // Seed boutique products — school-level plans. Replaces the old "pack école"
-    // (bulk seat codes for students): auto-écoles now pay directly for their own
-    // access to the platform, plus an optional weekly visibility boost.
-    const schoolProducts = [
+    // Seed the standard subscription plan catalog — élève / auto-école /
+    // mise en avant "Top 20". No unique sku on SubscriptionPlan, so match by
+    // (type) instead of an upsert key.
+    const subscriptionPlans = [
       {
-        sku: 'abo_ecole_mensuel',
+        type: 'STUDENT' as const,
+        title: 'Abonnement Annuel',
+        description:
+          'Accès illimité à toutes les séries, examens blancs et cours de conduite pendant 1 an.',
+        priceXof: 2900,
+        durationDays: 365,
+        ordre: 1,
+      },
+      {
+        type: 'SCHOOL' as const,
         title: 'Abonnement École — Mensuel',
-        description: "Accès complet à l'espace de gestion (élèves, équipe, véhicules, planning, finances). 3 mois d'essai gratuit à l'ouverture du compte.",
-        kind: 'school_subscription',
+        description:
+          "Accès complet à l'espace de gestion (élèves, équipe, véhicules, planning, finances). 3 mois d'essai gratuit à l'ouverture du compte.",
         priceXof: 5000,
+        durationDays: 30,
         ordre: 10,
-        validityDays: 30,
       },
       {
-        sku: 'top20_semaine',
+        type: 'SCHOOL_FEATURED' as const,
         title: 'Forfait Top 20 — 1 semaine',
-        description: "Votre auto-école mise en avant dans le Top 20 affiché sur la page d'accueil, pendant 7 jours.",
-        kind: 'featured_placement',
+        description:
+          "Votre auto-école mise en avant dans le Top 20 affiché sur la page d'accueil, pendant 7 jours.",
         priceXof: 5000,
+        durationDays: 7,
         ordre: 11,
-        validityDays: 7,
       },
     ];
-    for (const product of schoolProducts) {
-      const data = {
-        title: product.title,
-        description: product.description,
-        kind: product.kind,
-        priceXof: product.priceXof,
-        active: true,
-        ordre: product.ordre,
-        grants: [] as string[],
-        validityDays: product.validityDays,
-      };
-      await prisma.product.upsert({
-        where: { sku: product.sku },
-        update: data,
-        create: { sku: product.sku, ...data },
-      });
+    for (const plan of subscriptionPlans) {
+      const existing = await prisma.subscriptionPlan.findFirst({ where: { type: plan.type } });
+      const data = { ...plan, active: true };
+      if (existing) {
+        await prisma.subscriptionPlan.update({ where: { id: existing.id }, data });
+      } else {
+        await prisma.subscriptionPlan.create({ data });
+      }
     }
-    // abo_ecole_annuel (12 000 FCFA/year) renamed+repriced to abo_ecole_mensuel
-    // (5 000 FCFA/month) before any real purchase ever happened against it —
-    // deactivate the orphaned old SKU rather than leaving it purchasable.
-    await prisma.product.updateMany({
-      where: { sku: 'abo_ecole_annuel' },
-      data: { active: false },
-    });
-    console.log(`✅ Seeded ${schoolProducts.length} school-level products`);
+    console.log(`✅ Seeded ${subscriptionPlans.length} subscription plans`);
 
     // Demo auto-écoles — see seed-schools.ts (also runnable standalone via
     // `pnpm run prisma:seed:schools`, e.g. after restoring a DB backup that

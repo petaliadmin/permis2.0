@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import { AppShell, PageHeader } from '@/components/AppShell';
 import { useAuthStore, formatPhone } from '@/store/authStore';
 import { useSettingsStore } from '@/store/settingsStore';
-import { usePurchasesStore } from '@/store/purchasesStore';
+import { useSubscriptionStore } from '@/store/subscriptionStore';
 import { useNotificationStore } from '@/store/notificationStore';
 import { SUBSCRIPTION_PRICE_ANNUAL } from '@permis2.0/shared';
 import {
@@ -190,8 +190,8 @@ export default function ProfilPage() {
   const soundEnabled = useSettingsStore((s) => s.soundEnabled);
   const setSoundEnabled = useSettingsStore((s) => s.setSoundEnabled);
 
-  const hasKey = usePurchasesStore((s) => s.hasKey);
-  const premiumExpiresAt = usePurchasesStore((s) => s.premiumExpiresAt);
+  const hasKey = useSubscriptionStore((s) => s.hasKey);
+  const premiumExpiresAt = useSubscriptionStore((s) => s.premiumExpiresAt);
   const unreadCount = useNotificationStore((s) => s.unreadCount);
   const fetchNotifCount = useNotificationStore((s) => s.fetchCount);
 
@@ -344,13 +344,13 @@ export default function ProfilPage() {
               )}
             </div>
             {expiresSoon && (
-              <Link href="/boutique" className="text-xs font-bold text-amber-700">
+              <Link href="/abonnement" className="text-xs font-bold text-amber-700">
                 Renouveler
               </Link>
             )}
           </div>
         ) : (
-          <Link href="/boutique">
+          <Link href="/abonnement">
             <div className="mt-4 flex items-center gap-3 rounded-2xl bg-gradient-to-r from-orange-500 to-orange-600 px-4 py-4 text-white shadow-md">
               <IconCrown size="1em" className="text-2xl" aria-hidden="true" />
               <div className="flex-1">

@@ -67,7 +67,6 @@ const OWN_GRAPH_PATTERNS: RegExp[] = [
   /^\/blog\/[^/]+$/,
   /^\/traffic-signs\/categorie\/[^/]+$/,
   /^\/traffic-signs\/(?!categorie$)[^/]+$/,
-  /^\/prix-permis-conduire-senegal$/,
   /^\/assistance$/,
   /^\/auto-ecoles-senegal$/,
   /^\/auto-ecoles-senegal\/[^/]+$/,

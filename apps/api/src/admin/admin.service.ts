@@ -1,14 +1,14 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { Prisma, SubscriptionType } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
-import { ShopService } from '../shop/shop.service';
+import { SubscriptionService } from '../subscription/subscription.service';
 import { SchoolService } from '../school/school.service';
 import { SchoolStatus } from '@permis2.0/types';
 import { QuestionInputDto } from './dto/question-input.dto';
 import { SeriesInputDto } from './dto/series-input.dto';
 import { LessonInputDto } from './dto/lesson-input.dto';
 import { ArticleInputDto } from './dto/article-input.dto';
-import { PermitPriceInputDto } from './dto/permit-price-input.dto';
+import { SubscriptionPlanInputDto } from '../subscription/dto/subscription-plan-input.dto';
 
 /** Estimated DExchange cost per SMS/WhatsApp message, in XOF (override via env). */
 const SMS_COST_XOF = Number(process.env.SMS_COST_XOF || 15);
@@ -17,7 +17,7 @@ const SMS_COST_XOF = Number(process.env.SMS_COST_XOF || 15);
 export class AdminService {
   constructor(
     private prisma: PrismaService,
-    private shopService: ShopService,
+    private subscriptionService: SubscriptionService,
     private schoolService: SchoolService
   ) {}
 
@@ -83,94 +83,37 @@ export class AdminService {
   }
 
   /**
-   * Manual subscription activation (temporary WhatsApp payment flow).
-   * Grants the product's entitlement keys and records a PAID purchase with
-   * provider "manual" so revenue reporting stays accurate. The user gets
-   * access immediately — entitlements are read per request, no re-login needed.
+   * Manual subscription activation (temporary WhatsApp payment flow). Grants
+   * the user an ACTIVE STUDENT subscription immediately — no re-login needed,
+   * entitlements are read per request.
    */
-  async grantSubscription(userId: string, sku = 'abo_annuel') {
-    const user = await this.prisma.user.findUnique({ where: { id: userId } });
-    if (!user) throw new NotFoundException('User not found');
-
-    const product = await this.prisma.product.findUnique({ where: { sku } });
-    if (!product) throw new NotFoundException(`Produit « ${sku} » introuvable`);
-
-    const expiresAt = product.validityDays
-      ? new Date(Date.now() + product.validityDays * 24 * 60 * 60 * 1000)
-      : null;
-
-    const purchase = await this.prisma.purchase.create({
-      data: {
-        userId,
-        productId: product.id,
-        provider: 'manual',
-        method: 'whatsapp',
-        phone: user.phone,
-        amountXof: product.priceXof,
-        status: 'PAID',
-        providerRef: `manual-${Date.now()}`,
-      },
-    });
-
-    for (const key of product.grants) {
-      await this.prisma.entitlement.upsert({
-        where: { userId_key: { userId, key } },
-        update: { expiresAt, source: 'manual', purchaseId: purchase.id },
-        create: { userId, key, expiresAt, source: 'manual', purchaseId: purchase.id },
-      });
-    }
-
-    return {
-      granted: true,
-      user: { id: user.id, name: user.name, phone: user.phone },
-      product: product.title,
-      keys: product.grants,
-      expiresAt,
-    };
+  async grantSubscription(userId: string, planId?: string) {
+    return this.subscriptionService.adminGrantStudent(userId, planId);
   }
 
-  /** Remove the entitlements granted by a product (manual deactivation). */
-  async revokeSubscription(userId: string, sku = 'abo_annuel') {
-    const user = await this.prisma.user.findUnique({ where: { id: userId } });
-    if (!user) throw new NotFoundException('User not found');
-    const product = await this.prisma.product.findUnique({ where: { sku } });
-    if (!product) throw new NotFoundException(`Produit « ${sku} » introuvable`);
-
-    const removed = await this.prisma.entitlement.deleteMany({
-      where: { userId, key: { in: product.grants } },
-    });
-    return { revoked: removed.count };
+  /** Cancels the user's currently-active STUDENT subscription(s). */
+  async revokeSubscription(userId: string) {
+    return this.subscriptionService.adminRevokeStudent(userId);
   }
 
-  // ─── Purchase requests ───────────────────────────────────────────────────────
+  // ─── Subscription requests ───────────────────────────────────────────────────
 
   /**
-   * All purchases, most recent first, optionally filtered by status. Used by
-   * the admin "Demandes" view to surface manual (WhatsApp) requests awaiting
-   * confirmation without having to open each user one by one.
+   * All subscriptions, most recent first, optionally filtered by status/type.
+   * Used by the admin "Demandes" view to surface manual (WhatsApp) requests
+   * awaiting confirmation without having to open each user one by one.
    */
-  async listPurchases(status?: string) {
-    return this.prisma.purchase.findMany({
-      where: status ? { status } : {},
-      orderBy: { createdAt: 'desc' },
-      include: {
-        user: { select: { id: true, name: true, phone: true, email: true } },
-        product: { select: { title: true, sku: true } },
-        school: { select: { id: true, name: true } },
-      },
-    });
+  async listSubscriptions(status?: string, type?: SubscriptionType) {
+    return this.subscriptionService.listSubscriptions(status, type);
   }
 
   /**
-   * Confirms a specific PENDING purchase (as opposed to grantSubscription,
-   * which creates a brand new PAID one). Delegates to ShopService.markPaid so
-   * the entitlement-granting logic — including subscription-extension on
-   * renewal — stays in one place and matches the webhook/dev-confirm paths.
+   * Confirms a specific PENDING subscription (as opposed to grantSubscription,
+   * which creates a brand new ACTIVE one). Delegates to SubscriptionService so
+   * the extension logic — including renewal — stays in one place.
    */
-  async confirmPurchase(id: string) {
-    const purchase = await this.prisma.purchase.findUnique({ where: { id } });
-    if (!purchase) throw new NotFoundException('Purchase not found');
-    return this.shopService.markPaid(id);
+  async confirmSubscription(id: string) {
+    return this.subscriptionService.confirmSubscription(id);
   }
 
 
@@ -188,7 +131,7 @@ export class AdminService {
     return this.schoolService.delete(id);
   }
 
-  /** Full profile for the admin drawer: subscription, purchases, activity. */
+  /** Full profile for the admin drawer: subscriptions, activity. */
   async getUserDetails(id: string) {
     const user = await this.prisma.user.findUnique({
       where: { id },
@@ -207,12 +150,8 @@ export class AdminService {
     });
     if (!user) throw new NotFoundException('User not found');
 
-    const [entitlements, purchases, examCount, streak, otpCount] = await Promise.all([
-      this.prisma.entitlement.findMany({
-        where: { userId: id },
-        select: { key: true, source: true, expiresAt: true, createdAt: true },
-      }),
-      this.prisma.purchase.findMany({
+    const [subscriptions, examCount, streak, otpCount] = await Promise.all([
+      this.prisma.subscription.findMany({
         where: { userId: id },
         orderBy: { createdAt: 'desc' },
         take: 10,
@@ -220,10 +159,11 @@ export class AdminService {
           id: true,
           amountXof: true,
           status: true,
-          provider: true,
-          method: true,
+          paymentMethod: true,
+          startDate: true,
+          endDate: true,
           createdAt: true,
-          product: { select: { title: true } },
+          plan: { select: { title: true, type: true } },
         },
       }),
       this.prisma.examResult.count({ where: { userId: id } }),
@@ -234,11 +174,11 @@ export class AdminService {
       user.phone ? this.prisma.smsLog.count({ where: { phone: user.phone } }) : 0,
     ]);
 
-    const totalSpentXof = purchases
-      .filter((p) => p.status === 'PAID')
-      .reduce((sum, p) => sum + p.amountXof, 0);
+    const totalSpentXof = subscriptions
+      .filter((s) => s.status === 'ACTIVE')
+      .reduce((sum, s) => sum + s.amountXof, 0);
 
-    return { user, entitlements, purchases, examCount, streak, otpCount, totalSpentXof };
+    return { user, subscriptions, examCount, streak, otpCount, totalSpentXof };
   }
 
   // ─── Questions (quiz) CRUD ───────────────────────────────────────────────────
@@ -445,64 +385,66 @@ export class AdminService {
     return { deleted: true };
   }
 
-  // ─── Permit prices (/prix-permis-conduire-senegal, SEO brief Lot 4.1) ─────────
+  // ─── Subscription plan pricing (élève / école / mise en avant) ───────────────
 
-  async createPermitPrice(dto: PermitPriceInputDto) {
-    const existing = await this.prisma.permitPrice.findUnique({
-      where: { city_category: { city: dto.city, category: dto.category } },
-    });
-    if (existing) throw new BadRequestException('Un tarif existe déjà pour cette ville et cette catégorie — modifiez-le plutôt.');
-    return this.prisma.permitPrice.create({ data: dto });
+  async listSubscriptionPlans() {
+    return this.subscriptionService.listAllPlans();
   }
 
-  async updatePermitPrice(id: string, dto: PermitPriceInputDto) {
-    const existing = await this.prisma.permitPrice.findUnique({ where: { id } });
-    if (!existing) throw new NotFoundException('Tarif introuvable');
-    return this.prisma.permitPrice.update({ where: { id }, data: dto });
+  async createSubscriptionPlan(dto: SubscriptionPlanInputDto) {
+    return this.subscriptionService.createPlan(dto);
   }
 
-  async deletePermitPrice(id: string) {
-    const existing = await this.prisma.permitPrice.findUnique({ where: { id } });
-    if (!existing) throw new NotFoundException('Tarif introuvable');
-    await this.prisma.permitPrice.delete({ where: { id } });
-    return { deleted: true };
+  async updateSubscriptionPlan(id: string, dto: SubscriptionPlanInputDto) {
+    return this.subscriptionService.updatePlan(id, dto);
+  }
+
+  async deleteSubscriptionPlan(id: string) {
+    return this.subscriptionService.deletePlan(id);
   }
 
   // ─── Revenue (recettes) ──────────────────────────────────────────────────────
 
   async getRevenue() {
-    const [paidPurchases, activeSubscriptions, smsSent, smsSimulated] = await Promise.all([
-      this.prisma.purchase.findMany({
-        where: { status: 'PAID' },
-        select: {
-          amountXof: true,
-          createdAt: true,
-          provider: true,
-          product: { select: { sku: true, title: true } },
-        },
-      }),
-      this.prisma.entitlement.count({
-        where: { OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }] },
-      }),
-      this.prisma.smsLog.count({ where: { simulated: false } }),
-      this.prisma.smsLog.count({ where: { simulated: true } }),
-    ]);
+    const now = new Date();
+    const [activeSubs, studentActive, schoolActive, schoolFeaturedActive, smsSent, smsSimulated] =
+      await Promise.all([
+        this.prisma.subscription.findMany({
+          where: { status: 'ACTIVE' },
+          select: {
+            amountXof: true,
+            createdAt: true,
+            plan: { select: { id: true, title: true } },
+          },
+        }),
+        this.prisma.subscription.count({
+          where: { status: 'ACTIVE', endDate: { gt: now }, plan: { type: 'STUDENT' } },
+        }),
+        this.prisma.school.count({ where: { subscriptionExpiresAt: { gt: now } } }),
+        this.prisma.school.count({ where: { featuredUntil: { gt: now } } }),
+        this.prisma.smsLog.count({ where: { simulated: false } }),
+        this.prisma.smsLog.count({ where: { simulated: true } }),
+      ]);
 
-    const totalXof = paidPurchases.reduce((s, p) => s + p.amountXof, 0);
+    const totalXof = activeSubs.reduce((s, p) => s + p.amountXof, 0);
+    // Active subscriptions across all 3 tiers — STUDENT rows are counted
+    // directly; SCHOOL/SCHOOL_FEATURED are gated by the School fields
+    // themselves (see Subscription model doc), not by a Subscription row.
+    const activeSubscriptions = studentActive + schoolActive + schoolFeaturedActive;
 
-    // Revenue by product
-    const byProduct = new Map<string, { title: string; count: number; totalXof: number }>();
-    for (const p of paidPurchases) {
-      const key = p.product.sku;
-      const e = byProduct.get(key) ?? { title: p.product.title, count: 0, totalXof: 0 };
+    // Revenue by plan
+    const byPlan = new Map<string, { title: string; count: number; totalXof: number }>();
+    for (const p of activeSubs) {
+      const key = p.plan.id;
+      const e = byPlan.get(key) ?? { title: p.plan.title, count: 0, totalXof: 0 };
       e.count += 1;
       e.totalXof += p.amountXof;
-      byProduct.set(key, e);
+      byPlan.set(key, e);
     }
 
     // Revenue by month (last 6 months)
     const byMonth = new Map<string, number>();
-    for (const p of paidPurchases) {
+    for (const p of activeSubs) {
       const key = p.createdAt.toISOString().slice(0, 7); // YYYY-MM
       byMonth.set(key, (byMonth.get(key) ?? 0) + p.amountXof);
     }
@@ -516,9 +458,9 @@ export class AdminService {
     return {
       revenue: {
         totalXof,
-        salesCount: paidPurchases.length,
+        salesCount: activeSubs.length,
         activeSubscriptions,
-        byProduct: [...byProduct.entries()].map(([sku, v]) => ({ sku, ...v })),
+        byProduct: [...byPlan.entries()].map(([planId, v]) => ({ sku: planId, ...v })),
         byMonth: months,
       },
       costs: {

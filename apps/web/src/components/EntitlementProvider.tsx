@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { useAuthStore } from '@/store/authStore';
-import { usePurchasesStore } from '@/store/purchasesStore';
+import { useSubscriptionStore } from '@/store/subscriptionStore';
 import { flushSyncQueue } from '@/lib/syncQueue';
 
 const FOCUS_REFETCH_THROTTLE_MS = 10_000;
@@ -20,9 +20,9 @@ const FOCUS_REFETCH_THROTTLE_MS = 10_000;
  */
 export function EntitlementProvider({ children }: { children: React.ReactNode }) {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
-  const fetchEntitlements = usePurchasesStore((s) => s.fetchEntitlements);
-  const fetchProducts = usePurchasesStore((s) => s.fetchProducts);
-  const fetchPurchases = usePurchasesStore((s) => s.fetchPurchases);
+  const fetchEntitlements = useSubscriptionStore((s) => s.fetchEntitlements);
+  const fetchProducts = useSubscriptionStore((s) => s.fetchProducts);
+  const fetchPurchases = useSubscriptionStore((s) => s.fetchPurchases);
   const lastFetch = useRef(0);
 
   useEffect(() => {

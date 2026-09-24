@@ -68,9 +68,9 @@ export const ADMIN_SECTIONS = [
     color: '#DB2777',
   },
   {
-    href: '/admin/prix',
-    label: 'Tarifs permis',
-    desc: 'Prix par ville et catégorie — page /prix-permis-conduire-senegal',
+    href: '/admin/tarifs-abonnements',
+    label: 'Tarifs abonnements',
+    desc: 'Prix élève / école / mise en avant',
     icon: IconCash,
     color: '#16A34A',
   },

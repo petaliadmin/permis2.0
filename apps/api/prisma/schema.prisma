@@ -82,6 +82,28 @@ enum SchoolPaymentType {
   FACTURE
 }
 
+// ─── Abonnements standard : élève / auto-école / mise en avant ───────────────
+
+enum SubscriptionType {
+  STUDENT
+  SCHOOL
+  SCHOOL_FEATURED
+}
+
+enum SubscriptionStatus {
+  PENDING
+  ACTIVE
+  REJECTED
+  CANCELLED
+}
+
+enum SubscriptionPaymentMethod {
+  ORANGE_MONEY
+  CARD
+  WHATSAPP
+  ADMIN
+}
+
 model User {
   id           String      @id @default(cuid())
   email        String?     @unique
@@ -110,8 +132,6 @@ model User {
   notifications       Notification[]
   pushSubscriptions   PushSubscription[]
   passwordResetTokens PasswordResetToken[]
-  entitlements        Entitlement[]
-  purchases           Purchase[]
 
   // Multi-tenant — Phase 0 fondations (relations virtuelles, aucune colonne ajoutée sur users)
   schoolMemberships           SchoolMembership[]
@@ -424,20 +444,59 @@ model PushSubscription {
   @@map("push_subscriptions")
 }
 
+/// A sellable subscription tier: STUDENT (accès premium élève), SCHOOL (accès
+/// espace de gestion auto-école), SCHOOL_FEATURED (mise en avant "Top 20").
+/// No unique sku — front-end picks the active plan with the lowest `ordre`
+/// for a given `type`.
+model SubscriptionPlan {
+  id           String           @id @default(cuid())
+  type         SubscriptionType
+  title        String
+  description  String?
+  priceXof     Int
+  durationDays Int
+  active       Boolean          @default(true)
+  ordre        Int              @default(0)
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+
+  subscriptions Subscription[]
+
+  @@index([type, active])
+  @@map("subscription_plans")
+}
+
+/// A subscription request/grant. Every request creates a new row (no
+/// upsert) so renewals stay in a real historical ledger. `schoolId` is set
+/// only for SCHOOL/SCHOOL_FEATURED plans; STUDENT rows leave it null.
+/// `endDate` null = no access yet (PENDING) — fails closed.
+///
+/// SCHOOL/SCHOOL_FEATURED confirmation also extends School.subscriptionExpiresAt
+/// / School.featuredUntil, which remain the actual server-side access gate
+/// (SchoolRolesGuard, homepage Top 20 query) — this row is the audit trail,
+/// not the gate, for those two types.
 model Subscription {
-  id        String    @id @default(cuid())
-  userId    String
-  plan      String    @default("free") // free, premium, pro
-  status    String    @default("active") // active, cancelled, expired
-  startDate DateTime  @default(now())
-  endDate   DateTime?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id            String                    @id @default(cuid())
+  userId        String
+  planId        String
+  schoolId      String?
+  status        SubscriptionStatus        @default(PENDING)
+  paymentMethod SubscriptionPaymentMethod
+  amountXof     Int
+  startDate     DateTime?
+  endDate       DateTime?
+  requestedAt   DateTime                  @default(now())
+  confirmedAt   DateTime?
+  createdAt     DateTime                  @default(now())
+  updatedAt     DateTime                  @updatedAt
 
   // Relations
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user   User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan   SubscriptionPlan @relation(fields: [planId], references: [id])
+  school School?          @relation(fields: [schoolId], references: [id], onDelete: SetNull)
 
   @@index([userId])
+  @@index([schoolId])
   @@index([status])
   @@map("subscriptions")
 }
@@ -475,67 +534,6 @@ model PasswordResetToken {
 
   @@index([userId])
   @@map("password_reset_tokens")
-}
-
-model Entitlement {
-  id         String    @id @default(cuid())
-  userId     String
-  key        String
-  source     String    @default("purchase")
-  purchaseId String?
-  expiresAt  DateTime?
-  createdAt  DateTime  @default(now())
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, key])
-  @@index([userId])
-  @@map("entitlements")
-}
-
-model Product {
-  id           String   @id @default(cuid())
-  sku          String   @unique
-  title        String
-  description  String?
-  kind         String
-  priceXof     Int
-  active       Boolean  @default(true)
-  ordre        Int      @default(0)
-  grants       String[]
-  validityDays Int?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-
-  purchases Purchase[]
-
-  @@map("products")
-}
-
-model Purchase {
-  id          String   @id @default(cuid())
-  userId      String
-  productId   String
-  /// Set only for school-scoped products (school_subscription, featured_placement) —
-  /// which School the purchase applies to. Null for individual (student) products.
-  schoolId    String?
-  provider    String
-  method      String?
-  phone       String?
-  amountXof   Int
-  status      String   @default("PENDING")
-  providerRef String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  product Product @relation(fields: [productId], references: [id])
-  school  School? @relation(fields: [schoolId], references: [id], onDelete: SetNull)
-
-  @@unique([providerRef])
-  @@index([userId])
-  @@index([schoolId])
-  @@map("purchases")
 }
 
 model DrivingCourse {
@@ -657,8 +655,8 @@ model School {
 
   /// Platform access gate: the school's staff can use /mon-ecole only while this
   /// is in the future. Set to createdAt + 3 months at creation (free trial),
-  /// then extended by a PAID school_subscription Purchase (see
-  /// ShopService.markPaid) — enforced centrally in SchoolRolesGuard.
+  /// then extended by a confirmed SCHOOL Subscription (see
+  /// SubscriptionService.confirmSubscription) — enforced centrally in SchoolRolesGuard.
   subscriptionExpiresAt DateTime?
   /// End of the one-time free trial, set once at creation and never touched
   /// again (unlike subscriptionExpiresAt, which purchases extend). Lets the
@@ -667,7 +665,7 @@ model School {
   /// no purchase has ever extended past the original trial.
   trialEndsAt           DateTime?
   /// While in the future, the school appears in the homepage "Top 20" list.
-  /// Extended by a PAID featured_placement Purchase.
+  /// Extended by a confirmed SCHOOL_FEATURED Subscription.
   featuredUntil         DateTime?
 
   latitude  Float?
@@ -682,7 +680,7 @@ model School {
   vehicles           Vehicle[]
   sessions           Session[]
   payments           SchoolPayment[]
-  purchases          Purchase[]
+  subscriptions      Subscription[]
   reviews            SchoolReview[]
 
   @@index([status])
@@ -746,7 +744,7 @@ model SchoolMembership {
 /// A pre-registration lead submitted for a school. Separate from SchoolStudent
 /// on purpose: this is a CRM/workflow object (statuses SENT..REFUSED stop
 /// mattering once confirmed) while SchoolStudent is the durable operational
-/// rattachement — mirrors the existing Purchase -> Entitlement split.
+/// rattachement — mirrors the existing PENDING -> ACTIVE Subscription split.
 model SchoolEnrollmentRequest {
   id                String                 @id @default(cuid())
   schoolId          String
@@ -867,7 +865,7 @@ model Session {
 
 /// A manual invoice/payment record — tracked by staff, not a payment gateway
 /// integration (Mobile Money gateway integration is a later phase). Mirrors
-/// the existing "manual" purchase pattern already used by ShopService.
+/// the existing "manual" (WhatsApp) request pattern used by SubscriptionService.
 model SchoolPayment {
   id          String              @id @default(cuid())
   schoolId    String
@@ -895,29 +893,4 @@ model SchoolPayment {
   @@index([schoolId, status])
   @@index([studentId, status])
   @@map("school_payments")
-}
-
-/// Admin-editable reference price per ville × catégorie de permis, shown on
-/// /prix-permis-conduire-senegal (SEO brief Lot 4.1). Deliberately not
-/// sourced from School.priceXof/pricesByCategory (partner-specific, one
-/// price per school) — this is the *reference* table editors maintain by
-/// hand for the market-comparison page, independent of any one partner's
-/// listing. Empty until an admin fills it in; the page must never show
-/// invented figures (brief rule 1).
-model PermitPrice {
-  id       String @id @default(cuid())
-  city     String
-  /// License category code (A, B, C, D, E…) — same codes as
-  /// School.licenseCategories.
-  category String
-  priceXof Int
-  /// Optional context shown next to the price, e.g. "Code + conduite".
-  note     String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@unique([city, category])
-  @@index([city])
-  @@map("permit_prices")
 }

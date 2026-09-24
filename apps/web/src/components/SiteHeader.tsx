@@ -32,7 +32,7 @@ export function SiteHeader() {
           <Link href="/#erp" className="text-sm font-semibold text-secondary hover:text-foreground">
             ERP
           </Link>
-          <Link href="/boutique" className="text-sm font-semibold text-secondary hover:text-foreground">
+          <Link href="/abonnement" className="text-sm font-semibold text-secondary hover:text-foreground">
             Tarifs
           </Link>
           <Link href="/#faq" className="text-sm font-semibold text-secondary hover:text-foreground">

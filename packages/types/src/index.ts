@@ -314,37 +314,17 @@ export interface Notification {
   updatedAt: Date;
 }
 
-// Subscription Types
-export interface Subscription {
-  id: string;
-  userId: string;
-  plan: 'free' | 'premium' | 'pro';
-  status: 'active' | 'cancelled' | 'expired';
-  startDate: Date;
-  endDate: Date;
-  createdAt: Date;
-  updatedAt: Date;
-}
+// ─── Abonnements standard : élève / auto-école / mise en avant ───────────────
 
-// ─── Boutique / Premium (Sprint 6) ────────────────────────────────────────────
-
-export type ProductKind = 'PACK' | 'EXAM' | 'subscription' | 'school_subscription' | 'featured_placement';
-export type PurchaseStatus = 'PENDING' | 'PAID' | 'FAILED';
+export type SubscriptionType = 'STUDENT' | 'SCHOOL' | 'SCHOOL_FEATURED';
+export type SubscriptionStatus = 'PENDING' | 'ACTIVE' | 'REJECTED' | 'CANCELLED';
+/** The channel used to pay/activate. Orange Money / Card stay UI-disabled for now. */
+export type SubscriptionPaymentMethod = 'ORANGE_MONEY' | 'CARD' | 'WHATSAPP' | 'ADMIN';
 
 /**
- * Two distinct axes, do not conflate:
- * - `PaymentProviderId` = which back-end adapter handles the charge (routing).
- *   `bictorys` aggregates all real methods; `sandbox` is the offline dev fake.
- * - `PaymentMethod` = what the user picked in the UI. All methods route through
- *   Bictorys; `card` uses its hosted checkout page (redirect), the rest are
- *   Mobile Money (direct).
- */
-export type PaymentProviderId = 'bictorys' | 'sandbox';
-export type PaymentMethod = 'orange_money' | 'wave' | 'free_money' | 'card';
-
-/**
- * Entitlement keys. `exam:<templateId>` is dynamic (per-unit exam purchase);
- * the rest are fixed pack/global grants.
+ * Entitlement keys. Only `premium_all` is ever actually granted today (a
+ * single student tier) — the rest exist for forward-compatibility with a
+ * future per-pack plan.
  */
 export type EntitlementKey =
   | 'premium_all'
@@ -353,70 +333,39 @@ export type EntitlementKey =
   | 'pack_formation'
   | `exam:${string}`;
 
-/** "Examen Blanc 1..N" catalog entry — gates and prices an exam. */
-export interface ExamTemplate {
+/** A sellable subscription tier — élève, auto-école, ou mise en avant "Top 20". */
+export interface SubscriptionPlan {
   id: string;
-  numero: number;
-  title: string;
-  description: string;
-  isFree: boolean;
-  priceXof: number;
-  questionCount: number;
-  ordre: number;
-  createdAt: Date;
-  updatedAt: Date;
-  /** Computed by the API for the current viewer. */
-  locked?: boolean;
-}
-
-/** A sellable item: the annual subscription. */
-export interface Product {
-  id: string;
-  sku: string;
-  kind: ProductKind;
+  type: SubscriptionType;
   title: string;
   description?: string | null;
   priceXof: number;
-  grants: string[];
-  /** Grant duration in days when purchased; null/undefined = permanent. */
-  validityDays?: number | null;
+  durationDays: number;
   active: boolean;
   ordre: number;
   createdAt: Date;
   updatedAt: Date;
-  /** Computed by the API: the current user already owns all of this product's grants. */
-  owned?: boolean;
 }
 
-export interface Purchase {
+/** A subscription request/grant — one row per request, so renewals form a real ledger. */
+export interface Subscription {
   id: string;
   userId: string;
-  productId: string;
-  /** Set for school-scoped products (school_subscription, featured_placement). */
+  planId: string;
+  /** Set for school-scoped plans (SCHOOL, SCHOOL_FEATURED). */
   schoolId?: string | null;
-  provider: PaymentProviderId;
-  /** The Mobile Money / card method the user chose at checkout. */
-  method?: PaymentMethod | null;
-  providerRef?: string | null;
-  phone: string;
+  status: SubscriptionStatus;
+  paymentMethod: SubscriptionPaymentMethod;
   amountXof: number;
-  status: PurchaseStatus;
+  startDate?: Date | null;
+  endDate?: Date | null;
+  requestedAt: Date;
+  confirmedAt?: Date | null;
   createdAt: Date;
   updatedAt: Date;
   // Optionally included by the API
-  product?: Pick<Product, 'id' | 'sku' | 'title' | 'kind' | 'priceXof'>;
+  plan?: Pick<SubscriptionPlan, 'id' | 'title' | 'type'>;
   school?: { id: string; name: string } | null;
-}
-
-export interface Entitlement {
-  id: string;
-  userId: string;
-  key: string;
-  source: 'purchase' | 'seed' | 'admin';
-  purchaseId?: string | null;
-  expiresAt?: Date | null;
-  createdAt: Date;
-  updatedAt: Date;
 }
 
 // ─── Multi-tenant : auto-écoles — Phase 0 fondations ─────────────────────────

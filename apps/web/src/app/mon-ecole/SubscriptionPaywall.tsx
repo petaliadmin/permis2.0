@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import type { School } from '@permis2.0/types';
 import { SchoolShell } from '@/components/SchoolShell';
-import { usePurchasesStore } from '@/store/purchasesStore';
+import { useSubscriptionStore } from '@/store/subscriptionStore';
 import { useAuthStore } from '@/store/authStore';
 import { whatsappLink, WHATSAPP_DISPLAY } from '@/lib/contact';
 import { IconBrandWhatsapp, IconCheck, IconClock } from '@tabler/icons-react';
@@ -25,15 +25,15 @@ interface SubscriptionPaywallProps {
 /**
  * Shown by GestionClient instead of SchoolDashboard whenever
  * `school.subscriptionExpiresAt` is missing or in the past — the school
- * management space requires a PAID school_subscription (enforced server-side
- * too, in SchoolRolesGuard). Same manual/WhatsApp purchase pattern as the
- * student boutique (BoutiqueClient): no live online payment integration yet.
+ * management space requires an ACTIVE SCHOOL subscription (enforced
+ * server-side too, in SchoolRolesGuard). Same manual/WhatsApp request pattern
+ * as the student abonnement page: no live online payment integration yet.
  */
 export function SubscriptionPaywall({ school, onRefresh }: SubscriptionPaywallProps) {
   const authUser = useAuthStore((s) => s.user);
-  const products = usePurchasesStore((s) => s.products);
-  const fetchProducts = usePurchasesStore((s) => s.fetchProducts);
-  const requestManual = usePurchasesStore((s) => s.requestManual);
+  const products = useSubscriptionStore((s) => s.products);
+  const fetchProducts = useSubscriptionStore((s) => s.fetchProducts);
+  const requestManual = useSubscriptionStore((s) => s.requestManual);
 
   const [stage, setStage] = useState<'pay' | 'requested'>('pay');
   const [submitting, setSubmitting] = useState(false);
@@ -43,14 +43,17 @@ export function SubscriptionPaywall({ school, onRefresh }: SubscriptionPaywallPr
     fetchProducts();
   }, [fetchProducts]);
 
-  const product = products.find((p) => p.sku === 'abo_ecole_mensuel');
-  const price = product?.priceXof ?? 5000;
+  const plan = products
+    .filter((p) => p.type === 'SCHOOL' && p.active)
+    .sort((a, b) => a.ordre - b.ordre)[0];
+  const price = plan?.priceXof ?? 5000;
 
   // trialEndsAt is set once at creation and never touched again — a school
   // whose subscriptionExpiresAt still equals it has never had a real paid
   // subscription (only ever the free trial), regardless of whether that
-  // trial is still running or has lapsed. Any purchase pushes
-  // subscriptionExpiresAt strictly past trialEndsAt (see ShopService.markPaid).
+  // trial is still running or has lapsed. Any confirmed subscription pushes
+  // subscriptionExpiresAt strictly past trialEndsAt (see
+  // SubscriptionService.confirmSubscription).
   const onOriginalTrial =
     !!school.trialEndsAt &&
     !!school.subscriptionExpiresAt &&
@@ -62,9 +65,9 @@ export function SubscriptionPaywall({ school, onRefresh }: SubscriptionPaywallPr
   );
 
   const iPaid = async () => {
-    if (!product) return;
+    if (!plan) return;
     setSubmitting(true);
-    await requestManual(product.id, school.id);
+    await requestManual(plan.id, school.id);
     setSubmitting(false);
     setStage('requested');
   };
@@ -131,7 +134,7 @@ export function SubscriptionPaywall({ school, onRefresh }: SubscriptionPaywallPr
               </a>
               <button
                 onClick={iPaid}
-                disabled={!product || submitting}
+                disabled={!plan || submitting}
                 className="btn-primary w-full disabled:opacity-60"
               >
                 {submitting ? 'Enregistrement…' : "J'ai payé"}
