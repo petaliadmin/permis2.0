@@ -6,11 +6,15 @@ import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AppShell } from '@/components/AppShell';
 import { useAuthStore } from '@/store/authStore';
-import { usePurchasesStore } from '@/store/purchasesStore';
+import { useSubscriptionStore } from '@/store/subscriptionStore';
 import { useSettingsStore } from '@/store/settingsStore';
 import { loadData } from '@/lib/dataSource';
-import { playSuccessSound, playFailureSound } from '@/lib/feedbackSound';
+import { playSuccessSound, playFailureSound, playTapSound } from '@/lib/feedbackSound';
+import { startBackgroundMusic, stopBackgroundMusic } from '@/lib/backgroundMusic';
 import { trackEvent } from '@/lib/analytics';
+import { haptic } from '@permis2.0/hooks';
+import { MusicToggleButton } from '@/components/quiz/MusicToggleButton';
+import { WrongFlash, shakeAnimation, shakeTransition } from '@/components/quiz/WrongFlash';
 import { IconCheck, IconChevronLeft, IconClock, IconMedal, IconMoodSad, IconX } from '@tabler/icons-react';
 
 const FREE_UP_TO = 2;
@@ -46,10 +50,11 @@ export default function DiapoExamPage({ params }: { params: Promise<{ id: string
   const { id } = use(params);
   const router = useRouter();
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
-  const hasKey = usePurchasesStore((s) => s.hasKey);
-  const entitlementsReady = usePurchasesStore((s) => s.entitlementsReady);
-  const fetchEntitlements = usePurchasesStore((s) => s.fetchEntitlements);
+  const hasKey = useSubscriptionStore((s) => s.hasKey);
+  const entitlementsReady = useSubscriptionStore((s) => s.entitlementsReady);
+  const fetchEntitlements = useSubscriptionStore((s) => s.fetchEntitlements);
   const soundEnabled = useSettingsStore((s) => s.soundEnabled);
+  const musicEnabled = useSettingsStore((s) => s.musicEnabled);
 
   const [exam, setExam] = useState<DiapoExam | null>(null);
   const [loading, setLoading] = useState(true);
@@ -67,7 +72,7 @@ export default function DiapoExamPage({ params }: { params: Promise<{ id: string
   useEffect(() => {
     if (loading || !entitlementsReady) return;
     const hasAccess = Number(id) <= FREE_UP_TO || hasKey('pack_exams');
-    if (!hasAccess) router.replace(isAuthenticated ? '/boutique' : '/auth/login');
+    if (!hasAccess) router.replace(isAuthenticated ? '/abonnement' : '/auth/login');
   }, [loading, entitlementsReady, id, isAuthenticated, hasKey, router]);
 
   useEffect(() => {
@@ -90,6 +95,13 @@ export default function DiapoExamPage({ params }: { params: Promise<{ id: string
       if (timerRef.current) clearInterval(timerRef.current);
     };
   }, [exam, finished]);
+
+  // Background gaming loop plays for the duration of the exam session only.
+  useEffect(() => {
+    if (exam && !finished && musicEnabled) startBackgroundMusic();
+    else stopBackgroundMusic();
+    return () => stopBackgroundMusic();
+  }, [exam, finished, musicEnabled]);
 
   if (loading) {
     return (
@@ -119,6 +131,8 @@ export default function DiapoExamPage({ params }: { params: Promise<{ id: string
 
   const toggleOption = (letter: string) => {
     if (isConfirmed) return;
+    if (soundEnabled) playTapSound();
+    haptic.tap();
     setUserAnswers((prev) => {
       const cur = prev[q.q] ?? [];
       const next = cur.includes(letter) ? cur.filter((l) => l !== letter) : [...cur, letter];
@@ -127,12 +141,16 @@ export default function DiapoExamPage({ params }: { params: Promise<{ id: string
   };
   const confirm = () => {
     setConfirmed((prev) => ({ ...prev, [q.q]: true }));
-    if (soundEnabled) {
-      if (answersMatch(selected, q.answer)) playSuccessSound();
-      else playFailureSound();
+    if (answersMatch(selected, q.answer)) {
+      if (soundEnabled) playSuccessSound();
+      haptic.correct();
+    } else {
+      if (soundEnabled) playFailureSound();
+      haptic.wrong();
     }
   };
   const goNext = () => {
+    haptic.tap();
     if (currentQ < total - 1) {
       setCurrentQ((n) => n + 1);
       return;
@@ -147,6 +165,7 @@ export default function DiapoExamPage({ params }: { params: Promise<{ id: string
     setFinished(true);
   };
   const goPrev = () => {
+    haptic.tap();
     if (currentQ > 0) setCurrentQ((n) => n - 1);
   };
 
@@ -294,6 +313,7 @@ export default function DiapoExamPage({ params }: { params: Promise<{ id: string
               <IconClock size="1em" aria-hidden="true" />
               {fmt(elapsed)}
             </span>
+            <MusicToggleButton />
           </div>
           <div className="mt-2.5 flex items-center gap-2">
             <div className="h-2 flex-1 overflow-hidden rounded-full bg-surface-3">
@@ -357,10 +377,13 @@ export default function DiapoExamPage({ params }: { params: Promise<{ id: string
                   cls = 'border-orange-500 bg-orange-50 text-orange-700 font-semibold';
                   badge = 'bg-orange-500 text-white';
                 }
+                const isWrongOpt = isConfirmed && isSel && !isCorrect;
                 return (
                   <motion.button
                     key={letter}
                     whileTap={isConfirmed ? {} : { scale: 0.99 }}
+                    animate={isWrongOpt ? shakeAnimation : {}}
+                    transition={isWrongOpt ? shakeTransition : undefined}
                     onClick={() => toggleOption(letter)}
                     disabled={isConfirmed}
                     className={`flex w-full items-center gap-3 rounded-2xl border-2 px-4 py-3.5 text-left text-sm leading-snug shadow-soft transition-colors ${cls}`}
@@ -441,6 +464,8 @@ export default function DiapoExamPage({ params }: { params: Promise<{ id: string
           )}
         </div>
       </div>
+
+      <WrongFlash active={isConfirmed && !answersMatch(selected, q.answer)} />
     </div>
   );
 }

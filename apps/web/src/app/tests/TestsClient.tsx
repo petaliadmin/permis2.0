@@ -4,6 +4,12 @@ import { useEffect, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AppShell } from '@/components/AppShell';
 import { loadData } from '@/lib/dataSource';
+import { playSuccessSound, playFailureSound, playTapSound } from '@/lib/feedbackSound';
+import { startBackgroundMusic, stopBackgroundMusic } from '@/lib/backgroundMusic';
+import { useSettingsStore } from '@/store/settingsStore';
+import { haptic } from '@permis2.0/hooks';
+import { MusicToggleButton } from '@/components/quiz/MusicToggleButton';
+import { WrongFlash, shakeAnimation, shakeTransition } from '@/components/quiz/WrongFlash';
 
 interface Question {
   id: string;
@@ -32,12 +38,21 @@ function scoreColor(pct: number) {
 }
 
 export default function TestsClient() {
+  const soundEnabled = useSettingsStore((s) => s.soundEnabled);
+  const musicEnabled = useSettingsStore((s) => s.musicEnabled);
   const [allQuestions, setAllQuestions] = useState<Question[]>([]);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [phase, setPhase] = useState<Phase>('loading');
   const [index, setIndex] = useState(0);
   const [selected, setSelected] = useState<string | null>(null);
   const [score, setScore] = useState(0);
+
+  // Background gaming loop plays for the duration of the quiz phase only.
+  useEffect(() => {
+    if (phase === 'quiz' && musicEnabled) startBackgroundMusic();
+    else stopBackgroundMusic();
+    return () => stopBackgroundMusic();
+  }, [phase, musicEnabled]);
 
   useEffect(() => {
     loadData<Question[]>('/questions/quiz', '/data/questions_doc.json')
@@ -68,11 +83,20 @@ export default function TestsClient() {
 
   const confirm = (opt: string) => {
     if (confirmed) return;
+    if (soundEnabled) playTapSound();
     setSelected(opt);
-    if (opt === q.bonneReponse) setScore((s) => s + 1);
+    if (opt === q.bonneReponse) {
+      setScore((s) => s + 1);
+      if (soundEnabled) playSuccessSound();
+      haptic.correct();
+    } else {
+      if (soundEnabled) playFailureSound();
+      haptic.wrong();
+    }
   };
 
   const next = () => {
+    haptic.tap();
     if (index + 1 >= total) {
       setPhase('done');
     } else {
@@ -173,6 +197,7 @@ export default function TestsClient() {
         <span className="shrink-0 text-xs font-bold text-slate-400">
           {index + 1}/{total}
         </span>
+        <MusicToggleButton />
       </div>
 
       <AnimatePresence mode="wait">
@@ -221,10 +246,13 @@ export default function TestsClient() {
                 indicator = 'bg-primary-500 text-white';
               }
 
+              const isWrongOpt = confirmed && isSelected && !correct;
               return (
                 <motion.button
                   key={opt}
                   whileTap={confirmed ? {} : { scale: 0.98 }}
+                  animate={isWrongOpt ? shakeAnimation : {}}
+                  transition={isWrongOpt ? shakeTransition : undefined}
                   onClick={() => confirm(opt)}
                   className={`flex w-full items-center gap-3 rounded-2xl border px-4 py-3 text-left transition-colors ${bg} ${border}`}
                 >
@@ -270,6 +298,8 @@ export default function TestsClient() {
           </AnimatePresence>
         </motion.div>
       </AnimatePresence>
+
+      <WrongFlash active={confirmed && !isCorrect} />
     </AppShell>
   );
 }

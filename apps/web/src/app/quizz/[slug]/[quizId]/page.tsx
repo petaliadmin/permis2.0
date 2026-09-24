@@ -16,13 +16,17 @@ import {
 } from '../../config';
 import { SUBSCRIPTION_PRICE_ANNUAL } from '@permis2.0/shared';
 import { useAuthStore } from '@/store/authStore';
-import { usePurchasesStore } from '@/store/purchasesStore';
+import { useSubscriptionStore } from '@/store/subscriptionStore';
 import { useSettingsStore } from '@/store/settingsStore';
 import { addError, removeError } from '@/lib/errorBank';
 import { loadData } from '@/lib/dataSource';
-import { playSuccessSound, playFailureSound } from '@/lib/feedbackSound';
+import { playSuccessSound, playFailureSound, playTapSound } from '@/lib/feedbackSound';
+import { startBackgroundMusic, stopBackgroundMusic } from '@/lib/backgroundMusic';
 import { postWithSync } from '@/lib/syncQueue';
 import { trackEvent } from '@/lib/analytics';
+import { haptic } from '@permis2.0/hooks';
+import { MusicToggleButton } from '@/components/quiz/MusicToggleButton';
+import { WrongFlash, shakeAnimation, shakeTransition } from '@/components/quiz/WrongFlash';
 import {
   IconCircleCheckFilled,
   IconCircleXFilled,
@@ -334,7 +338,13 @@ function FeedbackSheet({
         </div>
 
         {/* CTA — green when correct, red when wrong */}
-        <button onClick={onNext} className={`w-full ${correct ? 'btn-success' : 'btn-danger'}`}>
+        <button
+          onClick={() => {
+            haptic.tap();
+            onNext();
+          }}
+          className={`w-full ${correct ? 'btn-success' : 'btn-danger'}`}
+        >
           {correct ? '🚀 Question suivante' : '💪 Continuer quand même'}
         </button>
       </div>
@@ -352,10 +362,11 @@ export default function QuizPlayerPage() {
   const isFreeSeries = Number(quizId) <= FREE_SERIES_UP_TO;
 
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
-  const isPremium = usePurchasesStore((s) => s.hasKey('premium_all'));
-  const entitlementsReady = usePurchasesStore((s) => s.entitlementsReady);
-  const fetchEntitlements = usePurchasesStore((s) => s.fetchEntitlements);
+  const isPremium = useSubscriptionStore((s) => s.hasKey('premium_all'));
+  const entitlementsReady = useSubscriptionStore((s) => s.entitlementsReady);
+  const fetchEntitlements = useSubscriptionStore((s) => s.fetchEntitlements);
   const soundEnabled = useSettingsStore((s) => s.soundEnabled);
+  const musicEnabled = useSettingsStore((s) => s.musicEnabled);
 
   useEffect(() => {
     if (isAuthenticated) fetchEntitlements();
@@ -409,6 +420,13 @@ export default function QuizPlayerPage() {
     setImgError(false);
   }, [index, questions]);
 
+  // Background gaming loop plays for the duration of the quiz session only.
+  useEffect(() => {
+    if (phase === 'quiz' && musicEnabled) startBackgroundMusic();
+    else stopBackgroundMusic();
+    return () => stopBackgroundMusic();
+  }, [phase, musicEnabled]);
+
   const q = questions[index];
   const displayTotal = questions.length;
   const isCorrect = confirmed && selected === q?.bonneReponse;
@@ -420,11 +438,13 @@ export default function QuizPlayerPage() {
       setScore((s) => s + 1);
       setXp((x) => x + 10);
       if (soundEnabled) playSuccessSound();
+      haptic.correct();
       removeError(q.id); // a corrected mistake leaves the review bank
     } else {
       setWrong((w) => w + 1);
       setHearts((h) => Math.max(0, h - 1));
       if (soundEnabled) playFailureSound();
+      haptic.wrong();
       addError(q); // keep it for "Revoir mes erreurs"
     }
   };
@@ -514,7 +534,7 @@ export default function QuizPlayerPage() {
     return (
       <PaywallScreen
         quizTitle={quizConfig.title}
-        ctaHref={isAuthenticated ? '/boutique' : '/auth/login'}
+        ctaHref={isAuthenticated ? '/abonnement' : '/auth/login'}
       />
     );
   }
@@ -570,6 +590,7 @@ export default function QuizPlayerPage() {
               />
             ))}
           </div>
+          <MusicToggleButton />
         </div>
       </header>
 
@@ -645,7 +666,14 @@ export default function QuizPlayerPage() {
                   <motion.button
                     key={opt}
                     whileTap={{ scale: confirmed ? 1 : 0.99 }}
-                    onClick={() => !confirmed && setSelected(opt)}
+                    animate={isWrongOpt ? shakeAnimation : {}}
+                    transition={isWrongOpt ? shakeTransition : undefined}
+                    onClick={() => {
+                      if (confirmed) return;
+                      if (soundEnabled) playTapSound();
+                      haptic.tap();
+                      setSelected(opt);
+                    }}
                     disabled={confirmed}
                     className={`flex w-full items-center gap-3 rounded-2xl border-2 px-4 py-3.5 text-left text-sm leading-snug shadow-soft transition-colors ${cls}`}
                   >
@@ -680,7 +708,10 @@ export default function QuizPlayerPage() {
       <div className="bg-surface px-5 pb-8 pt-4">
         <div className="mx-auto max-w-lg">
           <button
-            onClick={handleVerify}
+            onClick={() => {
+              haptic.tap();
+              handleVerify();
+            }}
             disabled={!selected || confirmed}
             className="btn-violet w-full disabled:opacity-40"
           >
@@ -689,8 +720,9 @@ export default function QuizPlayerPage() {
         </div>
       </div>
 
-      {/* Confetti burst on correct answer */}
+      {/* Confetti burst on correct answer / red flash on wrong */}
       <SuccessBurst active={!!isCorrect} />
+      <WrongFlash active={confirmed && !isCorrect} />
 
       {/* Feedback bottom sheet */}
       <FeedbackSheet

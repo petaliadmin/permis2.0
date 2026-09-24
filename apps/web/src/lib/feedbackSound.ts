@@ -23,6 +23,28 @@ export function playSuccessSound() {
   } catch {}
 }
 
+/** Short click for button presses (option select, validate, next…). */
+export function playTapSound() {
+  try {
+    const Ctx =
+      window.AudioContext ??
+      (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+    const ctx = new Ctx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.type = 'triangle';
+    osc.frequency.value = 880;
+    const t = ctx.currentTime;
+    gain.gain.setValueAtTime(0, t);
+    gain.gain.linearRampToValueAtTime(0.1, t + 0.005);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.08);
+    osc.start(t);
+    osc.stop(t + 0.08);
+  } catch {}
+}
+
 export function playFailureSound() {
   try {
     const Ctx =

@@ -7,6 +7,9 @@ interface SettingsState {
   /** Play feedback sounds in quizzes (correct/incorrect answers). */
   soundEnabled: boolean;
   setSoundEnabled: (enabled: boolean) => void;
+  /** Play the background gaming loop while answering a quiz/exam. */
+  musicEnabled: boolean;
+  setMusicEnabled: (enabled: boolean) => void;
 }
 
 /**
@@ -18,6 +21,8 @@ export const useSettingsStore = create<SettingsState>()(
     (set) => ({
       soundEnabled: true,
       setSoundEnabled: (soundEnabled) => set({ soundEnabled }),
+      musicEnabled: true,
+      setMusicEnabled: (musicEnabled) => set({ musicEnabled }),
     }),
     { name: 'settings-store' }
   )
