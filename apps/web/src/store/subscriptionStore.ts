@@ -26,8 +26,9 @@ interface SubscriptionState {
   fetchProducts: () => Promise<void>;
   fetchEntitlements: () => Promise<void>;
   fetchPurchases: () => Promise<void>;
-  /** schoolId is required for school-scoped plans (SCHOOL, SCHOOL_FEATURED). */
-  requestManual: (planId: string, schoolId?: string) => Promise<void>;
+  /** schoolId is required for school-scoped plans (SCHOOL, SCHOOL_FEATURED).
+   *  method defaults server-side to WHATSAPP; pass 'WAVE' for the Wave flow. */
+  requestManual: (planId: string, schoolId?: string, method?: 'WHATSAPP' | 'WAVE') => Promise<void>;
 }
 
 /**
@@ -112,18 +113,18 @@ export const useSubscriptionStore = create<SubscriptionState>((set, get) => ({
   },
 
   /**
-   * Manual (WhatsApp) mode: records a PENDING subscription so the request
-   * shows up in the admin's "Demandes" list. Best-effort — never blocks or
-   * fails the WhatsApp redirect the user is about to make.
+   * Manual mode (WhatsApp or Wave): records a PENDING subscription so the
+   * request shows up in the admin's "Demandes" list. Best-effort — never
+   * blocks or fails the WhatsApp/Wave redirect the user is about to make.
    */
-  requestManual: async (planId, schoolId) => {
+  requestManual: async (planId, schoolId, method) => {
     if (!useAuthStore.getState().isAuthenticated) return;
     try {
       await fetch(`${API_URL}/subscriptions/request`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ planId, schoolId }),
+        body: JSON.stringify({ planId, schoolId, method }),
       });
     } catch {
       /* the WhatsApp conversation is still the source of truth — ignore */
