@@ -88,8 +88,12 @@ export class SubscriptionService {
       schoolId = undefined;
     }
 
+    // Only WHATSAPP/WAVE ever reach here (DTO-validated) — both manual,
+    // transfer-then-confirm channels. Orange Money/Card stay UI-disabled.
+    const paymentMethod = dto.method ?? 'WHATSAPP';
+
     const existing = await this.prisma.subscription.findFirst({
-      where: { userId, planId: plan.id, status: 'PENDING' },
+      where: { userId, planId: plan.id, status: 'PENDING', paymentMethod },
     });
     if (existing) return existing;
 
@@ -98,7 +102,7 @@ export class SubscriptionService {
         userId,
         planId: plan.id,
         schoolId,
-        paymentMethod: 'WHATSAPP',
+        paymentMethod,
         amountXof: plan.priceXof,
         status: 'PENDING',
       },

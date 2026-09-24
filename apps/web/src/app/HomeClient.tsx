@@ -1,7 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import type { School } from '@permis2.0/types';
+import type { School, SubscriptionPlan } from '@permis2.0/types';
 import { SiteHeader } from '@/components/SiteHeader';
 import { SiteFooter } from '@/components/SiteFooter';
 import { Hero, type PlatformStats } from '@/components/home/Hero';
@@ -26,6 +26,7 @@ const ForStudents = dynamic(() =>
 const ForSchools = dynamic(() =>
   import('@/components/home/ForSchools').then((m) => m.ForSchools)
 );
+const Pricing = dynamic(() => import('@/components/home/Pricing').then((m) => m.Pricing));
 const SenegalMap = dynamic(() =>
   import('@/components/home/SenegalMap').then((m) => m.SenegalMap)
 );
@@ -41,9 +42,10 @@ const FinalCta = dynamic(() => import('@/components/home/FinalCta').then((m) => 
 interface HomeClientProps {
   top20Schools: School[];
   stats: PlatformStats;
+  subscriptionPlans: SubscriptionPlan[];
 }
 
-export default function HomeClient({ top20Schools, stats }: HomeClientProps) {
+export default function HomeClient({ top20Schools, stats, subscriptionPlans }: HomeClientProps) {
   return (
     <div className="on-light min-h-screen bg-surface">
       <SiteHeader />
@@ -54,6 +56,7 @@ export default function HomeClient({ top20Schools, stats }: HomeClientProps) {
       <WhyChooseUs />
       <ForStudents />
       <ForSchools />
+      <Pricing plans={subscriptionPlans} />
       <SenegalMap />
       <PartnerSchools initialSchools={top20Schools} />
       <StatsCounter stats={stats} />

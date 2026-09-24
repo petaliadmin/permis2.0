@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Skeleton } from '@permis2.0/ui';
 import { adminFetch, fmtXof, Toast, useToast, AdminPageHeader } from '../adminShared';
-import { IconCircleCheck, IconBrandWhatsapp } from '@tabler/icons-react';
+import { IconCircleCheck, IconBrandWhatsapp, IconDeviceMobile } from '@tabler/icons-react';
 
 interface PendingSubscription {
   id: string;
@@ -112,6 +112,14 @@ export default function AdminDemandesPage() {
                         className="ml-1.5 text-[#25D366]"
                         aria-hidden="true"
                         title="Demande via WhatsApp"
+                      />
+                    )}
+                    {p.paymentMethod === 'WAVE' && (
+                      <IconDeviceMobile
+                        size="1em"
+                        className="ml-1.5 text-sky-500"
+                        aria-hidden="true"
+                        title="Paiement annoncé par Wave"
                       />
                     )}
                     {p.school && (

@@ -2,12 +2,15 @@
 
 import { Suspense, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { Skeleton } from '@permis2.0/ui';
+import { Sheet, Skeleton } from '@permis2.0/ui';
 import { AppShell } from '@/components/AppShell';
+import { PaymentPanel } from '@/components/PaymentPanel';
 import { useSubscriptionStore } from '@/store/subscriptionStore';
 import { useAuthStore } from '@/store/authStore';
 import { WHATSAPP_DISPLAY, whatsappLink } from '@/lib/contact';
+import { waveLink } from '@/lib/wave';
 import { trackEvent } from '@/lib/analytics';
 import {
   IconBrandWhatsapp,
@@ -27,7 +30,7 @@ const BENEFITS = [
   { icon: IconCards, text: 'Toutes les séries de quiz du Code' },
   { icon: IconClipboardCheck, text: 'Tous les examens blancs premium' },
   { icon: IconCar, text: 'Tous les cours de conduite' },
-  { icon: IconCalendar, text: 'Accès illimité pendant 1 an' },
+  { icon: IconCalendar, text: 'Accès illimité pendant 4 mois' },
 ];
 
 function formatXof(n: number) {
@@ -51,6 +54,7 @@ function AbonnementInner() {
   const [refreshed, setRefreshed] = useState(false);
   const [requested, setRequested] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [waveSheetOpen, setWaveSheetOpen] = useState(false);
 
   const products = useSubscriptionStore((s) => s.products);
   const loading = useSubscriptionStore((s) => s.loading);
@@ -75,9 +79,10 @@ function AbonnementInner() {
     .sort((a, b) => a.ordre - b.ordre)[0];
   const isActive = hasKey('premium_all');
   const priceXof = plan?.priceXof ?? 2900;
+  const wavePayLink = waveLink(priceXof);
 
   const waLink = whatsappLink(
-    `Bonjour PERMIS 2.0 ! 👋\nJe souhaite activer l'Abonnement Annuel (${formatXof(priceXof)}).\nMon compte : ${authUser?.name ?? ''}${authUser?.phone ? ` — +221 ${authUser.phone}` : ''}`
+    `Bonjour PERMIS 2.0 ! 👋\nJe souhaite activer l'${plan?.title ?? 'Abonnement'} (${formatXof(priceXof)}).\nMon compte : ${authUser?.name ?? ''}${authUser?.phone ? ` — +221 ${authUser.phone}` : ''}`
   );
 
   const refreshEntitlements = async () => {
@@ -95,7 +100,17 @@ function AbonnementInner() {
     await requestManual(plan.id); // creates a PENDING subscription for /admin/demandes
     setSubmitting(false);
     setRequested(true);
-    trackEvent('subscription_started', { product_id: plan.id });
+    trackEvent('subscription_started', { product_id: plan.id, method: 'whatsapp' });
+  };
+
+  const iPaidWave = async () => {
+    if (!plan) return;
+    setSubmitting(true);
+    await requestManual(plan.id, undefined, 'WAVE');
+    setSubmitting(false);
+    setWaveSheetOpen(false);
+    setRequested(true);
+    trackEvent('subscription_started', { product_id: plan.id, method: 'wave' });
   };
 
   return (
@@ -130,7 +145,7 @@ function AbonnementInner() {
             </p>
             <a
               href={whatsappLink(
-                "Bonjour PERMIS 2.0 ! 👋\nJe souhaite activer l'Abonnement Annuel — la page m'indique qu'il est momentanément indisponible."
+                "Bonjour PERMIS 2.0 ! 👋\nJe souhaite activer mon abonnement — la page m'indique qu'il est momentanément indisponible."
               )}
               target="_blank"
               rel="noopener noreferrer"
@@ -153,7 +168,7 @@ function AbonnementInner() {
                 <span className="font-display text-4xl font-black text-orange-600">
                   {formatXof(plan.priceXof)}
                 </span>
-                <span className="mb-1.5 text-sm font-semibold text-muted">/ an</span>
+                <span className="mb-1.5 text-sm font-semibold text-muted">/ 4 mois</span>
               </div>
               <p className="mt-1 text-xs text-orange-700/70">{plan.description}</p>
             </div>
@@ -197,6 +212,19 @@ function AbonnementInner() {
                     Disponible bientôt
                   </span>
                 </div>
+                <button
+                  type="button"
+                  onClick={() => setWaveSheetOpen(true)}
+                  disabled={!plan}
+                  className="flex w-full items-center justify-between rounded-xl border border-sky-200 bg-sky-50 px-3.5 py-3 text-left transition-colors hover:bg-sky-100 disabled:opacity-60"
+                >
+                  <span className="flex items-center gap-2.5 text-sm font-semibold text-foreground">
+                    <Image src="/images/payments/wave.png" alt="Wave" width={46} height={20} />
+                  </span>
+                  <span className="rounded-full bg-sky-500 px-2.5 py-1 text-[11px] font-bold text-white">
+                    Actif
+                  </span>
+                </button>
                 <div className="flex items-center justify-between rounded-xl border border-[#25D366]/30 bg-[#25D366]/10 px-3.5 py-3">
                   <span className="flex items-center gap-2.5 text-sm font-semibold text-foreground">
                     <IconBrandWhatsapp size="1em" className="text-lg text-[#25D366]" aria-hidden="true" />
@@ -332,6 +360,24 @@ function AbonnementInner() {
           </motion.div>
         )}
       </div>
+
+      {/* ── Wave payment sheet ── */}
+      <Sheet open={waveSheetOpen} onClose={() => setWaveSheetOpen(false)} ariaLabel="Payer par Wave">
+        <h3 className="font-display text-lg font-extrabold text-foreground">Payer par Wave</h3>
+        <div className="mt-0.5 flex items-baseline gap-1">
+          <span className="font-display text-2xl font-extrabold text-orange-600">
+            {formatXof(priceXof)}
+          </span>
+          <span className="text-sm text-muted">/ 4 mois</span>
+        </div>
+        <PaymentPanel
+          link={wavePayLink}
+          methodLabel="Wave"
+          note="Après paiement, appuie sur « J'ai payé » — l'équipe active ton accès (généralement < 1h)."
+          primaryAction={{ label: "J'ai payé", onClick: iPaidWave, busy: submitting }}
+          onCancel={() => setWaveSheetOpen(false)}
+        />
+      </Sheet>
     </AppShell>
   );
 }

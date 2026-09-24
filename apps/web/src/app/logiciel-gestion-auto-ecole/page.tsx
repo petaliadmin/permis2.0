@@ -16,8 +16,7 @@ import { SiteHeader } from '@/components/SiteHeader';
 import { SiteFooter } from '@/components/SiteFooter';
 import { buildMetadata } from '@/lib/seo/metadata';
 import { organizationNode, websiteNode, graphScript, SITE_URL } from '@/lib/seo/jsonLd';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+import { fetchSubscriptionPlans, planByType, fmtXof } from '@/lib/fetchSubscriptionPlans';
 
 export const metadata: Metadata = buildMetadata({
   title: 'Logiciel de gestion pour auto-école',
@@ -56,27 +55,6 @@ const FAQS = [
   },
 ];
 
-interface SubscriptionPlan {
-  id: string;
-  title: string;
-  priceXof: number;
-  type: string;
-  active: boolean;
-}
-
-async function fetchSubscriptionPrice(): Promise<number | null> {
-  try {
-    const res = await fetch(`${API_URL}/subscriptions/plans?type=SCHOOL`, {
-      next: { revalidate: 3600 },
-    });
-    if (!res.ok) return null;
-    const plans: SubscriptionPlan[] = await res.json();
-    const sub = plans.find((p) => p.active);
-    return sub?.priceXof ?? null;
-  } catch {
-    return null;
-  }
-}
 
 function jsonLd(priceXof: number | null): string {
   const breadcrumb = {
@@ -126,10 +104,9 @@ function jsonLd(priceXof: number | null): string {
   return graphScript([organizationNode(), websiteNode(), breadcrumb, faqPage, software]);
 }
 
-const fmtXof = (n: number) => `${n.toLocaleString('fr-FR')} FCFA`;
-
 export default async function LogicielGestionAutoEcolePage() {
-  const priceXof = await fetchSubscriptionPrice();
+  const plans = await fetchSubscriptionPlans();
+  const priceXof = planByType(plans, 'SCHOOL')?.priceXof ?? null;
 
   return (
     <div className="on-light min-h-screen bg-surface">

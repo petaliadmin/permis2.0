@@ -1,4 +1,4 @@
-import { SUBSCRIPTION_PRICE_ANNUAL } from '@permis2.0/shared';
+import { SUBSCRIPTION_PRICE_PERIOD } from '@permis2.0/shared';
 import { WHATSAPP_DISPLAY } from '@/lib/contact';
 
 export interface FaqItem {
@@ -10,7 +10,7 @@ export interface FaqItem {
 export const ASSISTANCE_FAQS: FaqItem[] = [
   {
     question: "Comment fonctionne l'abonnement ?",
-    answer: `L'abonnement à ${SUBSCRIPTION_PRICE_ANNUAL} débloque tous les quiz, les séries d'examen et le mode examen officiel. Contactez-nous sur WhatsApp au ${WHATSAPP_DISPLAY} pour l'activer — c'est immédiat.`,
+    answer: `L'abonnement à ${SUBSCRIPTION_PRICE_PERIOD} débloque tous les quiz, les séries d'examen et le mode examen officiel. Contactez-nous sur WhatsApp au ${WHATSAPP_DISPLAY} pour l'activer — c'est immédiat.`,
   },
   {
     question: 'Le contenu est-il conforme au Code sénégalais ?',

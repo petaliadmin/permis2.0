@@ -319,7 +319,7 @@ export interface Notification {
 export type SubscriptionType = 'STUDENT' | 'SCHOOL' | 'SCHOOL_FEATURED';
 export type SubscriptionStatus = 'PENDING' | 'ACTIVE' | 'REJECTED' | 'CANCELLED';
 /** The channel used to pay/activate. Orange Money / Card stay UI-disabled for now. */
-export type SubscriptionPaymentMethod = 'ORANGE_MONEY' | 'CARD' | 'WHATSAPP' | 'ADMIN';
+export type SubscriptionPaymentMethod = 'ORANGE_MONEY' | 'CARD' | 'WAVE' | 'WHATSAPP' | 'ADMIN';
 
 /**
  * Entitlement keys. Only `premium_all` is ever actually granted today (a
