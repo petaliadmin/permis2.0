@@ -22,14 +22,25 @@ interface DirectoryStats {
   services: string[];
 }
 
+// Brief Lot 3.2's guard: a city only gets its own /auto-ecoles-senegal/{ville}
+// page with ≥3 real schools (see [ville]/page.tsx and sitemap-ecoles.xml).
+// Must match here too, otherwise this page links to cities that 404.
+const MIN_SCHOOLS_PER_CITY = 3;
+
 async function fetchDirectoryStats(): Promise<DirectoryStats> {
   try {
     const res = await fetch(`${API_URL}/schools?take=50`, { next: { revalidate: 3600 } });
     if (!res.ok) return { cities: [], services: [] };
     const schools = (await res.json()) as { city?: string | null; services?: string[] }[];
-    const cities = [...new Set(schools.map((s) => s.city).filter((c): c is string => !!c))].sort(
-      (a, b) => a.localeCompare(b, 'fr')
-    );
+    const cityCounts = new Map<string, number>();
+    for (const s of schools) {
+      if (!s.city) continue;
+      cityCounts.set(s.city, (cityCounts.get(s.city) ?? 0) + 1);
+    }
+    const cities = [...cityCounts.entries()]
+      .filter(([, count]) => count >= MIN_SCHOOLS_PER_CITY)
+      .map(([city]) => city)
+      .sort((a, b) => a.localeCompare(b, 'fr'));
     const services = [...new Set(schools.flatMap((s) => s.services ?? []))];
     return { cities, services };
   } catch {
