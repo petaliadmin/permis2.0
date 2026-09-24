@@ -500,14 +500,14 @@ export default function AdminUsersPage() {
                               method: 'POST',
                               json: {},
                             }),
-                          `Abonnement activé pour ${details.user.name} (1 an).`
+                          `Abonnement activé pour ${details.user.name} (4 mois).`
                         )
                       }
                       disabled={busy === details.user.id}
                       className="flex-1 rounded-xl bg-success-50 py-2.5 text-xs font-bold text-success-700 transition-colors hover:bg-success-100 disabled:opacity-40"
                     >
                       <IconCrown size="1em" className="mr-1" aria-hidden="true" />
-                      {activeStudent ? 'Prolonger 1 an' : 'Activer l’abonnement'}
+                      {activeStudent ? 'Prolonger 4 mois' : 'Activer l’abonnement'}
                     </button>
                     {activeStudent && (
                       <button

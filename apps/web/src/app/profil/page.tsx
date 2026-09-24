@@ -9,7 +9,7 @@ import { useAuthStore, formatPhone } from '@/store/authStore';
 import { useSettingsStore } from '@/store/settingsStore';
 import { useSubscriptionStore } from '@/store/subscriptionStore';
 import { useNotificationStore } from '@/store/notificationStore';
-import { SUBSCRIPTION_PRICE_ANNUAL } from '@permis2.0/shared';
+import { SUBSCRIPTION_PRICE_PERIOD } from '@permis2.0/shared';
 import {
   IconAward,
   IconBell,
@@ -356,7 +356,7 @@ export default function ProfilPage() {
               <div className="flex-1">
                 <p className="font-display text-sm font-bold">Passer Premium</p>
                 <p className="text-xs text-white/85">
-                  Accès illimité — {SUBSCRIPTION_PRICE_ANNUAL}
+                  Accès illimité — {SUBSCRIPTION_PRICE_PERIOD}
                 </p>
               </div>
               <IconChevronRight size="1em" aria-hidden="true" />

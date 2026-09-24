@@ -25,6 +25,7 @@ const STATIC_PAGES = [
   '/traffic-signs',
   '/code-route-senegal',
   '/permis-conduire-senegal',
+  '/tarifs',
   '/auto-ecoles-senegal',
   '/logiciel-gestion-auto-ecole',
   '/assistance',

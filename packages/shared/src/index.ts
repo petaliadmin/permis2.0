@@ -1,12 +1,13 @@
 // Constants
 export const APP_NAME = 'PERMIS2.0';
 
-// Subscription pricing — single source of truth for the annual plan
+// Subscription pricing — single source of truth for the student plan (4 mois)
 export const SUBSCRIPTION_PRICE_XOF = 2900;
+export const SUBSCRIPTION_DURATION_MONTHS = 4;
 /** Formatted label: "2 900 FCFA" */
 export const SUBSCRIPTION_PRICE_LABEL = `${SUBSCRIPTION_PRICE_XOF.toLocaleString('fr-FR')} FCFA`;
-/** Short label used in banners: "2 900 FCFA/an" */
-export const SUBSCRIPTION_PRICE_ANNUAL = `${SUBSCRIPTION_PRICE_XOF.toLocaleString('fr-FR')} FCFA/an`;
+/** Short label used in banners: "2 900 FCFA/4 mois" */
+export const SUBSCRIPTION_PRICE_PERIOD = `${SUBSCRIPTION_PRICE_XOF.toLocaleString('fr-FR')} FCFA/${SUBSCRIPTION_DURATION_MONTHS} mois`;
 export const APP_SLOGAN = 'Réussissez votre permis du premier coup.';
 export const APP_VERSION = '1.0.0';
 

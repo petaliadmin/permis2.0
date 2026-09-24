@@ -14,7 +14,7 @@ import {
   calcStars,
   shuffle,
 } from '../../config';
-import { SUBSCRIPTION_PRICE_ANNUAL } from '@permis2.0/shared';
+import { SUBSCRIPTION_PRICE_PERIOD } from '@permis2.0/shared';
 import { useAuthStore } from '@/store/authStore';
 import { useSubscriptionStore } from '@/store/subscriptionStore';
 import { useSettingsStore } from '@/store/settingsStore';
@@ -272,7 +272,7 @@ function PaywallScreen({ quizTitle, ctaHref }: { quizTitle: string; ctaHref: str
       </div>
       <div className="space-y-3 px-6 pb-10 pt-5">
         <Link href={ctaHref} className="btn-violet w-full">
-          🚀 Débloquer — {SUBSCRIPTION_PRICE_ANNUAL}
+          🚀 Débloquer — {SUBSCRIPTION_PRICE_PERIOD}
         </Link>
         <p className="text-center text-xs text-muted">Sans engagement · Annulation facile</p>
         <Link href="/quizz" className="block py-2 text-center text-sm text-muted">

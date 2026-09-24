@@ -9,6 +9,7 @@ import type { PlatformStats } from '@/components/home/Hero';
 import StudentHome from './learn/StudentHome';
 import GestionClient from './mon-ecole/GestionClient';
 import { organizationNode, websiteNode, graphScript } from '@/lib/seo/jsonLd';
+import { fetchSubscriptionPlans } from '@/lib/fetchSubscriptionPlans';
 
 // dataSource.ts is a 'use client' module — unusable from this Server
 // Component (see ecoles/[slug]/page.tsx for the same note).
@@ -116,11 +117,15 @@ export default async function Page() {
   if (space === 'admin') redirect('/admin');
   if (space === 'learn') return <StudentHome />;
   if (space === 'school') return <GestionClient />;
-  const [top20Schools, stats] = await Promise.all([fetchTop20Schools(), fetchPlatformStats()]);
+  const [top20Schools, stats, subscriptionPlans] = await Promise.all([
+    fetchTop20Schools(),
+    fetchPlatformStats(),
+    fetchSubscriptionPlans(),
+  ]);
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: homeJsonLd }} />
-      <HomeClient top20Schools={top20Schools} stats={stats} />
+      <HomeClient top20Schools={top20Schools} stats={stats} subscriptionPlans={subscriptionPlans} />
     </>
   );
 }

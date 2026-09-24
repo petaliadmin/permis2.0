@@ -27,7 +27,7 @@ const BENEFITS = [
   { icon: IconCards, text: 'Toutes les séries de quiz du Code' },
   { icon: IconClipboardCheck, text: 'Tous les examens blancs premium' },
   { icon: IconCar, text: 'Tous les cours de conduite' },
-  { icon: IconCalendar, text: 'Accès illimité pendant 1 an' },
+  { icon: IconCalendar, text: 'Accès illimité pendant 4 mois' },
 ];
 
 function formatXof(n: number) {
@@ -77,7 +77,7 @@ function AbonnementInner() {
   const priceXof = plan?.priceXof ?? 2900;
 
   const waLink = whatsappLink(
-    `Bonjour PERMIS 2.0 ! 👋\nJe souhaite activer l'Abonnement Annuel (${formatXof(priceXof)}).\nMon compte : ${authUser?.name ?? ''}${authUser?.phone ? ` — +221 ${authUser.phone}` : ''}`
+    `Bonjour PERMIS 2.0 ! 👋\nJe souhaite activer l'${plan?.title ?? 'Abonnement'} (${formatXof(priceXof)}).\nMon compte : ${authUser?.name ?? ''}${authUser?.phone ? ` — +221 ${authUser.phone}` : ''}`
   );
 
   const refreshEntitlements = async () => {
@@ -130,7 +130,7 @@ function AbonnementInner() {
             </p>
             <a
               href={whatsappLink(
-                "Bonjour PERMIS 2.0 ! 👋\nJe souhaite activer l'Abonnement Annuel — la page m'indique qu'il est momentanément indisponible."
+                "Bonjour PERMIS 2.0 ! 👋\nJe souhaite activer mon abonnement — la page m'indique qu'il est momentanément indisponible."
               )}
               target="_blank"
               rel="noopener noreferrer"
@@ -153,7 +153,7 @@ function AbonnementInner() {
                 <span className="font-display text-4xl font-black text-orange-600">
                   {formatXof(plan.priceXof)}
                 </span>
-                <span className="mb-1.5 text-sm font-semibold text-muted">/ an</span>
+                <span className="mb-1.5 text-sm font-semibold text-muted">/ 4 mois</span>
               </div>
               <p className="mt-1 text-xs text-orange-700/70">{plan.description}</p>
             </div>

@@ -254,11 +254,11 @@ async function main() {
     const subscriptionPlans = [
       {
         type: 'STUDENT' as const,
-        title: 'Abonnement Annuel',
+        title: 'Abonnement 4 mois',
         description:
-          'Accès illimité à toutes les séries, examens blancs et cours de conduite pendant 1 an.',
+          'Accès illimité à toutes les séries, examens blancs et cours de conduite pendant 4 mois.',
         priceXof: 2900,
-        durationDays: 365,
+        durationDays: 120,
         ordre: 1,
       },
       {
