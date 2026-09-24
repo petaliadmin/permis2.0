@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { SiteFooter } from '@/components/SiteFooter';
 import { useAuthStore } from '@/store/authStore';
@@ -22,13 +23,10 @@ function SchoolShellInner({ children }: { children: React.ReactNode }) {
       <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-token bg-surface-1/90 px-4 backdrop-blur-xl sm:px-8">
         <div className="flex items-center gap-3">
           <MenuButton />
-          <Link href="/" className="flex items-center gap-2.5">
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary-600 to-primary-800 text-sm font-black text-white">
-              P
-            </span>
-            <span className="font-display text-sm font-extrabold text-foreground">
-              PERMIS<span className="text-primary-600">2.0</span>
-              <span className="ml-1.5 hidden font-semibold text-muted sm:inline">· Auto-école</span>
+          <Link href="/" className="flex items-center gap-2">
+            <Image src="/logo-header.png" alt="PERMIS 2.0" width={700} height={655} className="h-10 w-auto" />
+            <span className="hidden font-display text-sm font-semibold text-muted sm:inline">
+              · Auto-école
             </span>
           </Link>
         </div>
