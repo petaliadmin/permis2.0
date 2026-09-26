@@ -3,8 +3,15 @@ import Link from 'next/link';
 import { SiteHeader } from '@/components/SiteHeader';
 import { SiteFooter } from '@/components/SiteFooter';
 import { WHATSAPP_DISPLAY, whatsappLink, CONTACT_EMAIL } from '@/lib/contact';
-import { IconBrandWhatsapp, IconMail, IconMapPin } from '@tabler/icons-react';
+import {
+  IconBrandWhatsapp,
+  IconBrandFacebook,
+  IconBrandTiktok,
+  IconMail,
+  IconMapPin,
+} from '@tabler/icons-react';
 import { buildMetadata } from '@/lib/seo/metadata';
+import { ContactForm } from './ContactForm';
 
 export const metadata: Metadata = buildMetadata({
   title: 'Contact',
@@ -64,6 +71,46 @@ export default function ContactPage() {
             </span>
           </a>
 
+          <a
+            href="https://www.facebook.com/permis2sn"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="card flex items-center gap-4 transition-colors hover:bg-surface-2"
+          >
+            <span
+              className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-blue-50 text-2xl"
+              aria-hidden="true"
+            >
+              <IconBrandFacebook size="1em" style={{ color: '#1877F2' }} />
+            </span>
+            <span>
+              <span className="block font-display text-sm font-bold text-foreground">
+                Facebook
+              </span>
+              <span className="block text-sm text-secondary">@permis2sn</span>
+            </span>
+          </a>
+
+          <a
+            href="https://www.tiktok.com/@permis2.0.sn"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="card flex items-center gap-4 transition-colors hover:bg-surface-2"
+          >
+            <span
+              className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-surface-2 text-2xl"
+              aria-hidden="true"
+            >
+              <IconBrandTiktok size="1em" style={{ color: '#000000' }} />
+            </span>
+            <span>
+              <span className="block font-display text-sm font-bold text-foreground">
+                TikTok
+              </span>
+              <span className="block text-sm text-secondary">@permis2.0.sn</span>
+            </span>
+          </a>
+
           <div className="card flex items-center gap-4">
             <span
               className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary-50 text-2xl"
@@ -87,6 +134,8 @@ export default function ContactPage() {
           </Link>
           .
         </p>
+
+        <ContactForm />
       </main>
 
       <SiteFooter />

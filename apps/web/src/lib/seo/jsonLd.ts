@@ -35,7 +35,7 @@ export function organizationNode() {
       areaServed: 'SN',
       availableLanguage: ['French'],
     },
-    sameAs: ['https://www.facebook.com/permis2sn'],
+    sameAs: ['https://www.facebook.com/permis2sn', 'https://www.tiktok.com/@permis2.0.sn'],
   };
 }
 

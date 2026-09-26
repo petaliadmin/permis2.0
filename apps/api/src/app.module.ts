@@ -24,6 +24,7 @@ import { SubscriptionModule } from './subscription/subscription.module';
 import { EntitlementModule } from './entitlement/entitlement.module';
 import { SchoolModule } from './school/school.module';
 import { PlatformStatsModule } from './platform-stats/platform-stats.module';
+import { ContactModule } from './contact/contact.module';
 
 @Module({
   imports: [
@@ -65,6 +66,7 @@ import { PlatformStatsModule } from './platform-stats/platform-stats.module';
     EntitlementModule,
     SchoolModule,
     PlatformStatsModule,
+    ContactModule,
   ],
   controllers: [AppController],
   providers: [

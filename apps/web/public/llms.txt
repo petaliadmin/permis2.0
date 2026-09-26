@@ -1,0 +1,66 @@
+# PERMIS 2.0
+
+> PERMIS 2.0 (permis2.com) est une plateforme sénégalaise pour préparer le Code de la route et le permis de conduire au Sénégal : séries de questions, examens blancs, révision des panneaux, annuaire des auto-écoles avec carte, et un ERP de gestion pour les auto-écoles. Le contenu est en français et porte sur la réglementation routière sénégalaise.
+
+Informations clés :
+- Public : candidats au permis au Sénégal (surtout permis B), conducteurs, auto-écoles.
+- Abonnement élève : 2 900 FCFA pour 4 mois, accès illimité aux quiz et examens blancs. La création de compte, la recherche d'auto-école et la pré-inscription sont gratuites.
+- Abonnement auto-école : 2 500 FCFA par mois, avec 3 mois d'essai gratuit.
+- Support : WhatsApp 76 905 58 52.
+- Facebook : https://www.facebook.com/permis2sn
+- TikTok : https://www.tiktok.com/@permis2.0.sn
+- Les articles du blog sont rédigés par l'Équipe PERMIS 2.0, datés, et citent les sources officielles (DTR, Capp Karangë, décrets).
+
+## Pages principales
+- [Accueil](https://www.permis2.com/): présentation de la plateforme
+- [Permis de conduire au Sénégal](https://www.permis2.com/permis-conduire-senegal): guide complet — catégories, étapes, dossier
+- [Code de la route Sénégal](https://www.permis2.com/code-route-senegal): cours, panneaux et quiz pour apprendre le Code
+- [Panneaux de signalisation](https://www.permis2.com/traffic-signs): tous les panneaux du Code de la route sénégalais
+- [Examens blancs](https://www.permis2.com/exam): examens du Code en conditions réelles
+- [Annuaire des auto-écoles](https://www.permis2.com/ecoles): trouver et comparer les auto-écoles au Sénégal, avec carte
+- [Auto-écoles au Sénégal](https://www.permis2.com/auto-ecoles-senegal): villes couvertes, critères de choix, pré-inscription
+- [Logiciel de gestion pour auto-école](https://www.permis2.com/logiciel-gestion-auto-ecole): l'ERP PERMIS 2.0 pour élèves, moniteurs, planning et paiements
+- [Tarifs](https://www.permis2.com/tarifs): détail des abonnements élève et auto-école
+- [Abonnement](https://www.permis2.com/abonnement): souscrire à l'accès illimité
+- [Blog](https://www.permis2.com/blog): guides sur le permis et le Code de la route au Sénégal
+- [Assistance & FAQ](https://www.permis2.com/assistance): questions fréquentes sur l'abonnement, le paiement et l'usage hors-ligne
+- [À propos](https://www.permis2.com/a-propos): présentation de l'équipe et de la mission PERMIS 2.0
+- [Contact](https://www.permis2.com/contact): WhatsApp et email pour joindre l'équipe
+
+## Permis de conduire
+- [S'inscrire au permis : âge, dossier et étapes](https://www.permis2.com/blog/inscription-permis-conduire-senegal-dossier-age)
+- [Catégories de permis A, B, C, D](https://www.permis2.com/blog/categories-permis-conduire-senegal)
+- [Moto et scooter : permis, immatriculation et casque](https://www.permis2.com/blog/permis-moto-deux-roues-senegal)
+- [Après l'examen : obtenir son permis](https://www.permis2.com/blog/nouvelle-demande-permis-conduire-apres-examen-senegal)
+- [Vérifier si son permis est disponible (Capp Karangë)](https://www.permis2.com/blog/verifier-disponibilite-permis-conduire-senegal)
+- [Remplacer l'ancien permis rose par le permis biométrique](https://www.permis2.com/blog/remplacement-ancien-permis-biometrique-senegal)
+- [Permis perdu ou volé : duplicata](https://www.permis2.com/blog/duplicata-permis-conduire-perdu-vole-senegal)
+- [Permis de conduire international](https://www.permis2.com/blog/permis-conduire-international-senegal)
+- [Conduire au Sénégal avec un permis étranger](https://www.permis2.com/blog/permis-etranger-conversion-senegal)
+
+## Code de la route
+- [Réforme du Code de la route et permis à points](https://www.permis2.com/blog/reforme-code-route-senegal-permis-a-points)
+- [Vidéo-verbalisation et amendes routières](https://www.permis2.com/blog/video-verbalisation-amendes-routieres-senegal)
+- [Téléphone au volant et ceinture : règles et amendes](https://www.permis2.com/blog/telephone-volant-ceinture-securite-amende-senegal)
+- [Limitations de vitesse](https://www.permis2.com/blog/limitations-vitesse-senegal)
+- [Alcool au volant : taux et sanctions](https://www.permis2.com/blog/alcool-au-volant-senegal)
+- [Priorités de circulation](https://www.permis2.com/blog/comprendre-priorites-circulation-senegal)
+- [Ronds-points : qui a la priorité](https://www.permis2.com/blog/ronds-points-priorite-senegal)
+- [Panneaux de signalisation](https://www.permis2.com/blog/panneaux-signalisation-routiere-senegal)
+- [Documents obligatoires en voiture](https://www.permis2.com/blog/documents-obligatoires-voiture-senegal)
+- [Accident de la route et constat amiable](https://www.permis2.com/blog/accident-route-senegal-que-faire-constat)
+- [Conduire pendant l'hivernage](https://www.permis2.com/blog/conduire-hivernage-pluie-senegal)
+
+## Préparer l'examen
+- [25 questions du Code avec réponses](https://www.permis2.com/blog/questions-code-route-senegal-avec-reponses)
+- [Déroulement de l'examen du Code](https://www.permis2.com/blog/deroulement-examen-code-route-senegal)
+- [Réussir le Code en 30 jours](https://www.permis2.com/blog/planning-revision-code-route-30-jours)
+- [Examen blanc : s'entraîner efficacement](https://www.permis2.com/blog/examen-blanc-code-sentrainer-efficacement)
+- [Quiz Code de la route : bien se préparer](https://www.permis2.com/blog/bien-preparer-quiz-code-route)
+- [Erreurs fréquentes à l'examen du Code](https://www.permis2.com/blog/erreurs-frequentes-examen-code-route)
+- [Gérer le stress le jour de l'examen](https://www.permis2.com/blog/gerer-stress-examen-permis)
+- [Examen de conduite : 10 conseils](https://www.permis2.com/blog/reussir-examen-conduite-pratique-senegal)
+
+## Auto-écoles
+- [Combien coûte le permis au Sénégal](https://www.permis2.com/blog/prix-permis-conduire-senegal)
+- [Choisir son auto-école : 8 critères](https://www.permis2.com/blog/choisir-auto-ecole-senegal)

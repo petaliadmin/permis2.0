@@ -60,4 +60,39 @@ export class EmailService {
       // because the mail server is briefly unreachable.
     }
   }
+
+  /** Forwards a public contact-form submission to the team inbox, reply-to the visitor. */
+  async sendContactMessage(opts: {
+    name: string;
+    email: string;
+    subject?: string;
+    message: string;
+  }): Promise<void> {
+    const transporter = this.getTransporter();
+    const to = process.env.CONTACT_INBOX_EMAIL || 'contact@permis2.com';
+    const subject = opts.subject?.trim() || `Nouveau message de ${opts.name}`;
+
+    if (!transporter) {
+      this.logger.log(`[EMAIL DEV] contact form from ${opts.name} <${opts.email}>: "${subject}"`);
+      return;
+    }
+
+    try {
+      await transporter.sendMail({
+        from: {
+          name: process.env.SMTP_FROM_NAME || 'PERMIS 2.0',
+          address: process.env.SMTP_FROM_EMAIL || 'no-reply@permis2.com',
+        },
+        replyTo: { name: opts.name, address: opts.email },
+        to,
+        subject,
+        text: `${opts.message}\n\n—\n${opts.name} <${opts.email}>`,
+      });
+    } catch (err) {
+      this.logger.error(`Contact form email failed: ${String(err)}`);
+      // Surfaced to the caller (unlike sendPdf) — a silent failure here would
+      // tell the visitor their message was sent when it never reached anyone.
+      throw err;
+    }
+  }
 }

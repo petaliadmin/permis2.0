@@ -72,6 +72,26 @@ export function SiteFooter() {
                   {CONTACT_EMAIL}
                 </a>
               </li>
+              <li>
+                <a
+                  href="https://www.facebook.com/permis2sn"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-secondary hover:text-foreground"
+                >
+                  Facebook
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://www.tiktok.com/@permis2.0.sn"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-secondary hover:text-foreground"
+                >
+                  TikTok
+                </a>
+              </li>
             </ul>
           </div>
 
