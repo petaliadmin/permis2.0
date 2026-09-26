@@ -26,9 +26,7 @@ export function organizationNode() {
     // Audit finding — no contactPoint existed anywhere in the graph. WhatsApp
     // (lib/contact.ts WHATSAPP_DISPLAY/WHATSAPP_INTL) and contact@permis2.com
     // are the site's real, live support channels, used throughout
-    // /assistance, /contact, /mentions-legales. No `sameAs` added here — no
-    // social profile URLs were found to actually exist for this brand;
-    // adding placeholder ones would be a fabricated claim, not a fix.
+    // /assistance, /contact, /mentions-legales.
     contactPoint: {
       '@type': 'ContactPoint',
       contactType: 'customer service',
@@ -37,6 +35,7 @@ export function organizationNode() {
       areaServed: 'SN',
       availableLanguage: ['French'],
     },
+    sameAs: ['https://www.facebook.com/permis2sn'],
   };
 }
 
@@ -77,6 +76,7 @@ const OWN_GRAPH_PATTERNS: RegExp[] = [
   /^\/ecoles\/[^/]+$/,
   /^\/permis-conduire-senegal$/,
   /^\/tarifs$/,
+  /^\/traffic-signs$/,
 ];
 
 export function pageProvidesOwnGraph(pathname: string): boolean {

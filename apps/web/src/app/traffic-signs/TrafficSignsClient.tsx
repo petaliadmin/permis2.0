@@ -67,6 +67,7 @@ const rowVariants = {
 export default function TrafficSignsClient({
   initialSigns = [],
   fullIndex,
+  intro,
 }: {
   /** Server-fetched signs (app/traffic-signs/page.tsx) — seeds state so the
    *  picker never flashes "0 panneaux" pre-hydration; the effect below still
@@ -76,6 +77,11 @@ export default function TrafficSignsClient({
    *  page.tsx so it renders inside AppShell's constrained-width container
    *  without this client component importing (and thus client-bundling) it. */
   fullIndex?: React.ReactNode;
+  /** Same pattern as `fullIndex` — real, server-rendered paragraph content
+   *  (Search Console audit: the hub was "explorée puis rejetée", too thin
+   *  below the interactive picker). Rendered right under the header, above
+   *  the fold, not buried below the picker + full index. */
+  intro?: React.ReactNode;
 }) {
   const [signs, setSigns] = useState<PanneauRaw[]>(initialSigns);
   const [selectedCat, setSelectedCat] = useState<string | null>(null);
@@ -204,6 +210,8 @@ export default function TrafficSignsClient({
           )}
         </div>
       </PageHeader>
+
+      {intro}
 
       <div className="px-4 pt-5">
         <AnimatePresence mode="wait">

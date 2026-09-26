@@ -73,10 +73,13 @@
     "category": "danger",
     "icon": "⚠️",
     "description": "Déformation de la chaussée : creux (cassis) ou bosse (dos d'âne). Réduisez impérativement votre vitesse pour passer sans heurt.",
+    "contexte_usage": "Très fréquent à l'entrée et à la sortie des villages et quartiers pour forcer le ralentissement du trafic, ainsi que sur certaines routes rurales où la chaussée s'est déformée avec le temps. Souvent mal signalé ou repeint, il surprend davantage la nuit.",
+    "regle_associee": "Ralentir suffisamment tôt pour aborder l'obstacle à faible allure, quel que soit le nombre de passagers ou la charge du véhicule.",
     "advice": [
-      "Réduire fortement la vitesse",
-      "Éviter le choc mécanique",
-      "Protéger le train avant"
+      "Réduire fortement la vitesse avant l'obstacle, pas dessus",
+      "Éviter le choc mécanique (suspensions, pot d'échappement)",
+      "Protéger le train avant, surtout véhicule chargé",
+      "Redoubler d'attention la nuit ou en cas de signalisation effacée"
     ]
   },
   {
@@ -122,13 +125,14 @@
     "name": "Chaussée rétrécie",
     "category": "danger",
     "icon": "⚠️",
-    "description": "La chaussée se rétrécit symétriquement. Soyez attentif aux véhicules venant en sens inverse.",
-    "contexte_usage": "Points de la route où la chaussée est plus étroite.",
-    "regle_associee": "Céder le passage aux véhicules qui ont déjà la priorité sur la partie étroite.",
+    "description": "La chaussée se rétrécit symétriquement des deux côtés à la fois. Soyez attentif aux véhicules venant en sens inverse, le croisement devenant plus difficile.",
+    "contexte_usage": "Fréquent sur les ponts, aux abords de travaux, ou sur des tronçons de route dégradés où seule une voie reste réellement praticable — par exemple sur certains axes secondaires reliant les villages.",
+    "regle_associee": "Céder le passage aux véhicules qui ont déjà la priorité sur la partie étroite ; ne pas s'engager si un véhicule est déjà engagé en face.",
     "advice": [
-      "Réduire la vitesse",
-      "Attention au gabarit",
-      "Croiser avec prudence"
+      "Réduire la vitesse bien avant le rétrécissement",
+      "Attention au gabarit de son véhicule (charge, largeur)",
+      "Croiser avec prudence, ralentir si nécessaire pour laisser passer",
+      "Ne jamais forcer le passage si la priorité revient à l'autre sens"
     ]
   },
   {
@@ -426,11 +430,14 @@
     "name": "Intersection — priorité à droite",
     "category": "priorité",
     "icon": "🔶",
-    "description": "À la prochaine intersection, la priorité à droite s'applique : cédez le passage à tout véhicule venant de votre droite.",
+    "description": "À la prochaine intersection, la priorité à droite s'applique par défaut : cédez le passage à tout véhicule venant de votre droite, en l'absence de panneau STOP, cédez-le-passage ou feu.",
+    "contexte_usage": "Typique des carrefours de quartier sans panneau ni feu, très courants dans les zones résidentielles des villes sénégalaises, où la règle de la priorité à droite reste la référence par défaut.",
+    "regle_associee": "En l'absence de toute autre signalisation, un véhicule venant de la droite est toujours prioritaire, même s'il roule plus lentement ou hésite à s'engager.",
     "advice": [
-      "Ralentir à l'approche",
-      "Céder aux véhicules venant de droite",
-      "Vérifier des deux côtés"
+      "Ralentir systématiquement à l'approche d'une intersection non protégée",
+      "Céder aux véhicules venant de droite, sans négociation",
+      "Vérifier des deux côtés avant de s'engager, y compris à faible vitesse",
+      "Ne jamais présumer qu'un autre conducteur va céder le passage"
     ]
   },
   {
@@ -1208,11 +1215,14 @@
     "name": "Vitesse conseillée",
     "category": "indication",
     "icon": "ℹ️",
-    "description": "Vitesse recommandée dans une section donnée (virage, descente, zone sensible), sans caractère obligatoire contrairement à une limitation.",
+    "description": "Vitesse recommandée dans une section donnée (virage serré, descente, zone sensible), sans caractère obligatoire contrairement à un panneau de limitation de vitesse.",
+    "contexte_usage": "Placé avant un virage prononcé, une descente ou une portion de route jugée délicate — par exemple sur des routes vallonnées ou en approche d'un rond-point — pour indiquer une vitesse jugée sûre dans ces conditions normales.",
+    "regle_associee": "Ne pas dépasser cette vitesse n'est pas une obligation légale comme pour une limitation, mais l'ignorer et perdre le contrôle du véhicule dans la zone qu'il signale reste imputable au conducteur.",
     "advice": [
-      "Vitesse recommandée, non obligatoire",
-      "Adapter selon les conditions",
-      "Prudence dans la zone concernée"
+      "Vitesse recommandée, non obligatoire — contrairement à une limitation",
+      "Adapter en plus selon la météo, la charge et la visibilité réelle",
+      "Rester prudent tant que la configuration signalée n'est pas passée",
+      "Ne pas confondre avec le panneau de limitation de vitesse obligatoire"
     ]
   },
   {
@@ -1666,11 +1676,14 @@
     "name": "Balise de virage",
     "category": "balises",
     "icon": "📍",
-    "description": "Balise délimitant un virage ou une courbe. Guide le conducteur sur le bord de la route.",
+    "description": "Balise délimitant un virage ou une courbe. Elle guide le conducteur sur le tracé exact de la route, surtout quand le marquage au sol est absent ou effacé.",
+    "contexte_usage": "Installée sur les routes sinueuses, en zone rurale ou sur les axes récemment refaits, notamment là où le bas-côté n'est pas clairement visible de nuit ou par mauvais temps.",
+    "regle_associee": "Le tracé des balises indique la trajectoire à suivre ; s'en écarter signale une sortie de chaussée imminente.",
     "advice": [
-      "Guide dans les virages",
-      "Rester à droite des balises",
-      "Signale le bord de route"
+      "Suivre le tracé des balises pour anticiper le virage",
+      "Rester à droite des balises, jamais à cheval dessus",
+      "Signale le bord de route quand le marquage au sol manque",
+      "Ralentir si l'espacement des balises annonce un virage serré"
     ]
   },
   {
