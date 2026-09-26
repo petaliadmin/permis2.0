@@ -8,6 +8,7 @@ import { IconArrowRight, IconBulb, IconChevronRight, IconRoadSign } from '@table
 import { buildSignMetaDescription } from '@/lib/signDescription';
 import { organizationNode, websiteNode, graphScript, SITE_URL } from '@/lib/seo/jsonLd';
 import { buildMetadata } from '@/lib/seo/metadata';
+import { CATEGORY_ORDER, categoryMeta } from '@/lib/trafficSignCategories';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -225,6 +226,21 @@ export default async function SignDetailPage({
               </div>
             </div>
           )}
+
+          {CATEGORY_ORDER.includes(sign.category) &&
+            (() => {
+              const label = categoryMeta(sign.category).label.toLowerCase();
+              const article = /^[aeiouéèêàâîïôû]/.test(label) ? `d'${label}` : `de ${label}`;
+              return (
+                <Link
+                  href={`/traffic-signs/categorie/${slugify(sign.category)}`}
+                  className="mt-6 flex items-center gap-1.5 text-sm font-semibold text-primary-600 hover:underline"
+                >
+                  Voir tous les panneaux {article}
+                  <IconArrowRight size="1em" className="text-xs" aria-hidden="true" />
+                </Link>
+              );
+            })()}
 
           <Link
             href="/quizz"
