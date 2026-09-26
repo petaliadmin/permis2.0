@@ -35,23 +35,20 @@ const STATIC_PAGES = [
   '/politique-confidentialite',
 ];
 
-// Audit finding — every entry here had no <lastmod> at all, unlike
-// sitemap-blog.xml and sitemap-panneaux.xml. There's no per-page "last
-// edited" date tracked (no CMS/git-blame wiring) to give a real editorial
-// timestamp, so — same rule as everywhere else in this file: a real signal
-// or none — this uses the build timestamp shared by every entry (`route`
-// is `force-static`, so this evaluates once at build time, not per request).
-// Honest about what it is: "known current as of this deploy", not a claim
-// about when the content itself last changed.
-const BUILD_TIME = new Date();
-
+// Audit finding — every entry here shared one <lastmod> (the build
+// timestamp), unlike sitemap-blog.xml and sitemap-panneaux.xml which both
+// carry a real per-item editorial date. Google flagged this: 14 URLs with
+// the exact same timestamp reads as synthetic, and it stops trusting the
+// field (Search Console audit, 2026-09). There's still no per-page "last
+// edited" date tracked (no CMS/git-blame wiring — the production Docker
+// build context excludes .git, see .dockerignore, so `git log` isn't even
+// available at build time to fake one). Same rule as everywhere else in
+// this file — a real signal or none — so <lastmod> is simply omitted here
+// rather than replaced with another shared, non-meaningful date.
 export async function GET() {
   const entries: SitemapEntry[] = [
-    ...STATIC_PAGES.map((path) => ({ url: `${SITE_URL}${path}`, lastModified: BUILD_TIME })),
-    ...QUIZ_CATEGORIES.map(({ slug }) => ({
-      url: `${SITE_URL}/quizz/${slug}`,
-      lastModified: BUILD_TIME,
-    })),
+    ...STATIC_PAGES.map((path) => ({ url: `${SITE_URL}${path}` })),
+    ...QUIZ_CATEGORIES.map(({ slug }) => ({ url: `${SITE_URL}/quizz/${slug}` })),
   ];
 
   return new Response(serializeUrlset(entries), { headers: SITEMAP_XML_HEADERS });

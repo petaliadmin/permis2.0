@@ -68,9 +68,16 @@ function cardElement(title: string, subtitle?: string) {
 }
 
 /** PNG at the standard 1.91:1 social-preview ratio — og:image/twitter:image
- *  convention every major platform expects (see opengraph-image.tsx files). */
+ *  convention every major platform expects (see opengraph-image.tsx files).
+ *  Google was crawling these as standalone image results despite them never
+ *  being useful outside a social-share card (Search Console audit, 2026-09)
+ *  — `noindex` here, not a robots.txt block: WhatsApp/Facebook still need to
+ *  fetch the URL itself to render link previews. */
 export function renderOgImage(title: string, subtitle?: string) {
-  return new ImageResponse(cardElement(title, subtitle), { ...OG_SIZE });
+  return new ImageResponse(cardElement(title, subtitle), {
+    ...OG_SIZE,
+    headers: { 'X-Robots-Tag': 'noindex' },
+  });
 }
 
 /** Same card, sized 16:9 — for callers that need a specific size/aspect
