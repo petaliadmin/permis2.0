@@ -22,7 +22,7 @@ async function iconCrop() {
   return sharp(SOURCE).trim().extract({ left: 0, top: 0, width: 1173, height: 660 }).toBuffer();
 }
 
-async function squareIcon(name, size, { background = WHITE, containScale = 0.92 } = {}) {
+async function squareIcon(name, size, { background = WHITE, containScale = 0.98 } = {}) {
   const crop = await iconCrop();
   const inner = Math.round(size * containScale);
   const resized = await sharp(crop)
@@ -44,8 +44,8 @@ await squareIcon('icon-512.png', 512);
 // Maskable: OS may crop up to ~20% from each edge, so the artwork stays
 // within a generous safe zone (smaller containScale, brand-color background
 // so the visible mask shape reads as intentional, not a random crop).
-await squareIcon('icon-maskable-192.png', 192, { background: BRAND_BLUE, containScale: 0.65 });
-await squareIcon('icon-maskable-512.png', 512, { background: BRAND_BLUE, containScale: 0.65 });
+await squareIcon('icon-maskable-192.png', 192, { background: BRAND_BLUE, containScale: 0.75 });
+await squareIcon('icon-maskable-512.png', 512, { background: BRAND_BLUE, containScale: 0.75 });
 
 // SVG favicon wrapper — the artwork itself is a raster illustration (can't be
 // meaningfully vectorized), so this embeds the same square PNG as a data URI
